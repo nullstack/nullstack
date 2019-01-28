@@ -5,12 +5,11 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 console.log("PATH:", path.resolve(__dirname, './build'));
 
 module.exports = {
-  entry: '../../../../../src/index.js',
+  entry: '../../../src/index.js',
   output: {
     path: path.resolve(__dirname, '../../build'),
     filename: 'client.js'
   },
-  mode: 'development',
   devtool: 'inline-source-map',
   stats: 'errors-only',
   module: {
@@ -42,7 +41,7 @@ module.exports = {
       },
       {
         test: /.js$/,
-        loader: path.resolve('../../../client-loader.js'),
+        loader: path.resolve('../../nullstack/client-loader.js'),
       },
       {
         test: /\.s?[ac]ss$/,

@@ -4,18 +4,13 @@ const NodemonPlugin = require('nodemon-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: '../../../../../src/index.js',
+  entry: '../../../src/index.js',
   output: {
     path: path.resolve(__dirname, '../../build'),
     filename: 'server.js'
   },
-  mode: 'development',
   devtool: 'inline-source-map',
   stats: 'errors-only',
-  /*devServer: {
-    contentBase: './build',
-    port: 3000
-  },*/
   module: {
     rules: [
       {
@@ -56,7 +51,7 @@ module.exports = {
   target: 'node',
   plugins: [
     new NodemonPlugin({
-      script: '../../../../../build/server.js',
+      script: '../../../build/server.js',
     }),
     new MiniCssExtractPlugin({
       filename: "client.css"

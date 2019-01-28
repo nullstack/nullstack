@@ -61,14 +61,14 @@ export async function ready() {
     },
   }));
 
-  app.use(express.static('../../../../../public'));
+  app.use(express.static('../../../public'));
 
   app.get('/client.css', (request, response) => {
-    response.sendFile('client.css', {root: '../../../../../build'});
+    response.sendFile('client.css', {root: '../../../build'});
   });
 
   app.get('/client.js', (request, response) => {
-    response.sendFile('client.js', {root: '../../../../../build'});
+    response.sendFile('client.js', {root: '../../../build'});
   });
 
   app.get('*', async (request, response) => {
@@ -122,6 +122,6 @@ export async function ready() {
     //databaseClient.close();
   });
 
-  app.listen(settings['server.port'], () => console.log(`Server is running on port ${settings['server.port']}!`));
+  app.listen(settings['server.port'], () => console.log(`Server is ready @ http://localhost:${settings['server.port']}!`));
 
 }
