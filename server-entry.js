@@ -9,13 +9,15 @@ import {getPageWithParamsFromPath} from './router';
 import React from "react";
 import ReactDOMServer from 'react-dom/server';
 import template from './template';
+import multer from 'multer';
+import storage from './storage';
 
 const app = express();
 
 const port = 3769;
 
 app.use(cors());
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
 
 const routes = [];
 
@@ -47,8 +49,11 @@ export async function ready() {
 
   await databaseClient.connect();
   const database = await databaseClient.db(settings['database.name']);
-  const store = new MongoDBStore({
-    db: database
+  
+  var store = new MongoDBStore({
+    uri: settings['database.url'],
+    databaseName: settings['database.name'],
+    collection: 'sessions'
   });
 
   app.use(session({
@@ -61,14 +66,17 @@ export async function ready() {
     },
   }));
 
-  app.use(express.static('../../../public'));
+  const upload = multer({ storage: multer.memoryStorage() });
+
+  app.use(express.static('NULLSTACK_ROOT/public'));
+  app.use('/uploads', express.static('NULLSTACK_ROOT/uploads'));
 
   app.get('/client.css', (request, response) => {
-    response.sendFile('client.css', {root: '../../../build'});
+    response.sendFile('client.css', {root: 'NULLSTACK_ROOT/NULLSTACK_FOLDER'});
   });
 
   app.get('/client.js', (request, response) => {
-    response.sendFile('client.js', {root: '../../../build'});
+    response.sendFile('client.js', {root: 'NULLSTACK_ROOT/NULLSTACK_FOLDER'});
   });
 
   app.get('*', async (request, response) => {
@@ -89,7 +97,7 @@ export async function ready() {
           constructor(props) {
             super(props);
             this.state = element.state;
-            this.session = request.body.session;
+            this.session = element.session;
             this.database = database;
           }
         }
@@ -103,15 +111,26 @@ export async function ready() {
     }
   });
 
-  app.post('*', async (request, response) => {
+  app.post('*', upload.any(), async (request, response) => {
+    const paramsSize = JSON.parse(request.body.params);
+    const functionParams = [];
+    for (let i = 0; i < paramsSize; i++) {
+      const fieldname = `param${i}`;
+      if(request.body[fieldname]) {
+        functionParams.push(JSON.parse(request.body[fieldname]));
+      } else {
+        functionParams.push(request.files.find((f) => f.fieldname == fieldname));
+      }
+    }
     let {page, params} = getPageWithParamsFromPath(routes, request.url);
     let element = new page();
     element.database = database;
-    element.state = request.body.state;
-    element.settings = request.body.settings;
+    element.state = JSON.parse(request.body.state);
+    element.settings = JSON.parse(request.body.settings);
     element.session = request.session;
     element.props = Object.assign({}, page.defaultProps, params);
-    const returned = await element[request.body.method].apply(element, request.body.params);
+    element.storage = storage;
+    const returned = await element[request.body.method].apply(element, functionParams);
     response.json({
       state: element.state,
       returned: returned,
@@ -122,6 +141,6 @@ export async function ready() {
     //databaseClient.close();
   });
 
-  app.listen(settings['server.port'], () => console.log(`Server is ready @ http://localhost:${settings['server.port']}!`));
+  app.listen(settings['server.port'], () => console.log(`Server is ready at http://localhost:${settings['server.port']}!`));
 
 }

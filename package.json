@@ -1,11 +1,8 @@
 {
   "name": "nullstack",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Full stack development on top of react and express",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Mortaro",
   "license": "MIT",
   "dependencies": {
@@ -40,6 +37,8 @@
     "express-session": "^1.15.6",
     "mongodb": "^3.1.10",
     "node-sass": "^4.11.0",
-    "radium": "^0.25.1"
+    "radium": "^0.25.1",
+    "multer": "^1.4.1",
+    "jimp": "^0.6.0"
   }
 }

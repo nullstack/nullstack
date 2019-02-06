@@ -5,19 +5,22 @@ export {route, ready, redirect, config} from './client-entry';
 export function server(target, key, descriptor) {
   const original = descriptor.value;
   descriptor.value = function(...args) {
+    const body = new FormData();
+    body.append('method', key);
+    body.append('state', JSON.stringify(this.state));
+    body.append('settings', JSON.stringify(this.settings));
+    args.forEach((arg, index) => {
+      if(arg instanceof File) {
+        body.append(`param${index}`, arg);
+      } else {
+        body.append(`param${index}`, JSON.stringify(arg));
+      }
+    })
+    body.append('params', args.length);
     return new Promise((resolve, reject) => {
       fetch(location.href, {
         method: 'post',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          method: key,
-          state: this.state,
-          settings: this.settings,
-          params: args
-        })
+        body: body
       }).then(r=>r.json()).then((response) => {
         this.setState(response.state);
         this.set(response.settings);
