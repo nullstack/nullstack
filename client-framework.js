@@ -57,3 +57,7 @@ export class Page extends Component {
   }
 
 }
+
+export function ObjectID() {
+  console.error('you cannot generate an object id in the client!');
+}

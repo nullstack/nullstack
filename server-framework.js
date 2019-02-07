@@ -1,6 +1,7 @@
 import React from 'react';
 import {getSettings} from './server-entry';
 export {route, ready, config} from './server-entry';
+export {ObjectID} from 'mongodb';
 
 export function server(ctx, fn) {
   return function(...args) {
