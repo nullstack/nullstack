@@ -39,6 +39,7 @@
     "node-sass": "^4.11.0",
     "radium": "^0.25.1",
     "multer": "^1.4.1",
-    "jimp": "^0.6.0"
+    "jimp": "^0.6.0",
+    "isomorphic-fetch": "^2.2.1"
   }
 }

@@ -53,7 +53,7 @@ export class Page extends Component {
 
   set(updates) {
     this.settings = Object.assign(this.settings, updates);
-    document.title = `${this.settings.project} - ${this.settings.title}`;
+    document.title = `${this.settings.title}`;
   }
 
 }

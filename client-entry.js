@@ -5,6 +5,8 @@ import Radium from 'radium';
 
 let routes = [];
 let element;
+let initialStateHydrated = false;
+let lastPage;
 
 export function config() {
 
@@ -16,20 +18,36 @@ export function route(path, page) {
 
 function renderCurrentPage() {
   let {page, params} = getPageWithParamsFromPath(routes, location.pathname + location.search);
-  const wrapper = document.getElementById("application");
-  const initialState = wrapper.getAttribute('data-state');
-  const initialSettings = wrapper.getAttribute('data-settings');
-  params.ref = (e) => {element = e};
-  const current = React.createElement(Radium(page), params);
-  ReactDOM.render(current, wrapper);
-  if(initialState) {
-    element.setState(JSON.parse(initialState));
-    element.set(JSON.parse(initialSettings));
-    wrapper.removeAttribute('data-state');
-    wrapper.removeAttribute('data-settings');
-  } else if(element.historyDidUpdate) {
-    element.historyDidUpdate();
-  }
+  /*if(!lastPage || lastPage.name != page.name) {
+    lastPage = page;*/
+    const wrapper = document.getElementById("application");
+    const initialState = wrapper.getAttribute('data-state');
+    const initialSettings = wrapper.getAttribute('data-settings');
+    params.ref = (e) => {element = e;};
+    const current = React.createElement(Radium(page), params);
+    ReactDOM.render(current, wrapper, function() {
+      if(initialState && !initialStateHydrated) {
+        console.log(element);
+        element.setState(JSON.parse(initialState));
+        element.set(JSON.parse(initialSettings));
+        //wrapper.removeAttribute('data-state');
+        //wrapper.removeAttribute('data-settings');
+      } else if(element.historyDidUpdate) {
+        console.log(element);
+        element.historyDidUpdate();
+      }
+      initialStateHydrated = true;
+    });
+  /*} else {
+    element.props = params;
+    if(element.historyDidUpdate) {
+      element.historyDidUpdate();
+    }
+    console.log(element.state);
+    element.forceUpdate();
+    console.log(element.props);
+    element.setState({_lastReloadAt: new Date()});
+  }*/
 }
 
 export function redirect(target) {

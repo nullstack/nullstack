@@ -5,7 +5,7 @@ export default function(page, settings, state) {
     <head>
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <title>${settings.project} - ${settings.title}</title>
+      <title>${settings.title}</title>
       <meta property="og:image" content="${settings.image}">
       <meta property="og:description" content="${settings.description}">
       <meta name="description" content="${settings.description}">
