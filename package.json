@@ -22,7 +22,6 @@
     "mini-css-extract-plugin": "^0.5.0",
     "nodemon": "^1.18.9",
     "nodemon-webpack-plugin": "^4.0.7",
-    "parallelshell": "^3.0.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "sass-loader": "^7.1.0",
@@ -40,6 +39,7 @@
     "radium": "^0.25.1",
     "multer": "^1.4.1",
     "jimp": "^0.6.0",
-    "isomorphic-fetch": "^2.2.1"
+    "isomorphic-fetch": "^2.2.1",
+    "concurrently": "^4.1.0"
   }
 }

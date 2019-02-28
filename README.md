@@ -22,7 +22,7 @@ Add the following scripts to your package.json
     "client": "cd ./node_modules/webpack/bin && node webpack.js --config ../../nullstack/webpack.client.dev.js --watch",
     "server": "cd ./node_modules/webpack/bin && node webpack.js --config ../../nullstack/webpack.server.dev.js --watch",
     "dist": "cd ./node_modules/parallelshell && node index.js \"cd ../webpack/bin && node webpack.js --config ../../nullstack/webpack.client.prod.js\" \"cd ../webpack/bin && node webpack.js --config ../../nullstack/webpack.server.prod.js\"",
-    "start": "cd ./node_modules/parallelshell && node index.js \"cd ../webpack/bin && node webpack.js --config ../../nullstack/webpack.client.dev.js --watch\" \"cd ../webpack/bin && node webpack.js --config ../../nullstack/webpack.server.dev.js --watch\""
+    "start": "concurrently -n client,server \"npm run client\" \"npm run server\""
 }
 ...
 ```
