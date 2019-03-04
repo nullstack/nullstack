@@ -3,51 +3,44 @@ Nullstack isn't anything shiny or new. This project is a stack built on top of r
 
 ## Installation
 
-Start your npm project (skip this step if you already have a project)
 ```sh
-$ npm init
+$ npm install -g nullstack
 ```
 
-```sh
-$ npm install --save nullstack
-```
+## Generating the application
 
-## Running the application
-
-Add the following scripts to your package.json
-
-```js
-...
-"scripts": {
-    "client": "cd ./node_modules/webpack/bin && node webpack.js --config ../../nullstack/webpack.client.dev.js --watch",
-    "server": "cd ./node_modules/webpack/bin && node webpack.js --config ../../nullstack/webpack.server.dev.js --watch",
-    "dist": "cd ./node_modules/parallelshell && node index.js \"cd ../webpack/bin && node webpack.js --config ../../nullstack/webpack.client.prod.js\" \"cd ../webpack/bin && node webpack.js --config ../../nullstack/webpack.server.prod.js\"",
-    "start": "concurrently -n client,server \"npm run client\" \"npm run server\""
-}
-...
-```
-
-this will give you access to the following commands in your terminal:
+The following command will initialize the project with the required structure structure and install the dependencies:
 
 ```sh
-$ npm run server
+$ nullstack new ProjectName
+```
+
+The project folder will give you access to the following commands in your terminal:
+
+```sh
+$ nullstack server
 ```
 compiles your server code into the build folder and watches for changes, the server will be available at the defined port
 
 ```sh
-$ npm run client
+$ nullstack client
 ```
 compiles your client code and styles into the build folder and watches for changes
 
 ```sh
-$ npm start
+$ nullstack
 ```
 the combination of both commands above running in a single terminal in parallel, this is the command you will use most of your development time
 
 ```sh
-$ npm run dist
+$ nullstack dist
 ```
 Prepares your code for production and pastes the result in the dist folder
+
+```sh
+$ nullstack generate page PageName
+```
+Generates a new page skeleton and imports it into index.js and routes it
 
 
 ## Project structure

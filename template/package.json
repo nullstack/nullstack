@@ -1,0 +1,18 @@
+{
+  "name": "{{PROJECT_NAME}}",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd ./node_modules/webpack/bin && node webpack.js --config ../../nullstack/webpack.client.dev.js --watch",
+    "server": "cd ./node_modules/webpack/bin && node webpack.js --config ../../nullstack/webpack.server.dev.js --watch",
+    "dist": "cd ./node_modules/parallelshell && node index.js \"cd ../webpack/bin && node webpack.js --config ../../nullstack/webpack.client.prod.js\" \"cd ../webpack/bin && node webpack.js --config ../../nullstack/webpack.server.prod.js\"",
+    "start": "concurrently -n client,server \"npm run client\" \"npm run server\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nullstack": "github:Mortaro/nullstack"
+  }
+}

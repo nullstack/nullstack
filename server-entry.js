@@ -17,7 +17,6 @@ const app = express();
 const port = 3769;
 
 app.use(cors());
-//app.use(bodyParser.json());
 
 const routes = [];
 
@@ -49,7 +48,7 @@ export async function ready() {
 
   await databaseClient.connect();
   const database = await databaseClient.db(settings['database.name']);
-  
+
   var store = new MongoDBStore({
     uri: settings['database.url'],
     databaseName: settings['database.name'],

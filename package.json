@@ -5,6 +5,9 @@
   "main": "index.js",
   "author": "Mortaro",
   "license": "MIT",
+  "bin": {
+    "nullstack": "cli.js"
+  },
   "dependencies": {
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.2.2",
