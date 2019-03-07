@@ -17,6 +17,9 @@ export function route(path, page) {
 }
 
 function renderCurrentPage() {
+  const parse = (string) => {
+    return JSON.parse(JSON.parse(string));
+  }
   let {page, params} = getPageWithParamsFromPath(routes, location.pathname + location.search);
   const wrapper = document.getElementById("application");
   const initialState = wrapper.getAttribute('data-state');
@@ -25,8 +28,8 @@ function renderCurrentPage() {
   const current = React.createElement(Radium(page), params);
   ReactDOM.render(current, wrapper, function() {
     if(initialState && !initialStateHydrated) {
-      element.setState(JSON.parse(initialState));
-      element.set(JSON.parse(initialSettings));
+      element.setState(parse(initialState));
+      element.set(parse(initialSettings));
     } else if(element.historyDidUpdate) {
       element.historyDidUpdate();
     }

@@ -1,4 +1,7 @@
 export default function(page, settings, state) {
+  const stringify = (object) => {
+    return JSON.stringify(JSON.stringify(object));
+  }
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -25,7 +28,7 @@ export default function(page, settings, state) {
       <link rel="stylesheet" href="/client.css" integrity="">
     </head>
     <body>
-      <div id="application" data-state='${JSON.stringify(state)}' data-settings='${JSON.stringify(settings)}'>${page}</div>
+      <div id="application" data-state="${stringify(state)}" data-settings="${stringify(settings)}">${page}</div>
       <script src="/client.js" integrity=""></script>
     </body>
     </html>
