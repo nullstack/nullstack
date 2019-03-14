@@ -12,8 +12,16 @@ module.exports = function(source) {
         return block;
       }
     }).join("\r\n\r\n");
-    return source;
-  } else {
-    return source;
   }
+  if(source.indexOf('//server') > 0) {
+    lines = source.split("\n");
+    source = lines.map((block) => {
+      if(block.indexOf('//server') > 0) {
+        return "";
+      } else {
+        return block;
+      }
+    }).join("\n");
+  }
+  return source;
 }

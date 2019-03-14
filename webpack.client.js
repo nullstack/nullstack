@@ -2,8 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-console.log("PATH:", path.resolve(__dirname, './build'));
-
 module.exports = {
   entry: '../../../src/index.js',
   output: {

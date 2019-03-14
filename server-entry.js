@@ -23,7 +23,11 @@ const routes = [];
 const settings = {};
 
 export function config(key, value) {
-  settings[key] = value;
+  if(value) {
+    settings[key] = value;
+  } else {
+    return settings[key];
+  }
 }
 
 export function route(path, page) {
@@ -86,6 +90,7 @@ export async function ready() {
         element.database = database;
         element.session = request.session;
         element.props = Object.assign({}, page.defaultProps, params);
+        element.resetState();
         if(element.historyDidUpdate) {
           await element.historyDidUpdate();
         }

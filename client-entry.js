@@ -8,8 +8,24 @@ let element;
 let initialStateHydrated = false;
 let lastPage;
 
-export function config() {
+const settings = {};
 
+export function config(key, value) {
+  if(value) {
+    settings[key] = value;
+  } else {
+    return settings[key];
+  }
+}
+
+export function getSettings() {
+  let defaults = {};
+  Object.keys(settings).forEach((key) => {
+    if(key.startsWith('default')) {
+      defaults[key.split('.')[1]] = settings[key];
+    }
+  });
+  return defaults;
 }
 
 export function route(path, page) {
@@ -25,8 +41,16 @@ function renderCurrentPage() {
   const initialState = wrapper.getAttribute('data-state');
   const initialSettings = wrapper.getAttribute('data-settings');
   params.ref = (e) => {element = e;};
-  const current = React.createElement(Radium(page), params);
+  class Page extends page {
+      constructor(props) {
+        super(props);
+        console.log(this.schema, 'schema');
+        this.resetState();
+      }
+  }
+  const current = React.createElement(Radium(Page), params);
   ReactDOM.render(current, wrapper, function() {
+    //element.resetState();
     if(initialState && !initialStateHydrated) {
       element.setState(parse(initialState));
       element.set(parse(initialSettings));
