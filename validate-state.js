@@ -10,11 +10,6 @@ export function bindProp(property) {
     const value = event.target.value;
     if(value != this.props[property]) {
       const query = this.queryString({[property]: value});
-      /*const props = {...this.props, [property]: value};
-      const path = window.location.pathname;
-      const defaultProps = this.constructor.defaultProps;
-      const keys = Object.keys(props).filter((k) => props[k] != defaultProps[k]);
-      const query = keys.map(k => k + '=' + props[k]).join('&');*/
       this.redirect(`${path}?${query}`);
     }
   }
@@ -102,11 +97,11 @@ export async function validateState(rules) {
       } else if(rule.format == 'email' && !(/\S+@\S+\.\S+/).test(value)) {
         state[recordKey]['errors'][propertyKey] = this.errorMessages.invalid;
         valid = false;
-      } else if(rule.gt && rule.type =='string' && value.length < rule.gt) {
-        state[recordKey]['errors'][propertyKey] = this.errorMessages.gt;
+      } else if(rule.min && rule.type =='string' && value.length < rule.min) {
+        state[recordKey]['errors'][propertyKey] = this.errorMessages.min;
         valid = false;
-      } else if(rule.lte && rule.type =='string' && value.length > rule.lte) {
-        state[recordKey]['errors'][propertyKey] = this.errorMessages.lt;
+      } else if(rule.max && rule.type =='string' && value.length > rule.max) {
+        state[recordKey]['errors'][propertyKey] = this.errorMessages.max;
         valid = false;
       } else if(rule.gt && value < rule.gt) {
         state[recordKey]['errors'][propertyKey] = this.errorMessages.gt;
