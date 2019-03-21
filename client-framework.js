@@ -1,7 +1,7 @@
 import { Component } from "react";
 import {redirect} from './client-entry';
 import {getSettings} from './client-entry';
-import {bindState, validateState, resetState} from './validate-state.js';
+import {bindState, validateState, resetState, whitelistState, bindProp, queryString} from './validate-state.js';
 import errorMessages from './error-messages';
 export {route, ready, redirect, config} from './client-entry';
 
@@ -17,6 +17,7 @@ export function server(target, key, descriptor) {
     body.append('method', key);
     body.append('state', JSON.stringify(this.state));
     body.append('settings', JSON.stringify(this.settings));
+    body.append('schema', JSON.stringify(this.schema));
     args.forEach((arg, index) => {
       if(arg instanceof File) {
         body.append(`param${index}`, arg);
@@ -30,6 +31,7 @@ export function server(target, key, descriptor) {
         method: 'post',
         body: body
       }).then(r=>r.json()).then((response) => {
+        this.schema = response.schema;
         this.setState(response.state);
         this.setState(function (state, props) {
           const loadingState = {...state};
@@ -52,13 +54,17 @@ export class Page extends Component {
 
   settings = getSettings();
   state = {};
+  schema = {};
 
   constructor(props) {
     super(props);
     this.errorMessages = errorMessages[this.settings.locale];
+    this.queryString = queryString.bind(this);
+    this.bindProp = bindProp.bind(this);
     this.bindState = bindState.bind(this);
     this.validateState = validateState.bind(this);
     this.resetState = resetState.bind(this);
+    this.whitelistState = whitelistState.bind(this);
   }
 
   setSession(updates) {
@@ -72,6 +78,11 @@ export class Page extends Component {
   set(updates) {
     this.settings = Object.assign(this.settings, updates);
     document.title = `${this.settings.title}`;
+  }
+
+  @server
+  async uploadImage(recordKey, propertyKey, file) {
+
   }
 
 }

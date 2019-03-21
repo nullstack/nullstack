@@ -129,13 +129,24 @@ export async function ready() {
     let {page, params} = getPageWithParamsFromPath(routes, request.url);
     let element = new page();
     element.database = database;
+    element.schema = JSON.parse(request.body.schema);
     element.state = JSON.parse(request.body.state);
     element.settings = JSON.parse(request.body.settings);
     element.session = request.session;
     element.props = Object.assign({}, page.defaultProps, params);
     element.storage = storage;
+    await element.authorize(request.body.method);
+    if(element._redirect) {
+      return response.json({
+        schema: element.schema,
+        state: element.state,
+        settings: element.settings,
+        redirect: element._redirect
+      });
+    }
     const returned = await element[request.body.method].apply(element, functionParams);
     response.json({
+      schema: element.schema,
       state: element.state,
       returned: returned,
       settings: element.settings,

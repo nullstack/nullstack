@@ -4,6 +4,13 @@ function getQueryStringParams(query) {
     return query.split('&').reduce((params, param) => {
       let [key, value] = param.split('=');
       params[key] = value ? decodeURIComponent(value.replace(/\+/g, ' ')) : '';
+      if(params[key] === 'true') {
+        params[key] = true;
+      } else if (params[key] === 'false') {
+        params[key] = false;
+      } else if(/^\d+$/.test(params[key])) {
+        params[key] = parseInt(params[key]);
+      }
       return params;
     }, {});
   } else {

@@ -33,27 +33,20 @@ export function route(path, page) {
 }
 
 function renderCurrentPage() {
-  const parse = (string) => {
-    return JSON.parse(JSON.parse(string));
-  }
   let {page, params} = getPageWithParamsFromPath(routes, location.pathname + location.search);
   const wrapper = document.getElementById("application");
-  const initialState = wrapper.getAttribute('data-state');
-  const initialSettings = wrapper.getAttribute('data-settings');
   params.ref = (e) => {element = e;};
   class Page extends page {
-      constructor(props) {
-        super(props);
-        console.log(this.schema, 'schema');
-        this.resetState();
-      }
+    constructor(props) {
+      super(props);
+      this.resetState();
+    }
   }
   const current = React.createElement(Radium(Page), params);
   ReactDOM.render(current, wrapper, function() {
-    //element.resetState();
-    if(initialState && !initialStateHydrated) {
-      element.setState(parse(initialState));
-      element.set(parse(initialSettings));
+    if(window.initialState && !initialStateHydrated) {
+      element.setState(window.initialState);
+      element.set(window.initialSettings);
     } else if(element.historyDidUpdate) {
       element.historyDidUpdate();
     }
