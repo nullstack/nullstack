@@ -17,7 +17,6 @@ export function server(target, key, descriptor) {
     body.append('method', key);
     body.append('state', JSON.stringify(this.state));
     body.append('settings', JSON.stringify(this.settings));
-    body.append('schema', JSON.stringify(this.schema));
     args.forEach((arg, index) => {
       if(arg instanceof File) {
         body.append(`param${index}`, arg);

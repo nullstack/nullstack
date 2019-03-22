@@ -91,6 +91,10 @@ export async function ready() {
         element.session = request.session;
         element.props = Object.assign({}, page.defaultProps, params);
         element.resetState();
+        await element.authorize();
+        if(element._redirect) {
+          response.redirect(element._redirect);
+        }
         if(element.historyDidUpdate) {
           await element.historyDidUpdate();
         }
@@ -129,7 +133,6 @@ export async function ready() {
     let {page, params} = getPageWithParamsFromPath(routes, request.url);
     let element = new page();
     element.database = database;
-    element.schema = JSON.parse(request.body.schema);
     element.state = JSON.parse(request.body.state);
     element.settings = JSON.parse(request.body.settings);
     element.session = request.session;

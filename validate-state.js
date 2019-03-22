@@ -1,3 +1,5 @@
+import slugify from 'slugify';
+
 export function queryString(delta) {
   const props = {...this.props, ...delta};
   const defaultProps = this.constructor.defaultProps;
@@ -29,9 +31,31 @@ export function whitelistState() {
   for(const recordKey of Object.keys(this.schema)) {
     state[recordKey] = {};
     for(const propertyKey of Object.keys(this.state[recordKey])) {
-      if(this.schema[recordKey][propertyKey]) {
-        state[recordKey][propertyKey] = this.state[recordKey][propertyKey];
+      const rule = this.schema[recordKey][propertyKey];
+      if(rule) {
+        if(rule.type == 'slug') {
+          const slugs = [];
+          if(rule.source instanceof Array) {
+            for(const sourceKey of rule.source) {
+              console.log(sourceKey, this.state[recordKey][sourceKey]);
+              slugs.push((this.state[recordKey][sourceKey] || '').toString());
+            }
+          } else {
+            slugs.push((state[recordKey][rule.source] || '').toString());
+          }
+          const value = slugs.join('-').replace(/[\W_]+/g, "-");
+          state[recordKey][propertyKey] = slugify(value, {lower: true});
+        } else {
+          state[recordKey][propertyKey] = this.state[recordKey][propertyKey];
+        }
       }
+    }
+    const timestamp = new Date();
+    state[recordKey].updated = timestamp;
+    if(!this.state[recordKey].created) {
+      state[recordKey].created = timestamp;
+    } else {
+      state[recordKey].created = new Date(this.state[recordKey].created);
     }
   }
   return state;
@@ -44,7 +68,9 @@ export function resetState() {
       state[recordKey] = {...this.state[recordKey], errors: {}};
       Object.keys(this.schema[recordKey]).forEach((propertyKey) => {
         const schema = this.schema[recordKey][propertyKey];
-        if(schema.type == 'string' && !state[recordKey][propertyKey]) {
+        if(schema.type == 'slug' && !state[recordKey][propertyKey]) {
+          state[recordKey][propertyKey] = schema.value || '';
+        } else if(schema.type == 'string' && !state[recordKey][propertyKey]) {
           state[recordKey][propertyKey] = schema.value || '';
         } else if(schema.type == 'boolean' && !state[recordKey][propertyKey]) {
           state[recordKey][propertyKey] = schema.value || false;
@@ -97,10 +123,10 @@ export async function validateState(rules) {
       } else if(rule.format == 'email' && !(/\S+@\S+\.\S+/).test(value)) {
         state[recordKey]['errors'][propertyKey] = this.errorMessages.invalid;
         valid = false;
-      } else if(rule.min && rule.type =='string' && value.length < rule.min) {
+      } else if(rule.min && rule.type =='string' && value && value.length < rule.min) {
         state[recordKey]['errors'][propertyKey] = this.errorMessages.min;
         valid = false;
-      } else if(rule.max && rule.type =='string' && value.length > rule.max) {
+      } else if(rule.max && rule.type =='string' && value && value.length > rule.max) {
         state[recordKey]['errors'][propertyKey] = this.errorMessages.max;
         valid = false;
       } else if(rule.gt && value < rule.gt) {
