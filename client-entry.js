@@ -71,4 +71,9 @@ export function ready() {
       redirect(target);
     }
   });
+  window.addEventListener('submit', function(event) {
+    if(event.target.tagName.toLowerCase() == 'form') {
+      event.preventDefault();
+    }
+  });
 }
