@@ -82,6 +82,8 @@ export function resetState() {
           state[recordKey][propertyKey] = schema.value || [];
         } else if(schema.type == 'image' && !state[recordKey][propertyKey]) {
           state[recordKey][propertyKey] = schema.value;
+        } else if(schema.type == 'images' && !state[recordKey][propertyKey]) {
+          state[recordKey][propertyKey] = schema.value || [];
         }
       });
     });
@@ -115,6 +117,8 @@ export async function validateState(rules) {
         value = this.state[recordKey][propertyKey] || [];
       } else if(rule.type == 'image') {
         value = this.state[recordKey][propertyKey];
+      } else if(rule.type == 'images') {
+        value = this.state[recordKey][propertyKey] || [];
       }
       state[recordKey][propertyKey] = value;
       if(rule.required && !value) {
@@ -165,7 +169,7 @@ export function bindState(record, property) {
   const rule = schema[recordKey][propertyKey];
   const recordID = recordKey.split(/(?=[A-Z])/).join('_').toLowerCase();
   const propertyID = propertyKey.split(/(?=[A-Z])/).join('_').toLowerCase();
-  const value = rule.type == 'image' ? '' : this.state[recordKey][propertyKey];
+  const value = rule.type == 'image' || rule.type == 'images' ? '' : this.state[recordKey][propertyKey];
   return {
     value,
     id: `${recordID}_${propertyID}`,
@@ -174,6 +178,13 @@ export function bindState(record, property) {
       let value = event;
       if(rule.type == 'image') {
         value = await this.uploadImage(recordKey, propertyKey, event.target.files[0]);
+      } else if(rule.type == 'images') {
+        const files = Array.from(event.target.files);
+        value = [...this.state[recordKey][propertyKey]];
+        for (const file of files) {
+          const image = await this.uploadImage(recordKey, propertyKey, file);
+          value.push(image);
+        }
       } else if(event.target) {
         value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
       }
@@ -181,6 +192,8 @@ export function bindState(record, property) {
       record[propertyKey] = value;
       this.setState({[recordKey]: record});
       if(rule.type == 'image') {
+        this.validateState(schema);
+      } else if(rule.type == 'images') {
         this.validateState(schema);
       }
     },
