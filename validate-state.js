@@ -29,33 +29,66 @@ export function bindProp(property) {
 export function whitelistState() {
   const state = {}
   for(const recordKey of Object.keys(this.schema)) {
-    state[recordKey] = {};
-    for(const propertyKey of Object.keys(this.state[recordKey])) {
-      const rule = this.schema[recordKey][propertyKey];
-      if(rule) {
-        if(rule.type == 'slug') {
-          const slugs = [];
-          if(rule.source instanceof Array) {
-            for(const sourceKey of rule.source) {
-              console.log(sourceKey, this.state[recordKey][sourceKey]);
-              slugs.push((this.state[recordKey][sourceKey] || '').toString());
+    if(Array.isArray(this.state[recordKey])) {
+      state[recordKey] = [];
+      for(const object of this.state[recordKey]) {
+        const clone = {};
+        for(const propertyKey of Object.keys(object)) {
+          const rule = this.schema[recordKey][propertyKey];
+          if(rule) {
+            if(rule.type == 'slug') {
+              const slugs = [];
+              if(rule.source instanceof Array) {
+                for(const sourceKey of rule.source) {
+                  slugs.push((object[sourceKey] || '').toString());
+                }
+              } else {
+                slugs.push((object[rule.source] || '').toString());
+              }
+              const value = slugs.join('-').replace(/[\W_]+/g, "-");
+              clone[propertyKey] = slugify(value, {lower: true});
+            } else {
+              clone[propertyKey] = object[propertyKey];
             }
-          } else {
-            slugs.push((state[recordKey][rule.source] || '').toString());
           }
-          const value = slugs.join('-').replace(/[\W_]+/g, "-");
-          state[recordKey][propertyKey] = slugify(value, {lower: true});
+        }
+        const timestamp = new Date();
+        clone.updated = timestamp;
+        if(!object.created) {
+          clone.created = timestamp;
         } else {
-          state[recordKey][propertyKey] = this.state[recordKey][propertyKey];
+          clone.created = new Date(object.created);
+        }
+        state[recordKey].push(clone);
+      }
+    } else {
+      state[recordKey] = {};
+      for(const propertyKey of Object.keys(this.state[recordKey])) {
+        const rule = this.schema[recordKey][propertyKey];
+        if(rule) {
+          if(rule.type == 'slug') {
+            const slugs = [];
+            if(rule.source instanceof Array) {
+              for(const sourceKey of rule.source) {
+                slugs.push((this.state[recordKey][sourceKey] || '').toString());
+              }
+            } else {
+              slugs.push((state[recordKey][rule.source] || '').toString());
+            }
+            const value = slugs.join('-').replace(/[\W_]+/g, "-");
+            state[recordKey][propertyKey] = slugify(value, {lower: true});
+          } else {
+            state[recordKey][propertyKey] = this.state[recordKey][propertyKey];
+          }
         }
       }
-    }
-    const timestamp = new Date();
-    state[recordKey].updated = timestamp;
-    if(!this.state[recordKey].created) {
-      state[recordKey].created = timestamp;
-    } else {
-      state[recordKey].created = new Date(this.state[recordKey].created);
+      const timestamp = new Date();
+      state[recordKey].updated = timestamp;
+      if(!this.state[recordKey].created) {
+        state[recordKey].created = timestamp;
+      } else {
+        state[recordKey].created = new Date(this.state[recordKey].created);
+      }
     }
   }
   return state;
@@ -65,27 +98,29 @@ export function resetState() {
   if(this.schema) {
     const state = {};
     Object.keys(this.schema).forEach((recordKey) => {
-      state[recordKey] = {...this.state[recordKey], errors: {}};
-      Object.keys(this.schema[recordKey]).forEach((propertyKey) => {
-        const schema = this.schema[recordKey][propertyKey];
-        if(schema.type == 'slug' && !state[recordKey][propertyKey]) {
-          state[recordKey][propertyKey] = schema.value || '';
-        } else if(schema.type == 'string' && !state[recordKey][propertyKey]) {
-          state[recordKey][propertyKey] = schema.value || '';
-        } else if(schema.type == 'boolean' && !state[recordKey][propertyKey]) {
-          state[recordKey][propertyKey] = schema.value || false;
-        } else if(schema.type == 'integer' && !state[recordKey][propertyKey]) {
-          state[recordKey][propertyKey] = schema.value || 0;
-        } else if(schema.type == 'float' && !state[recordKey][propertyKey]) {
-          state[recordKey][propertyKey] = schema.value || 0;
-        } else if(schema.type == 'array' && !state[recordKey][propertyKey]) {
-          state[recordKey][propertyKey] = schema.value || [];
-        } else if(schema.type == 'image' && !state[recordKey][propertyKey]) {
-          state[recordKey][propertyKey] = schema.value;
-        } else if(schema.type == 'images' && !state[recordKey][propertyKey]) {
-          state[recordKey][propertyKey] = schema.value || [];
-        }
-      });
+      if(!Array.isArray(this.state[recordKey])) {
+        state[recordKey] = {...this.state[recordKey], errors: {}};
+        Object.keys(this.schema[recordKey]).forEach((propertyKey) => {
+          const schema = this.schema[recordKey][propertyKey];
+          if(schema.type == 'slug' && !state[recordKey][propertyKey]) {
+            state[recordKey][propertyKey] = schema.value || '';
+          } else if(schema.type == 'string' && !state[recordKey][propertyKey]) {
+            state[recordKey][propertyKey] = schema.value || '';
+          } else if(schema.type == 'boolean' && !state[recordKey][propertyKey]) {
+            state[recordKey][propertyKey] = schema.value || false;
+          } else if(schema.type == 'integer' && !state[recordKey][propertyKey]) {
+            state[recordKey][propertyKey] = schema.value || 0;
+          } else if(schema.type == 'float' && !state[recordKey][propertyKey]) {
+            state[recordKey][propertyKey] = schema.value || 0;
+          } else if(schema.type == 'array' && !state[recordKey][propertyKey]) {
+            state[recordKey][propertyKey] = schema.value || [];
+          } else if(schema.type == 'image' && !state[recordKey][propertyKey]) {
+            state[recordKey][propertyKey] = schema.value;
+          } else if(schema.type == 'images' && !state[recordKey][propertyKey]) {
+            state[recordKey][propertyKey] = schema.value || [];
+          }
+        });
+      }
     });
     this.state = {...this.state, ...state};
   }
@@ -99,55 +134,114 @@ export async function validateState(rules) {
   const state = {};
   let valid = true;
   for(const recordKey of Object.keys(rules)) {
-    const record = rules[recordKey]
-    state[recordKey] = {...this.state[recordKey]};
-    state[recordKey].errors = {...state[recordKey].errors}
-    for(const propertyKey of Object.keys(record)) {
-      const rule = record[propertyKey];
-      let value;
-      if(rule.type == 'string') {
-        value = (this.state[recordKey][propertyKey] || '').trim();
-      } else if(rule.type == 'float') {
-        value = parseFloat(this.state[recordKey][propertyKey] || '0');
-      } else if(rule.type == 'integer') {
-        value = parseInt(this.state[recordKey][propertyKey] || '0');
-      } else if(rule.type == 'boolean') {
-        value = !!this.state[recordKey][propertyKey];
-      } else if(rule.type == 'array') {
-        value = this.state[recordKey][propertyKey] || [];
-      } else if(rule.type == 'image') {
-        value = this.state[recordKey][propertyKey];
-      } else if(rule.type == 'images') {
-        value = this.state[recordKey][propertyKey] || [];
-      }
-      state[recordKey][propertyKey] = value;
-      if(rule.required && !value) {
-        state[recordKey]['errors'][propertyKey] = this.errorMessages.required;
-        valid = false;
-      } else if(rule.format == 'email' && !(/\S+@\S+\.\S+/).test(value)) {
-        state[recordKey]['errors'][propertyKey] = this.errorMessages.invalid;
-        valid = false;
-      } else if(rule.min && rule.type =='string' && value && value.length < rule.min) {
-        state[recordKey]['errors'][propertyKey] = this.errorMessages.min;
-        valid = false;
-      } else if(rule.max && rule.type =='string' && value && value.length > rule.max) {
-        state[recordKey]['errors'][propertyKey] = this.errorMessages.max;
-        valid = false;
-      } else if(rule.gt && value < rule.gt) {
-        state[recordKey]['errors'][propertyKey] = this.errorMessages.gt;
-        valid = false;
-      } else if(rule.confirm && value != state[recordKey][rule.confirm]) {
-        state[recordKey]['errors'][propertyKey] = this.errorMessages.confirm;
-        valid = false;
-      } else if (rule.with) {
-        const customError = await this[rule.with](recordKey, propertyKey, value);
-        if(customError) {
-          state[recordKey]['errors'][propertyKey] = customError;
-          valid = false;
+    const record = rules[recordKey];
+    if(Array.isArray(this.state[recordKey])) {
+      state[recordKey] = [];
+      let index = 0;
+      for(const object of this.state[recordKey]) {
+        state[recordKey][index] = {errors: {}};
+        for(const propertyKey of Object.keys(record)) {
+          const rule = record[propertyKey];
+          let value;
+          /****/
+          if(rule.type == 'string') {
+            value = (object[propertyKey] || '').trim();
+          } else if(rule.type == 'float') {
+            value = parseFloat(object[propertyKey] || '0');
+          } else if(rule.type == 'integer') {
+            value = parseInt(object[propertyKey] || '0');
+          } else if(rule.type == 'boolean') {
+            value = !!object[propertyKey];
+          } else if(rule.type == 'array') {
+            value = object[propertyKey] || [];
+          } else if(rule.type == 'image') {
+            value = object[propertyKey];
+          } else if(rule.type == 'images') {
+            value = object[propertyKey] || [];
+          }
+          state[recordKey][index][propertyKey] = value;
+          if(rule.required && !value) {
+            state[recordKey][index]['errors'][propertyKey] = this.errorMessages.required;
+            valid = false;
+          } else if(rule.format == 'email' && !(/\S+@\S+\.\S+/).test(value)) {
+            state[recordKey][index]['errors'][propertyKey] = this.errorMessages.invalid;
+            valid = false;
+          } else if(rule.min && rule.type =='string' && value && value.length < rule.min) {
+            state[recordKey][index]['errors'][propertyKey] = this.errorMessages.min;
+            valid = false;
+          } else if(rule.max && rule.type =='string' && value && value.length > rule.max) {
+            state[recordKey][index]['errors'][propertyKey] = this.errorMessages.max;
+            valid = false;
+          } else if(rule.gt && value < rule.gt) {
+            state[recordKey][index]['errors'][propertyKey] = this.errorMessages.gt;
+            valid = false;
+          } else if(rule.confirm && value != state[recordKey][index][rule.confirm]) {
+            state[recordKey][index]['errors'][propertyKey] = this.errorMessages.confirm;
+            valid = false;
+          } else if (rule.with) {
+            const customError = await this[rule.with](recordKey, propertyKey, value);
+            if(customError) {
+              state[recordKey][index]['errors'][propertyKey] = customError;
+              valid = false;
+            }
+          }
+          if(valid) {
+            delete state[recordKey][index]['errors'][propertyKey];
+          }
+          /***/
         }
+        index++;
       }
-      if(valid) {
-        delete state[recordKey]['errors'][propertyKey];
+    } else {
+      state[recordKey] = {...this.state[recordKey]};
+      state[recordKey].errors = {...state[recordKey].errors};
+      for(const propertyKey of Object.keys(record)) {
+        const rule = record[propertyKey];
+        let value;
+        if(rule.type == 'string') {
+          value = (this.state[recordKey][propertyKey] || '').trim();
+        } else if(rule.type == 'float') {
+          value = parseFloat(this.state[recordKey][propertyKey] || '0');
+        } else if(rule.type == 'integer') {
+          value = parseInt(this.state[recordKey][propertyKey] || '0');
+        } else if(rule.type == 'boolean') {
+          value = !!this.state[recordKey][propertyKey];
+        } else if(rule.type == 'array') {
+          value = this.state[recordKey][propertyKey] || [];
+        } else if(rule.type == 'image') {
+          value = this.state[recordKey][propertyKey];
+        } else if(rule.type == 'images') {
+          value = this.state[recordKey][propertyKey] || [];
+        }
+        state[recordKey][propertyKey] = value;
+        if(rule.required && !value) {
+          state[recordKey]['errors'][propertyKey] = this.errorMessages.required;
+          valid = false;
+        } else if(rule.format == 'email' && !(/\S+@\S+\.\S+/).test(value)) {
+          state[recordKey]['errors'][propertyKey] = this.errorMessages.invalid;
+          valid = false;
+        } else if(rule.min && rule.type =='string' && value && value.length < rule.min) {
+          state[recordKey]['errors'][propertyKey] = this.errorMessages.min;
+          valid = false;
+        } else if(rule.max && rule.type =='string' && value && value.length > rule.max) {
+          state[recordKey]['errors'][propertyKey] = this.errorMessages.max;
+          valid = false;
+        } else if(rule.gt && value < rule.gt) {
+          state[recordKey]['errors'][propertyKey] = this.errorMessages.gt;
+          valid = false;
+        } else if(rule.confirm && value != state[recordKey][rule.confirm]) {
+          state[recordKey]['errors'][propertyKey] = this.errorMessages.confirm;
+          valid = false;
+        } else if (rule.with) {
+          const customError = await this[rule.with](recordKey, propertyKey, value);
+          if(customError) {
+            state[recordKey]['errors'][propertyKey] = customError;
+            valid = false;
+          }
+        }
+        if(valid) {
+          delete state[recordKey]['errors'][propertyKey];
+        }
       }
     }
   }
@@ -155,7 +249,66 @@ export async function validateState(rules) {
   return valid;
 }
 
-export function bindState(record, property) {
+export function bindState(record, indexOrProperty, property) {
+  if(property) {
+    return bindMultipleState.call(this, record, indexOrProperty, property);
+  } else {
+    return bindSingleState.call(this, record, indexOrProperty);
+  }
+}
+
+function bindMultipleState(record, index, property) {
+  let recordKey, propertyKey, schema;
+  if(!property) {
+    recordKey = Object.keys(record)[0];
+    propertyKey = Object.keys(record[recordKey])[0];
+    schema = record;
+  } else {
+    recordKey = record;
+    propertyKey = property;
+    schema = {[recordKey]: {[propertyKey]: this.schema[recordKey][propertyKey]}};
+  }
+  const rule = schema[recordKey][propertyKey];
+  const recordID = recordKey.split(/(?=[A-Z])/).join('_').toLowerCase();
+  const propertyID = propertyKey.split(/(?=[A-Z])/).join('_').toLowerCase();
+  const value = rule.type == 'image' || rule.type == 'images' ? '' : this.state[recordKey][index][propertyKey];
+  return {
+    value,
+    id: `${recordID}_${index}_${propertyID}`,
+    checked: (this.state[recordKey][index][propertyKey] == true),
+    onChange: async (event) => {
+      let value = event;
+      if(rule.type == 'image') {
+        value = await this.uploadImage(recordKey, propertyKey, event.target.files[0]);
+      } else if(rule.type == 'images') {
+        const files = Array.from(event.target.files);
+        value = [...this.state[recordKey][propertyKey]];
+        for (const file of files) {
+          const image = await this.uploadImage(recordKey, propertyKey, file);
+          value.push(image);
+        }
+      } else if(event.target) {
+        value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+      }
+      const record = {...this.state[recordKey][index]};
+      record[propertyKey] = value;
+      const array = [...this.state[recordKey]];
+      array[index] = record;
+      this.setState({[recordKey]: array});
+      /*if(rule.type == 'image') {
+        this.validateState(schema);
+      } else if(rule.type == 'images') {
+        this.validateState(schema);
+      }*/
+    },
+    onBlur: (event) => {
+      //this.validateState(schema);
+    },
+    maxLength: (rule.type == 'string' && rule.lte) ? rule.lte : null
+  }
+}
+
+function bindSingleState(record, property) {
   let recordKey, propertyKey, schema;
   if(!property) {
     recordKey = Object.keys(record)[0];
