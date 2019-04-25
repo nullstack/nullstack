@@ -12,6 +12,7 @@ export function bindProp(property) {
     const value = event.target.value;
     if(value != this.props[property]) {
       const query = this.queryString({[property]: value});
+      const path = location.pathname;
       this.redirect(`${path}?${query}`);
     }
   }
