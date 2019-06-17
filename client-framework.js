@@ -84,6 +84,11 @@ export class Page extends Component {
 
   }
 
+  @server
+  async uploadFile(recordKey, propertyKey, file) {
+
+  }
+
 }
 
 export function ObjectID() {

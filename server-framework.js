@@ -58,4 +58,14 @@ export class Page extends React.Component {
     return {...sizes, label: file.originalname};
   }
 
+  async uploadFile(recordKey, propertyKey, file) {
+    const sizes = {};
+    const collection = `${recordKey}-${propertyKey}`;
+    const link = await this.storage.collection(collection).insertOne(file);
+    console.log('----------');
+    console.log(link);
+    console.log('----------');
+    return {link, label: file.originalname};
+  }
+
 }

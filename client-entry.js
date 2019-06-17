@@ -68,12 +68,14 @@ export function ready() {
     const target = event.target.getAttribute('href');
     if(target && target.startsWith('/')) {
       event.preventDefault();
+      event.returnValue = false;
       redirect(target);
     }
   });
   window.addEventListener('submit', function(event) {
     if(event.target.tagName.toLowerCase() == 'form') {
       event.preventDefault();
+      event.returnValue = false;
     }
   });
 }

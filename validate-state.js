@@ -119,6 +119,8 @@ export function resetState() {
             state[recordKey][propertyKey] = schema.value;
           } else if(schema.type == 'images' && !state[recordKey][propertyKey]) {
             state[recordKey][propertyKey] = schema.value || [];
+          } else if(schema.type == 'files' && !state[recordKey][propertyKey]) {
+            state[recordKey][propertyKey] = schema.value || [];
           }
         });
       }
@@ -158,6 +160,8 @@ export async function validateState(rules) {
           } else if(rule.type == 'image') {
             value = object[propertyKey];
           } else if(rule.type == 'images') {
+            value = object[propertyKey] || [];
+          } else if(rule.type == 'files') {
             value = object[propertyKey] || [];
           }
           state[recordKey][index][propertyKey] = value;
@@ -212,6 +216,8 @@ export async function validateState(rules) {
         } else if(rule.type == 'image') {
           value = this.state[recordKey][propertyKey];
         } else if(rule.type == 'images') {
+          value = this.state[recordKey][propertyKey] || [];
+        } else if(rule.type == 'files') {
           value = this.state[recordKey][propertyKey] || [];
         }
         state[recordKey][propertyKey] = value;
@@ -288,6 +294,13 @@ function bindMultipleState(record, index, property) {
           const image = await this.uploadImage(recordKey, propertyKey, file);
           value.push(image);
         }
+      } else if(rule.type == 'images') {
+        const files = Array.from(event.target.files);
+        value = [...this.state[recordKey][propertyKey]];
+        for (const file of files) {
+          const image = await this.uploadFile(recordKey, propertyKey, file);
+          value.push(image);
+        }
       } else if(event.target) {
         value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
       }
@@ -323,7 +336,7 @@ function bindSingleState(record, property) {
   const rule = schema[recordKey][propertyKey];
   const recordID = recordKey.split(/(?=[A-Z])/).join('_').toLowerCase();
   const propertyID = propertyKey.split(/(?=[A-Z])/).join('_').toLowerCase();
-  const value = rule.type == 'image' || rule.type == 'images' ? '' : this.state[recordKey][propertyKey];
+  const value = rule.type == 'image' || rule.type == 'images' || rule.type == 'files' ? '' : this.state[recordKey][propertyKey];
   return {
     value,
     id: `${recordID}_${propertyID}`,
@@ -339,6 +352,13 @@ function bindSingleState(record, property) {
           const image = await this.uploadImage(recordKey, propertyKey, file);
           value.push(image);
         }
+      } else if(rule.type == 'files') {
+        const files = Array.from(event.target.files);
+        value = [...this.state[recordKey][propertyKey]];
+        for (const file of files) {
+          const image = await this.uploadFile(recordKey, propertyKey, file);
+          value.push(image);
+        }
       } else if(event.target) {
         value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
       }
@@ -348,6 +368,8 @@ function bindSingleState(record, property) {
       if(rule.type == 'image') {
         this.validateState(schema);
       } else if(rule.type == 'images') {
+        this.validateState(schema);
+      } else if(rule.type == 'files') {
         this.validateState(schema);
       }
     },
