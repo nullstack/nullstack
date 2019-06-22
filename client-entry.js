@@ -50,6 +50,9 @@ function renderCurrentPage() {
     } else if(element.historyDidUpdate) {
       element.historyDidUpdate();
     }
+    if(element.ready) {
+      element.ready();
+    }
     initialStateHydrated = true;
   });
 }
