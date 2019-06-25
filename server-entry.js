@@ -90,6 +90,7 @@ export async function ready() {
         element.database = database;
         element.session = request.session;
         element.props = Object.assign({}, page.defaultProps, params);
+        element.request = request;
         element.resetState();
         await element.authorize();
         if(element._redirect) {
@@ -107,6 +108,7 @@ export async function ready() {
             this.state = element.state;
             this.session = element.session;
             this.database = database;
+            this.request = request;
           }
         }
         const current = React.createElement(Klass, params);
@@ -138,6 +140,7 @@ export async function ready() {
     element.session = request.session;
     element.props = Object.assign({}, page.defaultProps, params);
     element.storage = storage;
+    element.request = request;
     await element.authorize(request.body.method);
     if(element._redirect) {
       return response.json({
