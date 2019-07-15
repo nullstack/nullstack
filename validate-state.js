@@ -150,7 +150,11 @@ export async function validateState(rules) {
           if(rule.type == 'string') {
             value = (object[propertyKey] || '').trim();
           } else if(rule.type == 'float') {
-            value = parseFloat(object[propertyKey] || '0');
+            value = object[propertyKey] || '0';
+            if(typeof value === 'string' && value.indexOf(',') > -1) {
+              value = value.replace(/\./g,'').replace(',', '.');
+            }
+            value = parseFloat(value);
           } else if(rule.type == 'integer') {
             value = parseInt(object[propertyKey] || '0');
           } else if(rule.type == 'boolean') {
@@ -206,7 +210,11 @@ export async function validateState(rules) {
         if(rule.type == 'string') {
           value = (this.state[recordKey][propertyKey] || '').trim();
         } else if(rule.type == 'float') {
-          value = parseFloat(this.state[recordKey][propertyKey] || '0');
+          value = this.state[recordKey][propertyKey] || '0';
+          if(typeof value === 'string' && value.indexOf(',') > -1) {
+            value = value.replace(/\./g,'').replace(',', '.');
+          }
+          value = parseFloat(value);
         } else if(rule.type == 'integer') {
           value = parseInt(this.state[recordKey][propertyKey] || '0');
         } else if(rule.type == 'boolean') {
