@@ -1,6 +1,6 @@
 {
   "name": "nullstack",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Full stack development on top of react and express",
   "main": "index.js",
   "author": "Mortaro",
