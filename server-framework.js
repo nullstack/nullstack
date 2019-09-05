@@ -53,14 +53,14 @@ export class Page extends React.Component {
     const collection = `${recordKey}-${propertyKey}`;
     for(const size of Object.keys(this.schema[recordKey][propertyKey].sizes)) {
       const settings = this.schema[recordKey][propertyKey].sizes[size];
-      sizes[size] = `${this.settings.protocol}://${this.settings.domain}` + await this.storage.collection(collection).insertOne({...file, ...settings});
+      sizes[size] = await this.storage.collection(collection).insertOne({...file, ...settings, ...this.settings});
     };
     return {...sizes, label: file.originalname};
   }
 
   async uploadFile(recordKey, propertyKey, file) {
     const collection = `${recordKey}-${propertyKey}`;
-    const link = `${this.settings.protocol}://${this.settings.domain}` + await this.storage.collection(collection).insertOne(file);
+    const link = `${this.settings.protocol}://${this.settings.domain}` + await this.storage.collection(collection).insertOne(file, ...this.settings);
     return {link, label: file.originalname};
   }
 

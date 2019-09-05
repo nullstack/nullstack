@@ -1,5 +1,31 @@
 import fs from 'fs';
 import Jimp from 'jimp';
+import AWS from 'aws-sdk';
+import {config} from './server-entry';
+
+async function saveOnAmazon(options) {
+  const s3 = new AWS.S3({
+    accessKeyId: config('storage.key'),
+    secretAccessKey: config('storage.secret'),
+    region: config('storage.region')
+  });
+  const response = await s3.putObject({
+    Bucket: config('storage.bucket'),
+    Key: options.key,
+    Body: options.buffer,
+    ACL: 'public-read',
+    ContentType: options.mimetype,
+  }).promise();
+  console.log('resp', response);
+  return `https://s3-${config('storage.region')}.amazonaws.com/${config('storage.bucket')}/${options.key}`;
+}
+
+async function saveOnDisk(options) {
+  const wstream = fs.createWriteStream(`NULLSTACK_ROOT` + '/' + options.key);
+  wstream.write(options.buffer);
+  wstream.end();
+  return `${config('default.protocol')}://${config('default.domain')}/` + options.key;
+}
 
 export default {
 
@@ -8,8 +34,7 @@ export default {
     return {
 
       async insertOne(options) {
-        const prefix = `NULLSTACK_ROOT`
-        const path = `/uploads/${folder}-`;
+        const path = `uploads/${folder}-`;
         if(options.width || options.height) {
           let buffer = await Jimp.read(options.buffer);
           const width = options.width || Jimp.AUTO;
@@ -25,10 +50,12 @@ export default {
           options.extension = options.mimetype.split('/')[1];
         }
         const name = `${options.name || new Date().getTime()}.${options.extension}`;
-        const wstream = fs.createWriteStream(`${prefix}${path}${name}`);
-        wstream.write(options.buffer);
-        wstream.end();
-        return `${path}${name}`;
+        options.key = `${path}${name}`;
+        if(config('storage.type') == 's3') {
+          return await saveOnAmazon(options);
+        } else {
+          return await saveOnDisk(options);
+        }
       }
 
     }
