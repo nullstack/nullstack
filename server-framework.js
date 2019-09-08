@@ -60,7 +60,7 @@ export class Page extends React.Component {
 
   async uploadFile(recordKey, propertyKey, file) {
     const collection = `${recordKey}-${propertyKey}`;
-    const link = `${this.settings.protocol}://${this.settings.domain}` + await this.storage.collection(collection).insertOne(file, ...this.settings);
+    const link = await this.storage.collection(collection).insertOne({...file, ...this.settings});
     return {link, label: file.originalname};
   }
 

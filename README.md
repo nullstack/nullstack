@@ -38,6 +38,11 @@ $ nullstack dist
 Prepares your code for production and pastes the result in the dist folder
 
 ```sh
+$ nullstack deploy
+```
+Runs dist automatically and then sends the dist files to production server in disk or s3
+
+```sh
 $ nullstack generate page PageName
 ```
 Generates a new page skeleton and imports it into index.js and routes it

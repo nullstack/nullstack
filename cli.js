@@ -51,13 +51,9 @@ if(command == 'new') {
     name: 'server'
   }]);
 } else if (command == 'dist') {
-  concurrently([{
-    command: 'cd ./node_modules/webpack/bin && node webpack.js --config ../../nullstack/webpack.client.prod.js',
-    name: 'client'
-  }, {
-    command: 'cd ./node_modules/webpack/bin && node webpack.js --config ../../nullstack/webpack.server.prod.js',
-    name: 'server'
-  }]);
+  require('./cli/dist.js')();
+} else if (command == 'deploy') {
+  require('./cli/deploy.js')();
 } else if (command == 'generate') {
   const pageName = process.argv[4];
   const fileName = pageName.split(/(?=[A-Z])/).join('_').toLowerCase();
