@@ -113,7 +113,7 @@ export async function ready() {
         }
         const current = React.createElement(Klass, params);
         const elementString = ReactDOMServer.renderToString(current);
-        response.send(template(elementString, element.settings, element.state));
+        response.send(template(elementString, element.settings, element.state, request));
       }
     } catch(e) {
       console.log(e);
