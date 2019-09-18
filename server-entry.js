@@ -87,6 +87,7 @@ export async function ready() {
       let {page, params} = getPageWithParamsFromPath(routes, request.url);
       if(page) {
         const element = new page();
+        element.settings = {...element.settings, canonical: `${element.settings.protocol}://${element.settings.domain}${request.path}`};
         element.database = database;
         element.session = request.session;
         element.props = Object.assign({}, page.defaultProps, params);

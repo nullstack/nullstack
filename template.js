@@ -2,7 +2,6 @@ export default function(page, settings, state, request) {
   const stringify = (object) => {
     return JSON.stringify(object);
   }
-  const url = `${settings.protocol}://${settings.domain}${request.path}`;
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -16,8 +15,8 @@ export default function(page, settings, state, request) {
       <meta property="og:title" content="${settings.title}">
       <meta property="og:type" content="${settings.type}">
       <meta property="og:site_name" content="${settings.project}">
-      <meta property="og:url" content="${settings.canonical || url}">
-      <link rel="canonical" href="${settings.canonical || url}">
+      <meta property="og:url" content="${settings.canonical}">
+      <link rel="canonical" href="${settings.canonical}">
       <meta property="og:locale" content="${settings.locale}">
       <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
       <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -30,6 +29,7 @@ export default function(page, settings, state, request) {
       <meta name="msapplication-starturl" content="/">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <link rel="stylesheet" href="/client.css" integrity="">
+      ${settings.schema ? `<script type="application/ld+json">${JSON.stringify(settings.schema)}</script>` : ''}
     </head>
     <body>
       <div id="application">${page}</div>
