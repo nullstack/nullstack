@@ -46,8 +46,9 @@ export default {
           options.buffer = await buffer.quality(options.quality).getBufferAsync('image/jpeg');
           options.mimetype = 'image/jpeg';
         }
-        if(!options.extension && options.mimetype) {
-          options.extension = options.mimetype.split('/')[1];
+        if(!options.extension) {
+          const extensions = options.originalname.split('.');
+          options.extension = extensions[extensions.length - 1];
         }
         const name = `${options.name || new Date().getTime()}.${options.extension}`;
         options.key = `${path}${name}`;
