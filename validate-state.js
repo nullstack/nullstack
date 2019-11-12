@@ -7,23 +7,33 @@ export function queryString(delta) {
   return keys.map(k => k + '=' + props[k]).join('&');
 }
 
-export function bindProp(property) {
-  const redirect = (event) => {
-    const value = event.target.value;
+export function bindProp(property, options={}) {
+  const redirect = (value) => {
     if(value != this.props[property]) {
-      const query = this.queryString({[property]: value});
+      const query = this.queryString({[property]: value, ...options});
       const path = location.pathname;
       this.redirect(`${path}?${query}`);
     }
   }
   return {
+    key: `${Math.floor((Math.random() * 1000))}-min`,
     defaultValue: this.props[property],
-    onKeyPress: (event) => {
-      if (event.key === 'Enter') {
-        redirect(event);
+    onChange: (event) => {
+      const value = event.target.value;
+      if(event.target.tagName.toLowerCase() == 'select') {
+        redirect(value);
       }
     },
-    onBlur: redirect
+    onKeyPress: (event) => {
+      if (event.key === 'Enter') {
+        redirect(event.target.value);
+      }
+    },
+    onBlur() {
+      if(event.target.tagName.toLowerCase() != 'select') {
+        redirect(event.target.value);
+      }
+    }
   }
 }
 
