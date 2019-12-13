@@ -131,6 +131,8 @@ export function resetState() {
             state[recordKey][propertyKey] = schema.value || [];
           } else if(schema.type == 'files' && !state[recordKey][propertyKey]) {
             state[recordKey][propertyKey] = schema.value || [];
+          } else if(schema.type == 'date' && !state[recordKey][propertyKey]) {
+            state[recordKey][propertyKey] = schema.value;
           }
         });
       }
@@ -177,6 +179,8 @@ export async function validateState(rules) {
             value = object[propertyKey] || [];
           } else if(rule.type == 'files') {
             value = object[propertyKey] || [];
+          } else if(rule.type == 'date') {
+            value = object[propertyKey];
           }
           state[recordKey][index][propertyKey] = value;
           if(rule.required && !value) {
@@ -236,6 +240,8 @@ export async function validateState(rules) {
         } else if(rule.type == 'images') {
           value = this.state[recordKey][propertyKey] || [];
         } else if(rule.type == 'files') {
+          value = this.state[recordKey][propertyKey] || [];
+        } else if(rule.type == 'date') {
           value = this.state[recordKey][propertyKey] || [];
         }
         state[recordKey][propertyKey] = value;

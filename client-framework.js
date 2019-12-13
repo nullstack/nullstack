@@ -4,6 +4,7 @@ import {getSettings} from './client-entry';
 import {bindState, validateState, resetState, whitelistState, bindProp, queryString} from './validate-state.js';
 import errorMessages from './error-messages';
 export {route, ready, redirect, config} from './client-entry';
+import dateParser from './date-parser';
 
 export function server(target, key, descriptor) {
   const original = descriptor.value;
@@ -29,7 +30,8 @@ export function server(target, key, descriptor) {
       fetch(location.href, {
         method: 'post',
         body: body
-      }).then(r=>r.json()).then((response) => {
+      }).then(r=>r.text()).then((response) => {
+        response = JSON.parse(response, dateParser);
         this.schema = response.schema;
         this.setState(response.state);
         this.setState(function (state, props) {

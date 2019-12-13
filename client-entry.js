@@ -2,6 +2,7 @@ import ReactDOM from "react-dom";
 import React, { Component } from "react";
 import {getPageWithParamsFromPath} from './router';
 import Radium from 'radium';
+import dateParser from './date-parser';
 
 let routes = [];
 let element;
@@ -45,7 +46,8 @@ function renderCurrentPage() {
   const current = React.createElement(Radium(Page), params);
   ReactDOM.render(current, wrapper, function() {
     if(window.initialState && !initialStateHydrated) {
-      element.setState(window.initialState);
+      const initialState = JSON.parse(JSON.stringify(window.initialState), dateParser);
+      element.setState(initialState);
       element.set(window.initialSettings);
     } else if(element.historyDidUpdate) {
       element.historyDidUpdate();

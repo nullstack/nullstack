@@ -11,6 +11,7 @@ import ReactDOMServer from 'react-dom/server';
 import template from './template';
 import multer from 'multer';
 import storage from './storage';
+import dateParser from './date-parser';
 
 const app = express();
 
@@ -136,7 +137,7 @@ export async function ready() {
     let {page, params} = getPageWithParamsFromPath(routes, request.url);
     let element = new page();
     element.database = database;
-    element.state = JSON.parse(request.body.state);
+    element.state = JSON.parse(request.body.state, dateParser);
     element.settings = JSON.parse(request.body.settings);
     element.session = request.session;
     element.props = Object.assign({}, page.defaultProps, params);
