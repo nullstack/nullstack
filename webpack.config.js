@@ -60,11 +60,11 @@ function server(env, argv) {
         babel,
         {
           test: /.js$/,
-          loader: path.resolve('./Nullstack/register-static-from-server-loader.js'),
+          loader: path.resolve('./node_modules/nullstack/register-static-from-server-loader.js'),
         },
         {
           test: /.js$/,
-          loader: path.resolve('./Nullstack/render-method-proposal.js'),
+          loader: path.resolve('./node_modules/nullstack/render-method-proposal.js'),
         },
         {
           test: /.js$/,
@@ -116,11 +116,11 @@ function client(env, argv) {
         babel,
         {
           test: /.js$/,
-          loader: path.resolve('./Nullstack/remove-static-from-client-loader.js'),
+          loader: path.resolve('./node_modules/nullstack/remove-static-from-client-loader.js'),
         },
         {
           test: /.js$/,
-          loader: path.resolve('./Nullstack/render-method-proposal.js'),
+          loader: path.resolve('./node_modules/nullstack/render-method-proposal.js'),
         },
         {
           test: /.js$/,
