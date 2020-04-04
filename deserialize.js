@@ -1,7 +1,7 @@
 const reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
 const reMsAjax = /^\/Date\((d|-|.*)\)[\/|\\]$/;
 
-export default function dateParser(key, value) {
+function dateParser(key, value) {
   if (typeof value === 'string') {
     let a = reISO.exec(value);
     if (a) return new Date(value);
@@ -13,3 +13,7 @@ export default function dateParser(key, value) {
   }
   return value;
 };
+
+export default function deserialize(string) {
+  return JSON.parse(string, dateParser);
+}
