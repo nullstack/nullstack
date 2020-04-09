@@ -1,16 +1,14 @@
 import deserialize from './deserialize';
 
-class Metadata {
-
-  set title(value) {
-    this._title = value;
-    document.title = value;
+const metadataProxyHandler = {
+  set(target, name, value) {
+    if(name === 'title') {
+      document.title = value;
+    }
+    const result = Reflect.set(...arguments);
+    Nullstack.update();
+    return result;
   }
-
-  get title() {
-    return this._title;
-  }
-
 }
 
 class Router {
@@ -27,7 +25,8 @@ class Router {
 }
 
 const environment = {client: true, server: false, prerendered: true, production: false, development: true};
-const metadata = new Metadata();
+const metadata = new Proxy({...window.metadata}, metadataProxyHandler);
+delete window.metadata;
 const router = new Router();
 const context = {environment, metadata, router};
 

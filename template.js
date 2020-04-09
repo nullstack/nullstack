@@ -33,7 +33,7 @@ function head(metadata) {
   `).split('\n').join('');
 }
 
-function body({html, memory, representation, context}) {
+function body({html, memory, representation, context, metadata}) {
   const serializableContext = {};
   const blacklist = ['scope', 'router', 'metadata', 'environment'];
   for(const [key, value] of Object.entries(context)) {
@@ -45,6 +45,7 @@ function body({html, memory, representation, context}) {
     <body>
       <div id="application">${html}</div>
       <script async defer>
+        window.metadata = ${serialize(metadata)};
         window.context = ${serialize(serializableContext)};
         window.instances = ${serialize(memory)};
         window.representation = ${serialize(representation)};
@@ -67,4 +68,3 @@ export default function(renderable) {
     </html>
   `)
 }
-

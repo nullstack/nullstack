@@ -99,10 +99,10 @@ const contextProxyHandler = {
 const instanceProxyHandler = {
   get(target, name) {
     if(name !== 'initialize' && name !== 'initiate' && target[name] === undefined && typeof(target.constructor[name]) === 'function') {
-      const detour = async function(params) {
+      const detour = async function(params = {}) {
         const request = target._request();
         const response = target._response();
-        const context = Nullstack.generateContext({request, response, params});
+        const context = Nullstack.generateContext({request, response, ...params});
         return await target.constructor[name](context);
       }
       target[name] = detour;
@@ -117,7 +117,7 @@ class Nullstack {
     const Starter = this;
     Nullstack.generator = () => <Starter />;
     Nullstack.selector = selector;
-    await Starter.initiate(context);
+    typeof(Starter.initiate) === 'function' && await Starter.initiate(context);
     listen();
   }
 
@@ -208,7 +208,7 @@ class Nullstack {
     for(const key in scope.instances) {
       memory[key] = scope.instances[key].serialize();
     }
-    return {html, memory, representation: virtualDom, context: clientContext};
+    return {html, memory, representation: virtualDom, context: clientContext, metadata};
   }
 
   static getQueryStringParams(query) {
