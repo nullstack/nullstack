@@ -1,19 +1,19 @@
 <img src='https://raw.githubusercontent.com/nullstack/nullstack/master/nullstack.png' height='60' alt='Nullstack'>
 
-# Nullstack
 Fullstack components for one man armies.
+
 a.k.a the framework that solves my daily problem and maybe yours.
 
 ## Getting Started
 
-You can clone the minimal template with the commands bellow:
+Replace PROJECT_NAME with your project name to clone the minimal template with the commands bellow:
 
 ```sh
 git clone https://github.com/nullstack/nullstack-create-app.git PROJECT_NAME
 git remote rm origin
 ```
 
-Install the dependencies and start the application
+Install the dependencies and start the application:
 
 ```sh
 npm install
@@ -22,7 +22,7 @@ npm start
 
 ## Nullstack Examples
 
-You can check this repository with Nullstack Examples
+You can check this repository with Nullstack Examples:
 
 * [Basic Component](https://github.com/nullstack/nullstack-examples/blob/master/src/01_BasicComponent.js)
 * [Context and Props](https://github.com/nullstack/nullstack-examples/blob/master/src/02_ContextAndProps.js)
