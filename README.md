@@ -41,4 +41,4 @@ You can check this repository with Nullstack Examples:
 
 ## License
 
-Ruby on Rails is released under the [MIT License](https://opensource.org/licenses/MIT).
+Nullstack is released under the [MIT License](https://opensource.org/licenses/MIT).
