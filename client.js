@@ -66,15 +66,6 @@ const instanceProxyHandler = {
   }
 }
 
-window.addEventListener('click', function(event) {
-  const target = event.target.getAttribute('href');
-  if(target && target.startsWith('/')) {
-    event.preventDefault();
-    event.returnValue = false;
-    router.url = target;
-  }
-});
-
 export default class Nullstack {
 
   static initialize() {
@@ -274,6 +265,28 @@ export default class Nullstack {
       }
     } else if (current.type === next.type) {
       const attributeNames = Object.keys({...current.attributes, ...next.attributes});
+      if(next.type === 'a' && next.attributes.href && next.attributes.href.startsWith('/')) {
+        next.attributes.onclick = ({event}) => {
+          event.preventDefault();
+          router.url = next.attributes.href;
+        };
+      }
+      if(next.attributes.bind) {
+        const instance = this.findParentInstance([0, ...vdepth]);
+        next.attributes.value = instance[next.attributes.bind];
+        next.attributes.name = next.attributes.bind;
+        let eventName = 'oninput';
+        let valueName = 'value';
+        if(next.attributes.type === 'checkbox' || next.attributes.type === 'radio') {
+          eventName = 'onclick';
+          valueName = 'checked';
+        } else if(next.type !== 'input') {
+          eventName = 'onchange';
+        }
+        next.attributes[eventName] = ({event}) => {
+          instance[next.attributes.bind] = event.target[valueName];
+        }
+      }
       for(const name of attributeNames) {
         if(name === 'value') {
           if(next.attributes[name] !== selector.value) {
@@ -286,6 +299,9 @@ export default class Nullstack {
           selector.removeEventListener(eventName, instance.events[key]);
           if(next.attributes[name]) {
             instance.events[key] = (event) => {
+              if(next.attributes.default !== true) {
+                event.preventDefault();
+              }
               const context = this.generateContext({...instance.attributes, ...next.attributes, event});
               next.attributes[name](context);
             };
@@ -452,12 +468,37 @@ export default class Nullstack {
       return document.createTextNode(node);
     }
     const element = document.createElement(node.type);
+    if(node.type === 'a' && node.attributes.href && node.attributes.href.startsWith('/')) {
+      node.attributes.onclick = ({event}) => {
+        event.preventDefault();
+        router.url = node.attributes.href;
+      };
+    }
+    if(node.attributes.bind) {
+      const instance = this.findParentInstance([0, ...depth]);
+      node.attributes.value = instance[node.attributes.bind];
+      node.attributes.name = node.attributes.bind;
+      let eventName = 'oninput';
+      let valueName = 'value';
+      if(node.attributes.type === 'checkbox' || node.attributes.type === 'radio') {
+        eventName = 'onclick';
+        valueName = 'checked';
+      } else if(node.type !== 'input') {
+        eventName = 'onchange';
+      }
+      node.attributes[eventName] = ({event}) => {
+        instance[node.attributes.bind] = event.target[valueName];
+      }
+    }
     for(let name in node.attributes) {
       if(name.startsWith('on')) {
         const key = '0.' + depth.join('.');
         const eventName = name.replace('on', '');
         const instance = this.findParentInstance([0, ...depth]);
         instance.events[key] = (event) => {
+          if(node.attributes.default !== true) {
+            event.preventDefault();
+          }
           const context = this.generateContext({...instance.attributes, ...node.attributes, event});
           node.attributes[name](context);
         };

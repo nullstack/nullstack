@@ -307,6 +307,11 @@ class Nullstack {
       return await this.render(node.children[0], [...depth, 0], scope);
     } else {
       let element = `<${node.type}`;
+      if(node.attributes.bind) {
+        const instance = scope.findParentInstance(depth);
+        node.attributes.value = instance[node.attributes.bind];
+        node.attributes.name = node.attributes.bind;
+      }
       for(let name in node.attributes) {
         if(!name.startsWith('on')) {
           if(node.attributes[name] === true) {
