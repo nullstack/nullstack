@@ -326,7 +326,7 @@ export default class Nullstack {
         }
       }
       const limit = Math.max(current.children.length, next.children.length);
-      for(let i = 0; i < limit; i++) {
+      for(let i = limit - 1; i > -1; i--) {
         this.rerender(selector, [...depth, i], [...vdepth, i]);
       }
     }
@@ -467,7 +467,21 @@ export default class Nullstack {
     if(this.isText(node)) {
       return document.createTextNode(node);
     }
-    const element = document.createElement(node.type);
+    let element;
+    let next = this.nextVirtualDom;
+    let isSvg = false;
+    for(const level of depth) {
+      next = next.children[level];
+      if(next.type === 'svg') {
+        isSvg = true;
+        break;
+      }
+    }
+    if(isSvg) {
+      element = document.createElementNS("http://www.w3.org/2000/svg", node.type);
+    } else {
+      element = document.createElement(node.type);
+    }
     if(node.type === 'a' && node.attributes.href && node.attributes.href.startsWith('/')) {
       node.attributes.onclick = ({event}) => {
         event.preventDefault();

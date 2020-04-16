@@ -321,14 +321,15 @@ class Nullstack {
           }
         }
       }
-      if(node.children.length > 0) {
+      const selfClosing = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr', 'menuitem'].includes(node.type);
+      if(selfClosing && node.children.length === 0) {
+        element += '/>';
+      } else {
         element += '>';
         for(let i = 0; i < node.children.length; i++) {
           element += await this.render(node.children[i], [...depth, i], scope);
         }
         element += `</${node.type}>`;
-      } else {
-        element += '/>';
       }
       return element;
     }
