@@ -1,5 +1,8 @@
 import deserialize from './deserialize';
 
+window.representation = deserialize(JSON.stringify(window.representation));
+window.instances = deserialize(JSON.stringify(window.instances));
+
 const metadataProxyHandler = {
   set(target, name, value) {
     if(name === 'title') {
@@ -264,7 +267,6 @@ export default class Nullstack {
         return selector.nodeValue = next;
       }
     } else if (current.type === next.type) {
-      const attributeNames = Object.keys({...current.attributes, ...next.attributes});
       if(next.type === 'a' && next.attributes.href && next.attributes.href.startsWith('/')) {
         next.attributes.onclick = ({event}) => {
           event.preventDefault();
@@ -273,22 +275,33 @@ export default class Nullstack {
       }
       if(next.attributes.bind) {
         const instance = this.findParentInstance([0, ...vdepth]);
-        next.attributes.value = instance[next.attributes.bind];
+        if(next.type === 'textarea') {
+          next.children = [instance[next.attributes.bind]];
+        } else if(next.type === 'input' && next.attributes.type === 'checkbox') {
+          next.attributes.checked = instance[next.attributes.bind];
+        } else {
+          next.attributes.value = instance[next.attributes.bind];
+        }
         next.attributes.name = next.attributes.bind;
         let eventName = 'oninput';
         let valueName = 'value';
         if(next.attributes.type === 'checkbox' || next.attributes.type === 'radio') {
           eventName = 'onclick';
           valueName = 'checked';
-        } else if(next.type !== 'input') {
+        } else if(next.type !== 'input' && next.type !== 'textarea') {
           eventName = 'onchange';
         }
         next.attributes[eventName] = ({event}) => {
           instance[next.attributes.bind] = event.target[valueName];
         }
       }
+      const attributeNames = Object.keys({...current.attributes, ...next.attributes});
       for(const name of attributeNames) {
-        if(name === 'value') {
+        if(name === 'checked') {
+          if(next.attributes[name] !== selector.value) {
+            selector.checked = next.attributes[name];
+          }
+        } else if(name === 'value') {
           if(next.attributes[name] !== selector.value) {
             selector.value = next.attributes[name];
           }
@@ -315,7 +328,7 @@ export default class Nullstack {
           } else if(current.attributes[name] !== undefined && next.attributes[name] === undefined) {
             selector.removeAttribute(name);
           } else if(current.attributes[name] !== next.attributes[name]) {
-            if(next.attributes[name] === false) {
+            if(next.attributes[name] === false || next.attributes[name] === null || next.attributes[name] === undefined) {
               selector.removeAttribute(name);
             } else if(next.attributes[name] === true) {
               selector.setAttribute(name, name);
@@ -393,6 +406,9 @@ export default class Nullstack {
       attributes = {};
     }
     children = this.flattenChildren(children);
+    if(type === 'textarea') {
+      children = [children.join('')];
+    }
     if(typeof(type) === 'function' && type.render !== undefined) {
       return {type, attributes, children: []}
     }
@@ -490,14 +506,18 @@ export default class Nullstack {
     }
     if(node.attributes.bind) {
       const instance = this.findParentInstance([0, ...depth]);
-      node.attributes.value = instance[node.attributes.bind];
+      if(node.type === 'textarea') {
+        node.children = [instance[node.attributes.bind]];
+      } else {
+        node.attributes.value = instance[node.attributes.bind];
+      }
       node.attributes.name = node.attributes.bind;
       let eventName = 'oninput';
       let valueName = 'value';
       if(node.attributes.type === 'checkbox' || node.attributes.type === 'radio') {
         eventName = 'onclick';
         valueName = 'checked';
-      } else if(node.type !== 'input') {
+      } else if(node.type !== 'input' && node.type !== 'textarea') {
         eventName = 'onchange';
       }
       node.attributes[eventName] = ({event}) => {
@@ -520,7 +540,7 @@ export default class Nullstack {
       } else if(typeof(node.attributes[name]) !== 'function' && typeof(node.attributes[name]) !== 'object') {
         if(node.attributes[name] === true) {
           element.setAttribute(name, name);
-        } else if(node.attributes[name] !== false) {
+        } else if(node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined) {
           element.setAttribute(name, node.attributes[name]);
         }
       }

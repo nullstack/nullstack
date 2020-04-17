@@ -158,6 +158,9 @@ class Nullstack {
       attributes = {};
     }
     children = this.flattenChildren(children);
+    if(type === 'textarea') {
+      children = [children.join('')];
+    }
     if(typeof(type) === 'function' && type.render !== undefined) {
       return {type, attributes, children: null}
     }
@@ -296,7 +299,6 @@ class Nullstack {
     } else if (this.isClass(node)) {
       const key = this.generateKey(node, depth);
       const instance = new node.type(scope);
-      //instance.server = {request: scope.request, response: scope.response};
       instance.attributes = node.attributes;
       scope.instances[key] = instance;
       const context = scope.generateContext(node.attributes);
@@ -309,14 +311,20 @@ class Nullstack {
       let element = `<${node.type}`;
       if(node.attributes.bind) {
         const instance = scope.findParentInstance(depth);
-        node.attributes.value = instance[node.attributes.bind];
+        if(node.type === 'textarea') {
+          node.children = [instance[node.attributes.bind]];
+        } else if(node.type === 'input' && node.attributes.type === 'checkbox') {
+          node.attributes.checked = instance[node.attributes.bind];
+        } else {
+          node.attributes.value = instance[node.attributes.bind];
+        }
         node.attributes.name = node.attributes.bind;
       }
       for(let name in node.attributes) {
         if(!name.startsWith('on')) {
           if(node.attributes[name] === true) {
             element += ` ${name}="${name}"`;
-          } else if(node.attributes[name] !== false) {
+          } else if(node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined) {
             element += ` ${name}="${node.attributes[name]}"`;
           }
         }
@@ -326,8 +334,12 @@ class Nullstack {
         element += '/>';
       } else {
         element += '>';
-        for(let i = 0; i < node.children.length; i++) {
-          element += await this.render(node.children[i], [...depth, i], scope);
+        if(node.type === 'textarea') {
+          element += node.children[0];
+        } else {
+          for(let i = 0; i < node.children.length; i++) {
+            element += await this.render(node.children[i], [...depth, i], scope);
+          }
         }
         element += `</${node.type}>`;
       }

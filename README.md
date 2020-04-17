@@ -20,6 +20,13 @@ npm install
 npm start
 ```
 
+## Deploy
+
+```sh
+npm run build
+node .production/server.js
+```
+
 ## Nullstack Examples
 
 You can check this repository with Nullstack Examples:
@@ -33,6 +40,9 @@ You can check this repository with Nullstack Examples:
 * [Server Side Rendering](https://github.com/nullstack/nullstack-examples/blob/master/src/07_ServerSideRendering.js)
 * [Metadata](https://github.com/nullstack/nullstack-examples/blob/master/src/08_Metadata.js)
 * [Initialization](https://github.com/nullstack/nullstack-examples/blob/master/src/09_Initialization.js)
+* [One Way Binding](https://github.com/nullstack/nullstack-examples/blob/master/src/10_OneWayBinding.js)
+* [Two Ways Binding](https://github.com/nullstack/nullstack-examples/blob/master/src/11_TwoWaysBinding.js)
+* [Scalable Vectors](https://github.com/nullstack/nullstack-examples/blob/master/src/12_ScalableVectors.js)
 
 ## Credits
 
