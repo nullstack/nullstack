@@ -219,7 +219,11 @@ export default class Nullstack {
     if(this.isFunction(next)) {
       const instance = this.findParentInstance([0, ...vdepth]);
       const context = this.generateContext({...instance.attributes, ...next.attributes});
-      next.children = [next.type(context)];
+      const root = next.type(context);
+      if(root && !this.isFalse(root)) {
+        root.attributes = {...root.attributes, ...next.attributes}
+      }
+      next.children = [root];
       return this.rerender(parent, depth, [...vdepth, 0]);
     }
     if(current !== undefined && /^[A-Z]/.test(current.type) && typeof(next.type) === 'function' && current.type === next.type.name) {
@@ -236,7 +240,11 @@ export default class Nullstack {
       instance.initialize && instance.initialize(context);
       instance.attributes = next.attributes;
       this.instancesRenewedQueue.push(instance);
-      next.children = [instance.render(context)];
+      const root = instance.render(context);
+      if(root && !this.isFalse(root)) {
+        root.attributes = {...root.attributes, ...next.attributes}
+      }
+      next.children = [root];
       const limit = Math.max(current.children.length, next.children.length);
       for(let i = 0; i < limit; i++) {
         this.rerender(parent, depth, [...vdepth, i]);
@@ -254,7 +262,11 @@ export default class Nullstack {
       }
       instance.attributes = next.attributes;
       this.instancesRenewedQueue.push(instance);
-      next.children = [instance.render.call(instance, context)];
+      const root = instance.render(context);
+      if(root && !this.isFalse(root)) {
+        root.attributes = {...root.attributes, ...next.attributes}
+      }
+      next.children = [root];
       const limit = Math.max(current.children.length, next.children.length);
       for(let i = 0; i < limit; i++) {
         this.rerender(parent, depth, [...vdepth, i]);
@@ -464,7 +476,11 @@ export default class Nullstack {
     if(this.isFunction(node)) {
       const instance = this.findParentInstance([0, ...depth]);
       const context = this.generateContext({...instance.attributes, ...node.attributes});
-      node.children = [node.type(context)];
+      const root = node.type(context);
+      if(root && !this.isFalse(root)) {
+        root.attributes = {...root.attributes, ...node.attributes}
+      }
+      node.children = [root];
       return this.render(node.children[0], [...depth, 0]);
     }
     if(this.isClass(node)) {
@@ -475,7 +491,11 @@ export default class Nullstack {
       this.instances[key] = instance;
       const context = this.generateContext(node.attributes);
       instance.initialize && instance.initialize(context);
-      node.children = [instance.render(context)];
+      const root = instance.render(context);
+      if(root && !this.isFalse(root)) {
+        root.attributes = {...root.attributes, ...node.attributes}
+      }
+      node.children = [root];
       this.instancesMountedQueue.push(instance);
       this.instancesRenewedQueue.push(instance);
       return this.render(node.children[0], [...depth, 0]);

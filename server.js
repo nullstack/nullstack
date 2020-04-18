@@ -252,6 +252,10 @@ class Nullstack {
     return {...params, ...this.getQueryStringParams(query)};
   }
 
+  static isFalse(node) {
+    return (node === false || node.type === false);
+  }
+
   static isClass(node) {
     return typeof(node.type) === 'function' && typeof(node.type.prototype.render === 'function');
   }
@@ -294,7 +298,11 @@ class Nullstack {
     } else if (this.isFunction(node)) {
       const instance = scope.findParentInstance(depth);
       const context = scope.generateContext({...instance.attributes, ...node.attributes});
-      node.children = [node.type(context)];
+      const root = node.type(context);
+      if(root && !this.isFalse(root)) {
+        root.attributes = {...root.attributes, ...node.attributes}
+      }
+      node.children = [root];
       return await this.render(node.children[0], [...depth, 0], scope);
     } else if (this.isClass(node)) {
       const key = this.generateKey(node, depth);
@@ -304,7 +312,11 @@ class Nullstack {
       const context = scope.generateContext(node.attributes);
       instance.initialize && instance.initialize(context);
       instance.initiate && await instance.initiate(context);
-      node.children = [instance.render.call(instance, context)];
+      const root = instance.render(context);
+      if(root && !this.isFalse(root)) {
+        root.attributes = {...root.attributes, ...node.attributes}
+      }
+      node.children = [root];
       node.type = node.type.name;
       return await this.render(node.children[0], [...depth, 0], scope);
     } else {
