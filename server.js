@@ -299,9 +299,6 @@ class Nullstack {
       const instance = scope.findParentInstance(depth);
       const context = scope.generateContext({...instance.attributes, ...node.attributes});
       const root = node.type(context);
-      if(root && !this.isFalse(root)) {
-        root.attributes = {...root.attributes, ...node.attributes}
-      }
       node.children = [root];
       return await this.render(node.children[0], [...depth, 0], scope);
     } else if (this.isClass(node)) {
@@ -313,9 +310,6 @@ class Nullstack {
       instance.initialize && instance.initialize(context);
       instance.initiate && await instance.initiate(context);
       const root = instance.render(context);
-      if(root && !this.isFalse(root)) {
-        root.attributes = {...root.attributes, ...node.attributes}
-      }
       node.children = [root];
       node.type = node.type.name;
       return await this.render(node.children[0], [...depth, 0], scope);

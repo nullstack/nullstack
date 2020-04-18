@@ -220,9 +220,6 @@ export default class Nullstack {
       const instance = this.findParentInstance([0, ...vdepth]);
       const context = this.generateContext({...instance.attributes, ...next.attributes});
       const root = next.type(context);
-      if(root && !this.isFalse(root)) {
-        root.attributes = {...root.attributes, ...next.attributes}
-      }
       next.children = [root];
       return this.rerender(parent, depth, [...vdepth, 0]);
     }
@@ -241,9 +238,6 @@ export default class Nullstack {
       instance.attributes = next.attributes;
       this.instancesRenewedQueue.push(instance);
       const root = instance.render(context);
-      if(root && !this.isFalse(root)) {
-        root.attributes = {...root.attributes, ...next.attributes}
-      }
       next.children = [root];
       const limit = Math.max(current.children.length, next.children.length);
       for(let i = 0; i < limit; i++) {
@@ -263,9 +257,6 @@ export default class Nullstack {
       instance.attributes = next.attributes;
       this.instancesRenewedQueue.push(instance);
       const root = instance.render(context);
-      if(root && !this.isFalse(root)) {
-        root.attributes = {...root.attributes, ...next.attributes}
-      }
       next.children = [root];
       const limit = Math.max(current.children.length, next.children.length);
       for(let i = 0; i < limit; i++) {
@@ -477,9 +468,6 @@ export default class Nullstack {
       const instance = this.findParentInstance([0, ...depth]);
       const context = this.generateContext({...instance.attributes, ...node.attributes});
       const root = node.type(context);
-      if(root && !this.isFalse(root)) {
-        root.attributes = {...root.attributes, ...node.attributes}
-      }
       node.children = [root];
       return this.render(node.children[0], [...depth, 0]);
     }
@@ -492,9 +480,6 @@ export default class Nullstack {
       const context = this.generateContext(node.attributes);
       instance.initialize && instance.initialize(context);
       const root = instance.render(context);
-      if(root && !this.isFalse(root)) {
-        root.attributes = {...root.attributes, ...node.attributes}
-      }
       node.children = [root];
       this.instancesMountedQueue.push(instance);
       this.instancesRenewedQueue.push(instance);
