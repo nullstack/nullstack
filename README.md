@@ -6,16 +6,16 @@ a.k.a the framework that solves my daily problem and maybe yours.
 
 ## Getting Started
 
-Replace PROJECT_NAME with your project name to clone the minimal template with the commands bellow:
+replace MyApp with your app name and run the command bellow to start a project: 
 
 ```sh
-git clone https://github.com/nullstack/nullstack-create-app.git PROJECT_NAME
-git remote rm origin
+npx create-nullstack-app MyApp
 ```
 
-Install the dependencies and start the application:
+cd into the generated folder, install the dependencies and start the application:
 
 ```sh
+cd my-app
 npm install
 npm start
 ```
