@@ -181,23 +181,6 @@ export default class Nullstack {
       current = current.children[level];
       next = next.children[level];
     }
-    if(this.isRoutable(next)) {
-      const routeDepth = depth.slice(0,-1).join('.');
-      if(this.routes[routeDepth] !== undefined) {
-        next.type = false;
-        next.children = [];
-      } else {
-        const params = this.routeMatches(router.url, next.attributes.route);
-        if(params) {
-          this.routes[routeDepth] = true;
-          next.attributes.params = params;
-        } else {
-          next.type = false;
-          next.children = [];
-        }
-      }
-      delete next.attributes.route;
-    }
     if(current === undefined && next !== undefined) {
       const nextSelector = this.render(next, vdepth);
       return parent.appendChild(nextSelector);
@@ -342,6 +325,25 @@ export default class Nullstack {
         }
       }
       const limit = Math.max(current.children.length, next.children.length);
+      const routeDepth = depth.join('.');
+      for(const child of next.children) {
+        if(this.isRoutable(child)) {
+          if(this.routes[routeDepth] !== undefined) {
+            child.type = false;
+            child.children = [];
+          } else {
+            const params = this.routeMatches(router.url, child.attributes.route);
+            if(params) {
+              this.routes[routeDepth] = true;
+              child.attributes.params = params;
+            } else {
+              child.type = false;
+              child.children = [];
+            }
+          }
+          delete child.attributes.route;
+        }
+      }
       for(let i = limit - 1; i > -1; i--) {
         this.rerender(selector, [...depth, i], [...vdepth, i]);
       }
@@ -443,15 +445,11 @@ export default class Nullstack {
   }
 
   static render(node, depth) {
-    if(this.isFalse(node)) {
-      return document.createComment("");
-    }
     if(this.isRoutable(node)) {
       const routeDepth = depth.slice(0,-1).join('.');
       if(this.routes[routeDepth] !== undefined) {
         node.type = false;
         node.children = [];
-        return this.render(node, depth);
       }
       const params = this.routeMatches(router.url, node.attributes.route);
       if(params) {
@@ -460,10 +458,12 @@ export default class Nullstack {
       } else {
         node.type = false;
         node.children = [];
-        return this.render(node, depth);
+
       }
-      delete node.attributes.route;
-    } 
+    }
+    if(this.isFalse(node)) {
+      return document.createComment("");
+    }
     if(this.isFunction(node)) {
       const instance = this.findParentInstance([0, ...depth]);
       const context = this.generateContext({...instance.attributes, ...node.attributes});
