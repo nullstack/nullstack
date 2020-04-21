@@ -258,6 +258,7 @@ export default class Nullstack {
         next.attributes.onclick = ({event}) => {
           event.preventDefault();
           router.url = next.attributes.href;
+          context.environment.prerendered = false;
         };
       }
       if(next.attributes.bind) {
@@ -377,7 +378,6 @@ export default class Nullstack {
       const context = this.generateContext(instance.attributes);
       instance.initiate && await instance.initiate(context);
     }
-    context.environment.prerendered = false;
     for(const [id, instance] of Object.entries(this.instances)) {
       if(!this.instancesRenewedQueue.includes(instance)) {
         const context = this.generateContext(instance.attributes);
@@ -508,6 +508,7 @@ export default class Nullstack {
       node.attributes.onclick = ({event}) => {
         event.preventDefault();
         router.url = node.attributes.href;
+        context.environment.prerendered = false;
       };
     }
     if(node.attributes.bind) {

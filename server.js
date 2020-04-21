@@ -182,7 +182,7 @@ class Nullstack {
 
   static async prerender(request, response) {
     const metadata = {};
-    const clientEnvironment = {...environment, prerender: true};
+    const clientEnvironment = {...environment, prerendered: true};
     const clientContext = {metadata, environment: clientEnvironment};
     const clientContextProxyHandler = {
       set(target, name, value) {
@@ -211,7 +211,7 @@ class Nullstack {
     for(const key in scope.instances) {
       memory[key] = scope.instances[key].serialize();
     }
-    return {html, memory, representation: virtualDom, context: clientContext, metadata, environment};
+    return {html, memory, representation: virtualDom, context: clientContext, metadata, environment: clientEnvironment};
   }
 
   static getQueryStringParams(query) {
