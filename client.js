@@ -27,7 +27,8 @@ class Router {
 
 }
 
-const environment = {client: true, server: false, prerendered: true, production: false, development: true};
+const environment = {...window.environment, client: true, server: false};
+delete window.environment;
 const metadata = new Proxy({...window.metadata}, metadataProxyHandler);
 delete window.metadata;
 const router = new Router();

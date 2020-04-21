@@ -33,7 +33,7 @@ function head(metadata) {
   `).split('\n').join('');
 }
 
-function body({html, memory, representation, context, metadata}) {
+function body({html, memory, representation, context, metadata, environment}) {
   const serializableContext = {};
   const blacklist = ['scope', 'router', 'metadata', 'environment'];
   for(const [key, value] of Object.entries(context)) {
@@ -49,6 +49,7 @@ function body({html, memory, representation, context, metadata}) {
         window.context = ${serialize(serializableContext)};
         window.instances = ${serialize(memory)};
         window.representation = ${serialize(representation)};
+        window.environment = ${serialize(environment)};
         document.addEventListener('DOMContentLoaded', () => {
           const script = window.document.createElement( 'script' );
           script.src = '/client.js';

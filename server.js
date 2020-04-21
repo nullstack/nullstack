@@ -211,7 +211,7 @@ class Nullstack {
     for(const key in scope.instances) {
       memory[key] = scope.instances[key].serialize();
     }
-    return {html, memory, representation: virtualDom, context: clientContext, metadata};
+    return {html, memory, representation: virtualDom, context: clientContext, metadata, environment};
   }
 
   static getQueryStringParams(query) {
