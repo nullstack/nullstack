@@ -18,6 +18,7 @@ class Router {
 
   set url(target) {
     history.pushState({}, document.title, target);
+    window.dispatchEvent(new Event('popstate'));
     Nullstack.update();
   }
 
@@ -75,6 +76,10 @@ export default class Nullstack {
   static initialize() {
     const Starter = this;
     Nullstack.start(() => <Starter />);
+  }
+
+  render() {
+    return false;
   }
 
   static initialized = false;
@@ -182,23 +187,12 @@ export default class Nullstack {
       current = current.children[level];
       next = next.children[level];
     }
-    if(current === undefined && next !== undefined) {
-      const nextSelector = this.render(next, vdepth);
-      return parent.appendChild(nextSelector);
-    } 
-    if(current !== undefined && next === undefined) {
-      return parent.removeChild(selector);
-    }
-    if(!this.isFalse(next) && this.isFalse(current)) {
-      const nextSelector = this.render(next, vdepth);
-      return parent.replaceChild(nextSelector, selector);
-    }
-    if(this.isFalse(next) && !this.isFalse(current)) {
-      const nextSelector = this.render(next, vdepth);
-      return parent.replaceChild(nextSelector, selector);
-    }
     if(this.isFalse(current) && this.isFalse(next)) {
       return;
+    }
+    if((this.isFalse(current) || this.isFalse(next)) && current != next) {
+      const nextSelector = this.render(next, vdepth);
+      return parent.replaceChild(nextSelector, selector);
     }
     if(this.isFunction(next)) {
       const instance = this.findParentInstance([0, ...vdepth]);
@@ -346,8 +340,25 @@ export default class Nullstack {
           delete child.attributes.route;
         }
       }
-      for(let i = limit - 1; i > -1; i--) {
-        this.rerender(selector, [...depth, i], [...vdepth, i]);
+      if(next.children.length > current.children.length) {
+        for(let i = 0; i < current.children.length; i++) {
+          this.rerender(selector, [...depth, i], [...vdepth, i]);
+        }
+        for(let i = current.children.length; i < next.children.length; i++) {
+          const nextSelector = this.render(next.children[i], depth);
+          selector.appendChild(nextSelector);
+        }
+      } else if(current.children.length > next.children.length) {
+        for(let i = 0; i < next.children.length; i++) {
+          this.rerender(selector, [...depth, i], [...vdepth, i]);
+        }
+        for(let i = current.children.length - 1; i >= next.children.length; i--) {
+          selector.removeChild(selector.children[i]);          
+        }
+      } else {
+        for(let i = limit - 1; i > -1; i--) {
+          this.rerender(selector, [...depth, i], [...vdepth, i]);
+        }
       }
     }
   }
@@ -494,6 +505,7 @@ export default class Nullstack {
     let isSvg = false;
     for(const level of depth) {
       next = next.children[level];
+      if(!next) break;
       if(next.type === 'svg') {
         isSvg = true;
         break;

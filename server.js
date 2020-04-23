@@ -113,6 +113,10 @@ const instanceProxyHandler = {
 
 class Nullstack {
 
+  render() {
+    return false;
+  }
+
   static async initialize(selector='#application') {
     const Starter = this;
     Nullstack.generator = () => <Starter />;
