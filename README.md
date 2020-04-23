@@ -43,6 +43,8 @@ You can check this repository with Nullstack Examples:
 * [One Way Binding](https://github.com/nullstack/nullstack-examples/blob/master/src/10_OneWayBinding.js)
 * [Two Ways Binding](https://github.com/nullstack/nullstack-examples/blob/master/src/11_TwoWaysBinding.js)
 * [Scalable Vectors](https://github.com/nullstack/nullstack-examples/blob/master/src/12_ScalableVectors.js)
+* [Lists](https://github.com/nullstack/nullstack-examples/blob/master/src/13_Lists.js)
+* [Headless Component](https://github.com/nullstack/nullstack-examples/blob/master/src/14_HeadlessComponent.js)
 
 ## Credits
 
