@@ -3,6 +3,10 @@ import deserialize from './deserialize';
 window.representation = deserialize(JSON.stringify(window.representation));
 window.instances = deserialize(JSON.stringify(window.instances));
 
+window.addEventListener('popstate', () => {
+  Nullstack.update();
+});
+
 const metadataProxyHandler = {
   set(target, name, value) {
     if(name === 'title') {
@@ -19,7 +23,6 @@ class Router {
   set url(target) {
     history.pushState({}, document.title, target);
     window.dispatchEvent(new Event('popstate'));
-    Nullstack.update();
   }
 
   get url() {
@@ -345,7 +348,7 @@ export default class Nullstack {
           this.rerender(selector, [...depth, i], [...vdepth, i]);
         }
         for(let i = current.children.length; i < next.children.length; i++) {
-          const nextSelector = this.render(next.children[i], depth);
+          const nextSelector = this.render(next.children[i], [...vdepth, i]);
           selector.appendChild(nextSelector);
         }
       } else if(current.children.length > next.children.length) {
