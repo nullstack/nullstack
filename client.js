@@ -291,8 +291,8 @@ export default class Nullstack {
             selector.value = next.attributes[name];
           }
         } if(name.startsWith('on')) {
-          const key = '0.' + vdepth.join('.');
           const eventName = name.replace('on', '');
+          const key = '0.' + vdepth.join('.') + '.' + eventName;
           const instance = this.findParentInstance([0, ...vdepth]);
           selector.removeEventListener(eventName, instance.events[key]);
           if(next.attributes[name]) {
@@ -548,8 +548,8 @@ export default class Nullstack {
     }
     for(let name in node.attributes) {
       if(name.startsWith('on')) {
-        const key = '0.' + depth.join('.');
         const eventName = name.replace('on', '');
+        const key = '0.' + depth.join('.') + '.' + eventName;
         const instance = this.findParentInstance([0, ...depth]);
         instance.events[key] = (event) => {
           if(node.attributes.default !== true) {
