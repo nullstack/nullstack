@@ -331,7 +331,7 @@ class Nullstack {
         node.attributes.name = node.attributes.bind;
       }
       for(let name in node.attributes) {
-        if(!name.startsWith('on')) {
+        if(!name.startsWith('on') && name !== 'html') {
           if(node.attributes[name] === true) {
             element += ` ${name}="${name}"`;
           } else if(node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined) {
@@ -344,7 +344,9 @@ class Nullstack {
         element += '/>';
       } else {
         element += '>';
-        if(node.type === 'textarea') {
+        if(node.attributes.html) {
+          element += node.attributes.html;
+        } else if(node.type === 'textarea') {
           element += node.children[0];
         } else {
           for(let i = 0; i < node.children.length; i++) {

@@ -45,6 +45,7 @@ You can check this repository with Nullstack Examples:
 * [Scalable Vectors](https://github.com/nullstack/nullstack-examples/blob/master/src/12_ScalableVectors.js)
 * [Lists](https://github.com/nullstack/nullstack-examples/blob/master/src/13_Lists.js)
 * [Headless Component](https://github.com/nullstack/nullstack-examples/blob/master/src/14_HeadlessComponent.js)
+* [Inner HTML](https://github.com/nullstack/nullstack-examples/blob/master/src/15_InnerHTML.js)
 
 ## Credits
 

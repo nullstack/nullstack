@@ -282,7 +282,19 @@ export default class Nullstack {
       }
       const attributeNames = Object.keys({...current.attributes, ...next.attributes});
       for(const name of attributeNames) {
-        if(name === 'checked') {
+        if(name === 'html') {
+          if(next.attributes[name] !== current.attributes[name]) {
+            selector.innerHTML = next.attributes[name];
+          }
+          const links = selector.querySelectorAll('a[href^="/"]');
+          for(const link of links) {
+            link.onclick = (event) => {
+              event.preventDefault();
+              router.url = link.href;
+              context.environment.prerendered = false;
+            };
+          }
+        } else if(name === 'checked') {
           if(next.attributes[name] !== selector.value) {
             selector.checked = next.attributes[name];
           }
@@ -290,7 +302,7 @@ export default class Nullstack {
           if(next.attributes[name] !== selector.value) {
             selector.value = next.attributes[name];
           }
-        } if(name.startsWith('on')) {
+        } else if(name.startsWith('on')) {
           const eventName = name.replace('on', '');
           const key = '0.' + vdepth.join('.') + '.' + eventName;
           const instance = this.findParentInstance([0, ...vdepth]);
@@ -323,6 +335,7 @@ export default class Nullstack {
           }
         }
       }
+      if(next.attributes.html) return;
       const limit = Math.max(current.children.length, next.children.length);
       const routeDepth = depth.join('.');
       for(const child of next.children) {
@@ -547,7 +560,17 @@ export default class Nullstack {
       }
     }
     for(let name in node.attributes) {
-      if(name.startsWith('on')) {
+      if(name === 'html') {
+        element.innerHTML = node.attributes[name];
+        const links = element.querySelectorAll('a[href^="/"]');
+        for(const link of links) {
+          link.onclick = (event) => {
+            event.preventDefault();
+            router.url = link.href;
+            context.environment.prerendered = false;
+          };
+        }
+      } else if(name.startsWith('on')) {
         const eventName = name.replace('on', '');
         const key = '0.' + depth.join('.') + '.' + eventName;
         const instance = this.findParentInstance([0, ...depth]);
@@ -567,9 +590,11 @@ export default class Nullstack {
         }
       }
     }
-    for(let i = 0; i < node.children.length; i++) {
-      const dom = this.render(node.children[i], [...depth, i]);
-      element.appendChild(dom);
+    if(!node.attributes.html) {
+      for(let i = 0; i < node.children.length; i++) {
+        const dom = this.render(node.children[i], [...depth, i]);
+        element.appendChild(dom);
+      }
     }
     return element;
   }
