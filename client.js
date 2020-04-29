@@ -23,6 +23,7 @@ class Router {
   set url(target) {
     history.pushState({}, document.title, target);
     window.dispatchEvent(new Event('popstate'));
+    Nullstack.routeChanged = true;
   }
 
   get url() {
@@ -226,7 +227,10 @@ export default class Nullstack {
       }
     } else if(this.isClass(current) && current.type === next.type) {
       const key = this.generateKey(next, [0, ...vdepth]);
-      let instance = this.instances[key];
+      let instance = null;
+      if(!next.attributes.params || !this.routeChanged) {
+        instance = this.instances[key];
+      }
       const context = this.generateContext(next.attributes);
       if(!instance) {
         instance = new next.type();
@@ -379,6 +383,8 @@ export default class Nullstack {
     }
   }
 
+  routeChanged = false;
+
   static update() {
     if(this.initialized) {
       clearInterval(this.renderQueue);
@@ -412,6 +418,7 @@ export default class Nullstack {
         delete this.instances[id];
       }
     }
+    this.routeChanged = false;
   }
 
   constructor() {
