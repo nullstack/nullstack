@@ -373,7 +373,7 @@ export default class Nullstack {
           this.rerender(selector, [...depth, i], [...vdepth, i]);
         }
         for(let i = current.children.length - 1; i >= next.children.length; i--) {
-          selector.removeChild(selector.children[i]);          
+          selector.removeChild(selector.childNodes[i]);          
         }
       } else {
         for(let i = limit - 1; i > -1; i--) {
