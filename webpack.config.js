@@ -1,7 +1,9 @@
 const path = require('path');
+const glob = require('glob');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
+const PurgecssPlugin = require('purgecss-webpack-plugin');
 
 const babel = {
   test: /\.js$/,
@@ -145,7 +147,17 @@ function client(env, argv) {
     plugins: [
       new MiniCssExtractPlugin({
         filename: "client.css"
-      })
+      }),
+      new PurgecssPlugin({
+        paths: glob.sync(`src/**/*`,  { nodir: true }),
+        whitelist: ['script', 'body', 'html', 'style'],
+        extractors: [
+          {
+            extractor: (content) => content.match(/[A-z0-9-\+:\/]+/g),
+            extensions: ['js']
+          }
+        ]
+      }),
     ]
   }
 }
