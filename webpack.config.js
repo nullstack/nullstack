@@ -94,6 +94,23 @@ function client(env, argv) {
   const folder = argv.mode === 'development' ? '.development' : '.production';
   const devtool = argv.mode === 'development' ? 'inline-source-map' : undefined;
   const minimize = argv.mode !== 'development';
+  const plugins = [
+    new MiniCssExtractPlugin({
+      filename: "client.css"
+    })
+  ]
+  if(argv.mode === 'production') {
+    plugins.push(new PurgecssPlugin({
+      paths: glob.sync(`src/**/*`,  { nodir: true }),
+      whitelist: ['script', 'body', 'html', 'style'],
+      extractors: [
+        {
+          extractor: (content) => content.match(/[A-z0-9-\+:\/]+/g),
+          extensions: ['js']
+        }
+      ]
+    }));
+  }
   return {
     entry: './src/index.js',
     output: {
@@ -104,12 +121,12 @@ function client(env, argv) {
       minimize: minimize,
       minimizer: [
         new TerserPlugin({
-            terserOptions: {
-                keep_classnames: true,
-                keep_fnames: true
-            }
-          })
-        ]
+          terserOptions: {
+            keep_classnames: true,
+            keep_fnames: true
+          }
+        })
+      ]
     },
     devtool,
     stats: 'errors-only',
@@ -144,21 +161,7 @@ function client(env, argv) {
       ]
     },
     target: 'node',
-    plugins: [
-      new MiniCssExtractPlugin({
-        filename: "client.css"
-      }),
-      new PurgecssPlugin({
-        paths: glob.sync(`src/**/*`,  { nodir: true }),
-        whitelist: ['script', 'body', 'html', 'style'],
-        extractors: [
-          {
-            extractor: (content) => content.match(/[A-z0-9-\+:\/]+/g),
-            extensions: ['js']
-          }
-        ]
-      }),
-    ]
+    plugins
   }
 }
 
