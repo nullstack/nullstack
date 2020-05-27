@@ -7,7 +7,7 @@ import template from './template';
 const environment = {client: false, server: true, prerendered: false};
 
 environment.development = process.argv[1].indexOf('.development') > -1;
-environment.production = process.argv[1].indexOf('.production') > -1;
+environment.production = !environment.development;
 
 const root = environment.development ? '.development' : '.production';
 
