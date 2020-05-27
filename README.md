@@ -9,13 +9,13 @@ a.k.a the framework that solves my daily problem and maybe yours.
 replace MyApp with your app name and run the command bellow to start a project: 
 
 ```sh
-npx create-nullstack-app MyApp
+npx create-nullstack-app app-name
 ```
 
 cd into the generated folder, install the dependencies and start the application:
 
 ```sh
-cd my-app
+cd app-name
 npm install
 npm start
 ```
