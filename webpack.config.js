@@ -4,6 +4,7 @@ const NodemonPlugin = require('nodemon-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 const babel = {
   test: /\.js$/,
@@ -109,6 +110,12 @@ function client(env, argv) {
           extensions: ['js']
         }
       ]
+    }));
+  } else {
+    plugins.push(new LiveReloadPlugin({
+      appendScriptTag: true,
+      port: 0,
+      delay: 3000,
     }));
   }
   return {

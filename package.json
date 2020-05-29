@@ -1,6 +1,6 @@
 {
   "name": "nullstack",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Fullstack components for one man armies",
   "main": "index.js",
   "author": "Mortaro",
@@ -29,6 +29,7 @@
     "terser-webpack-plugin": "^2.3.5",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
-    "purgecss-webpack-plugin": "^2.2.0"
+    "purgecss-webpack-plugin": "^2.2.0",
+    "webpack-livereload-plugin": "^2.3.0"
   }
 }
