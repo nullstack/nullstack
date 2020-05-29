@@ -3,6 +3,8 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import deserialize from './deserialize';
 import template from './template';
+import manifest from './manifest';
+import {existsSync} from 'fs';
 
 const environment = {client: false, server: true, prerendered: false};
 
@@ -14,13 +16,34 @@ const root = environment.development ? '.development' : '.production';
 const app = express();
 const server = http.createServer(app);
 
+const hasStyle = existsSync(`${root}/client.css`);
+
 for(const methodName of ['use','set', 'delete','get','head','options','patch','post','put']) {
   server[methodName] = function() {
     app[methodName](...arguments);
   }
 }
 
-const context = {environment, server, port: 5000};
+const project = {};
+project.type = "website";
+project.display = "standalone";
+project.orientation = "portrait";
+project.scope = "/";
+project.root = "/";
+project.icons = {
+  '72': '/icon-72x72.png',
+  '96': '/icon-96x96.png',
+  '128': '/icon-128x128.png',
+  '144': '/icon-144x144.png',
+  '152': '/icon-152x152.png',
+  '180': '/icon-180x180.png',
+  '192': '/icon-192x192.png',
+  '384': '/icon-384x384.png',
+  '512': '/icon-512x512.png'
+};
+project.favicon = '/favicon.png';
+
+const context = {environment, server, project, port: 5000};
 
 function listen() {
   
@@ -33,6 +56,10 @@ function listen() {
 
   app.get('/client.js', (request, response) => {
     response.sendFile('client.js', {root});
+  });
+
+  app.get('/manifest.json', (request, response) => {
+    response.json(manifest(project));
   });
 
   app.post("/:klassName/:methodName.json", async (request, response) => {
@@ -53,7 +80,7 @@ function listen() {
     if(request.originalUrl.indexOf('.') === -1) {
       const renderable = await Nullstack.prerender(request, response);
       if(!response.headersSent) {
-        const html = template(renderable);
+        const html = template(renderable, hasStyle);
         response.send(html);
       }
     } else {
@@ -63,9 +90,9 @@ function listen() {
 
   server.listen(context.port, () => {
     if(environment.development) {
-      console.log(`Nullstack is running in development mode at http://localhost:${context.port}`);
+      console.log(`${context.project.name} is running in development mode at http://localhost:${context.port}`);
     } else {
-      console.log(`Nullstack is running in production mode at http://127.0.0.1:${context.port}`);
+      console.log(`${context.project.name} is running in production mode at http://127.0.0.1:${context.port}`);
     }
   });
 
@@ -117,12 +144,13 @@ class Nullstack {
     return false;
   }
 
-  static async initialize(selector='#application') {
-    const Starter = this;
-    Nullstack.generator = () => <Starter />;
-    Nullstack.selector = selector;
-    typeof(Starter.initiate) === 'function' && await Starter.initiate(context);
-    listen();
+  static async start(Starter) {
+    if(this.name === 'Nullstack') {
+      Nullstack.generator = () => <Starter />;
+      Nullstack.selector = '#application';
+      typeof(Starter.start) === 'function' && await Starter.start(context);
+      listen();
+    }
   }
 
   serialize() {
@@ -136,6 +164,7 @@ class Nullstack {
   }
 
   static generateContext(temporary) {
+    console.log({context});
     return new Proxy({...context, ...temporary}, contextProxyHandler);
   }
 
@@ -185,9 +214,9 @@ class Nullstack {
   }
 
   static async prerender(request, response) {
-    const metadata = {};
+    const page = {image: '/image-1200x630.png'};
     const clientEnvironment = {...environment, prerendered: true};
-    const clientContext = {metadata, environment: clientEnvironment};
+    const clientContext = {page, project, environment: clientEnvironment};
     const clientContextProxyHandler = {
       set(target, name, value) {
         clientContext[name] = value;
@@ -215,7 +244,7 @@ class Nullstack {
     for(const key in scope.instances) {
       memory[key] = scope.instances[key].serialize();
     }
-    return {html, memory, representation: virtualDom, context: clientContext, metadata, environment: clientEnvironment};
+    return {html, memory, representation: virtualDom, context: clientContext, page, project, environment: clientEnvironment};
   }
 
   static getQueryStringParams(query) {

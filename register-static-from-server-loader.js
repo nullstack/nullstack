@@ -8,7 +8,9 @@ module.exports = function(source) {
     const subfragments = fragment.split('static ').filter((code) => code.startsWith('async'));
     for(const subfragment of subfragments) {
       const methodName = (subfragment.split('(')[0] || '').replace('async', '').trim();
-      source += `\nNullstack.registry[${klassName}.name+'.${methodName}'] = ${klassName}.${methodName};`
+      if(methodName !== 'start') {
+        source += `\nNullstack.registry[${klassName}.name+'.${methodName}'] = ${klassName}.${methodName};`
+      }
     }
   }
   return source;

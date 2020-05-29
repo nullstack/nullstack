@@ -7,7 +7,7 @@ window.addEventListener('popstate', () => {
   Nullstack.update();
 });
 
-const metadataProxyHandler = {
+const pageProxyHandler = {
   set(target, name, value) {
     if(name === 'title') {
       document.title = value;
@@ -34,10 +34,10 @@ class Router {
 
 const environment = {...window.environment, client: true, server: false};
 delete window.environment;
-const metadata = new Proxy({...window.metadata}, metadataProxyHandler);
-delete window.metadata;
+const page = new Proxy({...window.page}, pageProxyHandler);
+delete window.page;
 const router = new Router();
-const context = {environment, metadata, router};
+const context = {environment, page, router};
 
 const contextProxyHandler = {
   set(target, name, value) {
@@ -77,10 +77,10 @@ const instanceProxyHandler = {
 
 export default class Nullstack {
 
-  static initialize() {
+  /*static initialize() {
     const Starter = this;
     Nullstack.start(() => <Starter />);
-  }
+  }*/
 
   render() {
     return false;
@@ -99,15 +99,16 @@ export default class Nullstack {
 
   static renderQueue = null;
 
-  static start(initializer, selector='#application') {
+  static start(Starter) {
     for(const [key, value] of Object.entries(window.context)) {
       context[key] = value;
     }
+    Object.freeze(context.project);
     delete window.context;
     this.routes = {};
     this.currentInstance = null;
-    this.initializer = initializer;
-    this.selector = document.querySelector(selector);
+    this.initializer = () => <Starter />;
+    this.selector = document.querySelector('#application');
     this.instancesMountedQueue = [];
     this.instancesRenewedQueue = [];
     this.virtualDom = window.representation;
