@@ -164,7 +164,6 @@ class Nullstack {
   }
 
   static generateContext(temporary) {
-    console.log({context});
     return new Proxy({...context, ...temporary}, contextProxyHandler);
   }
 
