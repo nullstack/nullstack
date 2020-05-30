@@ -6,10 +6,10 @@ a.k.a the framework that solves my daily problem and maybe yours.
 
 ## Getting Started
 
-replace MyApp with your app name and run the command bellow to start a project: 
+replace project-name with your project name and run the command bellow to start a project: 
 
 ```sh
-npx create-nullstack-app app-name
+npx create-nullstack-app project-name
 ```
 
 cd into the generated folder, install the dependencies and start the application:
