@@ -376,7 +376,7 @@ class Nullstack {
         if(node.attributes.html) {
           element += node.attributes.html;
         } else if(node.type === 'textarea') {
-          element += node.children[0] || ' ';
+          element += node.children[0];
         } else {
           for(let i = 0; i < node.children.length; i++) {
             element += await this.render(node.children[i], [...depth, i], scope);

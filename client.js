@@ -77,11 +77,6 @@ const instanceProxyHandler = {
 
 export default class Nullstack {
 
-  /*static initialize() {
-    const Starter = this;
-    Nullstack.start(() => <Starter />);
-  }*/
-
   render() {
     return false;
   }
@@ -179,6 +174,9 @@ export default class Nullstack {
   static rerender(parent, depth, vdepth) {
     if(!this.hydrated) {
       for(const element of parent.childNodes) {
+        if(element.tagName && element.tagName.toLowerCase() == 'textarea' && element.childNodes.length == 0) {
+          element.appendChild(document.createTextNode(''));
+        }
         if(element.COMMENT_NODE === 8 && element.textContent === '#') {
           parent.removeChild(element);
         }
@@ -499,7 +497,6 @@ export default class Nullstack {
       } else {
         node.type = false;
         node.children = [];
-
       }
     }
     if(this.isFalse(node)) {
