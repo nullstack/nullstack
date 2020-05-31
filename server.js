@@ -89,10 +89,11 @@ function listen() {
   });
 
   server.listen(context.port, () => {
+    const name = context.project.name ? context.project.name : 'Nullstack'
     if(environment.development) {
-      console.log(`${context.project.name} is running in development mode at http://localhost:${context.port}`);
+      console.log(`${name} is running in development mode at http://localhost:${context.port}`);
     } else {
-      console.log(`${context.project.name} is running in production mode at http://127.0.0.1:${context.port}`);
+      console.log(`${name} is running in production mode at http://127.0.0.1:${context.port}`);
     }
   });
 
@@ -307,6 +308,17 @@ class Nullstack {
     if(node === false || (node !== undefined && node.type === false)) {
       return "<!-- -->";
     }
+    if(node !== undefined && node.attributes != undefined && node.attributes.bind) {
+      const instance = scope.findParentInstance(depth);
+      if(node.type === 'textarea') {
+        node.children = [instance[node.attributes.bind]];
+      } else if(node.type === 'input' && node.attributes.type === 'checkbox') {
+        node.attributes.checked = instance[node.attributes.bind];
+      } else {
+        node.attributes.value = instance[node.attributes.bind];
+      }
+      node.attributes.name = node.attributes.bind;
+    }
     if(node !== undefined && node.attributes !== undefined && node.attributes.route !== undefined) {
       const routeDepth = depth.slice(0,-1).join('.');
       if(scope.routes[routeDepth] !== undefined) {
@@ -347,17 +359,6 @@ class Nullstack {
       return await this.render(node.children[0], [...depth, 0], scope);
     } else {
       let element = `<${node.type}`;
-      if(node.attributes.bind) {
-        const instance = scope.findParentInstance(depth);
-        if(node.type === 'textarea') {
-          node.children = [instance[node.attributes.bind]];
-        } else if(node.type === 'input' && node.attributes.type === 'checkbox') {
-          node.attributes.checked = instance[node.attributes.bind];
-        } else {
-          node.attributes.value = instance[node.attributes.bind];
-        }
-        node.attributes.name = node.attributes.bind;
-      }
       for(let name in node.attributes) {
         if(!name.startsWith('on') && name !== 'html') {
           if(node.attributes[name] === true) {
@@ -375,7 +376,7 @@ class Nullstack {
         if(node.attributes.html) {
           element += node.attributes.html;
         } else if(node.type === 'textarea') {
-          element += node.children[0];
+          element += node.children[0] || ' ';
         } else {
           for(let i = 0; i < node.children.length; i++) {
             element += await this.render(node.children[i], [...depth, i], scope);

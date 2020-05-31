@@ -199,6 +199,33 @@ export default class Nullstack {
       const nextSelector = this.render(next, vdepth);
       return parent.replaceChild(nextSelector, selector);
     }
+    if(next !== undefined && next.attributes !== undefined && next.attributes.bind) {
+      const instance = this.findParentInstance([0, ...vdepth]);
+      if(next.type === 'textarea') {
+        next.children = [instance[next.attributes.bind]];
+      } else if(next.type === 'input' && next.attributes.type === 'checkbox') {
+        next.attributes.checked = instance[next.attributes.bind];
+      } else {
+        next.attributes.value = instance[next.attributes.bind];
+      }
+      next.attributes.name = next.attributes.bind;
+      let eventName = 'oninput';
+      let valueName = 'value';
+      if(next.attributes.type === 'checkbox' || next.attributes.type === 'radio') {
+        eventName = 'onclick';
+        valueName = 'checked';
+      } else if(next.type !== 'input' && next.type !== 'textarea') {
+        eventName = 'onchange';
+      }
+      const originalEvent = next.attributes[eventName];
+      next.attributes[eventName] = ({event, value}) => {
+        instance[next.attributes.bind] = event ? event.target[valueName] : value;
+        if(originalEvent !== undefined) {
+          const context = this.generateContext({...instance.attributes, ...next.attributes, event, value});
+          originalEvent(context);
+        }
+      }
+    }
     if(this.isFunction(next)) {
       const instance = this.findParentInstance([0, ...vdepth]);
       const context = this.generateContext({...instance.attributes, ...next.attributes});
@@ -262,28 +289,6 @@ export default class Nullstack {
           router.url = next.attributes.href;
           context.environment.prerendered = false;
         };
-      }
-      if(next.attributes.bind) {
-        const instance = this.findParentInstance([0, ...vdepth]);
-        if(next.type === 'textarea') {
-          next.children = [instance[next.attributes.bind]];
-        } else if(next.type === 'input' && next.attributes.type === 'checkbox') {
-          next.attributes.checked = instance[next.attributes.bind];
-        } else {
-          next.attributes.value = instance[next.attributes.bind];
-        }
-        next.attributes.name = next.attributes.bind;
-        let eventName = 'oninput';
-        let valueName = 'value';
-        if(next.attributes.type === 'checkbox' || next.attributes.type === 'radio') {
-          eventName = 'onclick';
-          valueName = 'checked';
-        } else if(next.type !== 'input' && next.type !== 'textarea') {
-          eventName = 'onchange';
-        }
-        next.attributes[eventName] = ({event}) => {
-          instance[next.attributes.bind] = event.target[valueName];
-        }
       }
       const attributeNames = Object.keys({...current.attributes, ...next.attributes});
       for(const name of attributeNames) {
@@ -500,6 +505,31 @@ export default class Nullstack {
     if(this.isFalse(node)) {
       return document.createComment("");
     }
+    if(node != undefined && node.attributes != undefined && node.attributes.bind) {
+      const instance = this.findParentInstance([0, ...depth]);
+      if(node.type === 'textarea') {
+        node.children = [instance[node.attributes.bind]];
+      } else {
+        node.attributes.value = instance[node.attributes.bind];
+      }
+      node.attributes.name = node.attributes.bind;
+      let eventName = 'oninput';
+      let valueName = 'value';
+      if(node.attributes.type === 'checkbox' || node.attributes.type === 'radio') {
+        eventName = 'onclick';
+        valueName = 'checked';
+      } else if(node.type !== 'input' && node.type !== 'textarea') {
+        eventName = 'onchange';
+      }
+      const originalEvent = node.attributes[eventName];
+      node.attributes[eventName] = ({event, value}) => {
+        instance[node.attributes.bind] = event ? event.target[valueName] : value;
+        if(originalEvent !== undefined) {
+          const context = this.generateContext({...instance.attributes, ...node.attributes, event, value});
+          originalEvent(context);
+        }
+      }
+    }
     if(this.isFunction(node)) {
       const instance = this.findParentInstance([0, ...depth]);
       const context = this.generateContext({...instance.attributes, ...node.attributes});
@@ -546,26 +576,6 @@ export default class Nullstack {
         router.url = node.attributes.href;
         context.environment.prerendered = false;
       };
-    }
-    if(node.attributes.bind) {
-      const instance = this.findParentInstance([0, ...depth]);
-      if(node.type === 'textarea') {
-        node.children = [instance[node.attributes.bind]];
-      } else {
-        node.attributes.value = instance[node.attributes.bind];
-      }
-      node.attributes.name = node.attributes.bind;
-      let eventName = 'oninput';
-      let valueName = 'value';
-      if(node.attributes.type === 'checkbox' || node.attributes.type === 'radio') {
-        eventName = 'onclick';
-        valueName = 'checked';
-      } else if(node.type !== 'input' && node.type !== 'textarea') {
-        eventName = 'onchange';
-      }
-      node.attributes[eventName] = ({event}) => {
-        instance[node.attributes.bind] = event.target[valueName];
-      }
     }
     for(let name in node.attributes) {
       if(name === 'html') {
