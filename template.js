@@ -28,8 +28,8 @@ function head({page, project, router}, hasStyle) {
       <meta property="og:url" content="${canonical}">
       <link rel="canonical" href="${canonical}">
       ${page.locale ? `<meta property="og:locale" content="${page.locale}">` : ''}
-      <link rel="shortcut icon" href="${project.icons['96']}" type="image/png">
-      <link rel="icon" href="${project.icons['96']}" type="image/png">
+      <link rel="shortcut icon" href="${project.favicon}" type="image/png">
+      <link rel="icon" href="${project.favicon}" type="image/png">
       <link rel="manifest" href="/manifest.json" integrity="">
       <meta name="mobile-web-app-capable" content="yes">
       <meta name="apple-mobile-web-app-capable" content="yes">

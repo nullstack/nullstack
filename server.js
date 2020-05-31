@@ -30,6 +30,7 @@ project.display = "standalone";
 project.orientation = "portrait";
 project.scope = "/";
 project.root = "/";
+project.favicon = "/favicon-96x96.png";
 project.icons = {
   '72': '/icon-72x72.png',
   '96': '/icon-96x96.png',
@@ -41,7 +42,6 @@ project.icons = {
   '384': '/icon-384x384.png',
   '512': '/icon-512x512.png'
 };
-project.favicon = '/favicon.png';
 
 const context = {environment, server, project, port: 5000};
 
