@@ -1,8 +1,12 @@
 <img src='https://raw.githubusercontent.com/nullstack/nullstack/master/nullstack.png' height='60' alt='Nullstack'>
 
-Fullstack components for one man armies.
+Full-stack components for one man armies.
 
 a.k.a the framework that solves my daily problem and maybe yours.
+
+## What is Nullstack?
+
+Nullstack is a full-stack framework for building progressive web applications that connects a stateful UI layer to specialized microservices in the same component using plain idiomatic javascript. This allows you to focus on solving your business logic instead of writing glue code.
 
 ## Getting Started
 
