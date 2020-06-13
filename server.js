@@ -5,18 +5,17 @@ import deserialize from './deserialize';
 import template from './template';
 import manifest from './manifest';
 import {existsSync} from 'fs';
+import path from 'path';
 
 const environment = {client: false, server: true, prerendered: false};
 
-environment.development = process.argv[1].indexOf('.development') > -1;
+environment.development = __dirname.indexOf('.development') > -1;
 environment.production = !environment.development;
-
-const root = environment.development ? '.development' : '.production';
 
 const app = express();
 const server = http.createServer(app);
 
-const hasStyle = existsSync(`${root}/client.css`);
+const hasStyle = existsSync(path.join(__dirname, 'client.css'));
 
 for(const methodName of ['use','set', 'delete','get','head','options','patch','post','put']) {
   server[methodName] = function() {
@@ -46,16 +45,16 @@ project.icons = {
 const context = {environment, server, project, port: 5000};
 
 function listen() {
-  
-  app.use(express.static('public'));
+
+  app.use(express.static(path.join(__dirname, '..', 'public')));
   app.use(bodyParser.text());
 
   app.get('/client.css', (request, response) => {
-    response.sendFile('client.css', {root});
+    response.sendFile(path.join(__dirname, 'client.css'));
   });
 
   app.get('/client.js', (request, response) => {
-    response.sendFile('client.js', {root});
+    response.sendFile(path.join(__dirname, 'client.js'));
   });
 
   app.get('/manifest.json', (request, response) => {

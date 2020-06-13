@@ -40,7 +40,7 @@ function server(env, argv) {
     })
   ]) : undefined;
   return {
-    entry: './src/index.js',
+    entry: './index.js',
     output: {
       path: path.resolve(__dirname, '../../'+folder),
       filename: 'server.js'
@@ -87,6 +87,10 @@ function server(env, argv) {
       ]
     },
     target: 'node',
+    node: {
+      __dirname: false,
+      __filename: false,
+    },
     plugins
   }
 }
@@ -119,7 +123,7 @@ function client(env, argv) {
     }));
   }
   return {
-    entry: './src/index.js',
+    entry: './index.js',
     output: {
       path: path.resolve(__dirname, '../../'+folder),
       filename: 'client.js'
