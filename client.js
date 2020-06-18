@@ -140,7 +140,6 @@ export default class Nullstack {
   static extractParamValue(value) {
     if(value === 'true') return true;
     if (value === 'false') return false;
-    if(/^\d+$/.test(value)) return parseInt(value);
     return value ? decodeURIComponent(value.replace(/\+/g, ' ')) : '';
   }
 
@@ -217,7 +216,11 @@ export default class Nullstack {
       }
       const originalEvent = next.attributes[eventName];
       next.attributes[eventName] = ({event, value}) => {
-        instance[next.attributes.bind] = event ? event.target[valueName] : value;
+        if(typeof instance[next.attributes.bind] === 'number') {
+          instance[next.attributes.bind] = parseFloat(event ? event.target[valueName] : value) || 0;
+        } else {
+          instance[next.attributes.bind] = event ? event.target[valueName] : value;
+        }
         if(originalEvent !== undefined) {
           const context = this.generateContext({...instance.attributes, ...next.attributes, event, value});
           originalEvent(context);
@@ -520,6 +523,11 @@ export default class Nullstack {
       }
       const originalEvent = node.attributes[eventName];
       node.attributes[eventName] = ({event, value}) => {
+        if(typeof instance[node.attributes.bind] === 'number') {
+          instance[node.attributes.bind] = parseFloat(event ? event.target[valueName] : value) || 0;
+        } else {
+          instance[node.attributes.bind] = event ? event.target[valueName] : value;
+        }
         instance[node.attributes.bind] = event ? event.target[valueName] : value;
         if(originalEvent !== undefined) {
           const context = this.generateContext({...instance.attributes, ...node.attributes, event, value});

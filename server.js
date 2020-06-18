@@ -262,7 +262,6 @@ class Nullstack {
   static extractParamValue(value) {
     if(value === 'true') return true;
     if (value === 'false') return false;
-    if(/^\d+$/.test(value)) return parseInt(value);
     return value ? decodeURIComponent(value.replace(/\+/g, ' ')) : '';
   }
 
