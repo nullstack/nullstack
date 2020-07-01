@@ -91,6 +91,7 @@ export default class Nullstack {
   static virtualDom = {};
   static selector = null;
   static routes = {};
+  static params = {};
 
   static renderQueue = null;
 
@@ -101,6 +102,8 @@ export default class Nullstack {
     Object.freeze(context.project);
     delete window.context;
     this.routes = {};
+    const [path, query] = router.url.split('?');
+    this.params = this.getQueryStringParams(query);
     this.currentInstance = null;
     this.initializer = () => <Starter />;
     this.selector = document.querySelector('#application');
@@ -121,6 +124,8 @@ export default class Nullstack {
   }
 
   static generateContext(temporary) {
+    console.log({temporary});
+    temporary.params = temporary.params ? {...this.params, ...temporary.params} : this.params;
     return new Proxy({...context, ...temporary}, contextProxyHandler);
   }
 
@@ -145,7 +150,7 @@ export default class Nullstack {
 
   static routeMatches(url, route) {
     let [path, query] = url.split('?');
-    if(route === '*') return this.getQueryStringParams(query);
+    if(route === '*') return {};
     const urlPaths = path.split('/');
     const routePaths = route.split('/');
     if(routePaths.length != urlPaths.length) return false;
@@ -158,7 +163,7 @@ export default class Nullstack {
         return false;
       }
     }
-    return {...params, ...this.getQueryStringParams(query)};
+    return params;
   }
 
   static findParentInstance(depth) {
@@ -396,6 +401,8 @@ export default class Nullstack {
     if(this.initialized) {
       clearInterval(this.renderQueue);
       this.renderQueue = setTimeout(() => {
+        const [path, query] = router.url.split('?');
+        this.params = this.getQueryStringParams(query);
         this.initialized = false;
         this.routes = {};
         this.instancesMountedQueue = [];

@@ -225,6 +225,8 @@ class Nullstack {
     const instances = {};
     const routes = {};
     const scope = {instances, request, routes, response};
+    const [path, query] = request.originalUrl.split('?');
+    scope.params = this.getQueryStringParams(query);
     scope.generateContext = (temporary) => {
       return new Proxy({...clientContext, ...temporary}, clientContextProxyHandler);
     }
@@ -267,7 +269,7 @@ class Nullstack {
 
   static routeMatches(url, route) {
     let [path, query] = url.split('?');
-    if(route === '*') return this.getQueryStringParams(query);
+    if(route === '*') return {};
     const urlPaths = path.split('/');
     const routePaths = route.split('/');
     if(routePaths.length != urlPaths.length) return false;
@@ -280,7 +282,7 @@ class Nullstack {
         return false;
       }
     }
-    return {...params, ...this.getQueryStringParams(query)};
+    return params;
   }
 
   static isFalse(node) {
@@ -317,6 +319,9 @@ class Nullstack {
       }
       node.attributes.name = node.attributes.bind;
     }
+    if(node && typeof(node.type) === 'function') {
+      node.attributes.params = scope.params;
+    }
     if(node !== undefined && node.attributes !== undefined && node.attributes.route !== undefined) {
       const routeDepth = depth.slice(0,-1).join('.');
       if(scope.routes[routeDepth] !== undefined) {
@@ -328,7 +333,7 @@ class Nullstack {
       const params = this.routeMatches(url, node.attributes.route);
       if(params) {
         scope.routes[routeDepth] = true;
-        node.attributes.params = params;
+        node.attributes.params = {...node.attributes.params, ...params};
       } else {
         node.type = false;
         node.children = [];
