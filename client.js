@@ -124,7 +124,6 @@ export default class Nullstack {
   }
 
   static generateContext(temporary) {
-    console.log({temporary});
     temporary.params = temporary.params ? {...this.params, ...temporary.params} : this.params;
     return new Proxy({...context, ...temporary}, contextProxyHandler);
   }

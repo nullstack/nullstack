@@ -14,6 +14,7 @@ environment.production = !environment.development;
 
 const app = express();
 const server = http.createServer(app);
+server.port = 5000;
 
 const hasStyle = existsSync(path.join(__dirname, 'client.css'));
 
@@ -42,7 +43,7 @@ project.icons = {
   '512': '/icon-512x512.png'
 };
 
-const context = {environment, server, project, port: 5000};
+const context = {environment, server, project};
 
 function listen() {
 
@@ -87,12 +88,12 @@ function listen() {
     }
   });
 
-  server.listen(context.port, () => {
+  server.listen(context.server.port, () => {
     const name = context.project.name ? context.project.name : 'Nullstack'
     if(environment.development) {
-      console.log(`${name} is running in development mode at http://localhost:${context.port}`);
+      console.log(`${name} is running in development mode at http://localhost:${context.server.port}`);
     } else {
-      console.log(`${name} is running in production mode at http://127.0.0.1:${context.port}`);
+      console.log(`${name} is running in production mode at http://127.0.0.1:${context.server.port}`);
     }
   });
 
