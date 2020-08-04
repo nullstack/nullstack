@@ -6,6 +6,11 @@ import template from './template';
 import manifest from './manifest';
 import {existsSync} from 'fs';
 import path from 'path';
+import fetch from 'node-fetch';
+
+if (!globalThis.fetch) {
+  globalThis.fetch = fetch;
+}
 
 const environment = {client: false, server: true, prerendered: false};
 
@@ -48,7 +53,7 @@ const context = {environment, server, project};
 function listen() {
 
   app.use(express.static(path.join(__dirname, '..', 'public')));
-  app.use(bodyParser.text());
+  app.use(bodyParser.text({limit: server.maximumPayloadSize}));
 
   app.get('/client.css', (request, response) => {
     response.sendFile(path.join(__dirname, 'client.css'));
