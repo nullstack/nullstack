@@ -8,8 +8,8 @@ import {existsSync} from 'fs';
 import path from 'path';
 import fetch from 'node-fetch';
 
-if (!globalThis.fetch) {
-  globalThis.fetch = fetch;
+if (!global.fetch) {
+  global.fetch = fetch;
 }
 
 const environment = {client: false, server: true, prerendered: false};
@@ -96,9 +96,9 @@ function listen() {
   server.listen(context.server.port, () => {
     const name = context.project.name ? context.project.name : 'Nullstack'
     if(environment.development) {
-      console.log(`${name} is running in development mode at http://localhost:${context.server.port}`);
+      console.log('\x1b[36m%s\x1b[0m', `${name} is running in development mode at http://localhost:${context.server.port}`);
     } else {
-      console.log(`${name} is running in production mode at http://127.0.0.1:${context.server.port}`);
+      console.log('\x1b[36m%s\x1b[0m', `${name} is running in production mode at http://127.0.0.1:${context.server.port}`);
     }
   });
 
