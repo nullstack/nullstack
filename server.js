@@ -275,16 +275,20 @@ class Nullstack {
 
   static routeMatches(url, route) {
     let [path, query] = url.split('?');
-    if(route === '*') return {};
     const urlPaths = path.split('/');
     const routePaths = route.split('/');
-    if(routePaths.length != urlPaths.length) return false;
     const params = {};
-    for(let i = 0; i < routePaths.length; i++) {
-      if(routePaths[i].startsWith(':')) {
+    const length = Math.max(urlPaths.length, routePaths.length);
+    let catchall = false;
+    for(let i = 0; i < length; i++) {
+      if(catchall) {
+        continue;
+      } else if (routePaths[i] === '*') {
+        catchall = true;
+      } else if (routePaths[i] && routePaths[i].startsWith(':')) {
         const key = routePaths[i].replace(':', '')
         params[key] = this.extractParamValue(urlPaths[i]);
-      } else if(routePaths[i] !== urlPaths[i]) {
+      } else if (routePaths[i] !== urlPaths[i]) {
         return false;
       }
     }
