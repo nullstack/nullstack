@@ -628,6 +628,10 @@ export default class Nullstack {
         const dom = this.render(node.children[i], [...depth, i]);
         element.appendChild(dom);
       }
+      if(node.type == 'select') {
+        console.log(node);
+        element.value = node.attributes.value;
+      }
     }
     return element;
   }
