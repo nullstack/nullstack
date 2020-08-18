@@ -1,7 +1,10 @@
+const crypto = require('crypto');
+
 module.exports = function(source) {
   if(source.indexOf('extends Nullstack') == -1) {
     return source;
   }
+  const hash = crypto.createHash('md5').update(source).digest("hex");
   const LOOKUP = 'static async ';
   let first = source.search(LOOKUP);
   while(first > -1) {
@@ -45,5 +48,8 @@ module.exports = function(source) {
       }
     }
   }
+  const fragments = source.split(' extends Nullstack')[0].split(' ');
+  const klassName = fragments[fragments.length - 1];
+  source += `\n${klassName}.hash = '${hash}';`;
   return source;
 }

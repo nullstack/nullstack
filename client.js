@@ -51,7 +51,7 @@ const instanceProxyHandler = {
   get(target, name) {
     if(name !== 'initialize' && name !== 'initiate' && target[name] === undefined && target.constructor[name] === true) {
       const detour = async function(params = {}) {
-        const url = `/${target.constructor.name}/${name}.json`;
+        const url = `/${target.constructor.hash}/${name}.json`;
         const response = await fetch(url, {
           method: 'POST',
           mode: 'cors',
