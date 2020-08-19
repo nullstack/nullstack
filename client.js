@@ -267,6 +267,8 @@ export default class Nullstack {
       let instance = null;
       if(!next.attributes.params || !this.routeChanged) {
         instance = this.instances[key];
+      } else if(this.routeChanged) {
+        console.log('route', current.attributes.params, next.attributes.params);
       }
       const context = this.generateContext(next.attributes);
       if(!instance) {
@@ -292,7 +294,7 @@ export default class Nullstack {
         return selector.nodeValue = next;
       }
     } else if (current.type === next.type) {
-      if(next.type === 'a' && next.attributes.href && next.attributes.href.startsWith('/')) {
+      if(next.type === 'a' && next.attributes.href && next.attributes.href.startsWith('/') && !next.attributes.target) {
         next.attributes.onclick = ({event}) => {
           event.preventDefault();
           router.url = next.attributes.href;
@@ -305,7 +307,7 @@ export default class Nullstack {
           if(next.attributes[name] !== current.attributes[name]) {
             selector.innerHTML = next.attributes[name];
           }
-          const links = selector.querySelectorAll('a[href^="/"]');
+          const links = selector.querySelectorAll('a[href^="/"]:not([target])');
           for(const link of links) {
             link.onclick = (event) => {
               event.preventDefault();
@@ -585,7 +587,7 @@ export default class Nullstack {
     } else {
       element = document.createElement(node.type);
     }
-    if(node.type === 'a' && node.attributes.href && node.attributes.href.startsWith('/')) {
+    if(node.type === 'a' && node.attributes.href && node.attributes.href.startsWith('/') && !node.attributes.target) {
       node.attributes.onclick = ({event}) => {
         event.preventDefault();
         router.url = node.attributes.href;
@@ -595,7 +597,7 @@ export default class Nullstack {
     for(let name in node.attributes) {
       if(name === 'html') {
         element.innerHTML = node.attributes[name];
-        const links = element.querySelectorAll('a[href^="/"]');
+        const links = element.querySelectorAll('a[href^="/"]:not([target])');
         for(const link of links) {
           link.onclick = (event) => {
             event.preventDefault();
@@ -629,7 +631,6 @@ export default class Nullstack {
         element.appendChild(dom);
       }
       if(node.type == 'select') {
-        console.log(node);
         element.value = node.attributes.value;
       }
     }
