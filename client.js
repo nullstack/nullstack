@@ -268,17 +268,17 @@ export default class Nullstack {
       if(!this.routeChanged) {
         instance = this.instances[key];
       } else if(this.routeChanged) {
+        let shouldReinitiate = false;
         if(next.attributes._segments) {
-          let shouldReinitiate = false;
           for(const segment of next.attributes._segments) {
             if(current.attributes.params[segment] !== next.attributes.params[segment]) {
               shouldReinitiate = true;
             }
           }
           delete next.attributes._segments;
-          if(!shouldReinitiate) {
-            instance = this.instances[key];
-          }
+        }
+        if(!shouldReinitiate) {
+          instance = this.instances[key];
         }
       }
       const context = this.generateContext(next.attributes);
