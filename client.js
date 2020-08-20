@@ -265,10 +265,21 @@ export default class Nullstack {
     } else if(this.isClass(current) && current.type === next.type) {
       const key = this.generateKey(next, [0, ...vdepth]);
       let instance = null;
-      if(!next.attributes.params || !this.routeChanged) {
+      if(!this.routeChanged) {
         instance = this.instances[key];
       } else if(this.routeChanged) {
-        console.log('route', current.attributes.params, next.attributes.params);
+        if(next.attributes._segments) {
+          let shouldReinitiate = false;
+          for(const segment of next.attributes._segments) {
+            if(current.attributes.params[segment] !== next.attributes.params[segment]) {
+              shouldReinitiate = true;
+            }
+          }
+          delete next.attributes._segments;
+          if(!shouldReinitiate) {
+            instance = this.instances[key];
+          }
+        }
       }
       const context = this.generateContext(next.attributes);
       if(!instance) {
@@ -374,6 +385,11 @@ export default class Nullstack {
               child.children = [];
             }
           }
+          child.attributes._segments = child.attributes.route.split('/').filter((segment) => {
+            return segment[0] == ':';
+          }).map((segment) => {
+            return segment.slice(1);
+          });
           delete child.attributes.route;
         }
       }
