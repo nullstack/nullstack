@@ -49,6 +49,9 @@ const contextProxyHandler = {
 
 const instanceProxyHandler = {
   get(target, name) {
+    if(target.attributes && target.attributes.proxy && target.attributes.proxy[name] !== undefined && target[name] !== undefined) {
+      return target.attributes.proxy[name];
+    }
     if(name !== 'initialize' && name !== 'initiate' && target[name] === undefined && target.constructor[name] === true) {
       const detour = async function(params = {}) {
         const url = `/${target.constructor.hash}/${name}.json`;
@@ -69,6 +72,9 @@ const instanceProxyHandler = {
     return Reflect.get(...arguments);
   },
   set(target, name, value) {
+    if(target.attributes && target.attributes.proxy && target.attributes.proxy[name] !== undefined && target[name] !== undefined) {
+      target.attributes.proxy[name] = value;
+    }
     const result = Reflect.set(...arguments);
     Nullstack.update();
     return result;
