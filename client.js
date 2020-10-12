@@ -419,6 +419,12 @@ export default class Nullstack {
           this.rerender(selector, [...depth, i], [...vdepth, i]);
         }
       }
+      if(next.type == 'textarea') {
+        selector.value = next.children.join("");
+      }
+      if(next.type == 'select') {
+        selector.value = next.attributes.value;
+      }
     }
   }
 
