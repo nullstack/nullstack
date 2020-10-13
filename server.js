@@ -330,12 +330,13 @@ class Nullstack {
     }
     if(node !== undefined && node.attributes != undefined && node.attributes.bind) {
       const instance = scope.findParentInstance(depth);
+      const target = node.attributes.source || instance;
       if(node.type === 'textarea') {
-        node.children = [instance[node.attributes.bind]];
+        node.children = [target[node.attributes.bind]];
       } else if(node.type === 'input' && node.attributes.type === 'checkbox') {
-        node.attributes.checked = instance[node.attributes.bind];
+        node.attributes.checked = target[node.attributes.bind];
       } else {
-        node.attributes.value = instance[node.attributes.bind];
+        node.attributes.value = target[node.attributes.bind];
       }
       node.attributes.name = node.attributes.bind;
     }
@@ -383,7 +384,7 @@ class Nullstack {
     } else {
       let element = `<${node.type}`;
       for(let name in node.attributes) {
-        if(!name.startsWith('on') && name !== 'html') {
+        if(!name.startsWith('on') && name !== 'html' && typeof(node.attributes[name]) != 'object') {
           if(node.attributes[name] === true) {
             element += ` ${name}="${name}"`;
           } else if(node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined) {

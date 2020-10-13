@@ -212,12 +212,13 @@ export default class Nullstack {
     }
     if(next !== undefined && next.attributes !== undefined && next.attributes.bind) {
       const instance = this.findParentInstance([0, ...vdepth]);
+      const target = next.attributes.source || instance;
       if(next.type === 'textarea') {
-        next.children = [instance[next.attributes.bind]];
+        next.children = [target[next.attributes.bind]];
       } else if(next.type === 'input' && next.attributes.type === 'checkbox') {
-        next.attributes.checked = instance[next.attributes.bind];
+        next.attributes.checked = target[next.attributes.bind];
       } else {
-        next.attributes.value = instance[next.attributes.bind];
+        next.attributes.value = target[next.attributes.bind];
       }
       next.attributes.name = next.attributes.bind;
       let eventName = 'oninput';
@@ -230,11 +231,12 @@ export default class Nullstack {
       }
       const originalEvent = next.attributes[eventName];
       next.attributes[eventName] = ({event, value}) => {
-        if(typeof instance[next.attributes.bind] === 'number') {
-          instance[next.attributes.bind] = parseFloat(event ? event.target[valueName] : value) || 0;
+        if(typeof target[next.attributes.bind] === 'number') {
+          target[next.attributes.bind] = parseFloat(event ? event.target[valueName] : value) || 0;
         } else {
-          instance[next.attributes.bind] = event ? event.target[valueName] : value;
+          target[next.attributes.bind] = event ? event.target[valueName] : value;
         }
+        Nullstack.update();
         if(originalEvent !== undefined) {
           const context = this.generateContext({...instance.attributes, ...next.attributes, event, value});
           originalEvent(context);
@@ -547,10 +549,11 @@ export default class Nullstack {
     }
     if(node != undefined && node.attributes != undefined && node.attributes.bind) {
       const instance = this.findParentInstance([0, ...depth]);
+      const target = node.attributes.source || instance;
       if(node.type === 'textarea') {
-        node.children = [instance[node.attributes.bind]];
+        node.children = [target[node.attributes.bind]];
       } else {
-        node.attributes.value = instance[node.attributes.bind];
+        node.attributes.value = target[node.attributes.bind];
       }
       node.attributes.name = node.attributes.bind;
       let eventName = 'oninput';
@@ -563,12 +566,13 @@ export default class Nullstack {
       }
       const originalEvent = node.attributes[eventName];
       node.attributes[eventName] = ({event, value}) => {
-        if(typeof instance[node.attributes.bind] === 'number') {
-          instance[node.attributes.bind] = parseFloat(event ? event.target[valueName] : value) || 0;
+        if(typeof target[node.attributes.bind] === 'number') {
+          target[node.attributes.bind] = parseFloat(event ? event.target[valueName] : value) || 0;
         } else {
-          instance[node.attributes.bind] = event ? event.target[valueName] : value;
+          target[node.attributes.bind] = event ? event.target[valueName] : value;
         }
-        instance[node.attributes.bind] = event ? event.target[valueName] : value;
+        target[node.attributes.bind] = event ? event.target[valueName] : value;
+        Nullstack.update();
         if(originalEvent !== undefined) {
           const context = this.generateContext({...instance.attributes, ...node.attributes, event, value});
           originalEvent(context);
