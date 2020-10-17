@@ -52,7 +52,7 @@ const instanceProxyHandler = {
     if(target.attributes && target.attributes.proxy && target.attributes.proxy[name] !== undefined && target[name] !== undefined) {
       return target.attributes.proxy[name];
     }
-    if(name !== 'initialize' && name !== 'initiate' && target[name] === undefined && target.constructor[name] === true) {
+    if(name !== 'prepare' && name !== 'initiate' && target[name] === undefined && target.constructor[name] === true) {
       const detour = async function(params = {}) {
         const url = `/${target.constructor.hash}/${name}.json`;
         const response = await fetch(url, {
@@ -111,7 +111,7 @@ export default class Nullstack {
     const [path, query] = router.url.split('?');
     this.params = this.getQueryStringParams(query);
     this.currentInstance = null;
-    this.initializer = () => <Starter />;
+    this.initializer = () => Nullstack.element(Starter);
     this.selector = document.querySelector('#application');
     this.instancesMountedQueue = [];
     this.instancesRenewedQueue = [];
@@ -261,7 +261,7 @@ export default class Nullstack {
       }
       this.instancesMountedQueue.push(instance);
       const context = this.generateContext(next.attributes);
-      instance.initialize && instance.initialize(context);
+      instance.prepare && instance.prepare(context);
       instance.attributes = next.attributes;
       this.instancesRenewedQueue.push(instance);
       const root = instance.render(context);
@@ -295,7 +295,7 @@ export default class Nullstack {
         instance.events = {};
         this.instances[key] = instance;
         this.instancesMountedQueue.push(instance);
-        instance.initialize && instance.initialize(context);
+        instance.prepare && instance.prepare(context);
       }
       instance.attributes = next.attributes;
       this.instancesRenewedQueue.push(instance);
@@ -593,7 +593,7 @@ export default class Nullstack {
       instance.attributes = node.attributes;
       this.instances[key] = instance;
       const context = this.generateContext(node.attributes);
-      instance.initialize && instance.initialize(context);
+      instance.prepare && instance.prepare(context);
       const root = instance.render(context);
       node.children = [root];
       this.instancesMountedQueue.push(instance);

@@ -8,6 +8,28 @@ const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 const babel = {
   test: /\.js$/,
+  resolve: {
+    extensions: ['.njs', '.js']
+  },
+  use: {
+    loader: 'babel-loader',
+    options: {
+      "presets": [
+        ["@babel/preset-env", {"targets": { node: "10" }}]
+      ],
+      "plugins": [
+        "@babel/plugin-proposal-export-default-from",
+        "@babel/plugin-proposal-class-properties"
+      ]
+    }
+  }
+};
+
+const babelNullstack = {
+  test: /\.njs$/,
+  resolve: {
+    extensions: ['.njs', '.js']
+  },
   use: {
     loader: 'babel-loader',
     options: {
@@ -16,7 +38,6 @@ const babel = {
         "@babel/preset-react"
       ],
       "plugins": [
-        ["@babel/plugin-proposal-decorators", { "legacy": true }],
         "@babel/plugin-proposal-export-default-from",
         "@babel/plugin-proposal-class-properties",
         ["@babel/plugin-transform-react-jsx", {
@@ -60,23 +81,28 @@ function server(env, argv) {
     stats: 'errors-only',
     module: {
       rules: [
-        babel,
         {
-          test: /.js$/,
-          loader: path.resolve('./node_modules/nullstack/register-static-from-server-loader.js'),
-        },
-        {
-          test: /.js$/,
-          loader: path.resolve('./node_modules/nullstack/render-method-proposal.js'),
-        },
-        {
-          test: /.js$/,
+          test: /nullstack.js$/,
           loader: 'string-replace-loader',
           options: {
             multiple: [
               { search: '{{ENVIRONMENT}}', replace: 'server', flags: 'ig' }
             ]
           }
+        },
+        babel,
+        babelNullstack,
+        {
+          test: /.njs$/,
+          loader: path.resolve('./node_modules/nullstack/register-static-from-server-loader.js'),
+        },
+        {
+          test: /.njs$/,
+          loader: path.resolve('./node_modules/nullstack/render-method-proposal.js'),
+        },
+        {
+          test: /.njs$/,
+          loader: path.resolve('./node_modules/nullstack/variable-reference-proposal.js'),
         },
         {
           test: /\.s?[ac]ss$/,
@@ -111,7 +137,7 @@ function client(env, argv) {
       extractors: [
         {
           extractor: (content) => content.match(/[A-z0-9-\+:\/]+/g),
-          extensions: ['js']
+          extensions: ['njs']
         }
       ]
     }));
@@ -143,23 +169,28 @@ function client(env, argv) {
     stats: 'errors-only',
     module: {
       rules: [
-        babel,
         {
-          test: /.js$/,
-          loader: path.resolve('./node_modules/nullstack/remove-static-from-client-loader.js'),
-        },
-        {
-          test: /.js$/,
-          loader: path.resolve('./node_modules/nullstack/render-method-proposal.js'),
-        },
-        {
-          test: /.js$/,
+          test: /nullstack.js$/,
           loader: 'string-replace-loader',
           options: {
             multiple: [
               { search: '{{ENVIRONMENT}}', replace: 'client', flags: 'ig' }
             ]
           }
+        },
+        babel,
+        babelNullstack,
+        {
+          test: /.njs$/,
+          loader: path.resolve('./node_modules/nullstack/remove-static-from-client-loader.js'),
+        },
+        {
+          test: /.njs$/,
+          loader: path.resolve('./node_modules/nullstack/render-method-proposal.js'),
+        },
+        {
+          test: /.njs$/,
+          loader: path.resolve('./node_modules/nullstack/variable-reference-proposal.js'),
         },
         {
           test: /\.s?[ac]ss$/,

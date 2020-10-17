@@ -120,6 +120,10 @@ class Router {
     }
   }
 
+  toJSON() {
+    return {url: this.scope.request.originalUrl}
+  }
+
 }
 
 const contextProxyHandler = {
@@ -134,7 +138,7 @@ const instanceProxyHandler = {
     if(target.attributes && target.attributes.proxy && target.attributes.proxy[name] !== undefined && target[name] !== undefined) {
       return target.attributes.proxy[name];
     }
-    if(name !== 'initialize' && name !== 'initiate' && target[name] === undefined && typeof(target.constructor[name]) === 'function') {
+    if(name !== 'prepare' && name !== 'initiate' && target[name] === undefined && typeof(target.constructor[name]) === 'function') {
       const detour = async function(params = {}) {
         const request = target._request();
         const response = target._response();
@@ -162,7 +166,7 @@ class Nullstack {
 
   static async start(Starter) {
     if(this.name === 'Nullstack') {
-      Nullstack.generator = () => <Starter />;
+      Nullstack.generator = () => Nullstack.element(Starter);
       Nullstack.selector = '#application';
       typeof(Starter.start) === 'function' && await Starter.start(context);
       listen();
@@ -375,7 +379,7 @@ class Nullstack {
       instance.attributes = node.attributes;
       scope.instances[key] = instance;
       const context = scope.generateContext(node.attributes);
-      instance.initialize && instance.initialize(context);
+      instance.prepare && instance.prepare(context);
       instance.initiate && await instance.initiate(context);
       const root = instance.render(context);
       node.children = [root];
