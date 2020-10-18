@@ -231,7 +231,9 @@ export default class Nullstack {
       }
       const originalEvent = next.attributes[eventName];
       next.attributes[eventName] = ({event, value}) => {
-        if(typeof target[next.attributes.bind] === 'number') {
+        if(target[next.attributes.bind] === true || target[next.attributes.bind] === false) {
+          target[next.attributes.bind] = event ? (event.target[valueName] == 'true') : value;
+        } else if(typeof target[next.attributes.bind] === 'number') {
           target[next.attributes.bind] = parseFloat(event ? event.target[valueName] : value) || 0;
         } else {
           target[next.attributes.bind] = event ? event.target[valueName] : value;
@@ -365,9 +367,9 @@ export default class Nullstack {
           } else if(current.attributes[name] !== undefined && next.attributes[name] === undefined) {
             selector.removeAttribute(name);
           } else if(current.attributes[name] !== next.attributes[name]) {
-            if(next.attributes[name] === false || next.attributes[name] === null || next.attributes[name] === undefined) {
+            if(name != 'value' && next.attributes[name] === false || next.attributes[name] === null || next.attributes[name] === undefined) {
               selector.removeAttribute(name);
-            } else if(next.attributes[name] === true) {
+            } else if(name != 'value' && next.attributes[name] === true) {
               selector.setAttribute(name, name);
             } else {
               selector.setAttribute(name, next.attributes[name]);
@@ -566,7 +568,9 @@ export default class Nullstack {
       }
       const originalEvent = node.attributes[eventName];
       node.attributes[eventName] = ({event, value}) => {
-        if(typeof target[node.attributes.bind] === 'number') {
+        if(target[node.attributes.bind] === true || target[node.attributes.bind] === false) {
+          target[node.attributes.bind] = event ? (event.target[valueName] == 'true') : value;
+        } else if(typeof target[node.attributes.bind] === 'number') {
           target[node.attributes.bind] = parseFloat(event ? event.target[valueName] : value) || 0;
         } else {
           target[node.attributes.bind] = event ? event.target[valueName] : value;
@@ -650,9 +654,9 @@ export default class Nullstack {
         };
         element.addEventListener(eventName, instance.events[key]);
       } else if(typeof(node.attributes[name]) !== 'function' && typeof(node.attributes[name]) !== 'object') {
-        if(node.attributes[name] === true) {
+        if(name != 'value' && node.attributes[name] === true) {
           element.setAttribute(name, name);
-        } else if(node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined) {
+        } else if(name == 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
           element.setAttribute(name, node.attributes[name]);
         }
       }

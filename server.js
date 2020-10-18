@@ -389,9 +389,9 @@ class Nullstack {
       let element = `<${node.type}`;
       for(let name in node.attributes) {
         if(!name.startsWith('on') && name !== 'html' && typeof(node.attributes[name]) != 'object') {
-          if(node.attributes[name] === true) {
+          if(name != 'value' && node.attributes[name] === true) {
             element += ` ${name}="${name}"`;
-          } else if(node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined) {
+          } else if(name == 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
             element += ` ${name}="${node.attributes[name]}"`;
           }
         }
