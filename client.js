@@ -18,12 +18,37 @@ const pageProxyHandler = {
   }
 }
 
+const paramsProxyHandler = {
+  set(target, name, value) {
+    const keys = Object.keys(target);
+    if(!keys.includes(name)) {
+      keys.push(name);
+    }
+    const search = keys.map((key) => {
+      const delta = key == name ? value : target[key];
+      if(delta === false || !!delta) {
+        return `${key}=${delta}`;
+      } else {
+        return '';
+      }
+    }).filter((segment) => !!segment).join('&');
+    context.router.url = window.location.pathname + (search ? '?' : '') + search;
+    const result = Reflect.set(...arguments);
+    return result;
+  }
+}
+
+let redirectTimer = null;
+
 class Router {
 
   set url(target) {
-    history.pushState({}, document.title, target);
-    window.dispatchEvent(new Event('popstate'));
-    Nullstack.routeChanged = true;
+    clearTimeout(redirectTimer);
+    redirectTimer = setTimeout(() => {
+      history.pushState({}, document.title, target);
+      window.dispatchEvent(new Event('popstate'));
+      Nullstack.routeChanged = true;
+    }, 0);
   }
 
   get url() {
@@ -130,7 +155,8 @@ export default class Nullstack {
   }
 
   static generateContext(temporary) {
-    temporary.params = temporary.params ? {...this.params, ...temporary.params} : this.params;
+    const params = temporary.params ? {...this.params, ...temporary.params} : this.params;
+    temporary.params = new Proxy(params, paramsProxyHandler);
     return new Proxy({...context, ...temporary}, contextProxyHandler);
   }
 
