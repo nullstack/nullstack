@@ -55,7 +55,7 @@ You can check this repository with Nullstack Examples:
 ## Credits
 
 * Code starter: [Christian Mortaro](https://github.com/Mortaro)
-* Rubber Duck: [Anny Figueira](https://github.com/AnnyFigueira)
+* Rubber duck: [Anny Figueira](https://github.com/AnnyFigueira)
 * Visual identity: [Dayson Marx](https://www.instagram.com/daysonmarx)
 
 ## License
