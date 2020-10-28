@@ -35,25 +35,27 @@ node .production/server.js
 
 You can check this repository with Nullstack Examples:
 
-* [Basic Component](https://github.com/nullstack/nullstack-examples/blob/master/src/01_BasicComponent.js)
-* [Context and Props](https://github.com/nullstack/nullstack-examples/blob/master/src/02_ContextAndProps.js)
-* [Events](https://github.com/nullstack/nullstack-examples/blob/master/src/03_Events.js)
-* [Inner Components](https://github.com/nullstack/nullstack-examples/blob/master/src/04_InnerComponents.js)
-* [Routes and Params](https://github.com/nullstack/nullstack-examples/blob/master/src/05_RoutesAndParams.js)
-* [Server Functions](https://github.com/nullstack/nullstack-examples/blob/master/src/06_ServerFunctions.js)
-* [Server Side Rendering](https://github.com/nullstack/nullstack-examples/blob/master/src/07_ServerSideRendering.js)
-* [Starter](https://github.com/nullstack/nullstack-examples/blob/master/src/08_Starter.js)
-* [Metadata](https://github.com/nullstack/nullstack-examples/blob/master/src/09_Metadata.js)
-* [One Way Binding](https://github.com/nullstack/nullstack-examples/blob/master/src/10_OneWayBinding.js)
-* [Two Ways Binding](https://github.com/nullstack/nullstack-examples/blob/master/src/11_TwoWaysBinding.js)
-* [Scalable Vectors](https://github.com/nullstack/nullstack-examples/blob/master/src/12_ScalableVectors.js)
-* [Lists](https://github.com/nullstack/nullstack-examples/blob/master/src/13_Lists.js)
-* [Headless Component](https://github.com/nullstack/nullstack-examples/blob/master/src/14_HeadlessComponent.js)
-* [Inner HTML](https://github.com/nullstack/nullstack-examples/blob/master/src/15_InnerHTML.js)
+* [Basic Component](https://github.com/nullstack/nullstack-examples/blob/master/src/01_BasicComponent.njs)
+* [Context and Props](https://github.com/nullstack/nullstack-examples/blob/master/src/02_ContextAndProps.njs)
+* [Events](https://github.com/nullstack/nullstack-examples/blob/master/src/03_Events.njs)
+* [Inner Components](https://github.com/nullstack/nullstack-examples/blob/master/src/04_InnerComponents.njs)
+* [Routes and Params](https://github.com/nullstack/nullstack-examples/blob/master/src/05_RoutesAndParams.njs)
+* [Server Functions](https://github.com/nullstack/nullstack-examples/blob/master/src/06_ServerFunctions.njs)
+* [Server Side Rendering](https://github.com/nullstack/nullstack-examples/blob/master/src/07_ServerSideRendering.njs)
+* [Starter](https://github.com/nullstack/nullstack-examples/blob/master/src/08_Starter.njs)
+* [Metadata](https://github.com/nullstack/nullstack-examples/blob/master/src/09_Metadata.njs)
+* [One Way Binding](https://github.com/nullstack/nullstack-examples/blob/master/src/10_OneWayBinding.njs)
+* [Two Ways Binding](https://github.com/nullstack/nullstack-examples/blob/master/src/11_TwoWaysBinding.njs)
+* [Scalable Vectors](https://github.com/nullstack/nullstack-examples/blob/master/src/12_ScalableVectors.njs)
+* [Lists](https://github.com/nullstack/nullstack-examples/blob/master/src/13_Lists.njs)
+* [Headless Component](https://github.com/nullstack/nullstack-examples/blob/master/src/14_HeadlessComponent.njs)
+* [Inner HTML](https://github.com/nullstack/nullstack-examples/blob/master/src/15_InnerHTML.njs)
+* [Proxy](https://github.com/nullstack/nullstack-examples/blob/master/src/16_Proxy.njs)
 
 ## Credits
 
 * Code starter: [Christian Mortaro](https://github.com/Mortaro)
+* Rubber Duck: [Anny Figueira](https://github.com/AnnyFigueira)
 * Visual identity: [Dayson Marx](https://www.instagram.com/daysonmarx)
 
 ## License
