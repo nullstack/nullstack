@@ -33,8 +33,12 @@ const paramsProxyHandler = {
       }
     }).filter((segment) => !!segment).join('&');
     context.router.url = window.location.pathname + (search ? '?' : '') + search;
+    Nullstack.params = target;
     const result = Reflect.set(...arguments);
     return result;
+  },
+  get(target, name) {
+    return target[name] || '';
   }
 }
 
@@ -42,7 +46,7 @@ let redirectTimer = null;
 
 class Router {
 
-  set url(target) {
+  _redirect(target) {
     clearTimeout(redirectTimer);
     redirectTimer = setTimeout(() => {
       history.pushState({}, document.title, target);
@@ -53,6 +57,18 @@ class Router {
 
   get url() {
     return window.location.pathname+window.location.search;
+  }
+
+  set url(target) {
+    this._redirect(target);
+  }
+
+  get path() {
+    return window.location.pathname;
+  }
+
+  set path(target) {
+    this._redirect(target+window.location.search);
   }
 
 }
@@ -155,7 +171,7 @@ export default class Nullstack {
   }
 
   static generateContext(temporary) {
-    const params = temporary.params ? {...this.params, ...temporary.params} : this.params;
+    const params = temporary.params ? {...temporary.params, ...this.params} : this.params;
     temporary.params = new Proxy(params, paramsProxyHandler);
     return new Proxy({...context, ...temporary}, contextProxyHandler);
   }
@@ -257,7 +273,9 @@ export default class Nullstack {
       }
       const originalEvent = next.attributes[eventName];
       next.attributes[eventName] = ({event, value}) => {
-        if(target[next.attributes.bind] === true || target[next.attributes.bind] === false) {
+        if(valueName == 'checked') {
+          target[next.attributes.bind] = event.target[valueName];
+        } else if(target[next.attributes.bind] === true || target[next.attributes.bind] === false) {
           target[next.attributes.bind] = event ? (event.target[valueName] == 'true') : value;
         } else if(typeof target[next.attributes.bind] === 'number') {
           target[next.attributes.bind] = parseFloat(event ? event.target[valueName] : value) || 0;
@@ -266,8 +284,10 @@ export default class Nullstack {
         }
         Nullstack.update();
         if(originalEvent !== undefined) {
-          const context = this.generateContext({...instance.attributes, ...next.attributes, event, value});
-          originalEvent(context);
+          setTimeout(() => {
+            const context = this.generateContext({...instance.attributes, ...next.attributes, event, value});
+            originalEvent(context);
+          }, 0);
         }
       }
     }
@@ -594,18 +614,21 @@ export default class Nullstack {
       }
       const originalEvent = node.attributes[eventName];
       node.attributes[eventName] = ({event, value}) => {
-        if(target[node.attributes.bind] === true || target[node.attributes.bind] === false) {
+        if(valueName == 'checked') {
+          target[node.attributes.bind] = event.target[valueName];
+        } else if(target[node.attributes.bind] === true || target[node.attributes.bind] === false) {
           target[node.attributes.bind] = event ? (event.target[valueName] == 'true') : value;
         } else if(typeof target[node.attributes.bind] === 'number') {
           target[node.attributes.bind] = parseFloat(event ? event.target[valueName] : value) || 0;
         } else {
           target[node.attributes.bind] = event ? event.target[valueName] : value;
         }
-        target[node.attributes.bind] = event ? event.target[valueName] : value;
         Nullstack.update();
         if(originalEvent !== undefined) {
-          const context = this.generateContext({...instance.attributes, ...node.attributes, event, value});
-          originalEvent(context);
+          setTimeout(() => {
+            const context = this.generateContext({...instance.attributes, ...node.attributes, event, value});
+            originalEvent(context);
+          }, 0);
         }
       }
     }

@@ -110,18 +110,38 @@ class Router {
     this.scope = scope;
   }
 
-  get url() {
-    return this.scope.request.originalUrl;
-  }
-
-  set url(target) {
+  _redirect(target) {
     if(!this.scope.response.headersSent) {
       this.scope.response.redirect(target);
     }
   }
 
+  get url() {
+    return this.scope.request.originalUrl;
+  }
+
+  set url(target) {
+    this._redirect(target);
+  }
+
+  get path() {
+    return this.scope.request.path;
+  }
+
+  set path(target) {
+    const search = this.scope.request.originalUrl.split('?')[1];
+    if(search) {
+      this._redirect(target+'?'+search);
+    } else {
+      this._redirect(target);
+    }
+  }
+
   toJSON() {
-    return {url: this.scope.request.originalUrl}
+    return {
+      url: this.scope.request.originalUrl,
+      path: this.scope.request.path
+    }
   }
 
 }
@@ -130,6 +150,13 @@ const contextProxyHandler = {
   set(target, name, value) {
     context[name] = value;
     return Reflect.set(...arguments);
+  }
+}
+
+
+const paramsProxyHandler = {
+  get(target, name) {
+    return target[name] || '';
   }
 }
 
@@ -248,6 +275,8 @@ class Nullstack {
     const [path, query] = request.originalUrl.split('?');
     scope.params = this.getQueryStringParams(query);
     scope.generateContext = (temporary) => {
+      const params = temporary.params ? {...temporary.params, ...clientContext.params} : clientContext.params;
+      temporary.params = new Proxy(params, paramsProxyHandler);
       return new Proxy({...clientContext, ...temporary}, clientContextProxyHandler);
     }
     scope.findParentInstance = (depth) => {
