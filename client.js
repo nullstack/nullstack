@@ -338,7 +338,9 @@ export default class Nullstack {
         }
       }
       const context = this.generateContext(next.attributes);
-      if(!instance) {
+      if(instance) {
+        instance.update && instance.update(context);
+      } else {
         instance = new next.type();
         instance.events = {};
         this.instances[key] = instance;
