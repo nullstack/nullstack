@@ -548,6 +548,11 @@ export default class Nullstack {
     if(type === 'textarea') {
       children = [children.join('')];
     }
+    if(type === 'element') {
+      type = attributes.tag;
+      delete attributes.tag;
+    }
+    attributes.children = children;
     if(typeof(type) === 'function' && type.render !== undefined) {
       return {type, attributes, children: []}
     }
