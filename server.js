@@ -82,14 +82,10 @@ function listen() {
   });
 
   app.get("*", async (request, response) => {
-    if(request.originalUrl.indexOf('.') === -1) {
-      const renderable = await Nullstack.prerender(request, response);
-      if(!response.headersSent) {
-        const html = template(renderable, hasStyle);
-        response.send(html);
-      }
-    } else {
-      response.status(404).send('');
+    const renderable = await Nullstack.prerender(request, response);
+    if(!response.headersSent) {
+      const html = template(renderable, hasStyle);
+      response.send(html);
     }
   });
 
