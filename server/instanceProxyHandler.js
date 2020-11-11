@@ -13,6 +13,17 @@ const instanceProxyHandler = {
         return await target.constructor[name](context);
       }
       target[name] = detour;
+    } else if(typeof(target[name]) == 'function') {
+      return (args) => {
+        const clientContextProxyHandler = {
+          set(target, name, value) {
+            target._scoped_context[name] = value;
+            return Reflect.set(...arguments);
+          }
+        }
+        const context = new Proxy({...target._context, ...args}, clientContextProxyHandler);
+        return target[name](context);
+      }
     }
     return Reflect.get(...arguments);
   },

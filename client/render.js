@@ -60,28 +60,26 @@ export default function render(node, depth) {
       client.update();
       if(originalEvent !== undefined) {
         setTimeout(() => {
-          const context = generateContext({...instance.attributes, ...node.attributes, event, value});
-          originalEvent(context);
+          originalEvent({...node.attributes, event, value});
         }, 0);
       }
     }
   }
   if(isFunction(node)) {
-    const instance = findParentInstance([0, ...depth]);
-    const context = generateContext({...instance.attributes, ...node.attributes});
-    const root = node.type(context);
+    const root = node.type();
     node.children = [root];
     return render(node.children[0], [...depth, 0]);
   }
   if(isClass(node)) {
     const key = generateKey(node, [0, ...depth]);
     const instance = new node.type();
-    instance.events = {};
-    instance.attributes = node.attributes;
+    instance._events = {};
+    instance._attributes = node.attributes;
     client.instances[key] = instance;
     const context = generateContext(node.attributes);
-    instance.prepare && instance.prepare(context);
-    const root = instance.render(context);
+    instance._context = context;
+    instance.prepare && instance.prepare();
+    const root = instance.render();
     node.children = [root];
     client.instancesMountedQueue.push(instance);
     client.instancesRenewedQueue.push(instance);
@@ -128,14 +126,13 @@ export default function render(node, depth) {
       const eventName = name.replace('on', '');
       const key = '0.' + depth.join('.') + '.' + eventName;
       const instance = findParentInstance([0, ...depth]);
-      instance.events[key] = (event) => {
+      instance._events[key] = (event) => {
         if(node.attributes.default !== true) {
           event.preventDefault();
         }
-        const context = generateContext({...instance.attributes, ...node.attributes, event});
-        node.attributes[name](context);
+        node.attributes[name]({...node.attributes, event});
       };
-      element.addEventListener(eventName, instance.events[key]);
+      element.addEventListener(eventName, instance._events[key]);
     } else if(typeof(node.attributes[name]) !== 'function' && typeof(node.attributes[name]) !== 'object') {
       if(name != 'value' && node.attributes[name] === true) {
         element.setAttribute(name, '');

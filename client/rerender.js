@@ -67,23 +67,20 @@ export default function rerender(parent, depth, vdepth) {
       client.update();
       if(originalEvent !== undefined) {
         setTimeout(() => {
-          const context = generateContext({...instance.attributes, ...next.attributes, event, value});
-          originalEvent(context);
+          originalEvent({...next.attributes, event, value});
         }, 0);
       }
     }
   }
   if(isFunction(next)) {
-    const instance = findParentInstance([0, ...vdepth]);
-    const context = generateContext({...instance.attributes, ...next.attributes});
-    const root = next.type(context);
+    const root = next.type(next.attributes);
     next.children = [root];
     return rerender(parent, depth, [...vdepth, 0]);
   }
   if(current !== undefined && /^[A-Z]/.test(current.type) && typeof(next.type) === 'function' && current.type === next.type.name) {
     const key = generateKey(next, [0, ...vdepth]);
     const instance = new next.type();
-    instance.events = {};
+    instance._events = {};
     client.instances[key] = instance;
     const state = window.instances[key];
     for(const attribute in state) {
@@ -91,10 +88,11 @@ export default function rerender(parent, depth, vdepth) {
     }
     client.instancesMountedQueue.push(instance);
     const context = generateContext(next.attributes);
-    instance.prepare && instance.prepare(context);
-    instance.attributes = next.attributes;
+    instance._context = context;
+    instance.prepare && instance.prepare();
+    instance._attributes = next.attributes;
     client.instancesRenewedQueue.push(instance);
-    const root = instance.render(context);
+    const root = instance.render();
     next.children = [root];
     const limit = Math.max(current.children.length, next.children.length);
     for(let i = 0; i < limit; i++) {
@@ -120,17 +118,19 @@ export default function rerender(parent, depth, vdepth) {
     }
     const context = generateContext(next.attributes);
     if(instance) {
-      instance.update && instance.update(context);
+      instance._context = context;
+      instance.update && instance.update();
     } else {
       instance = new next.type();
-      instance.events = {};
+      instance._context = context;
+      instance._events = {};
       client.instances[key] = instance;
       client.instancesMountedQueue.push(instance);
-      instance.prepare && instance.prepare(context);
+      instance.prepare && instance.prepare();
     }
-    instance.attributes = next.attributes;
+    instance._attributes = next.attributes;
     client.instancesRenewedQueue.push(instance);
-    const root = instance.render(context);
+    const root = instance.render();
     next.children = [root];
     const limit = Math.max(current.children.length, next.children.length);
     for(let i = 0; i < limit; i++) {
@@ -177,18 +177,17 @@ export default function rerender(parent, depth, vdepth) {
         const eventName = name.replace('on', '');
         const key = '0.' + vdepth.join('.') + '.' + eventName;
         const instance = findParentInstance([0, ...vdepth]);
-        selector.removeEventListener(eventName, instance.events[key]);
+        selector.removeEventListener(eventName, instance._events[key]);
         if(next.attributes[name]) {
-          instance.events[key] = (event) => {
+          instance._events[key] = (event) => {
             if(next.attributes.default !== true) {
               event.preventDefault();
             }
-            const context = generateContext({...instance.attributes, ...next.attributes, event});
-            next.attributes[name](context);
+            next.attributes[name]({...next.attributes, event});
           };
-          selector.addEventListener(eventName, instance.events[key]);
+          selector.addEventListener(eventName, instance._events[key]);
         } else {
-          delete instance.events[key];
+          delete instance._events[key];
         }
       } else if(typeof(next.attributes[name]) !== 'function' && typeof(next.attributes[name]) !== 'object') {
         if(current.attributes[name] === undefined && next.attributes[name] !== undefined) {

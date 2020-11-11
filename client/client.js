@@ -44,12 +44,12 @@ client.processLifecycleQueues = async function() {
     client.hydrated = true;
   }
   for(const instance of client.instancesMountedQueue) {
-    const context = generateContext(instance.attributes);
+    const context = generateContext(instance._attributes);
     instance.initiate && await instance.initiate(context);
   }
   for(const [id, instance] of Object.entries(client.instances)) {
     if(!client.instancesRenewedQueue.includes(instance)) {
-      const context = generateContext(instance.attributes);
+      const context = generateContext(instance._attributes);
       instance.terminate && await instance.terminate(context);
       delete client.instances[id];
     }
