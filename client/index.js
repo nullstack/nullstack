@@ -6,19 +6,23 @@ import client from './client';
 import context from './context';
 import rerender from './rerender';
 import instanceProxyHandler from './instanceProxyHandler';
+import page from './page';
+import environment from './environment';
 
-window.representation = deserialize(JSON.stringify(window.representation));
-window.instances = deserialize(JSON.stringify(window.instances));
-
-window.addEventListener('popstate', () => {
-  client.update();
-});
+context.environment = environment;
+context.page = page;
+context.router = router;
 
 export default class Nullstack {
 
   static element = element;
 
   static start(Starter) {
+    window.representation = deserialize(JSON.stringify(window.representation));
+    window.instances = deserialize(JSON.stringify(window.instances));
+    window.addEventListener('popstate', () => {
+      client.update();
+    });
     for(const [key, value] of Object.entries(window.context)) {
       context[key] = value;
     }
@@ -28,7 +32,7 @@ export default class Nullstack {
     const [path, query] = router.url.split('?');
     client.params = getQueryStringParams(query);
     client.currentInstance = null;
-    client.initializer = () => Nullstack.element(Starter);
+    client.initializer = () => element(Starter);
     client.selector = document.querySelector('#application');
     client.instancesMountedQueue = [];
     client.instancesRenewedQueue = [];

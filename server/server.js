@@ -5,10 +5,6 @@ import bodyParser from 'body-parser';
 import {existsSync} from 'fs';
 import fetch from 'node-fetch';
 
-if (!global.fetch) {
-  global.fetch = fetch;
-}
-
 import deserialize from '../shared/deserialize';
 import template from './template';
 import manifest from './manifest';
@@ -17,6 +13,10 @@ import project from './project';
 import environment from './environment';
 import registry from './registry';
 import {prerender} from './prerender';
+
+if (!global.fetch) {
+  global.fetch = fetch;
+}
 
 const app = express();
 const server = http.createServer(app);

@@ -1,10 +1,7 @@
-import page from './page';
-import environment from './environment';
-import router from './router';
 import client from './client';
 import paramsProxyHandler from './paramsProxyHandler';
 
-const context = {environment, page, router};
+const context = {};
 
 const contextProxyHandler = {
   set(target, name, value) {

@@ -1,8 +1,4 @@
-import server from './server';
-import project from './project';
-import environment from './environment';
-
-const context = {environment, server, project};
+const context = {};
 
 const contextProxyHandler = {
   set(target, name, value) {

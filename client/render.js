@@ -5,6 +5,7 @@ import client from './client';
 import {generateContext} from './context';
 import generateKey from '../shared/generateKey';
 import findParentInstance from './findParentInstance';
+import environment from './environment';
 
 export default function render(node, depth) {
   if(isRoutable(node)) {
@@ -106,7 +107,7 @@ export default function render(node, depth) {
     node.attributes.onclick = ({event}) => {
       event.preventDefault();
       router.url = node.attributes.href;
-      context.environment.prerendered = false;
+      environment.prerendered = false;
     };
   }
   for(let name in node.attributes) {
@@ -117,7 +118,7 @@ export default function render(node, depth) {
         link.onclick = (event) => {
           event.preventDefault();
           router.url = link.href;
-          context.environment.prerendered = false;
+          environment.prerendered = false;
         };
       }
     } else if(name.startsWith('on')) {

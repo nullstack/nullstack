@@ -6,6 +6,7 @@ import render from './render';
 import context, {generateContext} from './context';
 import generateKey from '../shared/generateKey';
 import findParentInstance from './findParentInstance';
+import environment from './environment';
 
 export default function rerender(parent, depth, vdepth) {
   if(!client.hydrated) {
@@ -86,7 +87,7 @@ export default function rerender(parent, depth, vdepth) {
     client.instances[key] = instance;
     const state = window.instances[key];
     for(const attribute in state) {
-      instance[attribute] = client[attribute];
+      instance[attribute] = state[attribute];
     }
     client.instancesMountedQueue.push(instance);
     const context = generateContext(next.attributes);
@@ -148,7 +149,7 @@ export default function rerender(parent, depth, vdepth) {
       next.attributes.onclick = ({event}) => {
         event.preventDefault();
         router.url = next.attributes.href;
-        context.environment.prerendered = false;
+        environment.prerendered = false;
       };
     }
     const attributeNames = Object.keys({...current.attributes, ...next.attributes});
@@ -162,7 +163,7 @@ export default function rerender(parent, depth, vdepth) {
           link.onclick = (event) => {
             event.preventDefault();
             router.url = link.href;
-            context.environment.prerendered = false;
+            environment.prerendered = false;
           };
         }
       } else if(name === 'checked') {

@@ -1,11 +1,17 @@
 
 
+import context from './context';
 import server from './server';
 import registry from './registry';
-import context from './context';
 import generator from './generator';
 import element from '../shared/element';
 import instanceProxyHandler from './instanceProxyHandler';
+import project from './project';
+import environment from './environment';
+
+context.server = server;
+context.project = project;
+context.environment = environment;
 
 class Nullstack {
 
