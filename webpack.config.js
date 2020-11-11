@@ -94,15 +94,15 @@ function server(env, argv) {
         babelNullstack,
         {
           test: /.njs$/,
-          loader: path.resolve('./node_modules/nullstack/register-static-from-server-loader.js'),
+          loader: path.resolve('./node_modules/nullstack/loaders/register-static-from-server-loader.js'),
         },
         {
           test: /.njs$/,
-          loader: path.resolve('./node_modules/nullstack/render-method-proposal.js'),
+          loader: path.resolve('./node_modules/nullstack/loaders/render-method-proposal.js'),
         },
         {
           test: /.njs$/,
-          loader: path.resolve('./node_modules/nullstack/variable-reference-proposal.js'),
+          loader: path.resolve('./node_modules/nullstack/loaders/variable-reference-proposal.js'),
         },
         {
           test: /\.s?[ac]ss$/,
@@ -182,15 +182,15 @@ function client(env, argv) {
         babelNullstack,
         {
           test: /.njs$/,
-          loader: path.resolve('./node_modules/nullstack/remove-static-from-client-loader.js'),
+          loader: path.resolve('./node_modules/nullstack/loaders/remove-static-from-client-loader.js'),
         },
         {
           test: /.njs$/,
-          loader: path.resolve('./node_modules/nullstack/render-method-proposal.js'),
+          loader: path.resolve('./node_modules/nullstack/loaders/render-method-proposal.js'),
         },
         {
           test: /.njs$/,
-          loader: path.resolve('./node_modules/nullstack/variable-reference-proposal.js'),
+          loader: path.resolve('./node_modules/nullstack/loaders/variable-reference-proposal.js'),
         },
         {
           test: /\.s?[ac]ss$/,
