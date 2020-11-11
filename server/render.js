@@ -1,4 +1,4 @@
-import {isClass, isFunction} from '../shared/nodes';
+import {isClass, isFunction, isRoutable} from '../shared/nodes';
 import routeMatches from '../shared/routeMatches';
 import generateKey from '../shared/generateKey';
 
@@ -25,10 +25,7 @@ export default async function render(node, depth, scope) {
     }
     node.attributes.name = node.attributes.bind;
   }
-  if(node && typeof(node.type) === 'function') {
-    node.attributes.params = scope.params;
-  }
-  if(node !== undefined && node.attributes !== undefined && node.attributes.route !== undefined) {
+  if(isRoutable(node)) {
     const routeDepth = depth.slice(0,-1).join('.');
     if(scope.routes[routeDepth] !== undefined) {
       node.type = false;
@@ -39,7 +36,9 @@ export default async function render(node, depth, scope) {
     const params = routeMatches(url, node.attributes.route);
     if(params) {
       scope.routes[routeDepth] = true;
-      node.attributes.params = {...node.attributes.params, ...params};
+      for(const key in params) {
+        scope.context.params[key] = params[key];
+      }
     } else {
       node.type = false;
       node.children = [];

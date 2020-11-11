@@ -107,13 +107,12 @@ export default function rerender(parent, depth, vdepth) {
       instance = client.instances[key];
     } else if(router._changed) {
       let shouldReinitiate = false;
-      if(next.attributes._segments) {
-        for(const segment of next.attributes._segments) {
-          if(current.attributes.params[segment] !== next.attributes.params[segment]) {
+      if(next._segments) {
+        for(const segment of next._segments) {
+          if(current._params[segment] !== next._params[segment]) {
             shouldReinitiate = true;
           }
         }
-        delete next.attributes._segments;
       }
       if(!shouldReinitiate) {
         instance = client.instances[key];
@@ -219,13 +218,16 @@ export default function rerender(parent, depth, vdepth) {
           const params = routeMatches(router.url, child.attributes.route);
           if(params) {
             client.routes[routeDepth] = true;
-            child.attributes.params = params;
+            for(const key in params) {
+              context.params[key] = params[key];
+            }
+            child._params = params;
           } else {
             child.type = false;
             child.children = [];
           }
         }
-        child.attributes._segments = child.attributes.route.split('/').filter((segment) => {
+        child._segments = child.attributes.route.split('/').filter((segment) => {
           return segment[0] == ':';
         }).map((segment) => {
           return segment.slice(1);

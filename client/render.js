@@ -2,12 +2,13 @@ import routeMatches from '../shared/routeMatches';
 import {isFalse, isClass, isFunction, isRoutable, isText} from '../shared/nodes';
 import router from './router';
 import client from './client';
-import {generateContext} from './context';
+import context, {generateContext} from './context';
 import generateKey from '../shared/generateKey';
 import findParentInstance from './findParentInstance';
 import environment from './environment';
 
 export default function render(node, depth) {
+  // i suspect this will never run
   if(isRoutable(node)) {
     const routeDepth = depth.slice(0,-1).join('.');
     if(client.routes[routeDepth] !== undefined) {
@@ -17,7 +18,9 @@ export default function render(node, depth) {
     const params = routeMatches(router.url, node.attributes.route);
     if(params) {
       client.routes[routeDepth] = true;
-      node.attributes.params = params;
+      for(const key in params) {
+        context.params[key] = params[key];
+      }
     } else {
       node.type = false;
       node.children = [];

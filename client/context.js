@@ -12,8 +12,6 @@ const contextProxyHandler = {
 }
 
 export function generateContext(temporary) {
-  const params = temporary.params ? {...temporary.params, ...client.params} : client.params;
-  temporary.params = new Proxy(params, paramsProxyHandler);
   return new Proxy({...context, ...temporary}, contextProxyHandler);
 }
 

@@ -20,10 +20,10 @@ export async function prerender(request, response) {
   const routes = {};
   const scope = {instances, request, routes, response};
   const [path, query] = request.originalUrl.split('?');
-  scope.params = getQueryStringParams(query);
+  const params = getQueryStringParams(query);
+  scope.context = clientContext;
+  clientContext.params = new Proxy(params, paramsProxyHandler);
   scope.generateContext = (temporary) => {
-    const params = temporary.params ? {...temporary.params, ...clientContext.params} : clientContext.params;
-    temporary.params = new Proxy(params, paramsProxyHandler);
     return new Proxy({...clientContext, ...temporary}, clientContextProxyHandler);
   }
   scope.findParentInstance = (depth) => {

@@ -1,5 +1,4 @@
 import deserialize from '../shared/deserialize';
-import getQueryStringParams from '../shared/getQueryStringParams';
 import element from '../shared/element';
 import router from './router';
 import client from './client';
@@ -8,6 +7,7 @@ import rerender from './rerender';
 import instanceProxyHandler from './instanceProxyHandler';
 import page from './page';
 import environment from './environment';
+import {generateParams} from './params';
 
 context.environment = environment;
 context.page = page;
@@ -30,7 +30,7 @@ export default class Nullstack {
     delete window.context;
     client.routes = {};
     const [path, query] = router.url.split('?');
-    client.params = getQueryStringParams(query);
+    client.params = generateParams(query);
     client.currentInstance = null;
     client.initializer = () => element(Starter);
     client.selector = document.querySelector('#application');
