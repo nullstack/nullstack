@@ -70,7 +70,7 @@ export default async function render(node, depth, scope) {
     for(let name in node.attributes) {
       if(!name.startsWith('on') && name !== 'html' && typeof(node.attributes[name]) != 'object') {
         if(name != 'value' && node.attributes[name] === true) {
-          element += ` ${name}="${name}"`;
+          element += ` ${name}`;
         } else if(name == 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
           element += ` ${name}="${node.attributes[name]}"`;
         }

@@ -138,7 +138,7 @@ export default function render(node, depth) {
       element.addEventListener(eventName, instance.events[key]);
     } else if(typeof(node.attributes[name]) !== 'function' && typeof(node.attributes[name]) !== 'object') {
       if(name != 'value' && node.attributes[name] === true) {
-        element.setAttribute(name, name);
+        element.setAttribute(name, '');
       } else if(name == 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
         element.setAttribute(name, node.attributes[name]);
       }

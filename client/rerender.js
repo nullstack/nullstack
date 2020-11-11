@@ -199,7 +199,7 @@ export default function rerender(parent, depth, vdepth) {
           if(name != 'value' && next.attributes[name] === false || next.attributes[name] === null || next.attributes[name] === undefined) {
             selector.removeAttribute(name);
           } else if(name != 'value' && next.attributes[name] === true) {
-            selector.setAttribute(name, name);
+            selector.setAttribute(name, '');
           } else {
             selector.setAttribute(name, next.attributes[name]);
           }
