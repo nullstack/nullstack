@@ -5,7 +5,6 @@ import getQueryStringParams from '../shared/getQueryStringParams';
 const paramsProxyHandler = {
   set(target, name, value) {
     const serializedValue = value && value.toJSON !== undefined ? value.toJSON() : value;
-    console.log({serializedValue});
     const keys = Object.keys(target);
     if(!keys.includes(name)) {
       keys.push(name);

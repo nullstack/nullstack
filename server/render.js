@@ -56,8 +56,8 @@ export default async function render(node, depth, scope) {
     const instance = new node.type(scope);
     instance.attributes = node.attributes;
     scope.instances[key] = instance;
-    const context = scope.generateContext(node.attributes);
-    instance._context = context;
+    instance._attributes = node.attributes;
+    instance._scope = scope;
     instance.prepare && instance.prepare();
     instance.initiate && await instance.initiate();
     const root = instance.render();

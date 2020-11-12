@@ -59,16 +59,4 @@ class Nullstack {
 
 }
 
-const staticProxyHandler = {
-  get(target, name) {
-    if(target.name != 'Nullstack' && typeof(target[name]) == 'function' && target[name].constructor.name == 'AsyncFunction') {
-      return (args) => {
-        const context = generateContext(args);
-        return target[name](context);
-      }
-    }
-    return Reflect.get(...arguments);
-  }
-}
-
-export default new Proxy(Nullstack, staticProxyHandler);
+export default Nullstack;
