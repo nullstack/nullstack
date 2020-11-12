@@ -1,6 +1,6 @@
 import router from './router';
 import {generateParams} from './params';
-import {generateContext} from './context';
+import context, {generateContext} from './context';
 import rerender from './rerender';
 
 const client = {};
@@ -15,7 +15,6 @@ client.instancesRenewedQueue = [];
 client.virtualDom = {};
 client.selector = null;
 client.routes = {};
-client.params = {};
 
 client.renderQueue = null;
 
@@ -24,7 +23,7 @@ client.update = function() {
     clearInterval(client.renderQueue);
     client.renderQueue = setTimeout(() => {
       const [path, query] = router.url.split('?');
-      client.params = generateParams(query);
+      context.params = generateParams(query);
       client.initialized = false;
       client.routes = {};
       client.instancesMountedQueue = [];

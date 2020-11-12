@@ -30,7 +30,7 @@ export default class Nullstack {
     delete window.context;
     client.routes = {};
     const [path, query] = router.url.split('?');
-    client.params = generateParams(query);
+    context.params = generateParams(query);
     client.currentInstance = null;
     client.initializer = () => element(Starter);
     client.selector = document.querySelector('#application');
