@@ -7,9 +7,9 @@ const instanceProxyHandler = {
     if(target._attributes && target._attributes.proxy && target._attributes.proxy[name] !== undefined && target[name] !== undefined) {
       return target._attributes.proxy[name];
     }
-    if(name !== 'prepare' && name !== 'initiate' && target[name] === undefined && target.constructor[name] === true) {
-      const detour = async function(params = {}) {
-        const url = `/${target.constructor.hash}/${name}.json`;
+    if(target[name] === undefined && target.constructor[name] === true) {
+      return async (params) => {
+        const url = `/api/${target.constructor.hash}/${name}.json`;
         const response = await fetch(url, {
           method: 'POST',
           mode: 'cors',
@@ -17,12 +17,11 @@ const instanceProxyHandler = {
           credentials: 'same-origin',
           redirect: 'follow',
           referrerPolicy: 'no-referrer',
-          body: JSON.stringify(params)
+          body: JSON.stringify(params || {})
         });
         const payload = await response.text();
         return deserialize(payload).result;
       }
-      target[name] = detour.bind(this);
     } else if(typeof(target[name]) == 'function') {
       return (args) => {
         const context = generateContext({...target._context, ...args});

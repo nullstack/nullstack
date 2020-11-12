@@ -47,7 +47,7 @@ server.start = function() {
     response.json(manifest(project));
   });
 
-  app.post("/:klassName/:methodName.json", async (request, response) => {
+  app.post("/api/:klassName/:methodName.json", async (request, response) => {
     const args = deserialize(request.body);
     const {klassName, methodName} = request.params;
     const key = `${klassName}.${methodName}`;

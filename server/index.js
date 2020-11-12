@@ -1,6 +1,6 @@
 
 
-import context from './context';
+import context, {generateContext} from './context';
 import server from './server';
 import registry from './registry';
 import generator from './generator';
@@ -56,4 +56,16 @@ class Nullstack {
 
 }
 
-export default Nullstack;
+const staticProxyHandler = {
+  get(target, name, value) {
+    if(typeof(target[name]) == 'function' && target[name].constructor.name == 'AsyncFunction') {
+      return (args) => {
+        const context = generateContext(args);
+        return target[name](context);
+      }
+    }
+    return Reflect.get(...arguments);
+  }
+}
+
+export default new Proxy(Nullstack, staticProxyHandler);
