@@ -5,7 +5,7 @@ const instanceProxyHandler = {
     if(target.attributes && target.attributes.proxy && target.attributes.proxy[name] !== undefined && target[name] !== undefined) {
       return target.attributes.proxy[name];
     }
-    if(name !== 'prepare' && name !== 'initiate' && target[name] === undefined && typeof(target.constructor[name]) === 'function') {
+    if(target[name] === undefined && typeof(target.constructor[name]) === 'function') {
       const detour = async function(params = {}) {
         const request = target._request();
         const response = target._response();
@@ -15,13 +15,7 @@ const instanceProxyHandler = {
       target[name] = detour;
     } else if(typeof(target[name]) == 'function') {
       return (args) => {
-        const clientContextProxyHandler = {
-          set(target, name, value) {
-            target._scoped_context[name] = value;
-            return Reflect.set(...arguments);
-          }
-        }
-        const context = new Proxy({...target._context, ...args}, clientContextProxyHandler);
+        const context = generateContext({...target._context, ...args});
         return target[name](context);
       }
     }

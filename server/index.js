@@ -49,6 +49,9 @@ class Nullstack {
     return serialized;
   }
 
+  toJSON() {
+    return this.serialize();
+  }
 
   render() {
     return false;
@@ -57,8 +60,8 @@ class Nullstack {
 }
 
 const staticProxyHandler = {
-  get(target, name, value) {
-    if(typeof(target[name]) == 'function' && target[name].constructor.name == 'AsyncFunction') {
+  get(target, name) {
+    if(target.name != 'Nullstack' && typeof(target[name]) == 'function' && target[name].constructor.name == 'AsyncFunction') {
       return (args) => {
         const context = generateContext(args);
         return target[name](context);

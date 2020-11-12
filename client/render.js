@@ -66,7 +66,7 @@ export default function render(node, depth) {
     }
   }
   if(isFunction(node)) {
-    const root = node.type();
+    const root = node.type(node.attributes);
     node.children = [root];
     return render(node.children[0], [...depth, 0]);
   }
