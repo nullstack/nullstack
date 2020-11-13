@@ -1,6 +1,7 @@
 import client from './client';
 import deserialize from '../shared/deserialize';
 import {generateContext} from './context';
+import network from './network';
 
 const instanceProxyHandler = {
   get(target, name) {
@@ -9,6 +10,8 @@ const instanceProxyHandler = {
     }
     if(target[name] === undefined && target.constructor[name] === true) {
       return async (params) => {
+        network.processing = true;
+        network[name] = true;
         const url = `/api/${target.constructor.hash}/${name}.json`;
         const response = await fetch(url, {
           method: 'POST',
@@ -20,6 +23,8 @@ const instanceProxyHandler = {
           body: JSON.stringify(params || {})
         });
         const payload = await response.text();
+        network.processing = false;
+        delete network[name];
         return deserialize(payload).result;
       }
     } else if(typeof(target[name]) == 'function') {

@@ -8,10 +8,12 @@ import instanceProxyHandler from './instanceProxyHandler';
 import page from './page';
 import environment from './environment';
 import {generateParams} from './params';
+import network from './network';
 
 context.environment = environment;
 context.page = page;
 context.router = router;
+context.network = network;
 
 export default class Nullstack {
 

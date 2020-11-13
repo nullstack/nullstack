@@ -1,6 +1,6 @@
 
 
-import context, {generateContext} from './context';
+import context from './context';
 import server from './server';
 import registry from './registry';
 import generator from './generator';
