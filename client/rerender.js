@@ -210,6 +210,12 @@ export default function rerender(parent, depth, vdepth) {
     const routeDepth = depth.join('.');
     for(const child of next.children) {
       if(isRoutable(child)) {
+        child._segments = child.attributes.route.split('/').filter((segment) => {
+          return segment[0] == ':';
+        }).map((segment) => {
+          return segment.slice(1);
+        });
+        router._addSegments(child._segments);
         if(client.routes[routeDepth] !== undefined) {
           child.type = false;
           child.children = [];
@@ -226,11 +232,6 @@ export default function rerender(parent, depth, vdepth) {
             child.children = [];
           }
         }
-        child._segments = child.attributes.route.split('/').filter((segment) => {
-          return segment[0] == ':';
-        }).map((segment) => {
-          return segment.slice(1);
-        });
         delete child.attributes.route;
       }
     }

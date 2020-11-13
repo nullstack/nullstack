@@ -29,6 +29,16 @@ class Router {
     this._redirect(target+window.location.search);
   }
 
+  _resetSegments() {
+    this._segments = {};
+  }
+
+  _addSegments(segments) {
+    for(const segment of segments) {
+      this._segments[segment] = true;
+    }
+  }
+
 }
 
 const router = new Router();
