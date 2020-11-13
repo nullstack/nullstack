@@ -34,9 +34,6 @@ export default class Nullstack {
     client.currentInstance = null;
     client.initializer = () => element(Starter);
     client.selector = document.querySelector('#application');
-    client.instancesMountedQueue = [];
-    client.instancesRenewedQueue = [];
-    client.instancesHydratedQueue = [];
     client.virtualDom = client.initializer();
     context.environment = environment;
     client.nextVirtualDom = client.initializer();

@@ -1,12 +1,12 @@
-import routeMatches from '../shared/routeMatches';
-import {isFalse, isClass, isFunction, isRoutable, isText} from '../shared/nodes';
+import {isFalse, isClass, isFunction, isText} from '../shared/nodes';
 import router from './router';
 import client from './client';
 import render from './render';
-import context, {generateContext} from './context';
+import {generateContext} from './context';
 import generateKey from '../shared/generateKey';
 import findParentInstance from './findParentInstance';
 import environment from './environment';
+import prepareNodeRoute from './prepareNodeRoute';
 
 export default function rerender(parent, depth, vdepth) {
   if(!client.hydrated) {
@@ -86,7 +86,7 @@ export default function rerender(parent, depth, vdepth) {
       let shouldReinitiate = false;
       if(next._segments) {
         for(const segment of next._segments) {
-          if(current._params[segment] !== next._params[segment]) {
+          if(current._params && current._params[segment] !== next._params[segment]) {
             shouldReinitiate = true;
           }
         }
@@ -196,33 +196,8 @@ export default function rerender(parent, depth, vdepth) {
     }
     if(next.attributes.html) return;
     const limit = Math.max(current.children.length, next.children.length);
-    const routeDepth = depth.join('.');
     for(const child of next.children) {
-      if(isRoutable(child)) {
-        child._segments = child.attributes.route.split('/').filter((segment) => {
-          return segment[0] == ':';
-        }).map((segment) => {
-          return segment.slice(1);
-        });
-        router._addSegments(child._segments);
-        if(client.routes[routeDepth] !== undefined) {
-          child.type = false;
-          child.children = [];
-        } else {
-          const params = routeMatches(router.url, child.attributes.route);
-          if(params) {
-            client.routes[routeDepth] = true;
-            for(const key in params) {
-              context.params[key] = params[key];
-            }
-            child._params = params;
-          } else {
-            child.type = false;
-            child.children = [];
-          }
-        }
-        delete child.attributes.route;
-      }
+      prepareNodeRoute(child, [...depth, 0]);
     }
     if(next.children.length > current.children.length) {
       for(let i = 0; i < current.children.length; i++) {

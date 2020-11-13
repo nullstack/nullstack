@@ -1,31 +1,14 @@
-import routeMatches from '../shared/routeMatches';
-import {isFalse, isClass, isFunction, isRoutable, isText} from '../shared/nodes';
+import {isFalse, isClass, isFunction, isText} from '../shared/nodes';
 import router from './router';
 import client from './client';
-import context, {generateContext} from './context';
+import {generateContext} from './context';
 import generateKey from '../shared/generateKey';
 import findParentInstance from './findParentInstance';
 import environment from './environment';
+import prepareNodeRoute from './prepareNodeRoute';
 
 export default function render(node, depth) {
-  // i suspect this will never run
-  if(isRoutable(node)) {
-    const routeDepth = depth.slice(0,-1).join('.');
-    if(client.routes[routeDepth] !== undefined) {
-      node.type = false;
-      node.children = [];
-    }
-    const params = routeMatches(router.url, node.attributes.route);
-    if(params) {
-      client.routes[routeDepth] = true;
-      for(const key in params) {
-        context.params[key] = params[key];
-      }
-    } else {
-      node.type = false;
-      node.children = [];
-    }
-  }
+  prepareNodeRoute(node, depth);
   if(isFalse(node)) {
     return document.createComment("");
   }

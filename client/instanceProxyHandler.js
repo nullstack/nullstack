@@ -40,7 +40,9 @@ const instanceProxyHandler = {
       target._attributes.proxy[name] = value;
     }
     const result = Reflect.set(...arguments);
-    client.update();
+    if(!name.startsWith('_')) {
+      client.update();
+    }
     return result;
   }
 }

@@ -54,7 +54,7 @@ client.processLifecycleQueues = async function() {
     const instance = client.instances[key];
     if(!client.instancesRenewedQueue.includes(instance)) {
       instance.terminate && await instance.terminate();
-      delete client.instances[id];
+      delete client.instances[key];
     }
   }
   router._changed = false;

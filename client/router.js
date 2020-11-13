@@ -5,12 +5,14 @@ class Router {
   _changed = false
 
   _redirect(target) {
-    clearTimeout(redirectTimer);
-    redirectTimer = setTimeout(() => {
-      history.pushState({}, document.title, target);
-      window.dispatchEvent(new Event('popstate'));
-      this._changed = true;
-    }, 0);
+    if(target != window.location.pathname+window.location.search) {
+      clearTimeout(redirectTimer);
+      redirectTimer = setTimeout(() => {
+        history.pushState({}, document.title, target);
+        window.dispatchEvent(new Event('popstate'));
+        this._changed = true;
+      }, 0);
+    }
   }
 
   get url() {
