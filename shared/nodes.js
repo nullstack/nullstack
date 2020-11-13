@@ -1,9 +1,9 @@
 export function isFalse(node) {
-  return (node === false || node.type === false);
+  return node === undefined || node === null || node === false || node.type === false;
 }
 
 export function isClass(node) {
-  return typeof(node.type) === 'function' && typeof(node.type.prototype.render === 'function');
+  return typeof(node.type) === 'function' && typeof(node.type.prototype.render) === 'function';
 }
 
 export function isFunction(node) {
@@ -11,7 +11,7 @@ export function isFunction(node) {
 }
 
 export function isRoutable(node) {
-  return (node && node.attributes !== undefined && node.attributes.route !== undefined);
+  return node && node.attributes !== undefined && node.attributes.route !== undefined;
 }
 
 export function isText(node) {

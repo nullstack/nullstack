@@ -77,28 +77,7 @@ export default function rerender(parent, depth, vdepth) {
     next.children = [root];
     return rerender(parent, depth, [...vdepth, 0]);
   }
-  if(current !== undefined && /^[A-Z]/.test(current.type) && typeof(next.type) === 'function' && current.type === next.type.name) {
-    const key = generateKey(next, [0, ...vdepth]);
-    const instance = new next.type();
-    instance._events = {};
-    client.instances[key] = instance;
-    const state = window.instances[key];
-    for(const attribute in state) {
-      instance[attribute] = state[attribute];
-    }
-    client.instancesMountedQueue.push(instance);
-    const context = generateContext(next.attributes);
-    instance._context = context;
-    instance.prepare && instance.prepare();
-    instance._attributes = next.attributes;
-    client.instancesRenewedQueue.push(instance);
-    const root = instance.render();
-    next.children = [root];
-    const limit = Math.max(current.children.length, next.children.length);
-    for(let i = 0; i < limit; i++) {
-      rerender(parent, depth, [...vdepth, i]);
-    }
-  } else if(isClass(current) && current.type === next.type) {
+  if(isClass(current) && current.type === next.type) {
     const key = generateKey(next, [0, ...vdepth]);
     let instance = null;
     if(!router._changed) {
@@ -122,11 +101,21 @@ export default function rerender(parent, depth, vdepth) {
       instance.update && instance.update();
     } else {
       instance = new next.type();
+      const memory = window.instances[key];
+      if(memory) {
+        for(const attribute in memory) {
+          instance[attribute] = memory[attribute];
+        }
+        delete window.instances[key];
+        client.instancesHydratedQueue.push(instance);
+      }
       instance._context = context;
       instance._events = {};
       client.instances[key] = instance;
-      client.instancesMountedQueue.push(instance);
-      instance.prepare && instance.prepare();
+      if(!memory) {
+        client.instancesMountedQueue.push(instance);
+        instance.prepare && instance.prepare();
+      }
     }
     instance._attributes = next.attributes;
     client.instancesRenewedQueue.push(instance);

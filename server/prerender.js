@@ -42,5 +42,5 @@ export async function prerender(request, response) {
   for(const key in scope.instances) {
     memory[key] = scope.instances[key].serialize();
   }
-  return {html, memory, representation: virtualDom, context: clientContext, page, project, environment: clientEnvironment};
+  return {html, memory, context: clientContext, page, project, environment: clientEnvironment};
 }

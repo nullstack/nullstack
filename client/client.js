@@ -1,6 +1,6 @@
 import router from './router';
 import {generateParams} from './params';
-import context, {generateContext} from './context';
+import context from './context';
 import rerender from './rerender';
 
 const client = {};
@@ -12,6 +12,7 @@ client.initializer = null;
 client.instances = {};
 client.instancesMountedQueue = [];
 client.instancesRenewedQueue = [];
+client.instancesHydratedQueue = [];
 client.virtualDom = {};
 client.selector = null;
 client.routes = {};
@@ -28,6 +29,7 @@ client.update = function() {
       client.routes = {};
       client.instancesMountedQueue = [];
       client.instancesRenewedQueue = [];
+      client.instancesHydratedQueue = [];
       client.nextVirtualDom = client.initializer();
       rerender(client.selector, [0], []);
       client.virtualDom = client.nextVirtualDom;
@@ -43,13 +45,15 @@ client.processLifecycleQueues = async function() {
     client.hydrated = true;
   }
   for(const instance of client.instancesMountedQueue) {
-    const context = generateContext(instance._attributes);
-    instance.initiate && await instance.initiate(context);
+    instance.initiate && await instance.initiate();
   }
-  for(const [id, instance] of Object.entries(client.instances)) {
+  for(const instance of client.instancesHydratedQueue) {
+    instance.update && await instance.update();
+  }
+  for(const key in client.instances) {
+    const instance = client.instances[key];
     if(!client.instancesRenewedQueue.includes(instance)) {
-      const context = generateContext(instance._attributes);
-      instance.terminate && await instance.terminate(context);
+      instance.terminate && await instance.terminate();
       delete client.instances[id];
     }
   }

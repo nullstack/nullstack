@@ -10,7 +10,6 @@ import environment from './environment';
 import {generateParams} from './params';
 import network from './network';
 
-context.environment = environment;
 context.page = page;
 context.router = router;
 context.network = network;
@@ -20,7 +19,6 @@ export default class Nullstack {
   static element = element;
 
   static start(Starter) {
-    window.representation = deserialize(JSON.stringify(window.representation));
     window.instances = deserialize(JSON.stringify(window.instances));
     window.addEventListener('popstate', () => {
       client.update();
@@ -38,13 +36,13 @@ export default class Nullstack {
     client.selector = document.querySelector('#application');
     client.instancesMountedQueue = [];
     client.instancesRenewedQueue = [];
-    client.virtualDom = window.representation;
+    client.instancesHydratedQueue = [];
+    client.virtualDom = client.initializer();
+    context.environment = environment;
     client.nextVirtualDom = client.initializer();
     rerender(client.selector, [0], []);
     client.virtualDom = client.nextVirtualDom;
     client.nextVirtualDom = null;
-    delete window.representation;
-    delete window.instances;
     client.processLifecycleQueues();
   }
 
