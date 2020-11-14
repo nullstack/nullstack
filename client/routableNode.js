@@ -4,7 +4,7 @@ import router from './router';
 import client from './client';
 import context from './context';
 
-export default function prepareNodeRoute(node, depth) {
+export default function routableNode(node, depth) {
   if(isRoutable(node)) {
     const routeDepth = depth.slice(0,-1).join('.');
     if(client.routes[routeDepth] !== undefined) {

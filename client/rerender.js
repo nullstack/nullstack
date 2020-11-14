@@ -5,8 +5,9 @@ import render from './render';
 import {generateContext} from './context';
 import generateKey from '../shared/generateKey';
 import findParentInstance from './findParentInstance';
-import environment from './environment';
-import prepareNodeRoute from './prepareNodeRoute';
+import routableNode from './routableNode';
+import bindableNode from './bindableNode';
+import {anchorableNode, anchorableElement} from './anchorableNode';
 
 export default function rerender(parent, depth, vdepth) {
   if(!client.hydrated) {
@@ -34,44 +35,7 @@ export default function rerender(parent, depth, vdepth) {
     const nextSelector = render(next, vdepth);
     return parent.replaceChild(nextSelector, selector);
   }
-  if(next !== undefined && next.attributes !== undefined && next.attributes.bind) {
-    const instance = findParentInstance([0, ...vdepth]);
-    const target = next.attributes.source || instance;
-    if(next.type === 'textarea') {
-      next.children = [target[next.attributes.bind]];
-    } else if(next.type === 'input' && next.attributes.type === 'checkbox') {
-      next.attributes.checked = target[next.attributes.bind];
-    } else {
-      next.attributes.value = target[next.attributes.bind];
-    }
-    next.attributes.name = next.attributes.bind;
-    let eventName = 'oninput';
-    let valueName = 'value';
-    if(next.attributes.type === 'checkbox' || next.attributes.type === 'radio') {
-      eventName = 'onclick';
-      valueName = 'checked';
-    } else if(next.type !== 'input' && next.type !== 'textarea') {
-      eventName = 'onchange';
-    }
-    const originalEvent = next.attributes[eventName];
-    next.attributes[eventName] = ({event, value}) => {
-      if(valueName == 'checked') {
-        target[next.attributes.bind] = event.target[valueName];
-      } else if(target[next.attributes.bind] === true || target[next.attributes.bind] === false) {
-        target[next.attributes.bind] = event ? (event.target[valueName] == 'true') : value;
-      } else if(typeof target[next.attributes.bind] === 'number') {
-        target[next.attributes.bind] = parseFloat(event ? event.target[valueName] : value) || 0;
-      } else {
-        target[next.attributes.bind] = event ? event.target[valueName] : value;
-      }
-      client.update();
-      if(originalEvent !== undefined) {
-        setTimeout(() => {
-          originalEvent({...next.attributes, event, value});
-        }, 0);
-      }
-    }
-  }
+  bindableNode(next, [0, ...vdepth])
   if(isFunction(next)) {
     const root = next.type(next.attributes);
     next.children = [root];
@@ -133,27 +97,14 @@ export default function rerender(parent, depth, vdepth) {
       return selector.nodeValue = next;
     }
   } else if (current.type === next.type) {
-    if(next.type === 'a' && next.attributes.href && next.attributes.href.startsWith('/') && !next.attributes.target) {
-      next.attributes.onclick = ({event}) => {
-        event.preventDefault();
-        router.url = next.attributes.href;
-        environment.prerendered = false;
-      };
-    }
+    anchorableNode(next);
     const attributeNames = Object.keys({...current.attributes, ...next.attributes});
     for(const name of attributeNames) {
       if(name === 'html') {
         if(next.attributes[name] !== current.attributes[name]) {
           selector.innerHTML = next.attributes[name];
-        }
-        const links = selector.querySelectorAll('a[href^="/"]:not([target])');
-        for(const link of links) {
-          link.onclick = (event) => {
-            event.preventDefault();
-            router.url = link.href;
-            environment.prerendered = false;
-          };
-        }
+          anchorableElement(selector);
+        }        
       } else if(name === 'checked') {
         if(next.attributes[name] !== selector.value) {
           selector.checked = next.attributes[name];
@@ -197,7 +148,7 @@ export default function rerender(parent, depth, vdepth) {
     if(next.attributes.html) return;
     const limit = Math.max(current.children.length, next.children.length);
     for(const child of next.children) {
-      prepareNodeRoute(child, [...depth, 0]);
+      routableNode(child, [...depth, 0]);
     }
     if(next.children.length > current.children.length) {
       for(let i = 0; i < current.children.length; i++) {

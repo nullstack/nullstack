@@ -1,53 +1,18 @@
 import {isFalse, isClass, isFunction, isText} from '../shared/nodes';
-import router from './router';
 import client from './client';
 import {generateContext} from './context';
 import generateKey from '../shared/generateKey';
 import findParentInstance from './findParentInstance';
-import environment from './environment';
-import prepareNodeRoute from './prepareNodeRoute';
+import routableNode from './routableNode';
+import bindableNode from './bindableNode';
+import {anchorableNode, anchorableElement} from './anchorableNode';
 
 export default function render(node, depth) {
-  prepareNodeRoute(node, depth);
+  routableNode(node, depth);
   if(isFalse(node)) {
     return document.createComment("");
   }
-  if(node != undefined && node.attributes != undefined && node.attributes.bind) {
-    const instance = findParentInstance([0, ...depth]);
-    const target = node.attributes.source || instance;
-    if(node.type === 'textarea') {
-      node.children = [target[node.attributes.bind]];
-    } else {
-      node.attributes.value = target[node.attributes.bind];
-    }
-    node.attributes.name = node.attributes.bind;
-    let eventName = 'oninput';
-    let valueName = 'value';
-    if(node.attributes.type === 'checkbox' || node.attributes.type === 'radio') {
-      eventName = 'onclick';
-      valueName = 'checked';
-    } else if(node.type !== 'input' && node.type !== 'textarea') {
-      eventName = 'onchange';
-    }
-    const originalEvent = node.attributes[eventName];
-    node.attributes[eventName] = ({event, value}) => {
-      if(valueName == 'checked') {
-        target[node.attributes.bind] = event.target[valueName];
-      } else if(target[node.attributes.bind] === true || target[node.attributes.bind] === false) {
-        target[node.attributes.bind] = event ? (event.target[valueName] == 'true') : value;
-      } else if(typeof target[node.attributes.bind] === 'number') {
-        target[node.attributes.bind] = parseFloat(event ? event.target[valueName] : value) || 0;
-      } else {
-        target[node.attributes.bind] = event ? event.target[valueName] : value;
-      }
-      client.update();
-      if(originalEvent !== undefined) {
-        setTimeout(() => {
-          originalEvent({...node.attributes, event, value});
-        }, 0);
-      }
-    }
-  }
+  bindableNode(node, [0, ...depth])
   if(isFunction(node)) {
     const root = node.type(node.attributes);
     node.children = [root];
@@ -97,24 +62,11 @@ export default function render(node, depth) {
   } else {
     element = document.createElement(node.type);
   }
-  if(node.type === 'a' && node.attributes.href && node.attributes.href.startsWith('/') && !node.attributes.target) {
-    node.attributes.onclick = ({event}) => {
-      event.preventDefault();
-      router.url = node.attributes.href;
-      environment.prerendered = false;
-    };
-  }
+  anchorableNode(node);
   for(let name in node.attributes) {
     if(name === 'html') {
       element.innerHTML = node.attributes[name];
-      const links = element.querySelectorAll('a[href^="/"]:not([target])');
-      for(const link of links) {
-        link.onclick = (event) => {
-          event.preventDefault();
-          router.url = link.href;
-          environment.prerendered = false;
-        };
-      }
+      anchorableElement(element);
     } else if(name.startsWith('on')) {
       const eventName = name.replace('on', '');
       const key = '0.' + depth.join('.') + '.' + eventName;
