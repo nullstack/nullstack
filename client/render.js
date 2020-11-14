@@ -56,15 +56,25 @@ export default function render(node, depth) {
   if(isClass(node)) {
     const key = generateKey(node, [0, ...depth]);
     const instance = new node.type();
+    const memory = window.instances[key];
+    if(memory) {
+      for(const attribute in memory) {
+        instance[attribute] = memory[attribute];
+      }
+      delete window.instances[key];
+      client.instancesHydratedQueue.push(instance);
+    }
     instance._events = {};
     instance._attributes = node.attributes;
     client.instances[key] = instance;
     const context = generateContext(node.attributes);
     instance._context = context;
-    instance.prepare && instance.prepare();
+    if(!memory) {
+      client.instancesMountedQueue.push(instance);
+      instance.prepare && instance.prepare();
+    }
     const root = instance.render();
     node.children = [root];
-    client.instancesMountedQueue.push(instance);
     client.instancesRenewedQueue.push(instance);
     return render(node.children[0], [...depth, 0]);
   }
