@@ -4,8 +4,10 @@ import client from './client';
 
 export default function bindableNode(node, depth) {
   if(isBindable(node)) {
-    const instance = findParentInstance(depth);
-    const target = node.attributes.source || instance;
+    let target = node.attributes.source;
+    if(!target) {
+      target = findParentInstance(depth);
+    }
     if(node.type === 'textarea') {
       node.children = [target[node.attributes.bind]];
     } else if(node.type === 'input' && node.attributes.type === 'checkbox') {
