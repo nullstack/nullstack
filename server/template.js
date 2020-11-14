@@ -47,9 +47,9 @@ function head({page, project, router}, hasStyle) {
   `).split('\n').join('');
 }
 
-function body({html, memory, representation, context, page, environment}) {
+function body({html, memory, context, page, environment}) {
   const serializableContext = {};
-  const blacklist = ['scope', 'router', 'page', 'environment'];
+  const blacklist = ['scope', 'router', 'page', 'environment', 'network'];
   for(const [key, value] of Object.entries(context)) {
     if(!blacklist.includes(key) && typeof(value) !== 'function') {
       serializableContext[key] = value;
@@ -62,7 +62,6 @@ function body({html, memory, representation, context, page, environment}) {
         window.page = ${serialize(page)};
         window.context = ${serialize(serializableContext)};
         window.instances = ${serialize(memory)};
-        window.representation = ${serialize(representation)};
         window.environment = ${serialize(environment)};
         document.addEventListener('DOMContentLoaded', () => {
           const script = window.document.createElement( 'script' );

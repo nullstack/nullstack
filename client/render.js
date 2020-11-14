@@ -1,89 +1,45 @@
-import routeMatches from '../shared/routeMatches';
-import {isFalse, isClass, isFunction, isRoutable, isText} from '../shared/nodes';
-import router from './router';
+import {isFalse, isClass, isFunction, isText} from '../shared/nodes';
 import client from './client';
-import context, {generateContext} from './context';
+import {generateContext} from './context';
 import generateKey from '../shared/generateKey';
 import findParentInstance from './findParentInstance';
-import environment from './environment';
+import routableNode from './routableNode';
+import bindableNode from './bindableNode';
+import {anchorableNode, anchorableElement} from './anchorableNode';
 
 export default function render(node, depth) {
-  // i suspect this will never run
-  if(isRoutable(node)) {
-    const routeDepth = depth.slice(0,-1).join('.');
-    if(client.routes[routeDepth] !== undefined) {
-      node.type = false;
-      node.children = [];
-    }
-    const params = routeMatches(router.url, node.attributes.route);
-    if(params) {
-      client.routes[routeDepth] = true;
-      for(const key in params) {
-        context.params[key] = params[key];
-      }
-    } else {
-      node.type = false;
-      node.children = [];
-    }
-  }
+  routableNode(node, depth);
   if(isFalse(node)) {
     return document.createComment("");
   }
-  if(node != undefined && node.attributes != undefined && node.attributes.bind) {
-    const instance = findParentInstance([0, ...depth]);
-    const target = node.attributes.source || instance;
-    if(node.type === 'textarea') {
-      node.children = [target[node.attributes.bind]];
-    } else {
-      node.attributes.value = target[node.attributes.bind];
-    }
-    node.attributes.name = node.attributes.bind;
-    let eventName = 'oninput';
-    let valueName = 'value';
-    if(node.attributes.type === 'checkbox' || node.attributes.type === 'radio') {
-      eventName = 'onclick';
-      valueName = 'checked';
-    } else if(node.type !== 'input' && node.type !== 'textarea') {
-      eventName = 'onchange';
-    }
-    const originalEvent = node.attributes[eventName];
-    node.attributes[eventName] = ({event, value}) => {
-      if(valueName == 'checked') {
-        target[node.attributes.bind] = event.target[valueName];
-      } else if(target[node.attributes.bind] === true || target[node.attributes.bind] === false) {
-        target[node.attributes.bind] = event ? (event.target[valueName] == 'true') : value;
-      } else if(typeof target[node.attributes.bind] === 'number') {
-        target[node.attributes.bind] = parseFloat(event ? event.target[valueName] : value) || 0;
-      } else {
-        target[node.attributes.bind] = event ? event.target[valueName] : value;
-      }
-      client.update();
-      if(originalEvent !== undefined) {
-        setTimeout(() => {
-          const context = generateContext({...instance.attributes, ...node.attributes, event, value});
-          originalEvent(context);
-        }, 0);
-      }
-    }
-  }
+  bindableNode(node, [0, ...depth])
   if(isFunction(node)) {
-    const instance = findParentInstance([0, ...depth]);
-    const context = generateContext({...instance.attributes, ...node.attributes});
-    const root = node.type(context);
+    const root = node.type(node.attributes);
     node.children = [root];
     return render(node.children[0], [...depth, 0]);
   }
   if(isClass(node)) {
     const key = generateKey(node, [0, ...depth]);
     const instance = new node.type();
-    instance.events = {};
-    instance.attributes = node.attributes;
+    const memory = window.instances[key];
+    if(memory) {
+      for(const attribute in memory) {
+        instance[attribute] = memory[attribute];
+      }
+      delete window.instances[key];
+      client.instancesHydratedQueue.push(instance);
+    }
+    instance._events = {};
+    instance._attributes = node.attributes;
     client.instances[key] = instance;
     const context = generateContext(node.attributes);
-    instance.prepare && instance.prepare(context);
-    const root = instance.render(context);
+    instance._context = context;
+    if(!memory) {
+      client.instancesMountedQueue.push(instance);
+      instance.prepare && instance.prepare();
+    }
+    const root = instance.render();
     node.children = [root];
-    client.instancesMountedQueue.push(instance);
     client.instancesRenewedQueue.push(instance);
     return render(node.children[0], [...depth, 0]);
   }
@@ -106,36 +62,22 @@ export default function render(node, depth) {
   } else {
     element = document.createElement(node.type);
   }
-  if(node.type === 'a' && node.attributes.href && node.attributes.href.startsWith('/') && !node.attributes.target) {
-    node.attributes.onclick = ({event}) => {
-      event.preventDefault();
-      router.url = node.attributes.href;
-      environment.prerendered = false;
-    };
-  }
+  anchorableNode(node);
   for(let name in node.attributes) {
     if(name === 'html') {
       element.innerHTML = node.attributes[name];
-      const links = element.querySelectorAll('a[href^="/"]:not([target])');
-      for(const link of links) {
-        link.onclick = (event) => {
-          event.preventDefault();
-          router.url = link.href;
-          environment.prerendered = false;
-        };
-      }
+      anchorableElement(element);
     } else if(name.startsWith('on')) {
       const eventName = name.replace('on', '');
       const key = '0.' + depth.join('.') + '.' + eventName;
       const instance = findParentInstance([0, ...depth]);
-      instance.events[key] = (event) => {
+      instance._events[key] = (event) => {
         if(node.attributes.default !== true) {
           event.preventDefault();
         }
-        const context = generateContext({...instance.attributes, ...node.attributes, event});
-        node.attributes[name](context);
+        node.attributes[name]({...node.attributes, event});
       };
-      element.addEventListener(eventName, instance.events[key]);
+      element.addEventListener(eventName, instance._events[key]);
     } else if(typeof(node.attributes[name]) !== 'function' && typeof(node.attributes[name]) !== 'object') {
       if(name != 'value' && node.attributes[name] === true) {
         element.setAttribute(name, '');

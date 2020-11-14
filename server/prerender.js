@@ -5,11 +5,12 @@ import Router from './router';
 import generator from './generator';
 import paramsProxyHandler from './paramsProxyHandler';
 import render from './render';
+import network from './network';
 
 export async function prerender(request, response) {
   const page = {image: '/image-1200x630.png'};
   const clientEnvironment = {...environment, prerendered: true};
-  const clientContext = {page, project, environment: clientEnvironment};
+  const clientContext = {page, project, environment: clientEnvironment, network};
   const clientContextProxyHandler = {
     set(target, name, value) {
       clientContext[name] = value;
@@ -41,5 +42,5 @@ export async function prerender(request, response) {
   for(const key in scope.instances) {
     memory[key] = scope.instances[key].serialize();
   }
-  return {html, memory, representation: virtualDom, context: clientContext, page, project, environment: clientEnvironment};
+  return {html, memory, context: clientContext, page, project, environment: clientEnvironment};
 }

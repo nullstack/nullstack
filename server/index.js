@@ -42,13 +42,16 @@ class Nullstack {
   serialize() {
     const serialized = {};
     for(const name of Object.getOwnPropertyNames(this)) {
-      if(typeof(this[name]) !== 'function') {
+      if(typeof(this[name]) !== 'function' && !name.startsWith('_') && name !== 'attributes') {
         serialized[name] = this[name];
       }
     }
     return serialized;
   }
 
+  toJSON() {
+    return this.serialize();
+  }
 
   render() {
     return false;

@@ -8,17 +8,17 @@ import instanceProxyHandler from './instanceProxyHandler';
 import page from './page';
 import environment from './environment';
 import {generateParams} from './params';
+import network from './network';
 
-context.environment = environment;
 context.page = page;
 context.router = router;
+context.network = network;
 
 export default class Nullstack {
 
   static element = element;
 
   static start(Starter) {
-    window.representation = deserialize(JSON.stringify(window.representation));
     window.instances = deserialize(JSON.stringify(window.instances));
     window.addEventListener('popstate', () => {
       client.update();
@@ -30,19 +30,16 @@ export default class Nullstack {
     delete window.context;
     client.routes = {};
     const [path, query] = router.url.split('?');
-    client.params = generateParams(query);
+    context.params = generateParams(query);
     client.currentInstance = null;
     client.initializer = () => element(Starter);
     client.selector = document.querySelector('#application');
-    client.instancesMountedQueue = [];
-    client.instancesRenewedQueue = [];
-    client.virtualDom = window.representation;
+    client.virtualDom = client.initializer();
+    context.environment = environment;
     client.nextVirtualDom = client.initializer();
     rerender(client.selector, [0], []);
     client.virtualDom = client.nextVirtualDom;
     client.nextVirtualDom = null;
-    delete window.representation;
-    delete window.instances;
     client.processLifecycleQueues();
   }
 

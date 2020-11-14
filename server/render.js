@@ -48,9 +48,7 @@ export default async function render(node, depth, scope) {
   if(node === undefined || node.type === undefined) {
     return node + "<!--#-->";
   } else if (isFunction(node)) {
-    const instance = scope.findParentInstance(depth);
-    const context = scope.generateContext({...instance.attributes, ...node.attributes});
-    const root = node.type(context);
+    const root = node.type(node.attributes);
     node.children = [root];
     return await render(node.children[0], [...depth, 0], scope);
   } else if (isClass(node)) {
@@ -58,10 +56,11 @@ export default async function render(node, depth, scope) {
     const instance = new node.type(scope);
     instance.attributes = node.attributes;
     scope.instances[key] = instance;
-    const context = scope.generateContext(node.attributes);
-    instance.prepare && instance.prepare(context);
-    instance.initiate && await instance.initiate(context);
-    const root = instance.render(context);
+    instance._attributes = node.attributes;
+    instance._scope = scope;
+    instance.prepare && instance.prepare();
+    instance.initiate && await instance.initiate();
+    const root = instance.render();
     node.children = [root];
     node.type = node.type.name;
     return await render(node.children[0], [...depth, 0], scope);

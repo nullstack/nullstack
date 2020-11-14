@@ -1,5 +1,4 @@
 import client from './client';
-import paramsProxyHandler from './paramsProxyHandler';
 
 const context = {};
 
