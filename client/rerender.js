@@ -50,8 +50,8 @@ export default function rerender(parent, depth, vdepth) {
       instance = client.instances[key];
     } else if(router._changed) {
       let shouldReinitiate = false;
-      if(next._segments) {
-        for(const segment of next._segments) {
+      if(next._params) {
+        for(const segment in next._params) {
           if(current._params && current._params[segment] !== next._params[segment]) {
             shouldReinitiate = true;
           }

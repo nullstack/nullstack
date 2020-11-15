@@ -7,7 +7,7 @@ import rerender from './rerender';
 import instanceProxyHandler from './instanceProxyHandler';
 import page from './page';
 import environment from './environment';
-import {generateParams} from './params';
+import params, {updateParams} from './params';
 import network from './network';
 
 context.page = page;
@@ -26,11 +26,11 @@ export default class Nullstack {
     for(const [key, value] of Object.entries(window.context)) {
       context[key] = value;
     }
+    context.params = params;
     Object.freeze(context.project);
     delete window.context;
     client.routes = {};
-    const [path, query] = router.url.split('?');
-    context.params = generateParams(query);
+    updateParams(router.url);
     client.currentInstance = null;
     client.initializer = () => element(Starter);
     client.selector = document.querySelector('#application');

@@ -1,8 +1,8 @@
 import extractParamValue from './extractParamValue';
 
-export default function getQueryStringParams(query) {
+export default function getQueryStringParams(url) {
+  const [path, query] = url.split('?');
   if(query) {
-    query = (/^[?#]/.test(query) ? query.slice(1) : query);
     return query.split('&').reduce((params, param) => {
       let [key, value] = param.split('=');
       params[key] = extractParamValue(value);

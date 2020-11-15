@@ -1,5 +1,4 @@
-import context from './context';
-import {generateParams} from './params';
+import {updateParams} from './params';
 
 let redirectTimer = null;
 
@@ -8,16 +7,12 @@ class Router {
   _changed = false
 
   _redirect(target) {
-    if(target != window.location.pathname+window.location.search) {
+    if(target != this.url) {
       clearTimeout(redirectTimer);
       redirectTimer = setTimeout(() => {
+        updateParams(target);
         history.pushState({}, document.title, target);
         window.dispatchEvent(new Event('popstate'));
-        //client.update();
-        const [path, query] = target.split('?');
-        context.params = generateParams(query);
-        //console.log('a', context.params);
-
         this._changed = true;
       }, 0);
     }
@@ -37,16 +32,6 @@ class Router {
 
   set path(target) {
     this._redirect(target+window.location.search);
-  }
-
-  _resetSegments() {
-    this._segments = {};
-  }
-
-  _addSegments(segments) {
-    for(const segment of segments) {
-      this._segments[segment] = true;
-    }
   }
 
 }
