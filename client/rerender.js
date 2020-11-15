@@ -1,6 +1,7 @@
 import {isFalse, isClass, isFunction, isText} from '../shared/nodes';
-import router from './router';
 import client from './client';
+import params from './params';
+import router from './router';
 import render from './render';
 import {generateContext} from './context';
 import generateKey from '../shared/generateKey';
@@ -8,6 +9,7 @@ import findParentInstance from './findParentInstance';
 import routableNode from './routableNode';
 import bindableNode from './bindableNode';
 import {anchorableNode, anchorableElement} from './anchorableNode';
+import parameterizableNode from '../shared/parameterizableNode';
 
 export default function rerender(parent, depth, vdepth) {
   if(!client.hydrated) {
@@ -97,6 +99,7 @@ export default function rerender(parent, depth, vdepth) {
       return selector.nodeValue = next;
     }
   } else if (current.type === next.type) {
+    parameterizableNode(next, router, params);
     anchorableNode(next);
     const attributeNames = Object.keys({...current.attributes, ...next.attributes});
     for(const name of attributeNames) {

@@ -1,24 +1,16 @@
 import router from './router';
 import getQueryStringParams from '../shared/getQueryStringParams';
+import seserializeParam from '../shared/serializeParam';
+import serializeSearch from '../shared/serializeSearch';
+import context from './context';
 
 const paramsProxyHandler = {
   set(target, name, value) {
-    const serializedValue = value && value.toJSON !== undefined ? value.toJSON() : value;
+    const serializedValue = seserializeParam(value);
     target[name] = serializedValue;
     if(!router._segments[name]) {
-      const keys = Object.keys(target);
-      if(!keys.includes(name)) {
-        keys.push(name);
-      }
-      const search = keys.map((key) => {
-        const delta = key == name ? serializedValue : target[key];
-        if(delta === false || !!delta) {
-          return `${key}=${delta}`;
-        } else {
-          return '';
-        }
-      }).filter((segment) => !!segment).join('&');
-      router.url = window.location.pathname + (search ? '?' : '') + search;
+      const search = serializeSearch(target);
+      router.url = router.path + (search ? '?' : '') + search;
     }
     return true;
   },
@@ -30,5 +22,12 @@ const paramsProxyHandler = {
 export function generateParams(query) {
   const params = getQueryStringParams(query);
   router._resetSegments();
-  return new Proxy(params, paramsProxyHandler);
+  if(!context.params) {
+    return new Proxy(params, paramsProxyHandler);
+  } else {
+    for(const key of Object.keys({...params, ...context.params})) {
+      context.params[key] = params[key];
+    }
+    return context.params;
+  }
 }

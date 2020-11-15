@@ -4,10 +4,16 @@ import router from './router';
 
 export function anchorableNode(node) {
   if(isAnchorable(node)) {
+    const originalEvent = node.attributes.onclick;
     node.attributes.onclick = ({event}) => {
       event.preventDefault();
       router.url = node.attributes.href;
       environment.prerendered = false;
+      if(originalEvent !== undefined) {
+        setTimeout(() => {
+          originalEvent({...node.attributes, event});
+        }, 0);
+      }
     };
   }
 }

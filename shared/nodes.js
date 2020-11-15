@@ -25,3 +25,7 @@ export function isBindable(node) {
 export function isAnchorable(node) {
   return node.type === 'a' && node.attributes.href && node.attributes.href.startsWith('/') && !node.attributes.target;
 }
+
+export function isParameterizable(node) {
+  return node && node.attributes && (node.attributes.params || node.attributes.path);
+}

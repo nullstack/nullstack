@@ -1,11 +1,14 @@
 import {isFalse, isClass, isFunction, isText} from '../shared/nodes';
 import client from './client';
+import params from './params';
+import router from './router';
 import {generateContext} from './context';
 import generateKey from '../shared/generateKey';
 import findParentInstance from './findParentInstance';
 import routableNode from './routableNode';
 import bindableNode from './bindableNode';
 import {anchorableNode, anchorableElement} from './anchorableNode';
+import parameterizableNode from '../shared/parameterizableNode';
 
 export default function render(node, depth) {
   routableNode(node, depth);
@@ -62,6 +65,7 @@ export default function render(node, depth) {
   } else {
     element = document.createElement(node.type);
   }
+  parameterizableNode(node, router, params);
   anchorableNode(node);
   for(let name in node.attributes) {
     if(name === 'html') {

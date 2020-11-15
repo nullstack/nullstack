@@ -1,3 +1,6 @@
+import context from './context';
+import {generateParams} from './params';
+
 let redirectTimer = null;
 
 class Router {
@@ -10,6 +13,11 @@ class Router {
       redirectTimer = setTimeout(() => {
         history.pushState({}, document.title, target);
         window.dispatchEvent(new Event('popstate'));
+        //client.update();
+        const [path, query] = target.split('?');
+        context.params = generateParams(query);
+        //console.log('a', context.params);
+
         this._changed = true;
       }, 0);
     }

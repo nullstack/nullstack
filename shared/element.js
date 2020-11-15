@@ -1,7 +1,7 @@
 function flattenChildren(children) {
   children = [].concat.apply([], children).map((child) => {
     if(child === null || child === undefined) return false;
-    if(child.type === 'Fragment') return this.flattenChildren(child.children);
+    if(child.type === 'Fragment') return flattenChildren(child.children);
     return child;
   });
   return [].concat.apply([], children);
