@@ -15,7 +15,7 @@ export default function render(node, depth) {
   if(isFalse(node)) {
     return document.createComment("");
   }
-  bindableNode(node, [0, ...depth])
+  bindableNode(node, [0, ...depth]);
   if(isFunction(node)) {
     const root = node.type(node.attributes);
     node.children = [root];
@@ -53,6 +53,7 @@ export default function render(node, depth) {
   let next = client.nextVirtualDom;
   let isSvg = false;
   for(const level of depth) {
+    if(!next.children) break;
     next = next.children[level];
     if(!next) break;
     if(next.type === 'svg') {
@@ -92,7 +93,8 @@ export default function render(node, depth) {
   }
   if(!node.attributes.html) {
     for(let i = 0; i < node.children.length; i++) {
-      const dom = render(node.children[i], [...depth, i]);
+      const ndepth = node.type === 'Fragment' ? depth : [...depth, i];
+      const dom = render(node.children[i], ndepth);
       element.appendChild(dom);
     }
     if(node.type == 'select') {

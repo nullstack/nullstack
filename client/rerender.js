@@ -23,19 +23,26 @@ export default function rerender(parent, depth, vdepth) {
     }
   }
   const index = depth[depth.length - 1];
-  const selector = parent.childNodes[index];
   let current = client.virtualDom;
   let next = client.nextVirtualDom;
   for(const level of vdepth) {
     current = current.children[level];
     next = next.children[level];
   }
+  const selector = parent.childNodes[index];
   if(isFalse(current) && isFalse(next)) {
     return;
   }
   if((isFalse(current) || isFalse(next)) && current != next) {
     const nextSelector = render(next, vdepth);
     return parent.replaceChild(nextSelector, selector);
+  }
+  if(next.type === 'Fragment') {
+    const limit = Math.max(current.children.length, next.children.length);
+    for(let i = limit - 1; i > -1; i--) {
+      rerender(selector, depth, [...vdepth, i]);
+    }
+    return;
   }
   bindableNode(next, [0, ...vdepth])
   if(isFunction(next)) {

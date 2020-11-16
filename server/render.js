@@ -7,7 +7,7 @@ export default async function render(node, depth, scope) {
   if(node.type === 'Fragment') {
     let element = '';
     for(let i = 0; i < node.children.length; i++) {
-      element += await render(node.children[i], [...depth, i], scope);
+      element += await render(node.children[i], depth, scope);
     }
     return element;
   }

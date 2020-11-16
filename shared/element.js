@@ -16,7 +16,7 @@ export default function element(type, attributes = {}, ...children) {
     children = [children.join('')];
   }
   if(type === 'element') {
-    type = attributes.tag;
+    type = attributes.tag || 'Fragment';
     delete attributes.tag;
   }
   attributes.children = children;
