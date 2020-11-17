@@ -32,8 +32,6 @@ const hasStyle = existsSync(path.join(__dirname, 'client.css'));
 
 server.start = function() {
 
-  console.log('sstart');
-
   app.use(express.static(path.join(__dirname, '..', 'public')));
   app.use(bodyParser.text({limit: server.maximumPayloadSize}));
 
