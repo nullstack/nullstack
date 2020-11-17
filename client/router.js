@@ -1,15 +1,18 @@
+import client from './client';
 import {updateParams} from './params';
 
 let redirectTimer = null;
 
 class Router {
 
+  processing = false;
   _changed = false
 
   _redirect(target) {
     if(target != this.url) {
       clearTimeout(redirectTimer);
       redirectTimer = setTimeout(() => {
+        this.processing = true;
         updateParams(target);
         history.pushState({}, document.title, target);
         window.dispatchEvent(new Event('popstate'));

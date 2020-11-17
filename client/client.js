@@ -46,6 +46,10 @@ client.processLifecycleQueues = async function() {
   for(const instance of client.instancesHydratedQueue) {
     instance.update && await instance.update();
   }
+  if(router.processing) {
+    router.processing = false;
+    client.update();
+  }
   for(const key in client.instances) {
     const instance = client.instances[key];
     if(!client.instancesRenewedQueue.includes(instance)) {

@@ -1,5 +1,7 @@
 export default class Router {
 
+  processing = false;
+
   constructor(scope) {
     this.scope = scope;
   }
