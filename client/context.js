@@ -9,7 +9,7 @@ const contextProxyHandler = {
     return Reflect.set(...arguments);
   },
   get(target, name) {
-    return target[name] || context[name];
+    return target[name] === undefined ? context[name] : target[name];
   }
 }
 
