@@ -42,13 +42,15 @@ client.processLifecycleQueues = async function() {
   }
   for(const instance of client.instancesMountedQueue) {
     instance.initiate && await instance.initiate();
+    if(router.processing) {
+      setTimeout(() => {
+        router.processing = false;
+        client.update();
+      }, 0);
+    }
   }
   for(const instance of client.instancesHydratedQueue) {
     instance.update && await instance.update();
-  }
-  if(router.processing) {
-    router.processing = false;
-    client.update();
   }
   for(const key in client.instances) {
     const instance = client.instances[key];

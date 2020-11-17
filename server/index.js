@@ -19,7 +19,7 @@ class Nullstack {
   static element = element;
 
   static async start(Starter) {
-    if(this.name === 'Nullstack') {
+    if(this.name.indexOf('Nullstack') > -1) {
       generator.starter = () => element(Starter);
       typeof(Starter.start) === 'function' && await Starter.start(context);
       server.start();
