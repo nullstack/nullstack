@@ -7,11 +7,14 @@ const contextProxyHandler = {
     context[name] = value;
     client.update();
     return Reflect.set(...arguments);
+  },
+  get(target, name) {
+    return target[name] || context[name];
   }
 }
 
 export function generateContext(temporary) {
-  return new Proxy({...context, ...temporary}, contextProxyHandler);
+  return new Proxy(temporary, contextProxyHandler);
 }
 
 export default context;
