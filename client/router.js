@@ -37,6 +37,15 @@ class Router {
     this._redirect(target+window.location.search);
   }
 
+  _stopProcessing() {
+    if(this.processing) {
+      setTimeout(() => {
+        this.processing = false;
+        client.update();
+      }, 0);
+    }
+  }
+
 }
 
 const router = new Router();

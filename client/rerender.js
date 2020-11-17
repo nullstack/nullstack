@@ -66,6 +66,7 @@ export default function rerender(parent, depth, vdepth) {
       }
       if(!shouldReinitiate) {
         instance = client.instances[key];
+        router._stopProcessing();
       }
     }
     const context = generateContext(next.attributes);
