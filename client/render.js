@@ -1,18 +1,21 @@
 import {isFalse, isClass, isFunction, isText} from '../shared/nodes';
 import client from './client';
+import params from './params';
+import router from './router';
 import {generateContext} from './context';
 import generateKey from '../shared/generateKey';
 import findParentInstance from './findParentInstance';
 import routableNode from './routableNode';
 import bindableNode from './bindableNode';
 import {anchorableNode, anchorableElement} from './anchorableNode';
+import parameterizableNode from '../shared/parameterizableNode';
 
 export default function render(node, depth) {
   routableNode(node, depth);
   if(isFalse(node)) {
     return document.createComment("");
   }
-  bindableNode(node, [0, ...depth])
+  bindableNode(node, [0, ...depth]);
   if(isFunction(node)) {
     const root = node.type(node.attributes);
     node.children = [root];
@@ -50,6 +53,7 @@ export default function render(node, depth) {
   let next = client.nextVirtualDom;
   let isSvg = false;
   for(const level of depth) {
+    if(!next.children) break;
     next = next.children[level];
     if(!next) break;
     if(next.type === 'svg') {
@@ -62,6 +66,7 @@ export default function render(node, depth) {
   } else {
     element = document.createElement(node.type);
   }
+  parameterizableNode(node, router, params);
   anchorableNode(node);
   for(let name in node.attributes) {
     if(name === 'html') {
@@ -88,7 +93,8 @@ export default function render(node, depth) {
   }
   if(!node.attributes.html) {
     for(let i = 0; i < node.children.length; i++) {
-      const dom = render(node.children[i], [...depth, i]);
+      const ndepth = node.type === 'Fragment' ? depth : [...depth, i];
+      const dom = render(node.children[i], ndepth);
       element.appendChild(dom);
     }
     if(node.type == 'select') {

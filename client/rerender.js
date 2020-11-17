@@ -1,6 +1,7 @@
 import {isFalse, isClass, isFunction, isText} from '../shared/nodes';
-import router from './router';
 import client from './client';
+import params from './params';
+import router from './router';
 import render from './render';
 import {generateContext} from './context';
 import generateKey from '../shared/generateKey';
@@ -8,6 +9,7 @@ import findParentInstance from './findParentInstance';
 import routableNode from './routableNode';
 import bindableNode from './bindableNode';
 import {anchorableNode, anchorableElement} from './anchorableNode';
+import parameterizableNode from '../shared/parameterizableNode';
 
 export default function rerender(parent, depth, vdepth) {
   if(!client.hydrated) {
@@ -21,19 +23,26 @@ export default function rerender(parent, depth, vdepth) {
     }
   }
   const index = depth[depth.length - 1];
-  const selector = parent.childNodes[index];
   let current = client.virtualDom;
   let next = client.nextVirtualDom;
   for(const level of vdepth) {
     current = current.children[level];
     next = next.children[level];
   }
+  const selector = parent.childNodes[index];
   if(isFalse(current) && isFalse(next)) {
     return;
   }
   if((isFalse(current) || isFalse(next)) && current != next) {
     const nextSelector = render(next, vdepth);
     return parent.replaceChild(nextSelector, selector);
+  }
+  if(next.type === 'Fragment') {
+    const limit = Math.max(current.children.length, next.children.length);
+    for(let i = limit - 1; i > -1; i--) {
+      rerender(selector, depth, [...vdepth, i]);
+    }
+    return;
   }
   bindableNode(next, [0, ...vdepth])
   if(isFunction(next)) {
@@ -48,8 +57,8 @@ export default function rerender(parent, depth, vdepth) {
       instance = client.instances[key];
     } else if(router._changed) {
       let shouldReinitiate = false;
-      if(next._segments) {
-        for(const segment of next._segments) {
+      if(next._params) {
+        for(const segment in next._params) {
           if(current._params && current._params[segment] !== next._params[segment]) {
             shouldReinitiate = true;
           }
@@ -97,6 +106,7 @@ export default function rerender(parent, depth, vdepth) {
       return selector.nodeValue = next;
     }
   } else if (current.type === next.type) {
+    parameterizableNode(next, router, params);
     anchorableNode(next);
     const attributeNames = Object.keys({...current.attributes, ...next.attributes});
     for(const name of attributeNames) {

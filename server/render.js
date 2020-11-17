@@ -1,12 +1,13 @@
 import {isClass, isFunction, isRoutable} from '../shared/nodes';
 import routeMatches from '../shared/routeMatches';
 import generateKey from '../shared/generateKey';
+import parameterizableNode from '../shared/parameterizableNode';
 
 export default async function render(node, depth, scope) {
   if(node.type === 'Fragment') {
     let element = '';
     for(let i = 0; i < node.children.length; i++) {
-      element += await render(node.children[i], [...depth, i], scope);
+      element += await render(node.children[i], depth, scope);
     }
     return element;
   }
@@ -65,6 +66,7 @@ export default async function render(node, depth, scope) {
     node.type = node.type.name;
     return await render(node.children[0], [...depth, 0], scope);
   } else {
+    parameterizableNode(node, scope.context.router, scope.context.params);
     let element = `<${node.type}`;
     for(let name in node.attributes) {
       if(!name.startsWith('on') && name !== 'html' && typeof(node.attributes[name]) != 'object') {

@@ -20,8 +20,7 @@ export async function prerender(request, response) {
   const instances = {};
   const routes = {};
   const scope = {instances, request, routes, response};
-  const [path, query] = request.originalUrl.split('?');
-  const params = getQueryStringParams(query);
+  const params = getQueryStringParams(request.originalUrl);
   scope.context = clientContext;
   clientContext.params = new Proxy(params, paramsProxyHandler);
   scope.generateContext = (temporary) => {

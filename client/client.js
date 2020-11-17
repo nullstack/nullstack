@@ -1,6 +1,4 @@
 import router from './router';
-import {generateParams} from './params';
-import context from './context';
 import rerender from './rerender';
 
 const client = {};
@@ -23,8 +21,6 @@ client.update = function() {
   if(client.initialized) {
     clearInterval(client.renderQueue);
     client.renderQueue = setTimeout(() => {
-      const [path, query] = router.url.split('?');
-      context.params = generateParams(query);
       client.initialized = false;
       client.routes = {};
       client.instancesMountedQueue = [];
