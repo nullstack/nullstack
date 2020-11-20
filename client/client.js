@@ -8,9 +8,9 @@ client.hydrated = false;
 client.initializer = null;
 
 client.instances = {};
-client.instancesMountedQueue = [];
-client.instancesRenewedQueue = [];
-client.instancesHydratedQueue = [];
+client.initiationQueue = [];
+client.renewalQueue = [];
+client.hydrationQueue = [];
 client.virtualDom = {};
 client.selector = null;
 client.routes = {};
@@ -23,9 +23,9 @@ client.update = function() {
     client.renderQueue = setTimeout(() => {
       client.initialized = false;
       client.routes = {};
-      client.instancesMountedQueue = [];
-      client.instancesRenewedQueue = [];
-      client.instancesHydratedQueue = [];
+      client.initiationQueue = [];
+      client.renewalQueue = [];
+      client.hydrationQueue = [];
       client.nextVirtualDom = client.initializer();
       rerender(client.selector, [0], []);
       client.virtualDom = client.nextVirtualDom;
@@ -40,16 +40,25 @@ client.processLifecycleQueues = async function() {
     client.initialized = true;
     client.hydrated = true;
   }
-  for(const instance of client.instancesMountedQueue) {
+  const initiationQueue = client.initiationQueue;
+  const hydrationQueue = client.hydrationQueue;
+  for(const instance of initiationQueue) {
     instance.initiate && await instance.initiate();
-    router._stopProcessing();
+    instance._self.initiated = true;
   }
-  for(const instance of client.instancesHydratedQueue) {
-    instance.update && await instance.update();
+  if(initiationQueue.length) {
+    client.update();
+  }
+  for(const instance of hydrationQueue) {
+    instance.hydrate && await instance.hydrate();
+    instance._self.hydrated = true;
+  }
+  if(hydrationQueue.length) {
+    client.update();
   }
   for(const key in client.instances) {
     const instance = client.instances[key];
-    if(!client.instancesRenewedQueue.includes(instance)) {
+    if(!client.renewalQueue.includes(instance)) {
       instance.terminate && await instance.terminate();
       delete client.instances[key];
     }

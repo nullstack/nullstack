@@ -15,7 +15,7 @@ const instanceProxyHandler = {
       target[name] = detour;
     } else if(typeof(target[name]) == 'function') {
       return (args) => {
-        const context = target._scope.generateContext({...target._attributes, ...args});
+        const context = target._scope.generateContext({...target._attributes, ...args, self: target._self});
         return target[name](context);
       }
     }

@@ -9,7 +9,7 @@ import network from './network';
 
 export async function prerender(request, response) {
   const page = {image: '/image-1200x630.png'};
-  const clientEnvironment = {...environment, prerendered: true};
+  const clientEnvironment = environment;
   const clientContext = {page, project, environment: clientEnvironment, network};
   const clientContextProxyHandler = {
     set(target, name, value) {
