@@ -66,7 +66,6 @@ export default function rerender(parent, depth, vdepth) {
       }
       if(!shouldReinitiate) {
         instance = client.instances[key];
-        router._stopProcessing();
       }
     }
     const context = generateContext(next.attributes);
@@ -81,18 +80,21 @@ export default function rerender(parent, depth, vdepth) {
           instance[attribute] = memory[attribute];
         }
         delete window.instances[key];
-        client.instancesHydratedQueue.push(instance);
+        instance._self.initiated = true;
+        instance._self.prerendered = true;
       }
       instance._context = context;
       instance._events = {};
       client.instances[key] = instance;
       if(!memory) {
-        client.instancesMountedQueue.push(instance);
+        client.initiationQueue.push(instance);
         instance.prepare && instance.prepare();
       }
+      client.hydrationQueue.push(instance);
     }
     instance._attributes = next.attributes;
-    client.instancesRenewedQueue.push(instance);
+    instance._self.element = selector;
+    client.renewalQueue.push(instance);
     const root = instance.render();
     next.children = [root];
     const limit = Math.max(current.children.length, next.children.length);

@@ -8,7 +8,6 @@ export function anchorableNode(node) {
     node.attributes.onclick = ({event}) => {
       event.preventDefault();
       router.url = node.attributes.href;
-      environment.prerendered = false;
       if(originalEvent !== undefined) {
         setTimeout(() => {
           originalEvent({...node.attributes, event});
@@ -24,7 +23,6 @@ export function anchorableElement(element) {
     link.onclick = (event) => {
       event.preventDefault();
       router.url = link.href;
-      environment.prerendered = false;
     };
   }
 }

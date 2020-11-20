@@ -30,7 +30,8 @@ export default function render(node, depth) {
         instance[attribute] = memory[attribute];
       }
       delete window.instances[key];
-      client.instancesHydratedQueue.push(instance);
+      instance._self.initiated = true;
+      instance._self.prerendered = true;
     }
     instance._events = {};
     instance._attributes = node.attributes;
@@ -38,13 +39,15 @@ export default function render(node, depth) {
     const context = generateContext(node.attributes);
     instance._context = context;
     if(!memory) {
-      client.instancesMountedQueue.push(instance);
+      client.initiationQueue.push(instance);
       instance.prepare && instance.prepare();
     }
     const root = instance.render();
     node.children = [root];
-    client.instancesRenewedQueue.push(instance);
-    return render(node.children[0], [...depth, 0]);
+    client.renewalQueue.push(instance);
+    instance._self.element = render(node.children[0], [...depth, 0]);
+    client.hydrationQueue.push(instance);
+    return instance._self.element;
   }
   if(isText(node)) {
     return document.createTextNode(node);

@@ -26,6 +26,12 @@ class Nullstack {
     }
   }
 
+  _self = {
+    prerendered: true,
+    initiated: false,
+    hydrated: false
+  }
+
   constructor(scope) {
     this._request = () => scope.request;
     this._response = () => scope.response;

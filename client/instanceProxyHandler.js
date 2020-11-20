@@ -29,7 +29,7 @@ const instanceProxyHandler = {
       }
     } else if(typeof(target[name]) == 'function') {
       return (args) => {
-        const context = generateContext({...target._context, ...args});
+        const context = generateContext({...target._context, ...args, self: target._self});
         return target[name](context);
       }
     }

@@ -5,14 +5,12 @@ let redirectTimer = null;
 
 class Router {
 
-  processing = false;
   _changed = false
 
   _redirect(target) {
     if(target != this.url) {
       clearTimeout(redirectTimer);
       redirectTimer = setTimeout(() => {
-        this.processing = true;
         updateParams(target);
         history.pushState({}, document.title, target);
         window.dispatchEvent(new Event('popstate'));
@@ -35,15 +33,6 @@ class Router {
 
   set path(target) {
     this._redirect(target+window.location.search);
-  }
-
-  _stopProcessing() {
-    if(this.processing) {
-      setTimeout(() => {
-        this.processing = false;
-        client.update();
-      }, 0);
-    }
   }
 
 }

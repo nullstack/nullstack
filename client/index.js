@@ -43,6 +43,12 @@ export default class Nullstack {
     client.processLifecycleQueues();
   }
 
+  _self = {
+    prerendered: false,
+    initiated: false,
+    hydrated: false
+  }
+
   constructor() {
     const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
     const proxy = new Proxy(this, instanceProxyHandler);
