@@ -76,8 +76,6 @@ export default function render(node, depth) {
       anchorableElement(element);
     } else if(name.startsWith('on')) {
       const eventName = name.replace('on', '');
-      //const key = '0.' + depth.join('.') + '.' + eventName;
-      //const instance = findParentInstance([0, ...depth]);
       const key = generateKey(depth) + '.' + eventName;
       client.events[key] = (event) => {
         if(node.attributes.default !== true) {

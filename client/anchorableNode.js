@@ -1,5 +1,4 @@
 import {isAnchorable} from '../shared/nodes';
-import environment from './environment';
 import router from './router';
 
 export function anchorableNode(node) {
