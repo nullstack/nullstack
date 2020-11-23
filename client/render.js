@@ -1,5 +1,6 @@
 import {isFalse, isClass, isFunction, isText, isStatic} from '../shared/nodes';
 import client from './client';
+import context from './context';
 import params from './params';
 import router from './router';
 import {generateContext} from './context';
@@ -18,7 +19,7 @@ export default function render(node, depth) {
   objectEvent(node);
   bindableNode(node, [0, ...depth]);
   if(isStatic(node)) {
-    const root = node.type.render.call(node.type, node.attributes);
+    const root = node.type.render.call(node.type, {...context, ...node.attributes});
     node.children = [root];
     return render(node.children[0], [...depth, 0]);
   }

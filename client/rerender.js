@@ -1,5 +1,6 @@
 import {isFalse, isClass, isFunction, isText, isStatic} from '../shared/nodes';
 import client from './client';
+import context from './context';
 import params from './params';
 import router from './router';
 import render from './render';
@@ -47,7 +48,7 @@ export default function rerender(parent, depth, vdepth) {
   objectEvent(next);
   bindableNode(next, [0, ...vdepth])
   if(isStatic(next)) {
-    const root = next.type.render.call(next.type, next.attributes);
+    const root = next.type.render.call(next.type, {...context, ...next.attributes});
     next.children = [root];
     return rerender(parent, depth, [...vdepth, 0]);
   }
