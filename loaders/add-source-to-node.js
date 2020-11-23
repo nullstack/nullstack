@@ -5,9 +5,17 @@ module.exports = function(source) {
     match = tag.match(/bind\=\{(.*?)\}/);
     if(match && tag.indexOf('source={') == -1) {
       let [a, b] = match[1].split(/\.(?=[^\.]+$)/);
+      if(!b) {
+        b = a;
+        a = '';
+      }
       if(b.indexOf('[') > -1) {
         const [ref, index] = b.split('[');
-        a = [a, ref].join('.');
+        if(a) {
+          a = [a, ref].join('.');
+        } else {
+          a = ref;
+        }
         b = '{' + index.replace(']', '}');
       } else {
         b = `"${b}"`;
