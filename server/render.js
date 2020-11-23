@@ -53,7 +53,7 @@ export default async function render(node, depth, scope) {
     node.children = [root];
     return await render(node.children[0], [...depth, 0], scope);
   } else if (isClass(node)) {
-    const key = generateKey(node, depth);
+    const key = node.attributes.key || generateKey(depth);
     const instance = new node.type(scope);
     instance.attributes = node.attributes;
     scope.instances[key] = instance;

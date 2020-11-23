@@ -5,7 +5,6 @@ import router from './router';
 import render from './render';
 import {generateContext} from './context';
 import generateKey from '../shared/generateKey';
-import findParentInstance from './findParentInstance';
 import routableNode from './routableNode';
 import bindableNode from './bindableNode';
 import {anchorableNode, anchorableElement} from './anchorableNode';
@@ -51,7 +50,7 @@ export default function rerender(parent, depth, vdepth) {
     return rerender(parent, depth, [...vdepth, 0]);
   }
   if(isClass(current) && current.type === next.type) {
-    const key = generateKey(next, [0, ...vdepth]);
+    const key = next.attributes.key || generateKey([0, ...vdepth]);
     let instance = null;
     if(!router._changed) {
       instance = client.instances[key];
@@ -128,19 +127,18 @@ export default function rerender(parent, depth, vdepth) {
         }
       } else if(name.startsWith('on')) {
         const eventName = name.replace('on', '');
-        const key = '0.' + vdepth.join('.') + '.' + eventName;
-        const instance = findParentInstance([0, ...vdepth]);
-        selector.removeEventListener(eventName, instance._events[key]);
+        const key = generateKey(vdepth) + '.' + eventName;
+        selector.removeEventListener(eventName, client.events[key]);
         if(next.attributes[name]) {
-          instance._events[key] = (event) => {
+          client.events[key] = (event) => {
             if(next.attributes.default !== true) {
               event.preventDefault();
             }
             next.attributes[name]({...next.attributes, event});
           };
-          selector.addEventListener(eventName, instance._events[key]);
+          selector.addEventListener(eventName, client.events[key]);
         } else {
-          delete instance._events[key];
+          delete client.events[key];
         }
       } else if(typeof(next.attributes[name]) !== 'function' && typeof(next.attributes[name]) !== 'object') {
         if(current.attributes[name] === undefined && next.attributes[name] !== undefined) {

@@ -4,7 +4,6 @@ import params from './params';
 import router from './router';
 import {generateContext} from './context';
 import generateKey from '../shared/generateKey';
-import findParentInstance from './findParentInstance';
 import routableNode from './routableNode';
 import bindableNode from './bindableNode';
 import {anchorableNode, anchorableElement} from './anchorableNode';
@@ -22,7 +21,7 @@ export default function render(node, depth) {
     return render(node.children[0], [...depth, 0]);
   }
   if(isClass(node)) {
-    const key = generateKey(node, [0, ...depth]);
+    const key = node.attributes.key || generateKey([0, ...depth]);
     const instance = new node.type();
     const memory = window.instances[key];
     if(memory) {
@@ -77,15 +76,16 @@ export default function render(node, depth) {
       anchorableElement(element);
     } else if(name.startsWith('on')) {
       const eventName = name.replace('on', '');
-      const key = '0.' + depth.join('.') + '.' + eventName;
-      const instance = findParentInstance([0, ...depth]);
-      instance._events[key] = (event) => {
+      //const key = '0.' + depth.join('.') + '.' + eventName;
+      //const instance = findParentInstance([0, ...depth]);
+      const key = generateKey(depth) + '.' + eventName;
+      client.events[key] = (event) => {
         if(node.attributes.default !== true) {
           event.preventDefault();
         }
         node.attributes[name]({...node.attributes, event});
       };
-      element.addEventListener(eventName, instance._events[key]);
+      element.addEventListener(eventName, client.events[key]);
     } else if(typeof(node.attributes[name]) !== 'function' && typeof(node.attributes[name]) !== 'object') {
       if(name != 'value' && node.attributes[name] === true) {
         element.setAttribute(name, '');

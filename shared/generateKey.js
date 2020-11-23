@@ -1,3 +1,3 @@
-export default function generateKey(node, depth) {
-  return depth.join('.');
+export default function generateKey(depth) {
+  return '_.' + depth.join('.');
 }
