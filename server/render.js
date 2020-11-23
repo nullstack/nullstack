@@ -1,4 +1,4 @@
-import {isClass, isFunction, isRoutable, isStatic} from '../shared/nodes';
+import {isBindable, isClass, isFunction, isRoutable, isStatic} from '../shared/nodes';
 import routeMatches from '../shared/routeMatches';
 import generateKey from '../shared/generateKey';
 import parameterizableNode from '../shared/parameterizableNode';
@@ -14,7 +14,7 @@ export default async function render(node, depth, scope) {
   if(node === false || (node !== undefined && node.type === false)) {
     return "<!-- -->";
   }
-  if(node !== undefined && node.attributes != undefined && node.attributes.bind) {
+  if(isBindable(node)) {
     const target = node.attributes.source;
     if(node.type === 'textarea') {
       node.children = [target[node.attributes.bind]];

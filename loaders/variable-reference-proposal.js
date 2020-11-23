@@ -1,11 +1,22 @@
 module.exports = function(source) {
   let match;
-  const pattern = /bind\=\{(.*?)\}/;
-  while ((match = pattern.exec(source)) != null) {
-    const [a, b] = match[1].split(/\.(?=[^\.]+$)/);
-    source = source.replace(match[0], `source={${a}} bind="${b}"`);
-  }
-  const tags = source.split('<');
+  let tags = source.split('<');
+  source = tags.map((tag) => {
+    match = tag.match(/bind\=\{(.*?)\}/);
+    if(match && tag.indexOf('source={') == -1) {
+      let [a, b] = match[1].split(/\.(?=[^\.]+$)/);
+      if(b.indexOf('[') > -1) {
+        const [ref, index] = b.split('[');
+        a = [a, ref].join('.');
+        b = '{' + index.replace(']', '}');
+      } else {
+        b = `"${b}"`;
+      }   
+      return tag.replace(match[0], `source={${a}} bind=${b}`);
+    }
+    return tag;
+  }).join('<');
+  tags = source.split('<');
   source = tags.map((tag) => {
     match = tag.match(/\ on([a-z]*?)\=\{(.*?)\}/);
     if(match && tag.indexOf('source={') == -1) {
