@@ -1,4 +1,4 @@
-import {isFalse, isClass, isFunction, isText} from '../shared/nodes';
+import {isFalse, isClass, isFunction, isText, isStatic} from '../shared/nodes';
 import client from './client';
 import params from './params';
 import router from './router';
@@ -44,6 +44,11 @@ export default function rerender(parent, depth, vdepth) {
     return;
   }
   bindableNode(next, [0, ...vdepth])
+  if(isStatic(next)) {
+    const root = next.type.render.call(next.type, next.attributes);
+    next.children = [root];
+    return rerender(parent, depth, [...vdepth, 0]);
+  }
   if(isFunction(next)) {
     const root = next.type(next.attributes);
     next.children = [root];

@@ -10,6 +10,10 @@ export function isFunction(node) {
   return typeof(node.type) === 'function' && node.type.prototype === undefined;
 }
 
+export function isStatic(node) {
+  return typeof(node.type) === 'function' && typeof(node.type.render) === 'function';
+}
+
 export function isText(node) {
   return node !== 'Fragment' && typeof(node.children) === 'undefined';
 }

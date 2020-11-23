@@ -1,4 +1,4 @@
-import {isFalse, isClass, isFunction, isText} from '../shared/nodes';
+import {isFalse, isClass, isFunction, isText, isStatic} from '../shared/nodes';
 import client from './client';
 import params from './params';
 import router from './router';
@@ -15,6 +15,11 @@ export default function render(node, depth) {
     return document.createComment("");
   }
   bindableNode(node, [0, ...depth]);
+  if(isStatic(node)) {
+    const root = node.type.render.call(node.type, node.attributes);
+    node.children = [root];
+    return render(node.children[0], [...depth, 0]);
+  }
   if(isFunction(node)) {
     const root = node.type(node.attributes);
     node.children = [root];

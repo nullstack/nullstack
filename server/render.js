@@ -1,4 +1,4 @@
-import {isClass, isFunction, isRoutable} from '../shared/nodes';
+import {isClass, isFunction, isRoutable, isStatic} from '../shared/nodes';
 import routeMatches from '../shared/routeMatches';
 import generateKey from '../shared/generateKey';
 import parameterizableNode from '../shared/parameterizableNode';
@@ -48,6 +48,10 @@ export default async function render(node, depth, scope) {
   }
   if(node === undefined || node.type === undefined) {
     return node + "<!--#-->";
+  } else if (isStatic(node)) {
+    const root = node.type.render.call(node.type, node.attributes);
+    node.children = [root];
+    return await render(node.children[0], [...depth, 0], scope);
   } else if (isFunction(node)) {
     const root = node.type(node.attributes);
     node.children = [root];
