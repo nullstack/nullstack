@@ -8,12 +8,14 @@ import routableNode from './routableNode';
 import bindableNode from './bindableNode';
 import {anchorableNode, anchorableElement} from './anchorableNode';
 import parameterizableNode from '../shared/parameterizableNode';
+import objectEvent from './objectEvent';
 
 export default function render(node, depth) {
   routableNode(node, depth);
   if(isFalse(node)) {
     return document.createComment("");
   }
+  objectEvent(node, [0, ...depth]);
   bindableNode(node, [0, ...depth]);
   if(isStatic(node)) {
     const root = node.type.render.call(node.type, node.attributes);

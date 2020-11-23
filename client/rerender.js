@@ -9,6 +9,7 @@ import routableNode from './routableNode';
 import bindableNode from './bindableNode';
 import {anchorableNode, anchorableElement} from './anchorableNode';
 import parameterizableNode from '../shared/parameterizableNode';
+import objectEvent from './objectEvent';
 
 export default function rerender(parent, depth, vdepth) {
   if(!client.hydrated) {
@@ -43,6 +44,7 @@ export default function rerender(parent, depth, vdepth) {
     }
     return;
   }
+  objectEvent(next, [0, ...vdepth]);
   bindableNode(next, [0, ...vdepth])
   if(isStatic(next)) {
     const root = next.type.render.call(next.type, next.attributes);

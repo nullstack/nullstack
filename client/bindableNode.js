@@ -1,13 +1,9 @@
-import findParentInstance from './findParentInstance';
 import {isBindable} from '../shared/nodes';
 import client from './client';
 
 export default function bindableNode(node, depth) {
   if(isBindable(node)) {
-    let target = node.attributes.source;
-    if(!target) {
-      target = findParentInstance(depth);
-    }
+    const target = node.attributes.source;
     if(node.type === 'textarea') {
       node.children = [target[node.attributes.bind]];
     } else if(node.type === 'input' && node.attributes.type === 'checkbox') {
