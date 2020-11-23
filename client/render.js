@@ -15,7 +15,7 @@ export default function render(node, depth) {
   if(isFalse(node)) {
     return document.createComment("");
   }
-  objectEvent(node, [0, ...depth]);
+  objectEvent(node);
   bindableNode(node, [0, ...depth]);
   if(isStatic(node)) {
     const root = node.type.render.call(node.type, node.attributes);
