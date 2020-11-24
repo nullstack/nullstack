@@ -19,7 +19,7 @@ export default function render(node, depth) {
   objectEvent(node);
   bindableNode(node, [0, ...depth]);
   if(isStatic(node)) {
-    const root = node.type.render.call(node.type, {...context, ...node.attributes});
+    const root = (node.type.render || node.type).call(node.type, {...context, ...node.attributes});
     node.children = [root];
     return render(node.children[0], [...depth, 0]);
   }

@@ -48,7 +48,7 @@ export default async function render(node, depth, scope) {
   if(node === undefined || node.type === undefined) {
     return node + "<!--#-->";
   } else if (isStatic(node)) {
-    const root = node.type.render.call(node.type, {...scope.context, ...node.attributes});
+    const root = (node.type.render || node.type).call(node.type, {...scope.context, ...node.attributes});
     node.children = [root];
     return await render(node.children[0], [...depth, 0], scope);
   } else if (isFunction(node)) {

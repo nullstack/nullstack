@@ -11,7 +11,7 @@ export function isFunction(node) {
 }
 
 export function isStatic(node) {
-  return typeof(node.type) === 'function' && typeof(node.type.render) === 'function';
+  return typeof(node.type) === 'function' && (typeof(node.type.render) === 'function' || (node.type.name && !node.type.prototype));
 }
 
 export function isText(node) {
