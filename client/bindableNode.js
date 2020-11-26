@@ -21,7 +21,8 @@ export default function bindableNode(node, depth) {
       eventName = 'onchange';
     }
     const originalEvent = node.attributes[eventName];
-    node.attributes[eventName] = ({event, value}) => {
+    node.attributes[eventName] = (scope) => {
+      const {event, value} = scope;
       if(valueName == 'checked') {
         target[node.attributes.bind] = event.target[valueName];
       } else if(target[node.attributes.bind] === true || target[node.attributes.bind] === false) {
@@ -34,7 +35,7 @@ export default function bindableNode(node, depth) {
       client.update();
       if(originalEvent !== undefined) {
         setTimeout(() => {
-          originalEvent({...node.attributes, event, value});
+          originalEvent({...node.attributes, ...scope});
         }, 0);
       }
     }
