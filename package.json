@@ -4,6 +4,7 @@
   "description": "Fullstack components for one man armies",
   "main": "nullstack.js",
   "author": "Mortaro",
+  "repository": "github:nullstack/nullstack",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
