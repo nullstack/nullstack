@@ -23,7 +23,7 @@ export function isRoutable(node) {
 }
 
 export function isBindable(node) {
-  return node !== undefined && node.attributes !== undefined && node.attributes.bind !== undefined;
+  return node !== undefined && node.attributes !== undefined && node.attributes.bind !== undefined && node.attributes.source !== undefined;
 }
 
 export function isAnchorable(node) {
