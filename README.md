@@ -50,7 +50,6 @@ You can check this repository with Nullstack Examples:
 * [Lists](https://github.com/nullstack/nullstack-examples/blob/master/src/13_Lists.njs)
 * [Headless Component](https://github.com/nullstack/nullstack-examples/blob/master/src/14_HeadlessComponent.njs)
 * [Inner HTML](https://github.com/nullstack/nullstack-examples/blob/master/src/15_InnerHTML.njs)
-* [Proxy](https://github.com/nullstack/nullstack-examples/blob/master/src/16_Proxy.njs)
 
 ## Credits
 
