@@ -1,4 +1,3 @@
-import client from './client';
 import {updateParams} from './params';
 
 let redirectTimer = null;

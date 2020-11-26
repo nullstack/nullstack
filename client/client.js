@@ -14,6 +14,7 @@ client.hydrationQueue = [];
 client.virtualDom = {};
 client.selector = null;
 client.routes = {};
+client.events = {};
 
 client.renderQueue = null;
 

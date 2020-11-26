@@ -5,9 +5,6 @@ import network from './network';
 
 const instanceProxyHandler = {
   get(target, name) {
-    if(target._attributes && target._attributes.proxy && target._attributes.proxy[name] !== undefined && target[name] !== undefined) {
-      return target._attributes.proxy[name];
-    }
     if(target[name] === undefined && target.constructor[name] === true) {
       return async (params) => {
         network.processing = true;
@@ -36,9 +33,6 @@ const instanceProxyHandler = {
     return Reflect.get(...arguments);
   },
   set(target, name, value) {
-    if(target._attributes && target._attributes.proxy && target._attributes.proxy[name] !== undefined && target[name] !== undefined) {
-      target._attributes.proxy[name] = value;
-    }
     const result = Reflect.set(...arguments);
     if(!name.startsWith('_')) {
       client.update();

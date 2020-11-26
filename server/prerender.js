@@ -26,14 +26,6 @@ export async function prerender(request, response) {
   scope.generateContext = (temporary) => {
     return new Proxy({...clientContext, ...temporary}, clientContextProxyHandler);
   }
-  scope.findParentInstance = (depth) => {
-    for(let i = 0; i < depth.length; i++) {
-      const key = depth.slice(0, i * -1).join('.');
-      if(scope.instances[key]) {
-        return scope.instances[key];
-      }
-    }
-  }
   clientContext.router = new Router(scope);
   const virtualDom = generator.starter();
   const html = await render(virtualDom, [0], scope);

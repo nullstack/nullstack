@@ -10,6 +10,10 @@ export function isFunction(node) {
   return typeof(node.type) === 'function' && node.type.prototype === undefined;
 }
 
+export function isStatic(node) {
+  return typeof(node.type) === 'function' && (typeof(node.type.render) === 'function' || (node.type.name && !node.type.prototype));
+}
+
 export function isText(node) {
   return node !== 'Fragment' && typeof(node.children) === 'undefined';
 }
@@ -19,7 +23,7 @@ export function isRoutable(node) {
 }
 
 export function isBindable(node) {
-  return node !== undefined && node.attributes !== undefined && node.attributes.bind;
+  return node !== undefined && node.attributes !== undefined && node.attributes.bind !== undefined;
 }
 
 export function isAnchorable(node) {

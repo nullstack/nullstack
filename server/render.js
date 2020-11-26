@@ -1,4 +1,4 @@
-import {isClass, isFunction, isRoutable} from '../shared/nodes';
+import {isBindable, isClass, isFunction, isRoutable, isStatic} from '../shared/nodes';
 import routeMatches from '../shared/routeMatches';
 import generateKey from '../shared/generateKey';
 import parameterizableNode from '../shared/parameterizableNode';
@@ -14,9 +14,8 @@ export default async function render(node, depth, scope) {
   if(node === false || (node !== undefined && node.type === false)) {
     return "<!-- -->";
   }
-  if(node !== undefined && node.attributes != undefined && node.attributes.bind) {
-    const instance = scope.findParentInstance(depth);
-    const target = node.attributes.source || instance;
+  if(isBindable(node)) {
+    const target = node.attributes.source;
     if(node.type === 'textarea') {
       node.children = [target[node.attributes.bind]];
     } else if(node.type === 'input' && node.attributes.type === 'checkbox') {
@@ -48,12 +47,16 @@ export default async function render(node, depth, scope) {
   }
   if(node === undefined || node.type === undefined) {
     return node + "<!--#-->";
+  } else if (isStatic(node)) {
+    const root = (node.type.render || node.type).call(node.type, {...scope.context, ...node.attributes});
+    node.children = [root];
+    return await render(node.children[0], [...depth, 0], scope);
   } else if (isFunction(node)) {
     const root = node.type(node.attributes);
     node.children = [root];
     return await render(node.children[0], [...depth, 0], scope);
   } else if (isClass(node)) {
-    const key = generateKey(node, depth);
+    const key = node.attributes.key || generateKey(depth);
     const instance = new node.type(scope);
     instance.attributes = node.attributes;
     scope.instances[key] = instance;

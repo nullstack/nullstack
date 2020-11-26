@@ -1,13 +1,9 @@
-import findParentInstance from './findParentInstance';
 import {isBindable} from '../shared/nodes';
 import client from './client';
 
 export default function bindableNode(node, depth) {
   if(isBindable(node)) {
-    let target = node.attributes.source;
-    if(!target) {
-      target = findParentInstance(depth);
-    }
+    const target = node.attributes.source;
     if(node.type === 'textarea') {
       node.children = [target[node.attributes.bind]];
     } else if(node.type === 'input' && node.attributes.type === 'checkbox') {
@@ -25,7 +21,8 @@ export default function bindableNode(node, depth) {
       eventName = 'onchange';
     }
     const originalEvent = node.attributes[eventName];
-    node.attributes[eventName] = ({event, value}) => {
+    node.attributes[eventName] = (scope) => {
+      const {event, value} = scope;
       if(valueName == 'checked') {
         target[node.attributes.bind] = event.target[valueName];
       } else if(target[node.attributes.bind] === true || target[node.attributes.bind] === false) {
@@ -38,7 +35,7 @@ export default function bindableNode(node, depth) {
       client.update();
       if(originalEvent !== undefined) {
         setTimeout(() => {
-          originalEvent({...node.attributes, event, value});
+          originalEvent({...node.attributes, ...scope});
         }, 0);
       }
     }

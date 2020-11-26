@@ -1,3 +1,6 @@
+import path from 'path';
+import {readdirSync} from 'fs';
+
 const project = {};
 
 project.type = "website";
@@ -6,16 +9,15 @@ project.orientation = "portrait";
 project.scope = "/";
 project.root = "/";
 project.favicon = "/favicon-96x96.png";
-project.icons = {
-  '72': '/icon-72x72.png',
-  '96': '/icon-96x96.png',
-  '128': '/icon-128x128.png',
-  '144': '/icon-144x144.png',
-  '152': '/icon-152x152.png',
-  '180': '/icon-180x180.png',
-  '192': '/icon-192x192.png',
-  '384': '/icon-384x384.png',
-  '512': '/icon-512x512.png'
-};
+project.icons = {};
+
+const publicFiles = readdirSync(path.join(__dirname, '..', 'public'));
+
+for(const file of publicFiles) {
+  if(file.startsWith('icon-')) {
+    const size = file.split('x')[1].split('.')[0];
+    project.icons[size] = '/' + file;
+  }
+}
 
 export default project;

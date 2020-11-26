@@ -1,28 +1,35 @@
-import {isFalse, isClass, isFunction, isText} from '../shared/nodes';
+import {isFalse, isClass, isFunction, isText, isStatic} from '../shared/nodes';
 import client from './client';
+import context from './context';
 import params from './params';
 import router from './router';
 import {generateContext} from './context';
 import generateKey from '../shared/generateKey';
-import findParentInstance from './findParentInstance';
 import routableNode from './routableNode';
 import bindableNode from './bindableNode';
 import {anchorableNode, anchorableElement} from './anchorableNode';
 import parameterizableNode from '../shared/parameterizableNode';
+import objectEvent from './objectEvent';
 
 export default function render(node, depth) {
   routableNode(node, depth);
   if(isFalse(node)) {
     return document.createComment("");
   }
+  objectEvent(node);
   bindableNode(node, [0, ...depth]);
+  if(isStatic(node)) {
+    const root = (node.type.render || node.type).call(node.type, {...context, ...node.attributes});
+    node.children = [root];
+    return render(node.children[0], [...depth, 0]);
+  }
   if(isFunction(node)) {
     const root = node.type(node.attributes);
     node.children = [root];
     return render(node.children[0], [...depth, 0]);
   }
   if(isClass(node)) {
-    const key = generateKey(node, [0, ...depth]);
+    const key = node.attributes.key || generateKey([0, ...depth]);
     const instance = new node.type();
     const memory = window.instances[key];
     if(memory) {
@@ -77,15 +84,14 @@ export default function render(node, depth) {
       anchorableElement(element);
     } else if(name.startsWith('on')) {
       const eventName = name.replace('on', '');
-      const key = '0.' + depth.join('.') + '.' + eventName;
-      const instance = findParentInstance([0, ...depth]);
-      instance._events[key] = (event) => {
+      const key = generateKey(depth) + '.' + eventName;
+      client.events[key] = (event) => {
         if(node.attributes.default !== true) {
           event.preventDefault();
         }
         node.attributes[name]({...node.attributes, event});
       };
-      element.addEventListener(eventName, instance._events[key]);
+      element.addEventListener(eventName, client.events[key]);
     } else if(typeof(node.attributes[name]) !== 'function' && typeof(node.attributes[name]) !== 'object') {
       if(name != 'value' && node.attributes[name] === true) {
         element.setAttribute(name, '');
