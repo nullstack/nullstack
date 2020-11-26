@@ -1,7 +1,9 @@
+import removeTrailingSlash from '../shared/removeTrailingSlash';
 import extractParamValue from './extractParamValue';
 
 export default function routeMatches(url, route) {
   let [path, query] = url.split('?');
+  path = removeTrailingSlash(path);
   const urlPaths = path.split('/');
   const routePaths = route.split('/');
   const params = {};

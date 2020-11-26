@@ -1,3 +1,5 @@
+import removeTrailingSlash from '../shared/removeTrailingSlash';
+
 export default class Router {
 
   constructor(scope) {
@@ -5,13 +7,14 @@ export default class Router {
   }
 
   _redirect(target) {
+    target = removeTrailingSlash(target);
     if(!this.scope.response.headersSent) {
       this.scope.response.redirect(target);
     }
   }
 
   get url() {
-    return this.scope.request.originalUrl;
+    return removeTrailingSlash(this.scope.request.originalUrl);
   }
 
   set url(target) {
@@ -19,7 +22,7 @@ export default class Router {
   }
 
   get path() {
-    return this.scope.request.path;
+    return removeTrailingSlash(this.scope.request.path);
   }
 
   set path(target) {
@@ -33,8 +36,8 @@ export default class Router {
 
   toJSON() {
     return {
-      url: this.scope.request.originalUrl,
-      path: this.scope.request.path
+      url: this.url,
+      path: this.path
     }
   }
 
