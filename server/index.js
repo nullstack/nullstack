@@ -8,10 +8,15 @@ import element from '../shared/element';
 import instanceProxyHandler from './instanceProxyHandler';
 import project from './project';
 import environment from './environment';
+import settings from './settings';
+import secrets from './secrets';
+import {freezeConfigurable} from './configurable';
 
 context.server = server;
 context.project = project;
 context.environment = environment;
+context.settings = settings;
+context.secrets = secrets;
 
 class Nullstack {
 
@@ -22,6 +27,8 @@ class Nullstack {
     if(this.name.indexOf('Nullstack') > -1) {
       generator.starter = () => element(Starter);
       typeof(Starter.start) === 'function' && await Starter.start(context);
+      freezeConfigurable(settings);
+      freezeConfigurable(secrets);
       server.start();
     }
   }
