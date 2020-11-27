@@ -1,3 +1,5 @@
+import extractLocation from '../shared/extractLocation';
+
 export default class Router {
 
   constructor(scope) {
@@ -6,12 +8,13 @@ export default class Router {
 
   _redirect(target) {
     if(!this.scope.response.headersSent) {
-      this.scope.response.redirect(target);
+      const {url} = extractLocation(target);
+      this.scope.response.redirect(url);
     }
   }
 
   get url() {
-    return this.scope.request.originalUrl;
+    return extractLocation(this.scope.request.originalUrl).url;
   }
 
   set url(target) {
@@ -19,22 +22,16 @@ export default class Router {
   }
 
   get path() {
-    return this.scope.request.path;
+    return extractLocation(this.scope.request.path).path;
   }
 
   set path(target) {
-    const search = this.scope.request.originalUrl.split('?')[1];
+    console.log({target});
+    const {search} = extractLocation(this.scope.request.originalUrl);
     if(search) {
       this._redirect(target+'?'+search);
     } else {
       this._redirect(target);
-    }
-  }
-
-  toJSON() {
-    return {
-      url: this.scope.request.originalUrl,
-      path: this.scope.request.path
     }
   }
 

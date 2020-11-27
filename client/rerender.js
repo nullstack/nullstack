@@ -46,7 +46,7 @@ export default function rerender(parent, depth, vdepth) {
     return;
   }
   objectEvent(next);
-  bindableNode(next, [0, ...vdepth])
+  bindableNode(next);
   if(isStatic(next)) {
     const root = (next.type.render || next.type).call(next.type, {...context, ...next.attributes});
     next.children = [root];

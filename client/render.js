@@ -17,7 +17,7 @@ export default function render(node, depth) {
     return document.createComment("");
   }
   objectEvent(node);
-  bindableNode(node, [0, ...depth]);
+  bindableNode(node);
   if(isStatic(node)) {
     const root = (node.type.render || node.type).call(node.type, {...context, ...node.attributes});
     node.children = [root];
