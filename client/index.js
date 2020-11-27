@@ -9,10 +9,12 @@ import page from './page';
 import environment from './environment';
 import params, {updateParams} from './params';
 import network from './network';
+import settings from './settings';
 
 context.page = page;
 context.router = router;
 context.network = network;
+context.settings = settings;
 
 export default class Nullstack {
 

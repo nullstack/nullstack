@@ -26,7 +26,6 @@ export default class Router {
   }
 
   set path(target) {
-    console.log({target});
     const {search} = extractLocation(this.scope.request.originalUrl);
     if(search) {
       this._redirect(target+'?'+search);
