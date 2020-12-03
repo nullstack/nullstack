@@ -2,6 +2,7 @@ import {updateParams} from './params';
 import environment from './environment';
 import extractLocation from '../shared/extractLocation';
 import network from './network';
+import page from './page';
 
 let redirectTimer = null;
 
@@ -18,7 +19,11 @@ class Router {
           network.processing = true;
           const endpoint = url == '/' ? '/index.json' : `${url}/index.json`;
           const response = await fetch(endpoint);
-          window.instances = await response.json();
+          const payload = await response.json();
+          window.instances = payload.instances;
+          for(const key in payload.page) {
+            page[key] = payload.page[key];
+          }
           network.processing = false;
         }
         updateParams(url);
