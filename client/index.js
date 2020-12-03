@@ -24,6 +24,7 @@ export default class Nullstack {
     window.instances = deserialize(JSON.stringify(window.instances));
     window.addEventListener('popstate', () => {
       client.update();
+      window.scroll(0, 0);
     });
     for(const [key, value] of Object.entries(window.context)) {
       context[key] = value;
