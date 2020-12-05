@@ -16,6 +16,7 @@ function head({page, project, router}, hasStyle) {
   }
   return (`
     <head>
+      <meta name="generator" content="Created with Nullstack - https://nullstack.app" />
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       ${page.title ? `<title>${page.title}</title>` : ''}
