@@ -1,4 +1,5 @@
 import client from './client';
+import windowEvent from './windowEvent';
 
 const pageProxyHandler = {
   set(target, name, value) {
@@ -6,6 +7,9 @@ const pageProxyHandler = {
       document.title = value;
     }
     const result = Reflect.set(...arguments);
+    if(name === 'title') {
+      windowEvent('page.title');
+    }
     client.update();
     return result;
   }

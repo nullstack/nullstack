@@ -3,6 +3,7 @@ import environment from './environment';
 import extractLocation from '../shared/extractLocation';
 import network from './network';
 import page from './page';
+import windowEvent from './windowEvent';
 
 let redirectTimer = null;
 
@@ -29,6 +30,7 @@ class Router {
         updateParams(url);
         history.pushState({}, document.title, url);
         window.dispatchEvent(new Event('popstate'));
+        windowEvent('router.url');
         this._changed = true;
       }, 0);
     }
