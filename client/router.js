@@ -12,7 +12,7 @@ class Router {
 
   _changed = false
 
-  async _update(url) {
+  async _update(url, push) {
     clearTimeout(redirectTimer);
     redirectTimer = setTimeout(async () => {
       if(environment.static) {
@@ -26,9 +26,11 @@ class Router {
         }
         network.processing = false;
       }
+      if(push) {
+        history.pushState({}, document.title, url);
+      }
       updateParams(url);
       client.update();
-      window.scroll(0, 0);
       windowEvent('router.url');
       this._changed = true;
     }, 0);
@@ -37,9 +39,9 @@ class Router {
   async _redirect(target) {
     const {url} = extractLocation(target);
     if(url != this.url) {
-      this._update(url);
-      history.pushState({}, document.title, url);
+      await this._update(url, true);
     }
+    window.scroll(0, 0);
   }
 
   get url() {
