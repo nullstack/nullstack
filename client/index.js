@@ -23,8 +23,7 @@ export default class Nullstack {
   static start(Starter) {
     window.instances = deserialize(JSON.stringify(window.instances));
     window.addEventListener('popstate', () => {
-      client.update();
-      window.scroll(0, 0);
+      router._update(router.url);
     });
     for(const [key, value] of Object.entries(window.context)) {
       context[key] = value;

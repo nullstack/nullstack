@@ -4,6 +4,7 @@ import extractLocation from '../shared/extractLocation';
 import network from './network';
 import page from './page';
 import windowEvent from './windowEvent';
+import client from './client';
 
 let redirectTimer = null;
 
@@ -11,28 +12,33 @@ class Router {
 
   _changed = false
 
+  async _update(url) {
+    clearTimeout(redirectTimer);
+    redirectTimer = setTimeout(async () => {
+      if(environment.static) {
+        network.processing = true;
+        const endpoint = url == '/' ? '/index.json' : `${url}/index.json`;
+        const response = await fetch(endpoint);
+        const payload = await response.json();
+        window.instances = payload.instances;
+        for(const key in payload.page) {
+          page[key] = payload.page[key];
+        }
+        network.processing = false;
+      }
+      updateParams(url);
+      client.update();
+      window.scroll(0, 0);
+      windowEvent('router.url');
+      this._changed = true;
+    }, 0);
+  }
+
   async _redirect(target) {
     const {url} = extractLocation(target);
     if(url != this.url) {
-      clearTimeout(redirectTimer);
-      redirectTimer = setTimeout(async () => {
-        if(environment.static) {
-          network.processing = true;
-          const endpoint = url == '/' ? '/index.json' : `${url}/index.json`;
-          const response = await fetch(endpoint);
-          const payload = await response.json();
-          window.instances = payload.instances;
-          for(const key in payload.page) {
-            page[key] = payload.page[key];
-          }
-          network.processing = false;
-        }
-        updateParams(url);
-        history.pushState({}, document.title, url);
-        window.dispatchEvent(new Event('popstate'));
-        windowEvent('router.url');
-        this._changed = true;
-      }, 0);
+      this._update(url);
+      history.pushState({}, document.title, url);
     }
   }
 
