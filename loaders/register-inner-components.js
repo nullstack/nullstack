@@ -18,7 +18,12 @@ module.exports = function(source) {
                 const start = path.node.body.body[0].start;
                 if(!positions.includes(start)) {
                   positions.push(start);
-                  injections[start] = subpath.node.name;
+                }
+                if(!injections[start]) {
+                  injections[start] = [];
+                }
+                if(!injections[start].includes(subpath.node.name)) {
+                  injections[start].push(subpath.node.name);
                 }
               }
             }
@@ -34,11 +39,14 @@ module.exports = function(source) {
   for(const position of positions) {
     let code = source.slice(position, last);
     last = position;
-    const injection = injections[position];
     outputs.push(code);
-      if(injection) {
-        outputs.push(`const ${injection} = this.render${injection};\n    `)
+    if(position) {
+      for(const injection of injections[position]) {
+        if(injection) {
+          outputs.push(`const ${injection} = this.render${injection};\n    `)
+        }
       }
+    }
   }
   return outputs.reverse().join('');
 }

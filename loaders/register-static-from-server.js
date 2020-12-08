@@ -15,7 +15,7 @@ module.exports = function(source) {
       klassName = path.node.id.name;
     },
     ClassMethod(path) {
-      if(path.node.static && path.node.async && path.node.key.name != 'start') {
+      if(path.node.static && path.node.async && path.node.key.name !== 'start') {
         methodNames.push(path.node.key.name);
       }
     }
