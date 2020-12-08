@@ -5,6 +5,7 @@ const traverse = require("@babel/traverse").default;
 module.exports = function(source) {
   const hash = crypto.createHash('md5').update(source).digest("hex");
   let hashPosition;
+  let shouldHash = false;
   const injections = {};
   const positions = [];
   const ast = parse(source, {
@@ -15,11 +16,17 @@ module.exports = function(source) {
     ClassBody(path) {
       const start = path.node.body[0].start;
       hashPosition = start;
+      positions.push(start);
     },
     ClassMethod(path) {
       if(path.node.static && path.node.async) {
         injections[path.node.start] = {end: path.node.end, name: path.node.key.name};
-        positions.push(path.node.start);
+        if(!positions.includes(path.node.start)) {
+          positions.push(path.node.start);
+        }
+        if(path.node.key.name !== 'start') {
+          shouldHash = true;
+        }
       }
     }
   });
@@ -31,7 +38,7 @@ module.exports = function(source) {
     let code = source.slice(position, last);
     last = position;
     const injection = injections[position];
-    if (position) {
+    if (position && injection) {
       const location = injection.end - position;
       if(injection.name === 'start') {
         code = code.substring(location).trimStart();
@@ -42,10 +49,9 @@ module.exports = function(source) {
     } else {
       outputs.push(code);
     }
-    if(position === hashPosition) {
-      if(positions.length > 1) {
-        outputs.push(`static hash = '${hash}';\n\n  `);
-      }
+    console.log({injections});
+    if(position === hashPosition && shouldHash) {
+      outputs.push(`static hash = '${hash}';\n\n  `);
     } 
   }
   return outputs.reverse().join('');
