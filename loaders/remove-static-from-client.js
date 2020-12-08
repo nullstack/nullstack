@@ -49,7 +49,6 @@ module.exports = function(source) {
     } else {
       outputs.push(code);
     }
-    console.log({injections});
     if(position === hashPosition && shouldHash) {
       outputs.push(`static hash = '${hash}';\n\n  `);
     } 
