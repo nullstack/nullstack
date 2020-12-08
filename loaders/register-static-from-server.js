@@ -1,20 +1,27 @@
 const crypto = require('crypto');
+const parse = require('@babel/parser').parse;
+const traverse = require("@babel/traverse").default;
 
 module.exports = function(source) {
-  if(source.indexOf('extends Nullstack') == -1) {
-    return source;
-  }
   const hash = crypto.createHash('md5').update(source).digest("hex");
-  const fragments = source.split('class ').filter((code) => code.indexOf('extends Nullstack') > -1 && code.indexOf('static async') > -1);
-  for(const fragment of fragments) {
-    const klassName = (fragment.split(' ')[0] || '').trim();
-    const subfragments = fragment.split('static ').filter((code) => code.startsWith('async'));
-    for(const subfragment of subfragments) {
-      const methodName = (subfragment.split('(')[0] || '').replace('async', '').trim();
-      if(methodName !== 'start') {
-        source += `\nNullstack.registry["${hash}.${methodName}"] = ${klassName}.${methodName};`
+  let klassName;
+  const methodNames = [];
+  const ast = parse(source, {
+    sourceType: 'module',
+    plugins: ['classProperties', 'jsx']
+  });
+  traverse(ast, {
+    ClassDeclaration(path) {
+      klassName = path.node.id.name;
+    },
+    ClassMethod(path) {
+      if(path.node.static && path.node.async && path.node.key.name != 'start') {
+        methodNames.push(path.node.key.name);
       }
     }
+  });
+  for(const methodName of methodNames) {
+    source += `\nNullstack.registry["${hash}.${methodName}"] = ${klassName}.${methodName};`
   }
   return source;
 }

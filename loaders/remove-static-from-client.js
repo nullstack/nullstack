@@ -1,55 +1,44 @@
 const crypto = require('crypto');
+const parse = require('@babel/parser').parse;
+const traverse = require("@babel/traverse").default;
 
 module.exports = function(source) {
-  if(source.indexOf('extends Nullstack') == -1) {
-    return source;
-  }
+  console.log('======================')
+  console.log(source);
   const hash = crypto.createHash('md5').update(source).digest("hex");
-  const LOOKUP = 'static async ';
-  let first = source.search(LOOKUP);
-  while(first > -1) {
-    let characters = source.split('');
-    let last = first + LOOKUP.length;
-    let completed = false;
-    let name = '';
-    let foundParametersEnd = false;
-    let foundFirstBracket = false;
-    let bracketsMissingClosure = 0;
-    while(!completed) {
-      if(!name) {
-        if(characters[last] === '(') {
-          name = characters.slice(first + LOOKUP.length, last).join('').trim();
-        }
-      } else if(!foundParametersEnd) {
-        if(characters[last] === ')') {
-          foundParametersEnd = true;
-        }
-      } else if (!foundFirstBracket) {
-        if(characters[last] === '{') {
-          foundFirstBracket = true;
-          bracketsMissingClosure = 1;
-        }
-      } else {
-        if(bracketsMissingClosure == 0) {
-          completed = true;
-        } else if(characters[last] === '{') {
-          bracketsMissingClosure++;
-        } else if(characters[last] === '}') {
-          bracketsMissingClosure--;
-        }
-      }
-      if(completed) {
-        const signature = characters.slice(first, last).join("");
-        const replacement = `static ${name} = true;`;
-        source = source.replace(signature, replacement);
-        first = source.search(LOOKUP);
-      } else {
-        last++;
+  const injections = {};
+  const positions = [];
+  const ast = parse(source, {
+    sourceType: 'module',
+    plugins: ['classProperties', 'jsx']
+  });
+  traverse(ast, {
+    ClassBody(path) {
+      injections[path.node.start] = 'hash';
+      positions.push(path.node.start);
+    },
+    ClassMethod(path) {
+      if(path.node.static) {
+        injections[path.node.start] = {end: path.node.end, name: path.node.key.name};
+        positions.push(path.node.start);
       }
     }
+  });
+  positions.reverse();
+  positions.push(0);
+  let outputs = [];
+  let last;
+  for(const position of positions) {
+    let code = source.slice(position, last);
+    last = position;
+    const injection = injections[position];
+    if(injection == 'hash') {
+      outputs.push(`static hash = '${hash}';\n\n  `);
+    } else if (injection) {
+      const location = injection.end - position;
+      code = `static ${injection.name} = true;` + code.substring(location);
+    }
+    outputs.push(code);
   }
-  const fragments = source.split(' extends Nullstack')[0].split(' ');
-  const klassName = fragments[fragments.length - 1];
-  source += `\n${klassName}.hash = '${hash}';`;
-  return source;
+  return outputs.reverse().join('');
 }

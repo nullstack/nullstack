@@ -94,6 +94,10 @@ function server(env, argv) {
         babelNullstack,
         {
           test: /.njs$/,
+          loader: path.resolve('./node_modules/nullstack/loaders/inject-nullstack.js'),
+        },
+        {
+          test: /.njs$/,
           loader: path.resolve('./node_modules/nullstack/loaders/register-static-from-server.js'),
         },
         {
@@ -184,6 +188,10 @@ function client(env, argv) {
         },
         babel,
         babelNullstack,
+        {
+          test: /.njs$/,
+          loader: path.resolve('./node_modules/nullstack/loaders/inject-nullstack.js'),
+        },
         {
           test: /.njs$/,
           loader: path.resolve('./node_modules/nullstack/loaders/remove-static-from-client.js'),

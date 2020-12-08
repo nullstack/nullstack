@@ -1,35 +1,44 @@
-module.exports = function(source) {
-  if(source.indexOf('extends Nullstack') == -1) {
-    return source;
-  }
-  const indexes = {};
-  const fragments = source.split(' ').filter((code) => code.indexOf('render') > -1 && code.indexOf('(') > -1 && code.indexOf('this.') == -1);
-  for(const fragment of fragments) {
-    const methodName = fragment.split('(')[0].replace('render', '');
-    if(methodName !== '') {
-      for(const matcher of [...source.matchAll(`<${methodName}`)]) {
+const parse = require('@babel/parser').parse;
+const traverse = require("@babel/traverse").default;
 
-        limit = source.substring(0, matcher.index);
-        const submatchers = [...limit.matchAll(`return`)];
-        const lastReturnIndex = submatchers[submatchers.length - 1].index;
-        if(!indexes[lastReturnIndex]) {
-          indexes[lastReturnIndex] = [];
-        }
-        if(!indexes[lastReturnIndex].includes(methodName)) {
-          indexes[lastReturnIndex].push(methodName);
-        }
+module.exports = function(source) {
+  const injections = {};
+  const positions = [];
+  const ast = parse(source, {
+    sourceType: 'module',
+    plugins: ['classProperties', 'jsx']
+  });
+  traverse(ast, {
+    ClassMethod(path) {
+      if(path.node.key.name.startsWith('render')) {
+        traverse(path.node, {
+          JSXIdentifier(subpath) {
+            if(/^[A-Z]/.test(subpath.node.name)) {
+              if(!path.scope.hasBinding(subpath.node.name)) {
+                const start = path.node.body.body[0].start;
+                if(!positions.includes(start)) {
+                  positions.push(start);
+                  injections[start] = subpath.node.name;
+                }
+              }
+            }
+          },
+        }, path.scope, path);
       }
     }
+  });
+  positions.reverse();
+  positions.push(0);
+  let outputs = [];
+  let last;
+  for(const position of positions) {
+    let code = source.slice(position, last);
+    last = position;
+    const injection = injections[position];
+    outputs.push(code);
+      if(injection) {
+        outputs.push(`const ${injection} = this.render${injection};\n    `)
+      }
   }
-  lastIndex = 0;
-  const sources = [];
-  for(const index in indexes) {
-    sources.push(source.substring(lastIndex, index - 1))
-    lastIndex = index;
-    for(const methodName of indexes[index]) {
-      sources.push(` const ${methodName} = this.render${methodName};\n    `);
-    }
-  }
-  sources.push(source.substring(lastIndex, source.length - 1));
-  return sources.join('');
+  return outputs.reverse().join('');
 }
