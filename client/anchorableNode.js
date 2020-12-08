@@ -7,7 +7,7 @@ export function anchorableNode(node) {
     node.attributes.onclick = ({event}) => {
       event.preventDefault();
       router.url = node.attributes.href;
-      if(originalEvent !== undefined) {
+      if(originalEvent) {
         setTimeout(() => {
           originalEvent({...node.attributes, event});
         }, 0);
