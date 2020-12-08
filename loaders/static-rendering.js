@@ -12,12 +12,16 @@ module.exports = function(source) {
   let shouldBeStatic = true;
   traverse(ast, {
     ClassDeclaration(path) {
-      for(const node of path.node.body.body) {
-        if(node.type !== 'ClassMethod' || !node.key.name.startsWith('render')) {
-          shouldBeStatic = false;
-        } else {
-          positions.push(node.start);
+      if(path.node.superClass.name === 'Nullstack') {
+        for(const node of path.node.body.body) {
+          if(node.type !== 'ClassMethod' || !node.key.name.startsWith('render')) {
+            shouldBeStatic = false;
+          } else {
+            positions.push(node.start);
+          }
         }
+      } else {
+        shouldBeStatic = false;
       }
     }
   });
