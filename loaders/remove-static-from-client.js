@@ -3,8 +3,6 @@ const parse = require('@babel/parser').parse;
 const traverse = require("@babel/traverse").default;
 
 module.exports = function(source) {
-  console.log('======================')
-  console.log(source);
   const hash = crypto.createHash('md5').update(source).digest("hex");
   const injections = {};
   const positions = [];
