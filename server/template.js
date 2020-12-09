@@ -2,7 +2,7 @@ function serialize(object) {
   return JSON.stringify(object);
 }
 
-function head({page, project, router}, hasStyle) {
+function head({page, project, router, environment}, hasStyle) {
   let canonical = page.canonical;
   if(!canonical) {
     canonical = `https://${project.domain}${router.url}`;
@@ -39,7 +39,7 @@ function head({page, project, router}, hasStyle) {
       ${page.robots ? `<meta name="robots" content="${page.robots}" />` : ''}
       <meta name="msapplication-starturl" content="/">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      ${hasStyle ? `<link rel="stylesheet" href="/client.css" integrity="">` : ''}
+      ${hasStyle ? `<link rel="stylesheet" href="/client-${environment.key}.css" integrity="">` : ''}
       ${page.schema ? `<script type="application/ld+json">${serialize(page.schema)}</script>` : ''}
       <link rel="apple-touch-icon" sizes="180x180" href="${project.icons['180']}">
       <meta name="msapplication-TileColor" content="${project.backgroundColor || project.color}">
@@ -67,7 +67,7 @@ function body({html, memory, context, page, environment, settings}) {
         window.settings = ${serialize(settings)};
         document.addEventListener('DOMContentLoaded', () => {
           const script = window.document.createElement( 'script' );
-          script.src = '/client.js';
+          script.src = '/client-${environment.key}.js';
           document.body.append(script);
         });
       </script>

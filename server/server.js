@@ -35,11 +35,11 @@ server.start = function() {
   app.use(express.static(path.join(__dirname, '..', 'public')));
   app.use(bodyParser.text({limit: server.maximumPayloadSize}));
 
-  app.get('/client.css', (request, response) => {
+  app.get(`/client-${environment.key}.css`, (request, response) => {
     response.sendFile(path.join(__dirname, 'client.css'));
   });
 
-  app.get('/client.js', (request, response) => {
+  app.get(`/client-${environment.key}.js`, (request, response) => {
     response.sendFile(path.join(__dirname, 'client.js'));
   });
 

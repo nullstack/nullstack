@@ -17,9 +17,10 @@ class Router {
     redirectTimer = setTimeout(async () => {
       if(environment.static) {
         network.processing = true;
-        const endpoint = url == '/' ? '/index.json' : `${url}/index.json`;
+        const target = `/${environment.key}.json`;
+        const endpoint = url === '/' ? target : url+target;
         const response = await fetch(endpoint);
-        const payload = await response.json();
+        const payload = await response.json(url);
         window.instances = payload.instances;
         for(const key in payload.page) {
           page[key] = payload.page[key];
