@@ -7,12 +7,14 @@ import fetch from 'node-fetch';
 
 import deserialize from '../shared/deserialize';
 import template from './template';
-import manifest from './manifest';
+import generateManifest from './manifest';
 import {generateContext} from './context';
 import project from './project';
 import environment from './environment';
 import registry from './registry';
 import {prerender} from './prerender';
+import files from './files';
+import worker, {generateServiceWorker} from './worker';
 
 if (!global.fetch) {
   global.fetch = fetch;
@@ -32,20 +34,37 @@ const hasStyle = existsSync(path.join(__dirname, 'client.css'));
 
 server.start = function() {
 
+  files['manifest.json'] = generateManifest();
+  files['service-worker.js'] = generateServiceWorker();
+
   app.use(express.static(path.join(__dirname, '..', 'public')));
   app.use(bodyParser.text({limit: server.maximumPayloadSize}));
 
   app.get(`/client-${environment.key}.css`, (request, response) => {
-    response.sendFile(path.join(__dirname, 'client.css'));
+    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.contentType('text/css');
+    response.send(files['client.css']);
   });
 
   app.get(`/client-${environment.key}.js`, (request, response) => {
-    response.sendFile(path.join(__dirname, 'client.js'));
+    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.contentType('text/javascript');
+    response.send(files['client.js']);
   });
 
-  app.get('/manifest.json', (request, response) => {
-    response.json(manifest(project));
+  app.get(`/manifest-${environment.key}.json`, (request, response) => {
+    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.contentType('application/manifest+json');
+    response.send(files['manifest.json']);
   });
+
+  if(worker.enabled) {
+    app.get(`/service-worker-${environment.key}.js`, (request, response) => {
+      response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+      response.contentType('text/javascript');
+      response.send(files['service-worker.js']);
+    });
+  }
 
   app.post("/api/:klassName/:methodName.json", async (request, response) => {
     const args = deserialize(request.body);
@@ -61,7 +80,10 @@ server.start = function() {
     }
   });
 
-  app.get("*", async (request, response) => {
+  app.get("*", async (request, response, next) => {
+    if(request.originalUrl.split('?')[0].indexOf('.') > -1) {
+      return next();
+    }
     const renderable = await prerender(request, response);
     if(!response.headersSent) {
       const html = template(renderable, hasStyle);

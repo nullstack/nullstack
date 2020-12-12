@@ -6,5 +6,4 @@ const networkProxyHandler = {
 
 const network = new Proxy({}, networkProxyHandler);
 
-
 export default network;

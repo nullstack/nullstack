@@ -1,4 +1,6 @@
-export default function manifest(project) {
+import project from './project';
+
+export default function generateManifest() {
   const json = {
     "name": project.name,
     "short_name": project.shortName || project.name,

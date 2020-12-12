@@ -2,27 +2,34 @@ import client from './client';
 import deserialize from '../shared/deserialize';
 import {generateContext} from './context';
 import network from './network';
+import worker from './worker';
 
 const instanceProxyHandler = {
   get(target, name) {
     if(target[name] === undefined && target.constructor[name] === true) {
       return async (params) => {
-        network.processing = true;
+        let payload;
+        worker.fetching = true;
         network[name] = true;
         const url = `/api/${target.constructor.hash}/${name}.json`;
-        const response = await fetch(url, {
-          method: 'POST',
-          mode: 'cors',
-          cache: 'no-cache',
-          credentials: 'same-origin',
-          redirect: 'follow',
-          referrerPolicy: 'no-referrer',
-          body: JSON.stringify(params || {})
-        });
-        const payload = await response.text();
-        network.processing = false;
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+            body: JSON.stringify(params || {})
+          });
+          payload = await response.text();
+          worker.online = true;
+        } catch(e) {
+          worker.online = false;
+        }
+        worker.fetching = false;
         delete network[name];
-        return deserialize(payload).result;
+        return payload ? deserialize(payload).result : undefined;
       }
     } else if(typeof(target[name]) == 'function') {
       return (args) => {

@@ -31,7 +31,7 @@ function head({page, project, router, environment}, hasStyle) {
       ${page.locale ? `<meta property="og:locale" content="${page.locale}">` : ''}
       <link rel="shortcut icon" href="${project.favicon}" type="image/png">
       <link rel="icon" href="${project.favicon}" type="image/png">
-      <link rel="manifest" href="/manifest.json" integrity="">
+      <link rel="manifest" href="/manifest-${environment.key}.json" integrity="">
       <meta name="mobile-web-app-capable" content="yes">
       <meta name="apple-mobile-web-app-capable" content="yes">
       ${project.name ? `<meta name="application-name" content="${project.name}">` : ''}
@@ -50,7 +50,7 @@ function head({page, project, router, environment}, hasStyle) {
 
 function body({html, memory, context, page, environment, settings}) {
   const serializableContext = {};
-  const blacklist = ['scope', 'router', 'page', 'environment', 'network', 'settings'];
+  const blacklist = ['scope', 'router', 'page', 'environment', 'network', 'settings', 'worker'];
   for(const [key, value] of Object.entries(context)) {
     if(!blacklist.includes(key) && typeof(value) !== 'function') {
       serializableContext[key] = value;
@@ -65,6 +65,7 @@ function body({html, memory, context, page, environment, settings}) {
         window.instances = ${serialize(memory)};
         window.environment = ${serialize(environment)};
         window.settings = ${serialize(settings)};
+        window.worker = ${serialize(context.worker)};
         document.addEventListener('DOMContentLoaded', () => {
           const script = window.document.createElement( 'script' );
           script.src = '/client-${environment.key}.js';

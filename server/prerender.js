@@ -7,9 +7,10 @@ import paramsProxyHandler from './paramsProxyHandler';
 import render from './render';
 import network from './network';
 import settings from './settings';
+import worker from './worker';
 
 export async function prerender(request, response) {
-  const page = {image: '/image-1200x630.png'};
+  const page = {image: '/image-1200x630.png'};  
   const clientContext = {page, project, environment, network, settings};
   const clientContextProxyHandler = {
     set(target, name, value) {
@@ -27,6 +28,10 @@ export async function prerender(request, response) {
     return new Proxy({...clientContext, ...temporary}, clientContextProxyHandler);
   }
   clientContext.router = new Router(scope);
+  clientContext.worker = {
+    ...worker,
+    online: clientContext.router.url !== `/offline-${environment.key}`
+  };
   const virtualDom = generator.starter();
   const html = await render(virtualDom, [0], scope);
   const memory = {};
