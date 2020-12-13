@@ -22,14 +22,15 @@ const instanceProxyHandler = {
             referrerPolicy: 'no-referrer',
             body: JSON.stringify(params || {})
           });
-          payload = await response.text();
+          const text = await response.text();
+          payload = deserialize(text).result;
           worker.online = true;
         } catch(e) {
           worker.online = false;
         }
         worker.fetching = false;
         delete network[name];
-        return payload ? deserialize(payload).result : undefined;
+        return payload;
       }
     } else if(typeof(target[name]) == 'function') {
       return (args) => {

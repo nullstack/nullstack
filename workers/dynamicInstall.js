@@ -1,8 +1,8 @@
 function install(event) {
   const urls = [
     '/',
-    ...self.context.worker.preload.map(toAPI),
-    '/offline-' + self.context.environment.key + '/index.html',
+    ...self.context.worker.preload,
+    '/offline-' + self.context.environment.key,
     '/client-' + self.context.environment.key + '.css',
     '/client-' + self.context.environment.key + '.js',
     '/manifest-' + self.context.environment.key + '.json'
@@ -10,9 +10,6 @@ function install(event) {
   event.waitUntil(async function() {
     const cache = await caches.open(self.context.environment.key);
     await cache.addAll([...new Set(urls)]);
-    const homeResponse = await cache.match('/');
-    const homeDataResponse = await extractData(homeResponse);
-    await cache.put('/index.json', homeDataResponse);
     self.skipWaiting();
   }());
 }

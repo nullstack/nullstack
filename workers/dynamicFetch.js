@@ -13,11 +13,7 @@ function staticStrategy(event) {
     return event.respondWith(staleWhileRevalidate(event));
   }
 
-  if(url.pathname === '/') {
-    return event.respondWith(networkFirst(event));
-  }
-
-  event.respondWith(networkDataFirst(event));
+  event.respondWith(networkOnly(event));
 
 }
 

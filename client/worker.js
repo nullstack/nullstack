@@ -1,5 +1,6 @@
 import environment from './environment';
 import client from './client';
+import router from './router';
 
 const worker = {...window.worker};
 delete window.worker;
@@ -7,7 +8,6 @@ delete window.worker;
 if(worker.enabled) {
 
   window.addEventListener('beforeinstallprompt', function(event) {
-    console.log('install');
     event.preventDefault();
     worker.installation = event;
   });
@@ -44,7 +44,11 @@ const workerProxyHandler = {
 const proxy = new Proxy(worker, workerProxyHandler);
 
 window.addEventListener('online', () => {
-  proxy.online = true;
+  if(environment.static) {
+    router._update(router.url);
+  } else {
+    proxy.online = true;
+  }
 });
 
 export default proxy;
