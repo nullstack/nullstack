@@ -32,7 +32,7 @@ export function generateServiceWorker() {
   let original = '';
   const file = path.join(__dirname, '../', 'public', 'service-worker.js');
   if(existsSync(file)) {
-    original = readFileSync(file);
+    original = readFileSync(file, 'utf-8');
   }
   sources.push(`self.context = ${JSON.stringify(context, null, 2)};`);
   sources.push(load);

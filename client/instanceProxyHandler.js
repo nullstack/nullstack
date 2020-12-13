@@ -1,7 +1,7 @@
 import client from './client';
 import deserialize from '../shared/deserialize';
 import {generateContext} from './context';
-import network from './network';
+import loading from './loading';
 import worker from './worker';
 
 const instanceProxyHandler = {
@@ -10,7 +10,7 @@ const instanceProxyHandler = {
       return async (params) => {
         let payload;
         worker.fetching = true;
-        network[name] = true;
+        loading[name] = true;
         const url = `/api/${target.constructor.hash}/${name}.json`;
         try {
           const response = await fetch(url, {
@@ -24,12 +24,12 @@ const instanceProxyHandler = {
           });
           const text = await response.text();
           payload = deserialize(text).result;
-          worker.online = true;
+          worker.responsive = true;
         } catch(e) {
-          worker.online = false;
+          worker.responsive = false;
         }
         worker.fetching = false;
-        delete network[name];
+        delete loading[name];
         return payload;
       }
     } else if(typeof(target[name]) == 'function') {

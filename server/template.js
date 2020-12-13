@@ -50,7 +50,7 @@ function head({page, project, router, environment}, hasStyle) {
 
 function body({html, memory, context, page, environment, settings}) {
   const serializableContext = {};
-  const blacklist = ['scope', 'router', 'page', 'environment', 'network', 'settings', 'worker'];
+  const blacklist = ['scope', 'router', 'page', 'environment', 'loading', 'settings', 'worker'];
   for(const [key, value] of Object.entries(context)) {
     if(!blacklist.includes(key) && typeof(value) !== 'function') {
       serializableContext[key] = value;

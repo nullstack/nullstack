@@ -1,6 +1,12 @@
+import {existsSync, readFileSync} from 'fs';
+import path from 'path';
 import project from './project';
 
 export default function generateManifest() {
+  const file = path.join(__dirname, '../', 'public', 'manifest.json');
+  if(existsSync(file)) {
+    return readFileSync(file, 'utf-8');
+  }
   const json = {
     "name": project.name,
     "short_name": project.shortName || project.name,

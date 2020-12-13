@@ -26,9 +26,9 @@ class Router {
           for(const key in payload.page) {
             page[key] = payload.page[key];
           }
-          worker.online = true;
+          worker.responsive = true;
         } catch(error) {
-          worker.online = false;
+          worker.responsive = false;
         }
         worker.fetching = false;
       }

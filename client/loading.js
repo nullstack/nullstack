@@ -1,6 +1,6 @@
-import client from './client';
+import client from 'nullstack/client/client';
 
-const networkProxyHandler = {
+const loadingProxyHandler = {
   set(target, name, value) {
     target[name] = value;
     client.update();
@@ -11,6 +11,6 @@ const networkProxyHandler = {
   }
 }
 
-const network = new Proxy({}, networkProxyHandler);
+const loading = new Proxy({}, loadingProxyHandler);
 
-export default network;
+export default loading;

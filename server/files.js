@@ -7,7 +7,7 @@ const files = {};
 const md5 = createHash('md5');
 
 for(const file of readdirSync(__dirname)) {
-  const source = readFileSync(path.join(__dirname, file));
+  const source = readFileSync(path.join(__dirname, file), 'utf-8');
   if(file.indexOf('server') > -1) {
     md5.update(source);
   } else {
