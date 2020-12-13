@@ -45,7 +45,7 @@ window.addEventListener('online', () => {
   if(environment.static) {
     router._update(router.url);
   } else {
-    proxy.online = true;
+    proxy.responsive = true;
   }
 });
 
