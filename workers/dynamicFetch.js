@@ -1,4 +1,4 @@
-function staticStrategy(event) {
+function dynamicStrategy(event) {
 
   const url = new URL(event.request.url);
 
@@ -17,4 +17,4 @@ function staticStrategy(event) {
 
 }
 
-self.addEventListener('fetch', staticStrategy);
+self.addEventListener('fetch', dynamicStrategy);
