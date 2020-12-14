@@ -1,7 +1,7 @@
 import {updateParams} from './params';
 import environment from './environment';
 import extractLocation from '../shared/extractLocation';
-import network from './network';
+import worker from './worker';
 import page from './page';
 import windowEvent from './windowEvent';
 import client from './client';
@@ -16,16 +16,21 @@ class Router {
     clearTimeout(redirectTimer);
     redirectTimer = setTimeout(async () => {
       if(environment.static) {
-        network.processing = true;
-        const target = `/${environment.key}.json`;
-        const endpoint = url === '/' ? target : url+target;
-        const response = await fetch(endpoint);
-        const payload = await response.json(url);
-        window.instances = payload.instances;
-        for(const key in payload.page) {
-          page[key] = payload.page[key];
+        worker.fetching = true;
+        const api = '/index.json';
+        const endpoint = url === '/' ? api : url+api;
+        try {
+          const response = await fetch(endpoint);
+          const payload = await response.json(url);
+          window.instances = payload.instances;
+          for(const key in payload.page) {
+            page[key] = payload.page[key];
+          }
+          worker.responsive = true;
+        } catch(error) {
+          worker.responsive = false;
         }
-        network.processing = false;
+        worker.fetching = false;
       }
       if(push) {
         history.pushState({}, document.title, url);

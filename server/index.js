@@ -11,12 +11,14 @@ import environment from './environment';
 import settings from './settings';
 import secrets from './secrets';
 import {freezeConfigurable} from './configurable';
+import worker from './worker';
 
 context.server = server;
 context.project = project;
 context.environment = environment;
 context.settings = settings;
 context.secrets = secrets;
+context.worker = worker;
 
 class Nullstack {
 
@@ -29,6 +31,8 @@ class Nullstack {
       typeof(Starter.start) === 'function' && await Starter.start(context);
       freezeConfigurable(settings);
       freezeConfigurable(secrets);
+      Object.freeze(worker);
+      Object.freeze(project);
       server.start();
     }
   }

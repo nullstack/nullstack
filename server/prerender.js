@@ -5,12 +5,13 @@ import Router from './router';
 import generator from './generator';
 import paramsProxyHandler from './paramsProxyHandler';
 import render from './render';
-import network from './network';
+import loading from './loading';
 import settings from './settings';
+import worker from './worker';
 
 export async function prerender(request, response) {
-  const page = {image: '/image-1200x630.png'};
-  const clientContext = {page, project, environment, network, settings};
+  const page = {image: '/image-1200x630.png'};  
+  const clientContext = {page, project, environment, loading, settings};
   const clientContextProxyHandler = {
     set(target, name, value) {
       clientContext[name] = value;
@@ -27,6 +28,8 @@ export async function prerender(request, response) {
     return new Proxy({...clientContext, ...temporary}, clientContextProxyHandler);
   }
   clientContext.router = new Router(scope);
+  const online = clientContext.router.url !== `/offline-${environment.key}`;
+  clientContext.worker = {...worker, online, responsive: online};
   const virtualDom = generator.starter();
   const html = await render(virtualDom, [0], scope);
   const memory = {};

@@ -26,6 +26,7 @@
     "node-fetch": "^2.6.0",
     "node-sass": "^4.13.1",
     "nodemon-webpack-plugin": "^4.3.1",
+    "raw-loader": "^4.0.2",
     "sass-loader": "^8.0.2",
     "string-replace-loader": "^2.2.0",
     "terser-webpack-plugin": "^2.3.5",

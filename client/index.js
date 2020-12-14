@@ -8,13 +8,15 @@ import instanceProxyHandler from './instanceProxyHandler';
 import page from './page';
 import environment from './environment';
 import params, {updateParams} from './params';
-import network from './network';
+import loading from './loading';
 import settings from './settings';
+import worker from './worker';
 
 context.page = page;
 context.router = router;
-context.network = network;
+context.loading = loading;
 context.settings = settings;
+context.worker = worker;
 
 export default class Nullstack {
 
