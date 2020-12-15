@@ -27,7 +27,7 @@ async function injectData(templateResponse, cachedDataResponse) {
     } else if(line.indexOf('window.page = ') > -1) {
       return `window.page = ${JSON.stringify(data.page)};`
     } else if(line.indexOf('window.worker = ') > -1) {
-      return line.replace('"online":false', '"online":true');
+      return line.replace('"online":false', '"online":true').replace('"responsive":false', '"responsive":true');
     }
     return line;
   }).join("\n");

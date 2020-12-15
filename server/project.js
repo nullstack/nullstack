@@ -1,5 +1,6 @@
 import path from 'path';
 import {readdirSync} from 'fs';
+import environment from './environment';
 
 const project = {};
 
@@ -10,6 +11,8 @@ project.scope = "/";
 project.root = "/";
 project.favicon = "/favicon-96x96.png";
 project.icons = {};
+project.disallow = [];
+project.sitemap = environment.static;
 
 const publicFiles = readdirSync(path.join(__dirname, '..', 'public'));
 
