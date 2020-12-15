@@ -38,12 +38,12 @@ export default function rerender(parent, depth, vdepth) {
     const nextSelector = render(next, vdepth);
     return parent.replaceChild(nextSelector, selector);
   }
-  if(next.type === 'Fragment') {
-    const limit = Math.max(current.children.length, next.children.length);
-    for(let i = limit - 1; i > -1; i--) {
-      rerender(selector, depth, [...vdepth, i]);
-    }
+  if(current.type == 'head' && next.type == 'head') {
     return;
+  }
+  if(current.type == 'head' || next.type == 'head') {
+    const nextSelector = render(next, vdepth);
+    return parent.replaceChild(nextSelector, selector);
   }
   objectEvent(next);
   bindableNode(next);

@@ -4,13 +4,6 @@ import generateKey from '../shared/generateKey';
 import parameterizableNode from '../shared/parameterizableNode';
 
 export default async function render(node, depth, scope) {
-  if(node.type === 'Fragment') {
-    let element = '';
-    for(let i = 0; i < node.children.length; i++) {
-      element += await render(node.children[i], depth, scope);
-    }
-    return element;
-  }
   if(node === false || (node !== undefined && node.type === false)) {
     return "<!-- -->";
   }
@@ -86,16 +79,26 @@ export default async function render(node, depth, scope) {
     } else {
       element += '>';
       if(node.attributes.html) {
-        element += node.attributes.html;
+        const source = node.attributes.html;
+        if(node.type === 'head') {
+          scope.head += source;
+        } else {
+          element += source;
+        }
       } else if(node.type === 'textarea') {
         element += node.children[0];
       } else {
         for(let i = 0; i < node.children.length; i++) {
-          element += await render(node.children[i], [...depth, i], scope);
+          const source = await render(node.children[i], [...depth, i], scope);
+          if(node.type === 'head') {
+            scope.head += source;
+          } else {
+            element += source;
+          }
         }
       }
       element += `</${node.type}>`;
     }
-    return element;
+    return node.type === 'head' ? '<!-- -->' : element;
   }
 }

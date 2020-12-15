@@ -1,7 +1,6 @@
 function flattenChildren(children) {
   children = [].concat.apply([], children).map((child) => {
     if(child === null || child === undefined) return false;
-    if(child.type === 'Fragment') return flattenChildren(child.children);
     return child;
   });
   return [].concat.apply([], children);
@@ -16,7 +15,7 @@ export default function element(type, attributes = {}, ...children) {
     children = [children.join('')];
   }
   if(type === 'element') {
-    type = attributes.tag || 'Fragment';
+    type = attributes.tag || 'div';
     delete attributes.tag;
   }
   attributes.children = children;

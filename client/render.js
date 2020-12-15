@@ -13,7 +13,7 @@ import objectEvent from './objectEvent';
 
 export default function render(node, depth) {
   routableNode(node, depth);
-  if(isFalse(node)) {
+  if(isFalse(node) || node.type === 'head') {
     return document.createComment("");
   }
   objectEvent(node);
@@ -102,8 +102,7 @@ export default function render(node, depth) {
   }
   if(!node.attributes.html) {
     for(let i = 0; i < node.children.length; i++) {
-      const ndepth = node.type === 'Fragment' ? depth : [...depth, i];
-      const dom = render(node.children[i], ndepth);
+      const dom = render(node.children[i], [...depth, i]);
       element.appendChild(dom);
     }
     if(node.type == 'select') {

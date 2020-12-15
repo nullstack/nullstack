@@ -2,7 +2,8 @@ function serialize(object) {
   return JSON.stringify(object);
 }
 
-function head({page, project, router, environment}, hasStyle) {
+function head({context, head}, hasStyle) {
+  const {page, project, router, environment} = context;
   let canonical = page.canonical;
   if(!canonical) {
     canonical = `https://${project.domain}${router.url}`;
@@ -44,11 +45,12 @@ function head({page, project, router, environment}, hasStyle) {
       <link rel="apple-touch-icon" sizes="180x180" href="${project.icons['180']}">
       <meta name="msapplication-TileColor" content="${project.backgroundColor || project.color}">
       <meta name="theme-color" content="${project.color}">
+      ${head.split('<!--#-->').join('')}
     </head>
   `).split('\n').join('');
 }
 
-function body({html, memory, context, page, environment, settings}) {
+function body({body, memory, context, page, environment, settings}) {
   const serializableContext = {};
   const blacklist = ['scope', 'router', 'page', 'environment', 'loading', 'settings', 'worker'];
   for(const [key, value] of Object.entries(context)) {
@@ -58,7 +60,7 @@ function body({html, memory, context, page, environment, settings}) {
   }
   return (`
     <body>
-      <div id="application">${html}</div>
+      <div id="application">${body}</div>
       <script async defer>
         window.page = ${serialize(page)};
         window.context = ${serialize(serializableContext)};
@@ -80,7 +82,7 @@ export default function(renderable, hasStyle) {
   return (`
     <!DOCTYPE html>
     <html${renderable.context.page.locale ? ` lang="${renderable.context.page.locale}"` : ''}>
-      ${head(renderable.context, hasStyle)}
+      ${head(renderable, hasStyle)}
       ${body(renderable)}
     </html>
   `)

@@ -15,7 +15,7 @@ export function isStatic(node) {
 }
 
 export function isText(node) {
-  return node !== 'Fragment' && typeof(node.children) === 'undefined';
+  return typeof(node.children) === 'undefined';
 }
 
 export function isRoutable(node) {

@@ -22,6 +22,7 @@ export async function prerender(request, response) {
   const routes = {};
   const scope = {instances, request, routes, response};
   const params = getQueryStringParams(request.originalUrl);
+  scope.head = '';
   scope.context = clientContext;
   clientContext.params = new Proxy(params, paramsProxyHandler);
   scope.generateContext = (temporary) => {
@@ -31,10 +32,10 @@ export async function prerender(request, response) {
   const online = clientContext.router.url !== `/offline-${environment.key}`;
   clientContext.worker = {...worker, online, responsive: online};
   const virtualDom = generator.starter();
-  const html = await render(virtualDom, [0], scope);
+  const body = await render(virtualDom, [0], scope);
   const memory = {};
   for(const key in scope.instances) {
     memory[key] = scope.instances[key].serialize();
   }
-  return {html, memory, context: clientContext, page, project, environment, settings};
+  return {body, memory, context: clientContext, page, project, environment, settings, head: scope.head};
 }
