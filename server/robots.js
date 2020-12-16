@@ -1,6 +1,6 @@
-import project from './project';
+import project from 'nullstack/server/project';
 
-export default function generateRobot() {
+export default function generateRobots() {
   const lines = []
   lines.push('User-Agent: *');
   if(!project.disallow.includes('/')) {

@@ -22,7 +22,9 @@ async function injectData(templateResponse, cachedDataResponse) {
   const data = await cachedDataResponse.json();
   const input = await templateResponse.text();
   const output = input.split(`\n`).map((line) => {
-    if(line.indexOf('window.instances = ') > -1) {
+    if(line.indexOf('<meta name="generator" content="Created with Nullstack - https://nullstack.app" />') > -1) {
+      return line.replace(/(<title\b[^>]*>)[^<>]*(<\/title>)/i, `$1${data.page.title}$2`);
+    } else if(line.indexOf('window.instances = ') > -1) {
       return `window.instances = ${JSON.stringify(data.instances)};`
     } else if(line.indexOf('window.page = ') > -1) {
       return `window.page = ${JSON.stringify(data.page)};`

@@ -3,6 +3,7 @@ import deserialize from '../shared/deserialize';
 import {generateContext} from './context';
 import loading from './loading';
 import worker from './worker';
+import prefix from '../shared/prefix';
 
 const instanceProxyHandler = {
   get(target, name) {
@@ -11,7 +12,7 @@ const instanceProxyHandler = {
         let payload;
         worker.fetching = true;
         loading[name] = true;
-        const url = `/api/${target.constructor.hash}/${name}.json`;
+        const url = `/${prefix}/${target.constructor.hash}/${name}.json`;
         try {
           const response = await fetch(url, {
             method: 'POST',

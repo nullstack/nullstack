@@ -15,7 +15,8 @@ import registry from './registry';
 import {prerender} from './prerender';
 import files from './files';
 import worker, {generateServiceWorker} from './worker';
-import generateRobot from './robot';
+import generateRobots from './robots';
+import prefix from '../shared/prefix';
 
 if (!global.fetch) {
   global.fetch = fetch;
@@ -37,7 +38,7 @@ server.start = function() {
 
   files['manifest.json'] = generateManifest();
   files['service-worker.js'] = generateServiceWorker();
-  files['robots.txt'] = generateRobot();
+  files['robots.txt'] = generateRobots();
 
   app.use(express.static(path.join(__dirname, '..', 'public')));
   app.use(bodyParser.text({limit: server.maximumPayloadSize}));
@@ -72,7 +73,7 @@ server.start = function() {
     response.send(files['robots.txt']);
   });
 
-  app.post("/api/:klassName/:methodName.json", async (request, response) => {
+  app.post(`/${prefix}/:klassName/:methodName.json`, async (request, response) => {
     const args = deserialize(request.body);
     const {klassName, methodName} = request.params;
     const key = `${klassName}.${methodName}`;
