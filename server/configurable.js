@@ -1,4 +1,4 @@
-import environment from 'nullstack/server/environment';
+import environment from './environment';
 
 function camelize(key) {
   return key.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());

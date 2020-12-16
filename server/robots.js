@@ -1,4 +1,4 @@
-import project from 'nullstack/server/project';
+import project from './project';
 
 export default function generateRobots() {
   const lines = []

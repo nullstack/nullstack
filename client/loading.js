@@ -1,4 +1,4 @@
-import client from 'nullstack/client/client';
+import client from './client';
 
 const loadingProxyHandler = {
   set(target, name, value) {

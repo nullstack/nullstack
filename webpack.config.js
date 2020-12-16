@@ -52,6 +52,7 @@ const babelNullstack = {
 
 function server(env, argv) {
   const folder = argv.mode === 'development' ? '.development' : '.production';
+  const dir = argv.dir || '../..';
   const devtool = argv.mode === 'development' ? 'inline-source-map' : undefined;
   const minimize = argv.mode !== 'development';
   const plugins = argv.mode === 'development' ? ([
@@ -63,7 +64,7 @@ function server(env, argv) {
   return {
     entry: './index.js',
     output: {
-      path: path.resolve(__dirname, '../../'+folder),
+      path: path.resolve(__dirname, dir+'/'+folder),
       filename: 'server.js'
     },
     optimization: {
@@ -130,6 +131,7 @@ function server(env, argv) {
 }
 
 function client(env, argv) {
+  const dir = argv.dir || '../..';
   const folder = argv.mode === 'development' ? '.development' : '.production';
   const devtool = argv.mode === 'development' ? 'inline-source-map' : undefined;
   const minimize = argv.mode !== 'development';
@@ -159,7 +161,7 @@ function client(env, argv) {
   return {
     entry: './index.js',
     output: {
-      path: path.resolve(__dirname, '../../'+folder),
+      path: path.resolve(__dirname, dir+'/'+folder),
       filename: 'client.js'
     },
     optimization: {
