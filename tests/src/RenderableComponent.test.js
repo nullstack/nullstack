@@ -71,6 +71,11 @@ describe('RenderableComponent [condition=false]', () => {
     expect(element).toBeTruthy();
   });
 
+  test('headless components are allocated with a comment', async () => {
+    const type = await page.$eval('.RenderableComponent', (element) => element.childNodes[0].nodeType);
+    expect(type).toBe(8);
+  });
+
 });
 
 describe('RenderableComponent [condition=true]', () => {

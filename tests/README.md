@@ -4,7 +4,7 @@
 
 This folder contains tests for Nullstack using Jest and Puppeteer.
 
-## How to Install
+## How to install
 
 ```sh
 npm link

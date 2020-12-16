@@ -15,6 +15,10 @@ class RenderableComponent extends Nullstack {
     )
   }
 
+  renderFalsy() {
+    return false;
+  }
+
   transform() {
     this.condition = true;
     this.list = [1,2,3];
@@ -23,6 +27,7 @@ class RenderableComponent extends Nullstack {
   render() {
     return (
       <div class="RenderableComponent">
+        <Falsy />
         <div> this is a normal tag </div>
         <label for="input"> label </label>
         <button disabled> disabled button </button>
