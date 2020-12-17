@@ -40,6 +40,13 @@ describe('RoutesAndParams /routes-and-params', () => {
     expect(element).toBeTruthy();  
   });
 
+  test('assignments to params convert the value to JSON', async () => {
+    await page.click('button');
+    await page.waitForSelector('[data-date="1992-10-16T00:00:00.000Z"]');
+    const element = await page.$('[data-date="1992-10-16T00:00:00.000Z"]');
+    expect(element).toBeTruthy();  
+  });
+
 });
 
 describe('RoutesAndParams /routes-and-params/a', () => {

@@ -25,6 +25,10 @@ class RoutesAndParams extends Nullstack {
       <div data-wildcard />
     )
   }
+
+  setParamsDate({params}) {
+    params.date = new Date('1992-10-16');
+  }
   
   render({router, params}) {
     return (
@@ -41,6 +45,8 @@ class RoutesAndParams extends Nullstack {
         <div data-path={router.path} />
         <div data-empty={params.empty} />
         <div data-boolean={params.boolean} />
+        <button onclick={this.setParamsDate}> date </button>
+        <div data-date={params.date} />
       </div>
     )
   }
