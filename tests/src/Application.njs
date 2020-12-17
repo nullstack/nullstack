@@ -3,13 +3,12 @@ import RenderableComponent from './RenderableComponent.njs';
 import StatefulComponent from './StatefulComponent.njs';
 import FullStackLifecycle from './FullStackLifecycle';
 import InstanceSelf from './InstanceSelf';
+import ContextProject from './ContextProject';
 
 class Application extends Nullstack {
 
-  static async start({project}) {
-    project.name = 'Test';
-    project.domain = 'nullstack.app';
-    project.color = '#D22365';
+  static async start(context) {
+    ContextProject.start(context);
   }
 
   render() {
@@ -20,6 +19,7 @@ class Application extends Nullstack {
         <StatefulComponent route="/stateful-component" />
         <FullStackLifecycle route="/full-stack-lifecycle" />
         <InstanceSelf route="/instance-self" />
+        <ContextProject route="/context-project" />
       </main>
     )
   }
