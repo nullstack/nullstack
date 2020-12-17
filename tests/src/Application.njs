@@ -10,6 +10,8 @@ import ContextSecrets from './ContextSecrets';
 import ContextSettings from './ContextSettings';
 import ContextEnvironment from './ContextEnvironment';
 import ContextLoading from './ContextLoading';
+import ContextWorker from './ContextWorker';
+import InstanceKey from './InstanceKey';
 
 class Application extends Nullstack {
 
@@ -17,12 +19,13 @@ class Application extends Nullstack {
     ContextProject.start(context);
     ContextSecrets.start(context);
     ContextSettings.start(context);
+    ContextWorker.start(context);
   }
 
-  render() {
+  render({project}) {
     return (
       <main>
-        <h1> Nullstack Tests </h1>
+        <h1> {project.name} </h1>
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
         <FullStackLifecycle route="/full-stack-lifecycle" />
@@ -34,6 +37,8 @@ class Application extends Nullstack {
         <ContextSettings route="/context-settings" />
         <ContextEnvironment route="/context-environment" />
         <ContextLoading route="/context-loading" />
+        <ContextWorker route="/context-worker" />
+        <InstanceKey route="/instance-key" />
       </main>
     )
   }

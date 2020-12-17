@@ -4,6 +4,11 @@ class StatefulComponent extends Nullstack {
 
   count = 1;
   object = {count: 0};
+  prepared = 0;
+
+  prepare() {
+    this.prepared++;
+  }
 
   increment({by}) {
     this.count += by;
@@ -28,8 +33,9 @@ class StatefulComponent extends Nullstack {
         <button class="set-object-to-one" source={this.object} onclick={{count: 1}}>
           =1
         </button>
-        <span data-count={this.count}> {this.count} </span>
-        <span data-object-count={this.object.count}> {this.object.count} </span>
+        <div data-prepared={this.prepared} />
+        <div data-count={this.count} />
+        <div data-object-count={this.object.count} />
       </form>
     )
   }

@@ -3,7 +3,7 @@ import Nullstack from 'nullstack';
 class ContextProject extends Nullstack {
 
   static async start({project}) {
-    project.name = 'Nullstack';
+    project.name = 'Nullstack Tests';
     project.shortName = 'Nullstack';
     project.domain = 'nullstack.app';
     project.color = '#d22365';
@@ -13,7 +13,10 @@ class ContextProject extends Nullstack {
     project.orientation = 'portrait';
     project.scope = '/';
     project.root = '/';
-    project.icons = {'72': '/icon-72x72.png'};
+    project.icons = {
+      '72': '/icon-72x72.png',
+      '144': '/icon-144x144.png'
+    };
     project.favicon = '/favicon-96x96.png';
     project.disallow = ['/admin'];
     project.sitemap = true;

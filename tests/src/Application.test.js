@@ -9,7 +9,12 @@ beforeAll(async () => {
 });
 
 test('the application is running', async () => {
-  await page.goto('http://localhost:5000');
+  const response = await page.goto('http://localhost:5000');
+  const status = response.status();
+  expect(status).toBe(200);
+});
+
+test('the static start function runs on startup', async () => {
   const h1 = await page.$('h1');
   const text = await page.evaluate(element => element.innerText, h1);
   expect(text).toMatch('Nullstack Tests');

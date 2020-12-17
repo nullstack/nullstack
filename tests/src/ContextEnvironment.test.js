@@ -11,7 +11,7 @@ beforeAll(async () => {
 
 describe('ContextEnvironment', () => {
 
-  test('is part of the client environment', async () => {
+  test('is part of the client context', async () => {
     const element = await page.$('[data-environment]');
     expect(element).toBeTruthy();
   });

@@ -30,7 +30,7 @@ describe('ContextLoading', () => {
 
   test('removes the key with the function name after it requests', async () => {
     await page.click('button');
-    await page.waitForTimeout(3500);
+    await page.waitForTimeout(1500);
     const element = await page.$('[data-loading-function]');
     expect(element).toBeFalsy();
   });

@@ -22,7 +22,7 @@ describe('ContextProject', () => {
   });
 
   test('has a name key', async () => {
-    const element = await page.$('[data-name="Nullstack"]');
+    const element = await page.$('[data-name="Nullstack Tests"]');
     expect(element).toBeTruthy();
   });
 
