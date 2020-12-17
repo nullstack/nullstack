@@ -12,6 +12,7 @@ import ContextEnvironment from './ContextEnvironment';
 import ContextLoading from './ContextLoading';
 import ContextWorker from './ContextWorker';
 import InstanceKey from './InstanceKey';
+import RoutesAndParams from './RoutesAndParams';
 
 class Application extends Nullstack {
 
@@ -39,6 +40,7 @@ class Application extends Nullstack {
         <ContextLoading route="/context-loading" />
         <ContextWorker route="/context-worker" />
         <InstanceKey route="/instance-key" />
+        <RoutesAndParams route="/routes-and-params/*" />
       </main>
     )
   }

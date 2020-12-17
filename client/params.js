@@ -13,6 +13,8 @@ const paramsProxyHandler = {
     return true;
   },
   get(target, name) {
+    if(target[name] === false) return false;
+    if(segments[name] === false) return false;
     return target[name] || segments[name] || '';
   }
 }
