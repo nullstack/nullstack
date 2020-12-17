@@ -2,4 +2,8 @@ import {proxyConfigurable} from './configurable';
 
 const settings = {};
 
-export default proxyConfigurable(settings, 'SETTINGS');
+const {proxy, loader} = proxyConfigurable(settings, 'SETTINGS');
+
+export const loadSettings = loader;
+
+export default proxy;

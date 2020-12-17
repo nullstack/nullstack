@@ -80,6 +80,11 @@ describe('RenderableComponent', () => {
     expect(type).toBe(8);
   });
 
+  test('render only components are optimized into static functions', async () => {
+    const element = await page.$('[data-name="RenderableComponent"]');
+    expect(element).toBeTruthy();
+  });
+
 });
 
 describe('RenderableComponent ?condition=true', () => {

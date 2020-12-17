@@ -47,6 +47,7 @@ class RenderableComponent extends Nullstack {
         <a params={{condition: true}} class="true-condition"> long list </a>
         <div data-condition={!!params.condition} />
         <div data-short-list={!!params.shortList} />
+        <div data-name={this.name} />
       </div>
     )
   }
