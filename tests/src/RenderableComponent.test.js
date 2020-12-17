@@ -1,15 +1,19 @@
 const puppeteer = require('puppeteer');
 
 let browser;
-let page;
 
 beforeAll(async () => {
   browser = await puppeteer.launch();
-  page = await browser.newPage();
-  await page.goto('http://localhost:5000/renderable-component');
 });
 
-describe('RenderableComponent [condition=false]', () => {
+describe('RenderableComponent', () => {
+
+  let page;
+
+  beforeAll(async () => {
+    page = await browser.newPage();
+    await page.goto('http://localhost:5000/renderable-component');
+  });
 
   test('elements are being rendered', async () => {
     const element = await page.$('.RenderableComponent');
@@ -78,11 +82,15 @@ describe('RenderableComponent [condition=false]', () => {
 
 });
 
-describe('RenderableComponent [condition=true]', () => {
+describe('RenderableComponent ?condition=true', () => {
+
+  let page;
 
   beforeAll(async () => {
-    await page.click('.transform');
-    await page.waitForSelector('.condition');
+    page = await browser.newPage();
+    await page.goto('http://localhost:5000/renderable-component');
+    await page.click('.true-condition');
+    await page.waitForSelector('[data-condition]');
   });
 
   test('elements are being conditionally rendered', async () => {
@@ -95,14 +103,27 @@ describe('RenderableComponent [condition=true]', () => {
     expect(element).toBeTruthy();
   });
 
-  test('lists are being updated', async () => {
-    const element = await page.$$('li');
-    expect(element.length).toBe(3);
-  });
-
   test('element tag is being conditionally updated', async () => {
     const element = await page.$('div.element');
     expect(element).toBeTruthy();
+  });
+
+});
+
+describe('RenderableComponent ?shortList=true', () => {
+
+  let page;
+
+  beforeAll(async () => {
+    page = await browser.newPage();
+    await page.goto('http://localhost:5000/renderable-component');
+    await page.click('.short-list');
+    await page.waitForSelector('[data-short-list]');
+  });
+
+  test('lists are being updated', async () => {
+    const element = await page.$$('li');
+    expect(element.length).toBe(3);
   });
 
 });

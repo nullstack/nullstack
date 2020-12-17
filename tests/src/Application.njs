@@ -4,6 +4,8 @@ import StatefulComponent from './StatefulComponent.njs';
 import FullStackLifecycle from './FullStackLifecycle';
 import InstanceSelf from './InstanceSelf';
 import ContextProject from './ContextProject';
+import ServerFunctions from './ServerFunctions';
+import Context from './Context';
 
 class Application extends Nullstack {
 
@@ -20,6 +22,8 @@ class Application extends Nullstack {
         <FullStackLifecycle route="/full-stack-lifecycle" />
         <InstanceSelf route="/instance-self" />
         <ContextProject route="/context-project" />
+        <ServerFunctions route="/server-functions" />
+        <Context route="/context" />
       </main>
     )
   }
