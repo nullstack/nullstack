@@ -65,7 +65,7 @@ describe('RoutesAndParams /routes-and-params/a', () => {
     expect(element).toBeTruthy();  
   });
 
-  test('a custom event is triggered when url changes', async () => {
+  test('a custom event is triggered when the url changes', async () => {
     const element = await page.$('[data-event-triggered]');
     expect(element).toBeTruthy();  
   });
