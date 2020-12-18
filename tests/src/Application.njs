@@ -14,6 +14,7 @@ import ContextWorker from './ContextWorker';
 import InstanceKey from './InstanceKey';
 import RoutesAndParams from './RoutesAndParams';
 import ContextPage from './ContextPage';
+import TwoWayBindings from './TwoWayBindings';
 
 class Application extends Nullstack {
 
@@ -43,6 +44,7 @@ class Application extends Nullstack {
         <InstanceKey route="/instance-key" />
         <RoutesAndParams route="/routes-and-params/*" />
         <ContextPage route="/context-page" />
+        <TwoWayBindings route="/two-way-bindings" />
       </main>
     )
   }

@@ -16,7 +16,7 @@ export default async function render(node, depth, scope) {
     } else {
       node.attributes.value = target[node.attributes.bind];
     }
-    node.attributes.name = node.attributes.bind;
+    node.attributes.name = node.attributes.name || node.attributes.bind;
   }
   if(isRoutable(node)) {
     const routeDepth = depth.slice(0,-1).join('.');

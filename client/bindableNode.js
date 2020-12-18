@@ -11,7 +11,7 @@ export default function bindableNode(node) {
     } else {
       node.attributes.value = target[node.attributes.bind];
     }
-    node.attributes.name = node.attributes.bind;
+    node.attributes.name = node.attributes.name || node.attributes.bind;
     let eventName = 'oninput';
     let valueName = 'value';
     if(node.attributes.type === 'checkbox' || node.attributes.type === 'radio') {
