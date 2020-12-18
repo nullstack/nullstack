@@ -12,7 +12,7 @@ describe('RoutesAndParams /routes-and-params', () => {
 
   beforeAll(async () => {
     page = await browser.newPage();
-    await page.goto('http://localhost:5000/routes-and-params');
+    await page.goto('http://localhost:6969/routes-and-params');
   });
 
   test('is part of the client environment', async () => {
@@ -55,7 +55,7 @@ describe('RoutesAndParams /routes-and-params/a', () => {
 
   beforeAll(async () => {
     page = await browser.newPage();
-    await page.goto('http://localhost:5000/routes-and-params');
+    await page.goto('http://localhost:6969/routes-and-params');
     await page.click('[href="/routes-and-params/a"]');
     await page.waitForSelector('[data-a]');
   });
@@ -78,7 +78,7 @@ describe('RoutesAndParams /routes-and-params/?boolean=true', () => {
 
   beforeAll(async () => {
     page = await browser.newPage();
-    await page.goto('http://localhost:5000/routes-and-params/?boolean=true');
+    await page.goto('http://localhost:6969/routes-and-params/?boolean=true');
   });
 
   test('params with value of true are converted to boolean', async () => {
@@ -109,7 +109,7 @@ describe('RoutesAndParams /routes-and-params?boolean=false', () => {
 
   beforeAll(async () => {
     page = await browser.newPage();
-    await page.goto('http://localhost:5000/routes-and-params?boolean=false');
+    await page.goto('http://localhost:6969/routes-and-params?boolean=false');
   });
 
   test('params with value of false are converted to boolean', async () => {
@@ -125,7 +125,7 @@ describe('RoutesAndParams /routes-and-params/c', () => {
 
   beforeAll(async () => {
     page = await browser.newPage();
-    await page.goto('http://localhost:5000/routes-and-params/c');
+    await page.goto('http://localhost:6969/routes-and-params/c');
   });
 
   test('wildcards are matched last', async () => {
@@ -146,7 +146,7 @@ describe('RoutesAndParams /routes-and-params/c', () => {
 
   beforeAll(async () => {
     page = await browser.newPage();
-    await page.goto('http://localhost:5000/routes-and-params/c/a');
+    await page.goto('http://localhost:6969/routes-and-params/c/a');
   });
 
   test('wildcards can be prefixed', async () => {

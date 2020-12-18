@@ -41,7 +41,7 @@ class ServerFunctions extends Nullstack {
   }
 
   static async useFetchInNode() {
-    const response = await fetch('http://localhost:5000/robots.txt');
+    const response = await fetch('http://localhost:6969/robots.txt');
     const text = await response.text();
     return text.split(`\n`)[0].trim();
   }

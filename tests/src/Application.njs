@@ -15,6 +15,7 @@ import InstanceKey from './InstanceKey';
 import RoutesAndParams from './RoutesAndParams';
 import ContextPage from './ContextPage';
 import TwoWayBindings from './TwoWayBindings';
+import ServerRequestAndResponse from './ServerRequestAndResponse';
 
 class Application extends Nullstack {
 
@@ -23,6 +24,7 @@ class Application extends Nullstack {
     ContextSecrets.start(context);
     ContextSettings.start(context);
     ContextWorker.start(context);
+    ServerRequestAndResponse.start(context);
   }
 
   render({project}) {
@@ -45,6 +47,7 @@ class Application extends Nullstack {
         <RoutesAndParams route="/routes-and-params/*" />
         <ContextPage route="/context-page" />
         <TwoWayBindings route="/two-way-bindings" />
+        <ServerRequestAndResponse route="/server-request-and-response" />
       </main>
     )
   }

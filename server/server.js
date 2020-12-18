@@ -26,7 +26,7 @@ const app = express();
 const server = http.createServer(app);
 server.port = 5000;
 
-for(const methodName of ['use','set', 'delete','get','head','options','patch','post','put']) {
+for(const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'post', 'put']) {
   server[methodName] = function() {
     app[methodName](...arguments);
   }

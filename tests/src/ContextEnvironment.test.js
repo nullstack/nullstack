@@ -6,7 +6,7 @@ let page;
 beforeAll(async () => {
   browser = await puppeteer.launch();
   page = await browser.newPage();
-  await page.goto('http://localhost:5000/context-environment');
+  await page.goto('http://localhost:6969/context-environment');
 });
 
 describe('ContextEnvironment', () => {

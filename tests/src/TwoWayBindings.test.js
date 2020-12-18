@@ -6,7 +6,7 @@ let page;
 beforeAll(async () => {
   browser = await puppeteer.launch();
   page = await browser.newPage();
-  await page.goto('http://localhost:5000/two-way-bindings?page=1');
+  await page.goto('http://localhost:6969/two-way-bindings?page=1');
 });
 
 describe('ContextPage', () => {
@@ -85,6 +85,8 @@ describe('ContextPage', () => {
     const element = await page.$('[data-character="b"]');
     expect(element).toBeTruthy();
   });
+
+  // test extra params bringHappiness
 
 });
 

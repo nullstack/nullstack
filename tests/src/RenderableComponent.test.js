@@ -12,7 +12,7 @@ describe('RenderableComponent', () => {
 
   beforeAll(async () => {
     page = await browser.newPage();
-    await page.goto('http://localhost:5000/renderable-component');
+    await page.goto('http://localhost:6969/renderable-component');
   });
 
   test('elements are being rendered', async () => {
@@ -93,9 +93,14 @@ describe('RenderableComponent ?condition=true', () => {
 
   beforeAll(async () => {
     page = await browser.newPage();
-    await page.goto('http://localhost:5000/renderable-component');
+    await page.goto('http://localhost:6969/renderable-component');
     await page.click('.true-condition');
     await page.waitForSelector('[data-condition]');
+  });
+
+  test('boolean attributes that have a true value should be empty', async () => {
+    const value = await page.$eval('[data-condition]', (element) => element.getAttribute('data-condition'));
+    expect(value).toBeFalsy();
   });
 
   test('elements are being conditionally rendered', async () => {
@@ -121,7 +126,7 @@ describe('RenderableComponent ?shortList=true', () => {
 
   beforeAll(async () => {
     page = await browser.newPage();
-    await page.goto('http://localhost:5000/renderable-component');
+    await page.goto('http://localhost:6969/renderable-component');
     await page.click('.short-list');
     await page.waitForSelector('[data-short-list]');
   });

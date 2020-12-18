@@ -9,7 +9,7 @@ beforeAll(async () => {
 });
 
 test('the application is running', async () => {
-  const response = await page.goto('http://localhost:5000');
+  const response = await page.goto('http://localhost:6969');
   const status = response.status();
   expect(status).toBe(200);
 });

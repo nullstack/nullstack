@@ -12,7 +12,7 @@ describe('ContextProject', () => {
 
   beforeAll(async () => {
     page = await browser.newPage();
-    await page.goto('http://localhost:5000/context-project');
+    await page.goto('http://localhost:6969/context-project');
     await page.waitForSelector('[data-project]');
   });
 
@@ -110,7 +110,7 @@ describe('robots.txt', () => {
   
   beforeAll(async () => {
     page = await browser.newPage();
-    await page.goto('http://localhost:5000/robots.txt');
+    await page.goto('http://localhost:6969/robots.txt');
     text = await page.evaluate(() => document.body.innerHTML);
   });
 
