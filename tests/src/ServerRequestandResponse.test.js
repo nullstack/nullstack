@@ -20,7 +20,7 @@ describe('ServerRequestAndResponse', () => {
   test('server accepts use of middlewares', async () => {
     const response = await page.goto('http://localhost:6969/api');
     const status = response.status();
-    expect(status).toBe(200);
+    expect([200, 304]).toContain(status);
   });
 
   test('server accepts GET routes', async () => {

@@ -19,7 +19,9 @@ const paramsProxyHandler = {
   }
 }
 
-const params = {};
+const params = {...window.params};
+
+delete window.params;
 
 const proxy = new Proxy(params, paramsProxyHandler);
 

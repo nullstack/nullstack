@@ -42,6 +42,7 @@ class ContextProject extends Nullstack {
         <div data-disallow={!!project.disallow} />
         <div data-disallow-admin={project.disallow[0]} />
         <div data-sitemap={project.sitemap} />
+        <div data-cdn={project.cdn} />
       </div>
     )
   }

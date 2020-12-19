@@ -2,6 +2,12 @@ import client from './client';
 
 const context = {};
 
+for(const [key, value] of Object.entries(window.context)) {
+  context[key] = value;
+}
+
+delete window.context;
+
 const contextProxyHandler = {
   set(target, name, value) {
     context[name] = value;

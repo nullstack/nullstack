@@ -17,6 +17,7 @@ import ContextPage from './ContextPage';
 import TwoWayBindings from './TwoWayBindings';
 import ServerRequestAndResponse from './ServerRequestAndResponse';
 import ErrorPage from './ErrorPage';
+import './Application.css';
 
 class Application extends Nullstack {
 

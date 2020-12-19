@@ -2,7 +2,6 @@ import express from 'express';
 import http from 'http';
 import path from 'path';
 import bodyParser from 'body-parser';
-import {existsSync} from 'fs';
 import fetch from 'node-fetch';
 
 import deserialize from '../shared/deserialize';
@@ -32,8 +31,6 @@ for(const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'po
     app[methodName](...arguments);
   }
 }
-
-const hasStyle = existsSync(path.join(__dirname, 'client.css'));
 
 server.start = function() {
 
@@ -97,10 +94,11 @@ server.start = function() {
     if(request.originalUrl.split('?')[0].indexOf('.') > -1) {
       return next();
     }
-    const renderable = await prerender(request, response);
+    const scope = await prerender(request, response);
     if(!response.headersSent) {
-      const html = template(renderable, hasStyle);
-      response.status(renderable.page.status).send(html);
+      const status = scope.context.page.status;
+      const html = template(scope);
+      response.status(status).send(html);
     }
   });
 

@@ -2,19 +2,20 @@ import extractLocation from '../shared/extractLocation';
 
 export default class Router {
 
-  constructor(scope) {
-    this.scope = scope;
+  constructor(request, response) {
+    this.request = request;
+    this.response = response;
   }
 
   _redirect(target) {
-    if(!this.scope.response.headersSent) {
+    if(!this.response.headersSent) {
       const {url} = extractLocation(target);
-      this.scope.response.redirect(url);
+      this.response.redirect(url);
     }
   }
 
   get url() {
-    return extractLocation(this.scope.request.originalUrl).url;
+    return extractLocation(this.request.originalUrl).url;
   }
 
   set url(target) {
@@ -22,11 +23,11 @@ export default class Router {
   }
 
   get path() {
-    return extractLocation(this.scope.request.path).path;
+    return extractLocation(this.request.path).path;
   }
 
   set path(target) {
-    const {search} = extractLocation(this.scope.request.originalUrl);
+    const {search} = extractLocation(this.request.originalUrl);
     if(search) {
       this._redirect(target+'?'+search);
     } else {

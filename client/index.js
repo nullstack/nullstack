@@ -11,12 +11,15 @@ import params, {updateParams} from './params';
 import loading from './loading';
 import settings from './settings';
 import worker from './worker';
+import project from './project';
 
 context.page = page;
 context.router = router;
 context.loading = loading;
 context.settings = settings;
 context.worker = worker;
+context.params = params;
+context.project = project;
 
 export default class Nullstack {
 
@@ -27,12 +30,6 @@ export default class Nullstack {
     window.addEventListener('popstate', () => {
       router._popState();
     });
-    for(const [key, value] of Object.entries(window.context)) {
-      context[key] = value;
-    }
-    context.params = params;
-    Object.freeze(context.project);
-    delete window.context;
     client.routes = {};
     updateParams(router.url);
     client.currentInstance = null;

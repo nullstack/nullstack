@@ -20,7 +20,6 @@ class Router {
 
   async _popState() {
     const {url} = extractLocation(window.location.pathname+window.location.search);
-    console.log(url);
     await this._update(url, false);
   }
 

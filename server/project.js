@@ -13,6 +13,7 @@ project.favicon = "/favicon-96x96.png";
 project.icons = {};
 project.disallow = [];
 project.sitemap = environment.static;
+project.cdn = '';
 
 const publicFiles = readdirSync(path.join(__dirname, '..', 'public'));
 

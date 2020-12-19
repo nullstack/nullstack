@@ -20,6 +20,11 @@ test('the static start function runs on startup', async () => {
   expect(text).toMatch('Nullstack Tests');
 });
 
+test('a stylesheet is generated if css is imported', async () => {
+  const element = await page.$('[rel="stylesheet"]');
+  expect(element).toBeTruthy();
+});
+
 afterAll(async () => {
   browser.close();
 });

@@ -41,6 +41,11 @@ describe('ContextProject', () => {
     expect(element).toBeTruthy();
   });
 
+  test('has a cdn key', async () => {
+    const element = await page.$('[data-cdn]');
+    expect(element).toBeTruthy();
+  });
+
   test('has a backgroundColor key', async () => {
     const element = await page.$('[data-background-color="#d22365"]');
     expect(element).toBeTruthy();

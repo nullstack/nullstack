@@ -20,17 +20,6 @@ describe('ContextWorker', () => {
     expect(element).toBeFalsy();
   });
 
-});
-
-describe('ContextWorker', () => {
-
-  let page;
-
-  beforeAll(async () => {
-    page = await browser.newPage();
-    await page.goto('http://localhost:6969/context-worker');
-  });
-
   test('is part of the client context', async () => {
     const element = await page.$('[data-worker]');
     expect(element).toBeTruthy();
@@ -43,13 +32,6 @@ describe('ContextWorker', () => {
 
   test('has an online key', async () => {
     const element = await page.$('[data-online]');
-    expect(element).toBeTruthy();
-  });
-
-  test('fetching is set to true when the worker is fetching', async () => {
-    await page.click('button');
-    await page.waitForSelector('[data-fetching]');
-    const element = await page.$('[data-fetching]');
     expect(element).toBeTruthy();
   });
 
@@ -87,6 +69,24 @@ describe('ContextWorker', () => {
     expect(element).toBeTruthy();
   });
   */
+
+});
+
+describe('ContextWorker', () => {
+
+  let page;
+
+  beforeAll(async () => {
+    page = await browser.newPage();
+    await page.goto('http://localhost:6969/context-worker');
+  });
+
+  test('fetching is set to true when the worker is fetching', async () => {
+    await page.click('button');
+    await page.waitForSelector('[data-fetching]');
+    const element = await page.$('[data-fetching]');
+    expect(element).toBeTruthy();
+  });
 
 });
 
