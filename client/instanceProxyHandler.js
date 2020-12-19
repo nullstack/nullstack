@@ -16,6 +16,7 @@ const instanceProxyHandler = {
         try {
           const response = await fetch(url, {
             method: 'POST',
+            headers: worker.headers,
             mode: 'cors',
             cache: 'no-cache',
             credentials: 'same-origin',

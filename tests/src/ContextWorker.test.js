@@ -59,6 +59,12 @@ describe('ContextWorker', () => {
     expect(element).toBeTruthy();
   });
 
+  test('headers can be customized', async () => {
+    await page.waitForSelector('[data-header="custom"]');
+    const element = await page.$('[data-header="custom"]');
+    expect(element).toBeTruthy();
+  });
+
   /* TODO - beforeinstallationprompt is not firing in puppeteer
   test('installation prompt is available as the installation key', async () => {
     await page.waitForSelector('[data-installation="BeforeInstallPromptEvent"]');

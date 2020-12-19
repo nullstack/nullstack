@@ -11,7 +11,6 @@ class ContextSecrets extends Nullstack {
   }
 
   static async leakSecrets({secrets}) {
-    console.log(secrets);
     return secrets;
   }
 

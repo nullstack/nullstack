@@ -59,6 +59,7 @@ function server(env, argv) {
     new NodemonPlugin({
       watch: path.resolve('./.development'),
       script: './.development/server.js',
+      nodeArgs: ['--enable-source-maps'],
     })
   ]) : undefined;
   return {

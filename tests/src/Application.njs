@@ -16,6 +16,7 @@ import RoutesAndParams from './RoutesAndParams';
 import ContextPage from './ContextPage';
 import TwoWayBindings from './TwoWayBindings';
 import ServerRequestAndResponse from './ServerRequestAndResponse';
+import ErrorPage from './ErrorPage';
 
 class Application extends Nullstack {
 
@@ -27,10 +28,11 @@ class Application extends Nullstack {
     ServerRequestAndResponse.start(context);
   }
 
-  render({project}) {
+  render({project, page}) {
     return (
       <main>
         <h1> {project.name} </h1>
+        {page.status !== 200 && <div route="*" data-page-status={page.status}></div>}
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
         <FullStackLifecycle route="/full-stack-lifecycle" />
@@ -48,6 +50,7 @@ class Application extends Nullstack {
         <ContextPage route="/context-page" />
         <TwoWayBindings route="/two-way-bindings" />
         <ServerRequestAndResponse route="/server-request-and-response" />
+        <ErrorPage route="/error-page" />
       </main>
     )
   }

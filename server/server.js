@@ -17,6 +17,7 @@ import files from './files';
 import worker, {generateServiceWorker} from './worker';
 import generateRobots from './robots';
 import prefix from '../shared/prefix';
+import printError from './printError';
 
 if (!global.fetch) {
   global.fetch = fetch;
@@ -79,9 +80,14 @@ server.start = function() {
     const key = `${klassName}.${methodName}`;
     const method = registry[key];
     if(method !== undefined) {
-      const context = generateContext({request, response, ...args});
-      const result = await method(context);
-      response.json({result});
+      try {
+        const context = generateContext({request, response, ...args});
+        const result = await method(context);
+        response.json({result});
+      } catch(error) {
+        printError(error);
+        response.status(500).json({});
+      }
     } else {
       response.status(404).json({});
     }
@@ -94,7 +100,7 @@ server.start = function() {
     const renderable = await prerender(request, response);
     if(!response.headersSent) {
       const html = template(renderable, hasStyle);
-      response.send(html);
+      response.status(renderable.page.status).send(html);
     }
   });
 

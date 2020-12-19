@@ -6,6 +6,8 @@ function sleep(ms) {
 
 class ContextWorker extends Nullstack {
 
+  header = '';
+
   static async serverFunctionName() {
     await sleep(1000);
   }
@@ -18,11 +20,21 @@ class ContextWorker extends Nullstack {
     worker.enabled = true;
     worker.preload = ['/context-worker'];
   }
+
+  static async inspectHeaders({request}) {
+    return request.headers.custom;
+  }
+
+  async hydrate({worker}) {
+    worker.headers.custom = 'custom';
+    this.header = await this.inspectHeaders();
+  }
   
   render({worker}) {
     return (
       <div> 
         <button onclick={this.invokeServerFunction}> Invoke </button>
+        <div data-header={this.header} />
         <div data-worker={!!worker} />
         <div data-enabled={worker.enabled} />
         <div data-online={worker.online} />
