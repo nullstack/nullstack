@@ -26,7 +26,6 @@ class Router {
 
   async _update(target, push) {
     const {url} = extractLocation(target);
-    console.log('a',  url);
     clearTimeout(redirectTimer);
     redirectTimer = setTimeout(async () => {
       page.status = 200;

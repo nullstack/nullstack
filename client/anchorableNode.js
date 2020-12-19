@@ -21,7 +21,7 @@ export function anchorableElement(element) {
   for(const link of links) {
     link.onclick = (event) => {
       event.preventDefault();
-      router.url = link.href;
+      router.url = link.getAttribute('href');
     };
   }
 }

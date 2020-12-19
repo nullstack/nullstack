@@ -51,7 +51,7 @@ describe('RenderableComponent', () => {
   });
 
   test('elements accept an html attribute', async () => {
-    const element = await page.$('a[href="https://nullstack.app"]');
+    const element = await page.$('a[href="/"]');
     expect(element).toBeTruthy();
   });
 

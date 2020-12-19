@@ -1,19 +1,34 @@
 const puppeteer = require('puppeteer');
 
 let browser;
-let page;
 
 beforeAll(async () => {
   browser = await puppeteer.launch();
-  page = await browser.newPage();
-  await page.goto('http://localhost:6969/context-worker');
 });
 
 describe('ContextWorker', () => {
 
+  let page;
+
+  beforeAll(async () => {
+    page = await browser.newPage();
+    await page.goto('http://localhost:6969/context-worker');
+  });
+
   test('fetching is set to false when the worker is idle', async () => {
     const element = await page.$('[data-fetching]');
     expect(element).toBeFalsy();
+  });
+
+});
+
+describe('ContextWorker', () => {
+
+  let page;
+
+  beforeAll(async () => {
+    page = await browser.newPage();
+    await page.goto('http://localhost:6969/context-worker');
   });
 
   test('is part of the client context', async () => {

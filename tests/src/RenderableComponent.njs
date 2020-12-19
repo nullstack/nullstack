@@ -17,7 +17,7 @@ class RenderableComponent extends Nullstack {
   
   render({params}) {
     const list = params.shortList ? [1,2,3] : [1, 2, 3, 4, 5, 6]
-    const html = '<a href="https://nullstack.app"> Nullstack </a>';
+    const html = '<a href="/"> Nullstack </a>';
     return (
       <div class="RenderableComponent">
         <Falsy />
