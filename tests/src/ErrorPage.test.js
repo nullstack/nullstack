@@ -32,6 +32,14 @@ describe('ErrorPage', () => {
     expect(element).toBeTruthy();
   });
 
+  test('the offline template should always have a 200 status', async () => {
+    await page.goto('http://localhost:6969');
+    const link = await page.$eval('a', (element) => element.href);
+    const response = await page.goto(link);
+    const status = response.status();
+    expect([200, 304]).toContain(status);
+  });
+
 });
 
 afterAll(async () => {

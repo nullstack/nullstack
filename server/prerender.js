@@ -35,6 +35,9 @@ export async function prerender(request, response) {
   let body = '';
   try {
     body = await render(generator.starter(), [0], scope);
+    if(!online) {
+      page.status = 200;
+    }
   } catch(error) {
     printError(error);
     page.status = 500;

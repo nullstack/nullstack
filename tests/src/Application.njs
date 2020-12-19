@@ -28,11 +28,12 @@ class Application extends Nullstack {
     ServerRequestAndResponse.start(context);
   }
 
-  render({project, page}) {
+  render({project, page, environment}) {
     return (
       <main>
         <h1> {project.name} </h1>
         {page.status !== 200 && <div route="*" data-page-status={page.status}></div>}
+        <a href={`/offline-${environment.key}`} route="/"> offline </a>
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
         <FullStackLifecycle route="/full-stack-lifecycle" />
@@ -50,7 +51,7 @@ class Application extends Nullstack {
         <ContextPage route="/context-page" />
         <TwoWayBindings route="/two-way-bindings" />
         <ServerRequestAndResponse route="/server-request-and-response" />
-        <ErrorPage route="/error-page" />
+        <ErrorPage route="*" />
       </main>
     )
   }

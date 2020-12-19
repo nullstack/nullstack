@@ -11,6 +11,11 @@ beforeAll(async () => {
 
 describe('ContextWorker', () => {
 
+  test('fetching is set to false when the worker is idle', async () => {
+    const element = await page.$('[data-fetching]');
+    expect(element).toBeFalsy();
+  });
+
   test('is part of the client context', async () => {
     const element = await page.$('[data-worker]');
     expect(element).toBeTruthy();
@@ -24,11 +29,6 @@ describe('ContextWorker', () => {
   test('has an online key', async () => {
     const element = await page.$('[data-online]');
     expect(element).toBeTruthy();
-  });
-
-  test('fetching is set to false when the worker is idle', async () => {
-    const element = await page.$('[data-fetching]');
-    expect(element).toBeFalsy();
   });
 
   test('fetching is set to true when the worker is fetching', async () => {
