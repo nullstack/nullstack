@@ -14,9 +14,22 @@ class Router {
 
   _changed = false
 
-  async _update(url, push) {
+  constructor() {
+    this._url = extractLocation(window.location.pathname+window.location.search).url;
+  }
+
+  async _popState() {
+    const {url} = extractLocation(window.location.pathname+window.location.search);
+    console.log(url);
+    await this._update(url, false);
+  }
+
+  async _update(target, push) {
+    const {url} = extractLocation(target);
+    console.log('a',  url);
     clearTimeout(redirectTimer);
     redirectTimer = setTimeout(async () => {
+      page.status = 200;
       if(environment.static) {
         worker.fetching = true;
         const api = '/index.json';
@@ -37,10 +50,11 @@ class Router {
       if(push) {
         history.pushState({}, document.title, url);
       }
+      this._url = url;
+      this._changed = true;
       updateParams(url);
       client.update();
       windowEvent('router');
-      this._changed = true;
     }, 0);
   }
 
@@ -53,7 +67,7 @@ class Router {
   }
 
   get url() {
-    return extractLocation(window.location.pathname+window.location.search).url;
+    return this._url;
   }
 
   set url(target) {
@@ -61,7 +75,7 @@ class Router {
   }
 
   get path() {
-    return extractLocation(window.location.pathname).path;
+    return extractLocation(this._url).path;
   }
 
   set path(target) {
