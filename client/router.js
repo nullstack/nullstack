@@ -10,6 +10,8 @@ let redirectTimer = null;
 
 class Router {
 
+  event = 'nullstack.router';
+
   _changed = false
 
   async _update(url, push) {
@@ -37,7 +39,7 @@ class Router {
       }
       updateParams(url);
       client.update();
-      windowEvent('router.url');
+      windowEvent('router');
       this._changed = true;
     }, 0);
   }

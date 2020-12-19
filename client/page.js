@@ -1,6 +1,13 @@
 import client from './client';
 import windowEvent from './windowEvent';
 
+const page = {
+  ...window.page,
+  event: 'nullstack.page'
+}
+
+delete window.page;
+
 const pageProxyHandler = {
   set(target, name, value) {
     if(name === 'title') {
@@ -8,15 +15,13 @@ const pageProxyHandler = {
     }
     const result = Reflect.set(...arguments);
     if(name === 'title') {
-      windowEvent('page.title');
+      windowEvent('page');
     }
     client.update();
     return result;
   }
 }
 
-const page = new Proxy({...window.page}, pageProxyHandler);
+const proxy = new Proxy(page, pageProxyHandler);
 
-delete window.page;
-
-export default page;
+export default proxy;

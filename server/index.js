@@ -8,8 +8,8 @@ import element from '../shared/element';
 import instanceProxyHandler from './instanceProxyHandler';
 import project from './project';
 import environment from './environment';
-import settings from './settings';
-import secrets from './secrets';
+import settings, {loadSettings} from './settings';
+import secrets, {loadSecrets} from './secrets';
 import {freezeConfigurable} from './configurable';
 import worker from './worker';
 
@@ -28,6 +28,8 @@ class Nullstack {
   static async start(Starter) {
     if(this.name.indexOf('Nullstack') > -1) {
       generator.starter = () => element(Starter);
+      loadSettings();
+      loadSecrets();
       typeof(Starter.start) === 'function' && await Starter.start(context);
       freezeConfigurable(settings);
       freezeConfigurable(secrets);

@@ -149,9 +149,7 @@ export default function rerender(parent, depth, vdepth) {
           delete client.events[key];
         }
       } else if(typeof(next.attributes[name]) !== 'function' && typeof(next.attributes[name]) !== 'object') {
-        if(current.attributes[name] === undefined && next.attributes[name] !== undefined) {
-          selector.setAttribute(name, next.attributes[name]);
-        } else if(current.attributes[name] !== undefined && next.attributes[name] === undefined) {
+        if(current.attributes[name] !== undefined && next.attributes[name] === undefined) {
           selector.removeAttribute(name);
         } else if(current.attributes[name] !== next.attributes[name]) {
           if(name != 'value' && next.attributes[name] === false || next.attributes[name] === null || next.attributes[name] === undefined) {

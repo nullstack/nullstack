@@ -1,4 +1,4 @@
-import {isParameterizable} from 'nullstack/shared/nodes';
+import {isParameterizable} from './nodes';
 
 import serializeParam from '../shared/serializeParam';
 import serializeSearch from '../shared/serializeSearch';

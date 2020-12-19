@@ -1,3 +1,5 @@
+import client from './client';
+
 export default function objectEvent(node) {
   for(const attribute in node.attributes) {
     if(attribute.startsWith('on') && typeof(node.attributes[attribute]) === 'object') {
@@ -7,6 +9,7 @@ export default function objectEvent(node) {
         for(const key in keys) {
           target[key] = keys[key];
         }
+        client.update();
       }).bind(target);
     }
   }

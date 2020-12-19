@@ -9,6 +9,7 @@ const instanceProxyHandler = {
         const context = generateContext({request, response, ...params});
         return await target.constructor[name](context);
       }
+      Object.defineProperty(detour, 'name', {value: name});
       target[name] = detour;
     } else if(typeof(target[name]) == 'function') {
       return (args) => {

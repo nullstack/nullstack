@@ -1,0 +1,56 @@
+const puppeteer = require('puppeteer');
+
+let browser;
+let page;
+
+beforeAll(async () => {
+  browser = await puppeteer.launch();
+  page = await browser.newPage();
+  await page.goto('http://localhost:6969/stateful-component');
+});
+
+describe('StatefulComponent', () => {
+
+  test('state is being reflected in the dom', async () => {
+    const element = await page.$('[data-count="1"]');
+    expect(element).toBeTruthy();
+  });
+
+  test('state is being reflected in the dom', async () => {
+    const element = await page.$('[data-object-count="0"]');
+    expect(element).toBeTruthy();
+  });
+
+  test('state is being updated by events', async () => {
+    await page.click('.increment-by-one');
+    await page.waitForSelector('[data-count="2"]');
+    const element = await page.$('[data-count="2"]');
+    expect(element).toBeTruthy();
+  });
+
+  test('event attributes are merged into the function context', async () => {
+    await page.click('.increment-by-two');
+    await page.waitForSelector('[data-count="4"]');
+    const element = await page.$('[data-count="4"]');
+    expect(element).toBeTruthy();
+  });
+
+  test('objects can be passed to events', async () => {
+    await page.click('.set-to-one');
+    await page.waitForSelector('[data-count="1"]');
+    const element = await page.$('[data-count="1"]');
+    expect(element).toBeTruthy();
+  });
+
+  test('object events can declare a source', async () => {
+    await page.click('.set-object-to-one');
+    await page.waitForSelector('[data-object-count="1"]');
+    const element = await page.$('[data-object-count="1"]');
+    expect(element).toBeTruthy();
+  });
+
+});
+
+afterAll(async () => {
+  browser.close();
+});

@@ -30,7 +30,7 @@ export default function render(node, depth) {
   }
   if(isClass(node)) {
     const key = node.attributes.key || generateKey([0, ...depth]);
-    const instance = new node.type();
+    const instance = client.instances[key] || new node.type();
     const memory = window.instances[key];
     if(memory) {
       for(const attribute in memory) {
@@ -42,13 +42,13 @@ export default function render(node, depth) {
     }
     instance._events = {};
     instance._attributes = node.attributes;
-    client.instances[key] = instance;
     const context = generateContext(node.attributes);
     instance._context = context;
-    if(!memory) {
+    if(!memory && client.instances[key] == undefined) {
       client.initiationQueue.push(instance);
       instance.prepare && instance.prepare();
     }
+    client.instances[key] = instance;
     const root = instance.render();
     node.children = [root];
     client.renewalQueue.push(instance);

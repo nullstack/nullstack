@@ -25,6 +25,7 @@ const worker = {};
 worker.enabled = environment.production;
 worker.fetching = false;
 worker.preload = [];
+worker.headers = {};
 
 export function generateServiceWorker() {
   const sources = [];

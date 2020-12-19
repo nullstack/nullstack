@@ -1,10 +1,10 @@
-import project from 'nullstack/server/project';
+import project from './project';
 
 export default function generateRobots() {
   const lines = []
   lines.push('User-Agent: *');
   if(!project.disallow.includes('/')) {
-    lines.push('Allow: /');
+    lines.push(`Allow: ${project.root}`);
   }
   for(const path of project.disallow) {
     lines.push(`Disallow: ${path}`);

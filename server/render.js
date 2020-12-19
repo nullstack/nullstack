@@ -16,7 +16,7 @@ export default async function render(node, depth, scope) {
     } else {
       node.attributes.value = target[node.attributes.bind];
     }
-    node.attributes.name = node.attributes.bind;
+    node.attributes.name = node.attributes.name || node.attributes.bind;
   }
   if(isRoutable(node)) {
     const routeDepth = depth.slice(0,-1).join('.');
@@ -50,13 +50,15 @@ export default async function render(node, depth, scope) {
     return await render(node.children[0], [...depth, 0], scope);
   } else if (isClass(node)) {
     const key = node.attributes.key || generateKey(depth);
-    const instance = new node.type(scope);
+    const instance = scope.instances[key] || new node.type(scope);
     instance.attributes = node.attributes;
-    scope.instances[key] = instance;
     instance._attributes = node.attributes;
     instance._scope = scope;
-    instance.prepare && instance.prepare();
-    instance.initiate && await instance.initiate();
+    if(scope.instances[key] === undefined) {
+      instance.prepare && instance.prepare();
+      instance.initiate && await instance.initiate();
+    }
+    scope.instances[key] = instance;
     const root = instance.render();
     node.children = [root];
     node.type = node.type.name;
