@@ -1,6 +1,7 @@
 import {readFileSync, readdirSync} from 'fs';
 import {createHash} from 'crypto';
 import path from 'path';
+import {generateIntegrity} from './integrities';
 
 const files = {};
 
@@ -18,6 +19,12 @@ for(const file of readdirSync(__dirname)) {
 for(const key in files) {
   md5.update(files[key]);
 }
+
+if(files['client.css']) {
+  generateIntegrity('client.css', files['client.css']);
+}
+
+generateIntegrity('client.js', files['client.js']);
 
 files.key = md5.digest("hex");
 

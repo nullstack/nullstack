@@ -106,6 +106,32 @@ describe('ContextProject', () => {
     expect(element).toBeTruthy();
   });
 
+  test('css bundle can use a cdn', async () => {
+    const text = await page.$eval('[rel="stylesheet"]', (element) => element.href);
+    expect(text).toMatch(/localhost:6969/);
+  });
+
+  test('javacript bundle can use a cdn', async () => {
+    const text = await page.$eval('script[integrity]', (element) => element.src);
+    expect(text).toMatch(/localhost:6969/);
+  });
+
+  test('css bundle has integrity', async () => {
+    const text = await page.$eval('[rel="stylesheet"]', (element) => element.integrity);
+    expect(text).toMatch(/sha512/);
+  });
+
+  test('javacript bundle has integrity', async () => {
+    const text = await page.$eval('script[integrity]', (element) => element.integrity);
+    expect(text).toMatch(/sha512/);
+  });
+
+  test('manifest has integrity', async () => {
+    const text = await page.$eval('[rel="manifest"]', (element) => element.integrity);
+    expect(text).toMatch(/sha512/);
+  });
+
+
 });
 
 describe('robots.txt', () => {
@@ -135,7 +161,7 @@ describe('robots.txt', () => {
   });
 
   test('it reflects project.sitemap', async () => {
-    const index = text.indexOf('Sitemap: https://nullstack.app/sitemap.xml')
+    const index = text.indexOf('Sitemap: http://nullstack.app/sitemap.xml')
     expect(index).toBeGreaterThan(-1);
   });
 

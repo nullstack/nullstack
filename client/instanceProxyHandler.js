@@ -4,6 +4,7 @@ import {generateContext} from './context';
 import loading from './loading';
 import worker from './worker';
 import prefix from '../shared/prefix';
+import page from './page';
 
 const instanceProxyHandler = {
   get(target, name) {
@@ -24,10 +25,15 @@ const instanceProxyHandler = {
             referrerPolicy: 'no-referrer',
             body: JSON.stringify(params || {})
           });
-          const text = await response.text();
-          payload = deserialize(text).result;
+          if(response.status !== 200) {
+            page.status = response.status;
+          } else {
+            const text = await response.text();
+            payload = deserialize(text).result;
+          }
           worker.responsive = true;
         } catch(e) {
+          console.log('hey', e);
           worker.responsive = false;
         }
         worker.fetching = false;

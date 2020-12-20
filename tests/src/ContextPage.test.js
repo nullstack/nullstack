@@ -48,7 +48,7 @@ describe('ContextPage', () => {
 
   test('the image key updates the open graph image with an absolute url', async () => {
     const text = await page.$eval('head > meta[property="og:image"]', element => element.content);
-    expect(text).toMatch('https://nullstack.app/image.jpg');
+    expect(text).toMatch('http://localhost:6969/image.jpg');
   });
 
   test('the description key updates the open graph description', async () => {
@@ -63,7 +63,7 @@ describe('ContextPage', () => {
 
   test('the canonical tag is generated if the canonical key is omitted', async () => {
     const text = await page.$eval('head > link[rel="canonical"]', element => element.href);
-    expect(text).toMatch('https://nullstack.app/context-page');
+    expect(text).toMatch('http://nullstack.app/context-page');
   });
 
   test('the schema key generates a json schema', async () => {
@@ -87,6 +87,14 @@ describe('ContextPage', () => {
     const element = await page.$('[data-event-triggered]');
     expect(element).toBeTruthy();  
   });
+
+  test('the page reacts to a server function status', async () => {
+    await page.click('[status="401"]');
+    await page.waitForSelector('[data-page-status="401"]');
+    const element = await page.$('[data-page-status="401"]');
+    expect(element).toBeTruthy();  
+  });
+
 
 });
 

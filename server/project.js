@@ -14,6 +14,7 @@ project.icons = {};
 project.disallow = [];
 project.sitemap = environment.static;
 project.cdn = '';
+project.protocol = environment.development ? 'http' : 'https';
 
 const publicFiles = readdirSync(path.join(__dirname, '..', 'public'));
 

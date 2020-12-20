@@ -34,9 +34,9 @@ for(const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'po
 
 server.start = function() {
 
-  files['manifest.json'] = generateManifest();
-  files['service-worker.js'] = generateServiceWorker();
-  files['robots.txt'] = generateRobots();
+  generateManifest();
+  generateServiceWorker();
+  generateRobots();
 
   app.use(express.static(path.join(__dirname, '..', 'public')));
   app.use(bodyParser.text({limit: server.maximumPayloadSize}));

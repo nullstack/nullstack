@@ -3,6 +3,7 @@ import path from 'path';
 import environment from './environment';
 import project from './project';
 import settings from './settings';
+import files from './files';
 
 import load from '!!raw-loader!../workers/load.js';
 import cacheFirst from '!!raw-loader!../workers/cacheFirst.js';
@@ -60,7 +61,7 @@ export function generateServiceWorker() {
   if(original) {
     sources.push(original);
   }
-  return sources.join(`\n\n`);
+  files['service-worker.js'] = sources.join(`\n\n`);
 }
 
 export default worker;

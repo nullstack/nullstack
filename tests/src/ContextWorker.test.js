@@ -82,6 +82,7 @@ describe('ContextWorker', () => {
   });
 
   test('fetching is set to true when the worker is fetching', async () => {
+    await page.waitForTimeout(1000);
     await page.click('button');
     await page.waitForSelector('[data-fetching]');
     const element = await page.$('[data-fetching]');

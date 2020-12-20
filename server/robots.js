@@ -1,4 +1,5 @@
 import project from './project';
+import files from './files';
 
 export default function generateRobots() {
   const lines = []
@@ -11,12 +12,12 @@ export default function generateRobots() {
   }
   if(project.sitemap) {
     if(project.sitemap === true) {
-      lines.push(`Sitemap: https://${project.domain}/sitemap.xml`);
+      lines.push(`Sitemap: ${project.protocol}://${project.domain}/sitemap.xml`);
     } else if (project.sitemap.indexOf('//') === -1) {
-      lines.push(`Sitemap: https://${project.domain}${project.sitemap}`);
+      lines.push(`Sitemap: ${project.protocol}://${project.domain}${project.sitemap}`);
     } else {
       lines.push(`Sitemap: ${project.sitemap}`);
     }
   }
-  return lines.join(`\n`);
+  files['robots.txt'] = lines.join(`\n`);
 }

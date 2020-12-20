@@ -1,6 +1,9 @@
 import {existsSync, readFileSync} from 'fs';
 import path from 'path';
 import project from './project';
+import {generateIntegrity} from './integrities';
+import files from './files';
+import {cdn} from './links';
 
 export default function generateManifest() {
   const file = path.join(__dirname, '../', 'public', 'manifest.json');
@@ -22,11 +25,13 @@ export default function generateManifest() {
   for(const size in project.icons) {
     const icon = project.icons[size];
     json.icons.push({
-      "src": icon,
+      "src": cdn(icon),
       "sizes": `${size}x${size}`,
       "type": "image/png",
       "purpose": "maskable any"
     });
   }
-  return json;
+  const manifest = JSON.stringify(json);
+  generateIntegrity('manifest.json', manifest);
+  files['manifest.json'] = manifest;
 }

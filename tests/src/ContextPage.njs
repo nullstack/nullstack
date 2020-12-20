@@ -26,6 +26,15 @@ class ContextPage extends Nullstack {
     });
   }
 
+  static async raiseStatus({response, status}) {
+    response.status(401);
+    return status;
+  }
+
+  async requestStatus({status}) {
+    await this.raiseStatus({status});
+  }
+
   render({page}) {
     return (
       <div>
@@ -34,6 +43,7 @@ class ContextPage extends Nullstack {
         <div data-changes={page.changes} />
         <div data-priority={page.priority} />
         <button source={page} onclick={{title: 'Nullstack Tested'}}> title </button>
+        <button onclick={this.requestStatus} status={401}> 401 </button>
       </div>
     )
   }

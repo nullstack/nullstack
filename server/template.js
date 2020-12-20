@@ -2,18 +2,13 @@ import files from './files';
 import environment from './environment';
 import project from './project';
 import settings from './settings';
-
-function absolutefy(path) {
-  if(path.indexOf('//') === -1) {
-    return `https://${project.domain}${path}`;
-  }
-  return path;
-}
+import integrities from './integrities';
+import {absolute, cdn, cdnOrAbsolute} from './links';
 
 export default function({head, body, context, instances}) {
-  const {page, router, worker, params, project} = context;
-  const canonical = absolutefy(page.canonical || router.url);
-  const image = absolutefy(page.image);
+  const {page, router, worker, params} = context;
+  const canonical = absolute(page.canonical || router.url);
+  const image = cdnOrAbsolute(page.image);
   const serializableContext = {};
   const blacklist = ['scope', 'router', 'page', 'environment', 'loading', 'settings', 'worker', 'params', 'project'];
   for(const [key, value] of Object.entries(context)) {
@@ -37,9 +32,9 @@ export default function({head, body, context, instances}) {
     <meta property="og:url" content="${canonical}">
     <link rel="canonical" href="${canonical}">
     ${page.locale ? `<meta property="og:locale" content="${page.locale}">` : ''}
-    <link rel="shortcut icon" href="${project.favicon}" type="image/png">
-    <link rel="icon" href="${project.favicon}" type="image/png">
-    <link rel="manifest" href="/manifest-${environment.key}.json" integrity="">
+    <link rel="shortcut icon" href="${cdn(project.favicon)}" type="image/png">
+    <link rel="icon" href="${cdn(project.favicon)}" type="image/png">
+    <link rel="manifest" href="/manifest-${environment.key}.json" integrity="${integrities['manifest.json']}">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     ${project.name ? `<meta name="application-name" content="${project.name}">` : ''}
@@ -47,16 +42,16 @@ export default function({head, body, context, instances}) {
     ${page.robots ? `<meta name="robots" content="${page.robots}" />` : ''}
     <meta name="msapplication-starturl" content="/">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    ${files['client.css'] ? `<link rel="stylesheet" href="${project.cdn}/client-${environment.key}.css" integrity="">` : ''}
+    ${files['client.css'] ? `<link rel="stylesheet" href="${cdn(`/client-${environment.key}.css`)}" integrity="${integrities['client.css']}" crossorigin="anonymous">` : ''}
     ${page.schema ? `<script type="application/ld+json">${JSON.stringify(page.schema)}</script>` : ''}
-    ${project.icons['180'] ? `<link rel="apple-touch-icon" sizes="180x180" href="${project.icons['180']}">` : ''}
+    ${project.icons['180'] ? `<link rel="apple-touch-icon" sizes="180x180" href="${cdn(project.icons['180'])}">` : ''}
     <meta name="msapplication-TileColor" content="${project.backgroundColor || project.color}">
     <meta name="theme-color" content="${project.color}">
     ${head.split('<!--#-->').join('')}
   </head>
   <body>
     <div id="application">${body}</div>
-    <script async defer>
+    <script async>
       window.page = ${JSON.stringify(page)};
       window.instances = ${JSON.stringify(instances)};
       window.environment = ${JSON.stringify(environment)};
@@ -67,7 +62,9 @@ export default function({head, body, context, instances}) {
       window.context = ${JSON.stringify(serializableContext)};
       document.addEventListener('DOMContentLoaded', () => {
         const script = window.document.createElement('script');
-        script.src = '${project.cdn}/client-${environment.key}.js';
+        script.src = '${cdn(`/client-${environment.key}.js`)}';
+        script.integrity = '${integrities['client.js']}';
+        script.crossorigin = 'anonymous';
         document.body.append(script);
       });
     </script>
