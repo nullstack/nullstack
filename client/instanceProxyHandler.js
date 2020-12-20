@@ -25,15 +25,11 @@ const instanceProxyHandler = {
             referrerPolicy: 'no-referrer',
             body: JSON.stringify(params || {})
           });
-          if(response.status !== 200) {
-            page.status = response.status;
-          } else {
-            const text = await response.text();
-            payload = deserialize(text).result;
-          }
+          page.status = response.status;
+          const text = await response.text();
+          payload = deserialize(text).result;
           worker.responsive = true;
         } catch(e) {
-          console.log('hey', e);
           worker.responsive = false;
         }
         worker.fetching = false;
