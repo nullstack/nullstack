@@ -148,16 +148,19 @@ export default function rerender(parent, depth, vdepth) {
         } else {
           delete client.events[key];
         }
-      } else if(typeof(next.attributes[name]) !== 'function' && typeof(next.attributes[name]) !== 'object') {
-        if(current.attributes[name] !== undefined && next.attributes[name] === undefined) {
-          selector.removeAttribute(name);
-        } else if(current.attributes[name] !== next.attributes[name]) {
-          if(name != 'value' && next.attributes[name] === false || next.attributes[name] === null || next.attributes[name] === undefined) {
+      } else {
+        const type = typeof(next.attributes[name]);
+        if(type !== 'object' && type !== 'function') {
+          if(current.attributes[name] !== undefined && next.attributes[name] === undefined) {
             selector.removeAttribute(name);
-          } else if(name != 'value' && next.attributes[name] === true) {
-            selector.setAttribute(name, '');
-          } else {
-            selector.setAttribute(name, next.attributes[name]);
+          } else if(current.attributes[name] !== next.attributes[name]) {
+            if(name != 'value' && next.attributes[name] === false || next.attributes[name] === null || next.attributes[name] === undefined) {
+              selector.removeAttribute(name);
+            } else if(name != 'value' && next.attributes[name] === true) {
+              selector.setAttribute(name, '');
+            } else {
+              selector.setAttribute(name, next.attributes[name]);
+            }
           }
         }
       }

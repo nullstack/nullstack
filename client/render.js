@@ -92,11 +92,14 @@ export default function render(node, depth) {
         node.attributes[name]({...node.attributes, event});
       };
       element.addEventListener(eventName, client.events[key]);
-    } else if(typeof(node.attributes[name]) !== 'function' && typeof(node.attributes[name]) !== 'object') {
-      if(name != 'value' && node.attributes[name] === true) {
-        element.setAttribute(name, '');
-      } else if(name == 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
-        element.setAttribute(name, node.attributes[name]);
+    } else {
+      const type = typeof(node.attributes[name]);
+      if(type !== 'object' && type !== 'function') {
+        if(name != 'value' && node.attributes[name] === true) {
+          element.setAttribute(name, '');
+        } else if(name == 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
+          element.setAttribute(name, node.attributes[name]);
+        }
       }
     }
   }

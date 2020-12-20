@@ -67,11 +67,14 @@ export default async function render(node, depth, scope) {
     parameterizableNode(node, scope.context.router, scope.context.params);
     let element = `<${node.type}`;
     for(let name in node.attributes) {
-      if(!name.startsWith('on') && name !== 'html' && typeof(node.attributes[name]) != 'object') {
-        if(name != 'value' && node.attributes[name] === true) {
-          element += ` ${name}`;
-        } else if(name == 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
-          element += ` ${name}="${node.attributes[name]}"`;
+      if(!name.startsWith('on') && name !== 'html') {
+        const type = typeof(node.attributes[name]);
+        if(type !== 'object' && type !== 'function') {
+          if(name != 'value' && node.attributes[name] === true) {
+            element += ` ${name}`;
+          } else if(name == 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
+            element += ` ${name}="${node.attributes[name]}"`;
+          }
         }
       }
     }

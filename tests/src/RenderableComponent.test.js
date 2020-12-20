@@ -85,6 +85,16 @@ describe('RenderableComponent', () => {
     expect(element).toBeTruthy();
   });
 
+  test('attributes with object values should not be rendered', async () => {
+    const element = await page.$('[data-object]');
+    expect(element).toBeFalsy();
+  });
+
+  test('attributes with function values should not be rendered', async () => {
+    const element = await page.$('[data-function]');
+    expect(element).toBeFalsy();
+  });
+
 });
 
 describe('RenderableComponent ?condition=true', () => {

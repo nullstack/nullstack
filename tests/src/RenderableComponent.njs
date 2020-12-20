@@ -21,6 +21,8 @@ class RenderableComponent extends Nullstack {
     return (
       <div class="RenderableComponent">
         <Falsy />
+        <div data-object={{a: 1}} />
+        <div data-function={RenderableComponent} />
         <div> this is a normal tag </div>
         <label for="input"> label </label>
         <button disabled> disabled button </button>
