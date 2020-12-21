@@ -1,8 +1,5 @@
 import environment from './environment';
-
-function camelize(key) {
-  return key.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
-}
+import {camelize} from '../shared/string';
 
 const configurableProxyHandler = {
   get(target, name) {

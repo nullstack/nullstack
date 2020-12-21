@@ -2,8 +2,10 @@ import {isBindable, isClass, isFunction, isRoutable, isStatic} from '../shared/n
 import routeMatches from '../shared/routeMatches';
 import generateKey from '../shared/generateKey';
 import parameterizableNode from '../shared/parameterizableNode';
+import datableNode from '../shared/datableNode';
 
 export default async function render(node, depth, scope) {
+  datableNode(node);
   if(node === false || (node !== undefined && node.type === false)) {
     return "<!-- -->";
   }

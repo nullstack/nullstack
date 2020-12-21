@@ -17,6 +17,7 @@ import ContextPage from './ContextPage';
 import TwoWayBindings from './TwoWayBindings';
 import ServerRequestAndResponse from './ServerRequestAndResponse';
 import ErrorPage from './ErrorPage';
+import ContextData from './ContextData';
 import './Application.css';
 
 class Application extends Nullstack {
@@ -52,6 +53,7 @@ class Application extends Nullstack {
         <ContextPage route="/context-page" />
         <TwoWayBindings route="/two-way-bindings" />
         <ServerRequestAndResponse route="/server-request-and-response" />
+        <ContextData route="/context-data" />
         <ErrorPage route="*" />
       </main>
     )

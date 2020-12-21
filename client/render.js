@@ -9,10 +9,12 @@ import routableNode from './routableNode';
 import bindableNode from './bindableNode';
 import {anchorableNode, anchorableElement} from './anchorableNode';
 import parameterizableNode from '../shared/parameterizableNode';
+import datableNode from '../shared/datableNode';
 import objectEvent from './objectEvent';
 
 export default function render(node, depth) {
   routableNode(node, depth);
+  datableNode(node);
   if(isFalse(node) || node.type === 'head') {
     return document.createComment("");
   }

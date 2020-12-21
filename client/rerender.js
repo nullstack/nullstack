@@ -11,6 +11,7 @@ import bindableNode from './bindableNode';
 import {anchorableNode, anchorableElement} from './anchorableNode';
 import parameterizableNode from '../shared/parameterizableNode';
 import objectEvent from './objectEvent';
+import datableNode from '../shared/datableNode';
 
 export default function rerender(parent, depth, vdepth) {
   if(!client.hydrated) {
@@ -45,6 +46,7 @@ export default function rerender(parent, depth, vdepth) {
     const nextSelector = render(next, vdepth);
     return parent.replaceChild(nextSelector, selector);
   }
+  datableNode(next);
   objectEvent(next);
   bindableNode(next);
   if(isStatic(next)) {
