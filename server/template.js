@@ -10,7 +10,7 @@ export default function({head, body, context, instances}) {
   const canonical = absolute(page.canonical || router.url);
   const image = cdnOrAbsolute(page.image);
   const serializableContext = {};
-  const blacklist = ['scope', 'router', 'page', 'environment', 'loading', 'settings', 'worker', 'params', 'project'];
+  const blacklist = ['scope', 'router', 'page', 'environment', 'settings', 'worker', 'params', 'project'];
   for(const [key, value] of Object.entries(context)) {
     if(!blacklist.includes(key) && typeof(value) !== 'function') {
       serializableContext[key] = value;

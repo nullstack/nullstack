@@ -14,12 +14,12 @@ class ContextLoading extends Nullstack {
     await this.serverFunctionName();
   }
   
-  render({loading}) {
+  render({worker}) {
     return (
       <div> 
         <button onclick={this.invokeServerFunction}> Invoke </button>
-        <div data-loading={!!loading} />
-        <div data-loading-function={loading.serverFunctionName} />
+        <div data-loading={!!worker.loading} />
+        <div data-loading-function={worker.loading.serverFunctionName} />
       </div>
     )
   }

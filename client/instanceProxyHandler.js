@@ -1,7 +1,6 @@
 import client from './client';
 import deserialize from '../shared/deserialize';
 import {generateContext} from './context';
-import loading from './loading';
 import worker from './worker';
 import prefix from '../shared/prefix';
 import page from './page';
@@ -12,7 +11,7 @@ const instanceProxyHandler = {
       return async (params) => {
         let payload;
         worker.fetching = true;
-        loading[name] = true;
+        worker.loading[name] = true;
         const url = `/${prefix}/${target.constructor.hash}/${name}.json`;
         try {
           const response = await fetch(url, {
@@ -33,7 +32,7 @@ const instanceProxyHandler = {
           worker.responsive = false;
         }
         worker.fetching = false;
-        delete loading[name];
+        delete worker.loading[name];
         return payload;
       }
     } else if(typeof(target[name]) == 'function') {

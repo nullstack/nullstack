@@ -1,10 +1,12 @@
 import environment from './environment';
 import client from './client';
 import router from './router';
+import loading from './loading';
 
 const worker = {...window.worker};
 worker.online = navigator.onLine;
 delete window.worker;
+worker.loading = loading;
 
 const workerProxyHandler = {
   set(target, name, value) {

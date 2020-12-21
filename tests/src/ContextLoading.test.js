@@ -11,7 +11,7 @@ beforeAll(async () => {
 
 describe('ContextLoading', () => {
 
-  test('is part of the client environment', async () => {
+  test('is part of the context worker', async () => {
     const element = await page.$('[data-loading]');
     expect(element).toBeTruthy();
   });

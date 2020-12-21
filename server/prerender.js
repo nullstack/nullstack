@@ -4,7 +4,6 @@ import Router from './router';
 import generator from './generator';
 import {generateParams} from './params';
 import render from './render';
-import loading from './loading';
 import settings from './settings';
 import worker from './worker';
 import printError from './printError';
@@ -15,7 +14,6 @@ export async function prerender(request, response) {
   context.page = {image: '/image-1200x630.png', status: 200};  
   context.project = project;
   context.environment = environment;
-  context.loading = loading;
   context.settings = settings;
   context.params = generateParams(request.originalUrl);
   context.router = new Router(request, response);
