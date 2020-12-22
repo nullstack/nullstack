@@ -21,6 +21,11 @@ describe('StatefulComponent', () => {
     expect(element).toBeTruthy();
   });
 
+  test('date instance variables are being hydrated as dates', async () => {
+    const element = await page.$('[data-year="1992"]');
+    expect(element).toBeTruthy();
+  });
+
   test('state is being updated by events', async () => {
     await page.click('.increment-by-one');
     await page.waitForSelector('[data-count="2"]');

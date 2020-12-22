@@ -9,7 +9,7 @@ beforeAll(async () => {
   await page.goto('http://localhost:6969/context-data');
 });
 
-describe('ContextEnvironment', () => {
+describe('ContextData', () => {
 
   test('is part of the client context', async () => {
     const element = await page.$('[data-data]');

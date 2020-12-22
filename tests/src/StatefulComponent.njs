@@ -5,6 +5,7 @@ class StatefulComponent extends Nullstack {
   count = 1;
   object = {count: 0};
   prepared = 0;
+  date = new Date('1992-10-16');
 
   prepare() {
     this.prepared++;
@@ -36,6 +37,7 @@ class StatefulComponent extends Nullstack {
         <div data-prepared={this.prepared} />
         <div data-count={this.count} />
         <div data-object-count={this.object.count} />
+        <div data-year={this.date.getFullYear()} />
       </form>
     )
   }
