@@ -2,7 +2,6 @@ const parse = require('@babel/parser').parse;
 const traverse = require("@babel/traverse").default;
 
 module.exports = function(source) {
-  if(source.indexOf('class ServerFunctions') === -1) return source;
   const ast = parse(source, {
     sourceType: 'module',
     plugins: ['classProperties', 'jsx']
