@@ -193,6 +193,10 @@ function client(env, argv) {
         babelNullstack,
         {
           test: /.njs$/,
+          loader: path.resolve('./node_modules/nullstack/loaders/remove-import-from-client.js'),
+        },
+        {
+          test: /.njs$/,
           loader: path.resolve('./node_modules/nullstack/loaders/inject-nullstack.js'),
         },
         {

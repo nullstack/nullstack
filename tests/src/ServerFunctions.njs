@@ -1,4 +1,8 @@
 import Nullstack from 'nullstack';
+import {
+  readFileSync, readir
+} from 'fs';
+import Context from './Context';
 
 class ServerFunctions extends Nullstack {
 
@@ -35,7 +39,6 @@ class ServerFunctions extends Nullstack {
   }
 
   static async useNodeFileSystem() {
-    const {readFileSync} = await import('fs');
     const text = readFileSync('src/ServerFunctions.njs', 'utf-8');
     return text.split(`\n`)[0].trim();
   }
