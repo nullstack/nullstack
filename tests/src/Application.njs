@@ -18,6 +18,7 @@ import TwoWayBindings from './TwoWayBindings';
 import ServerRequestAndResponse from './ServerRequestAndResponse';
 import ErrorPage from './ErrorPage';
 import ContextData from './ContextData';
+import DateParser from './DateParser';
 import './Application.css';
 
 class Application extends Nullstack {
@@ -54,6 +55,7 @@ class Application extends Nullstack {
         <TwoWayBindings route="/two-way-bindings" />
         <ServerRequestAndResponse route="/server-request-and-response" />
         <ContextData route="/context-data" />
+        <DateParser route="/date-parser" />
         <ErrorPage route="*" />
       </main>
     )

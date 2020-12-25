@@ -1,11 +1,7 @@
 import client from './client';
+import deserialize from '../shared/deserialize';
 
-const context = {};
-
-for(const [key, value] of Object.entries(window.context)) {
-  context[key] = value;
-}
-
+const context = deserialize(JSON.stringify(window.context));
 delete window.context;
 
 const contextProxyHandler = {
