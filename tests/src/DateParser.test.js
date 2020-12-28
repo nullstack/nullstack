@@ -27,6 +27,7 @@ describe('DateParser', () => {
   });
 
   test('dates in the context are instances of Date in spa mode', async () => {
+    await page.waitForSelector('[data-spa-context-year="92"]');
     const element = await page.$('[data-spa-context-year="92"]');
     expect(element).toBeTruthy();
   });

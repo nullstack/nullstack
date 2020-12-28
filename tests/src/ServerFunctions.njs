@@ -3,6 +3,7 @@ import {
   readFileSync, readir
 } from 'fs';
 import Context from './Context';
+import {serverOnly, clientOnly} from './helpers';
 
 class ServerFunctions extends Nullstack {
 
@@ -10,6 +11,7 @@ class ServerFunctions extends Nullstack {
   year = null;
   statement = '';
   response = '';
+  clientOnly = '';
 
   static async getCountAsOne() {
     return 1;
@@ -39,6 +41,7 @@ class ServerFunctions extends Nullstack {
   }
 
   static async useNodeFileSystem() {
+    serverOnly();
     const text = readFileSync('src/ServerFunctions.njs', 'utf-8');
     return text.split(`\n`)[0].trim();
   }
@@ -54,6 +57,10 @@ class ServerFunctions extends Nullstack {
     this.response = await this.useFetchInNode();
   }
   
+  async hydrate() {
+    this.clientOnly = clientOnly();
+  }
+  
   render() {
     return (
       <div> 
@@ -64,6 +71,7 @@ class ServerFunctions extends Nullstack {
         <div data-year={this.year} />
         <div data-statement={this.statement} />
         <div data-response={this.response} />
+        <div data-client-only={this.clientOnly} />
       </div>
     )
   }

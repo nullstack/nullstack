@@ -39,8 +39,13 @@ describe('ServerFunctions', () => {
   });
 
   test('server functions have access to fetch', async () => {
-    await page.waitForSelector(`[data-response="User-Agent: *"]`);
-    const element = await page.$(`[data-response="User-Agent: *"]`);
+    await page.waitForSelector('[data-response="User-Agent: *"]');
+    const element = await page.$('[data-response="User-Agent: *"]');
+    expect(element).toBeTruthy();
+  });
+
+  test('isomorphic imports stay in the client', async () => {
+    const element = await page.$('[data-client-only]');
     expect(element).toBeTruthy();
   });
 
