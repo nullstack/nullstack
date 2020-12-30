@@ -40,6 +40,11 @@ describe('RenderableComponent', () => {
     expect(element).toBeTruthy();
   });
 
+  test('inner components can be nested', async () => {
+    const element = await page.$('[data-nested]');
+    expect(element).toBeTruthy();
+  });
+
   test('lists are being rendered', async () => {
     const element = await page.$$('li');
     expect(element.length).toBe(6);

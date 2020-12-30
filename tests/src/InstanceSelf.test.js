@@ -10,7 +10,7 @@ beforeAll(async () => {
 });
 
 describe('InstanceSelf', () => {
-
+  
   test('self is aware that the component initiated', async () => {
     await page.waitForSelector('[data-initiated]');
     const element = await page.$('[data-initiated]');

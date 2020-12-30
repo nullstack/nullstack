@@ -2,10 +2,15 @@ import Nullstack from 'nullstack';
 
 class RenderableComponent extends Nullstack {
 
+  renderNestedInnerComponent() {
+    return <div data-nested />
+  }
+
   renderInnerComponent({children}) {
     return (
       <div class="InnerComponent">
         <p> Inner Component </p>
+        <NestedInnerComponent />
         {children}
       </div>
     )
