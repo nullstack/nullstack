@@ -3,6 +3,7 @@ import http from 'http';
 import path from 'path';
 import bodyParser from 'body-parser';
 import fetch from 'node-fetch';
+import cors from 'cors';
 
 import deserialize from '../shared/deserialize';
 import template from './template';
@@ -37,6 +38,8 @@ server.start = function() {
   generateManifest();
   generateServiceWorker();
   generateRobots();
+
+  app.use(cors(server.cors))
 
   app.use(express.static(path.join(__dirname, '..', 'public')));
   app.use(bodyParser.text({limit: server.maximumPayloadSize}));

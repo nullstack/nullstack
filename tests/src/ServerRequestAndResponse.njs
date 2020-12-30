@@ -19,6 +19,10 @@ class ServerRequestAndResponse extends Nullstack {
       });
     }
     server.port = 6969;
+    server.cors = {
+      origin: 'http://localhost:6969',
+      optionsSuccessStatus: 200
+    }
   }
 
   async hydrate() {

@@ -20,7 +20,7 @@ class ContextProject extends Nullstack {
     project.favicon = '/favicon-96x96.png';
     project.disallow = ['/admin'];
     project.sitemap = true;
-    project.cdn = 'localhost:6969'
+    project.cdn = '127.0.0.1:6969'
   }
   
   render({project}) {

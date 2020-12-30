@@ -64,7 +64,7 @@ export default function({head, body, context, instances}) {
         const script = window.document.createElement('script');
         script.src = '${cdn(`/client-${environment.key}.js`)}';
         script.integrity = '${integrities['client.js']}';
-        script.crossorigin = 'anonymous';
+        script.crossOrigin = 'anonymous';
         document.body.append(script);
       });
     </script>

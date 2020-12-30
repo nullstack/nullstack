@@ -12,6 +12,22 @@ describe('ContextProject', () => {
 
   beforeAll(async () => {
     page = await browser.newPage();
+  });
+
+  test('cors can be enabled', async () => {
+    const response = await page.goto('http://localhost:6969/context-project');
+    const status = response.status();
+    expect([200, 304]).toContain(status);
+  });
+
+});
+
+describe('ContextProject', () => {
+  
+  let page;
+
+  beforeAll(async () => {
+    page = await browser.newPage();
     await page.goto('http://localhost:6969/context-project');
     await page.waitForSelector('[data-project]');
   });
