@@ -64,7 +64,9 @@ class Router {
     if(url !== this._url || this._hash !== hash) {
       await this._update(urlWithHash, true);
     }
-    window.scroll(0, 0);
+    if(!hash) {
+      window.scroll(0, 0);
+    }
   }
 
   get url() {
