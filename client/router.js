@@ -15,23 +15,25 @@ class Router {
   _changed = false
 
   constructor() {
-    this._url = extractLocation(window.location.pathname+window.location.search).url;
+    const {hash, url} = extractLocation(window.location.pathname+window.location.search);
+    this._url = url;
+    this._hash = hash;
   }
 
   async _popState() {
-    const {url} = extractLocation(window.location.pathname+window.location.search);
-    await this._update(url, false);
+    const {urlWithHash} = extractLocation(window.location.pathname+window.location.search);
+    await this._update(urlWithHash, false);
   }
 
   async _update(target, push) {
-    const {url} = extractLocation(target);
+    const {url, path, hash, urlWithHash} = extractLocation(target);
     clearTimeout(redirectTimer);
     redirectTimer = setTimeout(async () => {
       page.status = 200;
       if(environment.static) {
         worker.fetching = true;
         const api = '/index.json';
-        const endpoint = url === '/' ? api : url+api;
+        const endpoint = path === '/' ? api : path+api;
         try {
           const response = await fetch(endpoint);
           const payload = await response.json(url);
@@ -46,9 +48,10 @@ class Router {
         worker.fetching = false;
       }
       if(push) {
-        history.pushState({}, document.title, url);
+        history.pushState({}, document.title, urlWithHash);
       }
       this._url = url;
+      this._hash = hash;
       this._changed = true;
       updateParams(url);
       client.update();
@@ -57,9 +60,9 @@ class Router {
   }
 
   async _redirect(target) {
-    const {url} = extractLocation(target);
-    if(url != this.url) {
-      await this._update(url, true);
+    const {url, hash, urlWithHash} = extractLocation(target);
+    if(url !== this._url || this._hash !== hash) {
+      await this._update(urlWithHash, true);
     }
     window.scroll(0, 0);
   }

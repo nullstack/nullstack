@@ -1,5 +1,6 @@
 export default function extractLocation(originalUrl) {
-  let [path, search] = originalUrl.split('?');
+  let [target, hash] = originalUrl.split('#');
+  let [path, search] = target.split('?');
   if(path !== '/' && path.endsWith('/')) {
     path = path.substring(0, path.length - 1);
   }
@@ -7,5 +8,12 @@ export default function extractLocation(originalUrl) {
   if(search) {
     url += '?' + search;
   }
-  return {path, search, url};
+  let urlWithHash = url;
+  if(hash) {
+    urlWithHash += '#' + hash;
+  }
+  if(hash === undefined) {
+    hash = '';
+  }
+  return {path, search, url, urlWithHash, hash};
 }

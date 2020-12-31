@@ -33,6 +33,7 @@ class RoutesAndParams extends Nullstack {
   render({router, params}) {
     return (
       <div> 
+        <a href="/routes-and-params/no-hash#hash">hash</a>
         <div data-event-triggered={this.eventTriggered} />
         <div data-router={!!router} />
         <div route="/routes-and-params" data-route="/routes-and-params" />

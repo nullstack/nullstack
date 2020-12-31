@@ -156,6 +156,51 @@ describe('RoutesAndParams /routes-and-params/c', () => {
 
 });
 
+describe('RoutesAndParams /routes-and-params/d?boolean=true#hash ssr', () => {
+
+  let page;
+
+  beforeAll(async () => {
+    page = await browser.newPage();
+    await page.goto('http://localhost:6969/routes-and-params/d?boolean=true#hash');
+  });
+
+  test('hash is not part of the router url', async () => {
+    const element = await page.$('[data-url="/routes-and-params/d?boolean=true"]');
+    expect(element).toBeTruthy();  
+  });
+
+  test('hash is not part of the router path', async () => {
+    const element = await page.$('[data-path="/routes-and-params/d"]');
+    expect(element).toBeTruthy();  
+  });
+
+});
+
+describe('RoutesAndParams /routes-and-params/d?boolean=true#hash spa', () => {
+
+  let page;
+
+  beforeAll(async () => {
+    page = await browser.newPage();
+    await page.goto('http://localhost:6969/routes-and-params/d?boolean=true#hash');
+    await page.click('[href="/routes-and-params/no-hash#hash"]');
+    await page.waitForSelector('[data-url="/routes-and-params/no-hash"]');
+  });
+
+  test('hash is not part of the router url', async () => {
+    const element = await page.$('[data-url="/routes-and-params/no-hash"]');
+    expect(element).toBeTruthy();  
+  });
+
+  test('hash is not part of the router path', async () => {
+    const element = await page.$('[data-path="/routes-and-params/no-hash"]');
+    expect(element).toBeTruthy();  
+  });
+
+});
+
+
 afterAll(async () => {
   browser.close();
 });
