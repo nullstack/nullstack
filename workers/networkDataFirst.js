@@ -1,6 +1,7 @@
 async function networkDataFirst(event) {
   const cache = await caches.open(self.context.environment.key);
-  const api = event.request.url + '/index.json';
+  const url = new URL(event.request.url);
+  const api = url.pathname + '/index.json';
   try {
     const response = await load(event);
     const dataResponse = await extractData(response);
