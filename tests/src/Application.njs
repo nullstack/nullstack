@@ -19,6 +19,7 @@ import ServerRequestAndResponse from './ServerRequestAndResponse';
 import ErrorPage from './ErrorPage';
 import ContextData from './ContextData';
 import DateParser from './DateParser';
+import RemoveStart from './RemoveStart';
 import './Application.css';
 
 class Application extends Nullstack {
@@ -56,6 +57,7 @@ class Application extends Nullstack {
         <ServerRequestAndResponse route="/server-request-and-response" />
         <ContextData route="/context-data" />
         <DateParser route="/date-parser" />
+        <RemoveStart route="/remove-start" />
         <ErrorPage route="*" />
       </main>
     )

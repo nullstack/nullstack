@@ -53,7 +53,7 @@ const babelNullstack = {
 function server(env, argv) {
   const folder = argv.mode === 'development' ? '.development' : '.production';
   const dir = argv.dir || '../..';
-  const devtool = argv.mode === 'development' ? 'cheap-inline-module-source-map' : undefined;
+  const devtool = argv.mode === 'development' ? 'cheap-inline-module-source-map' : 'none';
   const minimize = argv.mode !== 'development';
   const plugins = argv.mode === 'development' ? ([
     new NodemonPlugin({
@@ -134,7 +134,7 @@ function server(env, argv) {
 function client(env, argv) {
   const dir = argv.dir || '../..';
   const folder = argv.mode === 'development' ? '.development' : '.production';
-  const devtool = argv.mode === 'development' ? 'cheap-inline-module-source-map' : undefined;
+  const devtool = argv.mode === 'development' ? 'cheap-inline-module-source-map' : 'none';
   const minimize = argv.mode !== 'development';
   const plugins = [
     new MiniCssExtractPlugin({
@@ -225,7 +225,7 @@ function client(env, argv) {
         }
       ]
     },
-    target: 'node',
+    target: 'web',
     plugins
   }
 }

@@ -40,7 +40,7 @@ module.exports = function(source) {
     const injection = injections[position];
     if (position && injection) {
       const location = injection.end - position;
-      if(injection.name === 'start') {
+      if(injection.name.split(/[A-Z]/)[0] === 'start') {
         code = code.substring(location).trimStart();
       } else {
         code = `static ${injection.name} = true;` + code.substring(location);
