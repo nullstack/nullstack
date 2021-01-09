@@ -15,9 +15,9 @@ export default function(error) {
       source = source.split('\\').join('/');
     }
   }
-  let file, line, column;
+  let file, line;
   if(source) {
-    [file, line, column] = source.split(':');
+    [file, line] = source.split(':');
     let className = file.split('/').find((segment) => segment.indexOf('.') > -1);
     if(className) {
       className = className.replace('.njs', '');
@@ -37,9 +37,6 @@ export default function(error) {
   }
   if(line) {
     console.log('\x1b[2m', 'line:     ', '\x1b[0m', '\x1b[37m', line ,'\x1b[0m');
-  }
-  if(column) {
-    console.log('\x1b[2m', 'column:   ', '\x1b[0m', '\x1b[37m', column ,'\x1b[0m');
   }
   console.log();
 }
