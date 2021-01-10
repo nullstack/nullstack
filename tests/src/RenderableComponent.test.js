@@ -85,11 +85,6 @@ describe('RenderableComponent', () => {
     expect(type).toBe(8);
   });
 
-  test('render only components are optimized into static functions', async () => {
-    const element = await page.$('[data-name="RenderableComponent"]');
-    expect(element).toBeTruthy();
-  });
-
   test('attributes with object values should not be rendered', async () => {
     const element = await page.$('[data-object]');
     expect(element).toBeFalsy();
