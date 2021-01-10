@@ -19,7 +19,15 @@ module.exports = function(source) {
           if(node.type !== 'ClassMethod' || !node.key.name.startsWith('render')) {
             shouldBeStatic = false;
           } else {
-            positions.push(node.start);
+            if(node.key.name === 'render') {
+              positions.push(node.start);
+            } else {
+              if(node.type === 'ClassMethod' && (!node.params || !node.params.length)) {
+                positions.push(node.start);
+              } else {
+                shouldBeStatic = false;
+              }
+            }
           }
         }
       } else {
