@@ -1,10 +1,11 @@
 {
   "name": "nullstack",
-  "version": "0.9.13",
+  "version": "0.9.14",
   "description": "Full-stack Javascript Components for one-dev armies",
   "main": "nullstack.js",
   "author": "Mortaro",
   "repository": "github:nullstack/nullstack",
+  "homepage": "https://nullstack.app",
   "license": "MIT",
   "dependencies": {
     "@babel/cli": "^7.0.0",
