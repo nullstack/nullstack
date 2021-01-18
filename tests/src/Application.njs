@@ -21,6 +21,7 @@ import ContextData from './ContextData';
 import DateParser from './DateParser';
 import RemoveStart from './RemoveStart';
 import StaticRendering from './StaticRendering';
+import StaticThis from './StaticThis';
 import './Application.css';
 
 class Application extends Nullstack {
@@ -38,7 +39,10 @@ class Application extends Nullstack {
       <main>
         <h1> {project.name} </h1>
         {page.status !== 200 && <div route="*" data-page-status={page.status}></div>}
-        <a href={`/offline-${environment.key}`} route="/"> offline </a>
+        <div route="/">
+          <a href={`/offline-${environment.key}`}> offline </a>
+          <a href="/static-this"> static this </a>
+        </div>
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
         <FullStackLifecycle route="/full-stack-lifecycle" />
@@ -60,6 +64,7 @@ class Application extends Nullstack {
         <DateParser route="/date-parser" />
         <RemoveStart route="/remove-start" />
         <StaticRendering route="/static-rendering" />
+        <StaticThis route="/static-this" />
         <ErrorPage route="*" />
       </main>
     )

@@ -21,7 +21,7 @@ module.exports = function(source) {
     }
   });
   for(const methodName of methodNames) {
-    source += `\nNullstack.registry["${hash}.${methodName}"] = ${klassName}.${methodName};`
+    source += `\nNullstack.registry["${hash}.${methodName}"] = ${klassName}.${methodName}.bind(${klassName});`
   }
   return source;
 }
