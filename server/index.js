@@ -5,7 +5,6 @@ import server from './server';
 import registry from './registry';
 import generator from './generator';
 import element from '../shared/element';
-import instanceProxyHandler from './instanceProxyHandler';
 import project from './project';
 import environment from './environment';
 import settings, {loadSettings} from './settings';
@@ -13,6 +12,7 @@ import secrets, {loadSecrets} from './secrets';
 import {freezeConfigurable} from './configurable';
 import worker from './worker';
 import invoke from './invoke';
+import contextualize from './contextualize';
 
 context.server = server;
 context.project = project;
@@ -51,13 +51,12 @@ class Nullstack {
     this._request = () => scope.request;
     this._response = () => scope.response;
     const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
-    const proxy = new Proxy(this, instanceProxyHandler);
     for(const method of methods) {
-      if(method !== '_request' && method !== '_response' && method !== 'constructor' && typeof(this[method]) === 'function') {
-        this[method] = this[method].bind(proxy);
+      if(method !== 'constructor' && typeof(this[method]) === 'function' && !this[method].name.startsWith('_')) {
+        this[method] = contextualize(this[method]).bind(this);
       }
     }
-    return proxy;
+    return this;
   }
 
   toJSON() {

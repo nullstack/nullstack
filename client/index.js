@@ -11,8 +11,8 @@ import params, {updateParams} from './params';
 import settings from './settings';
 import worker from './worker';
 import project from './project';
-
 import invoke from './invoke';
+import contextualize from './contextualize';
 
 context.page = page;
 context.router = router;
@@ -55,8 +55,8 @@ export default class Nullstack {
     const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
     const proxy = new Proxy(this, instanceProxyHandler);
     for(const method of methods) {
-      if(method !== 'constructor' && typeof(this[method]) === 'function') {
-        this[method] = this[method].bind(proxy);
+      if(method !== 'constructor' && typeof(this[method]) === 'function' && !this[method].name.startsWith('_')) {
+        this[method] = contextualize(this[method]).bind(proxy);
       }
     }
     return proxy;
