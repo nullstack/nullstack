@@ -12,6 +12,8 @@ import settings from './settings';
 import worker from './worker';
 import project from './project';
 
+import invoke from './invoke';
+
 context.page = page;
 context.router = router;
 context.settings = settings;
@@ -22,6 +24,7 @@ context.project = project;
 export default class Nullstack {
 
   static element = element;
+  static invoke = invoke;
 
   static start(Starter) {
     window.instances = deserialize(JSON.stringify(window.instances));

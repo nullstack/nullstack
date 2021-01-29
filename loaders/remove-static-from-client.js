@@ -4,8 +4,6 @@ const traverse = require("@babel/traverse").default;
 
 module.exports = function(source) {
   const hash = crypto.createHash('md5').update(source).digest("hex");
-  let hashPosition;
-  let shouldHash = false;
   const injections = {};
   const positions = [];
   const ast = parse(source, {
@@ -15,7 +13,6 @@ module.exports = function(source) {
   traverse(ast, {
     ClassBody(path) {
       const start = path.node.body[0].start;
-      hashPosition = start;
       positions.push(start);
     },
     ClassMethod(path) {
@@ -43,15 +40,12 @@ module.exports = function(source) {
       if(injection.name.split(/[A-Z]/)[0] === 'start') {
         code = code.substring(location).trimStart();
       } else {
-        code = `static ${injection.name} = true;` + code.substring(location);
+        code = `${injection.name} = Nullstack.invoke('${injection.name}', '${hash}');` + code.substring(location);
       }
       outputs.push(code);
     } else {
       outputs.push(code);
     }
-    if(position === hashPosition && shouldHash) {
-      outputs.push(`static hash = '${hash}';\n\n  `);
-    } 
   }
   return outputs.reverse().join('');
 }

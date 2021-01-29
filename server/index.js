@@ -12,6 +12,7 @@ import settings, {loadSettings} from './settings';
 import secrets, {loadSecrets} from './secrets';
 import {freezeConfigurable} from './configurable';
 import worker from './worker';
+import invoke from './invoke';
 
 context.server = server;
 context.project = project;
@@ -24,6 +25,7 @@ class Nullstack {
 
   static registry = registry;
   static element = element;
+  static invoke = invoke;
 
   static async start(Starter) {
     if(this.name.indexOf('Nullstack') > -1) {
