@@ -108,10 +108,6 @@ function server(env, argv) {
         },
         {
           test: /.njs$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/static-rendering.js'),
-        },
-        {
-          test: /.njs$/,
           loader: path.resolve('./node_modules/nullstack/loaders/register-inner-components.js'),
         },
         {
@@ -206,10 +202,6 @@ function client(env, argv) {
         {
           test: /.njs$/,
           loader: path.resolve('./node_modules/nullstack/loaders/add-source-to-node.js'),
-        },
-        {
-          test: /.njs$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/static-rendering.js'),
         },
         {
           test: /.njs$/,

@@ -20,7 +20,6 @@ import ErrorPage from './ErrorPage';
 import ContextData from './ContextData';
 import DateParser from './DateParser';
 import RemoveStart from './RemoveStart';
-import StaticRendering from './StaticRendering';
 import StaticThis from './StaticThis';
 import './Application.css';
 
@@ -63,7 +62,6 @@ class Application extends Nullstack {
         <ContextData route="/context-data" />
         <DateParser route="/date-parser" />
         <RemoveStart route="/remove-start" />
-        <StaticRendering route="/static-rendering" />
         <StaticThis route="/static-this" />
         <ErrorPage route="*" />
       </main>

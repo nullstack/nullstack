@@ -3,12 +3,13 @@ import deserialize from '../shared/deserialize';
 import objectProxyHandler from './objectProxyHandler';
 import isProxyable from './isProxyable';
 
+//console.log(window.context);
 const context = deserialize(JSON.stringify(window.context));
-delete window.context;
+//delete window.context;
 
 const contextProxyHandler = {
   set(target, name, value) {
-    if(isProxyable(value)) {
+    if(isProxyable(name, value)) {
       value._isProxy = true;
       context[name] = new Proxy(value, objectProxyHandler);
     } else {

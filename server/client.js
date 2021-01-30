@@ -3,6 +3,9 @@ export function generateContext(context) {
     set(target, name, value) {
       context[name] = value;
       return Reflect.set(...arguments);
+    },
+    get(target, name) {
+      return target[name] === undefined ? context[name] : target[name];
     }
   }  
   return function(temporary) {

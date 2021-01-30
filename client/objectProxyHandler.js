@@ -3,7 +3,7 @@ import isProxyable from './isProxyable';
 
 const objectProxyHandler = {
   set(target, name, value) {
-    if(isProxyable(value)) {
+    if(isProxyable(name, value)) {
       value._isProxy = true;
       target[name] = new Proxy(value, this);
     } else {
