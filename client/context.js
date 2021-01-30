@@ -3,7 +3,6 @@ import deserialize from '../shared/deserialize';
 import objectProxyHandler from './objectProxyHandler';
 import isProxyable from './isProxyable';
 
-//console.log(window.context);
 const context = deserialize(JSON.stringify(window.context));
 //delete window.context;
 

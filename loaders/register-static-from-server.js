@@ -24,11 +24,12 @@ module.exports = function(source) {
   });
   let output = source.substring(0, klassEnd);
   for(const methodName of methodNames) {
-    output += `${methodName} = Nullstack.invoke('${methodName}', ${klassName});\n`
+    output += `${methodName} = Nullstack.invoke('${methodName}');\n`
   }
   output += source.substring(klassEnd);
   for(const methodName of methodNames) {
-    output += `\nNullstack.registry["${hash}.${methodName}"] = ${klassName}.${methodName}.bind(${klassName});`
+    output += `\nNullstack.registry["${hash}.${methodName}"] = ${klassName}.${methodName};`
   }
+  output += `\nNullstack.registry["${hash}"] = ${klassName};`
   return output;
 }
