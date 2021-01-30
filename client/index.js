@@ -4,7 +4,7 @@ import router from './router';
 import client from './client';
 import context from './context';
 import rerender from './rerender';
-import instanceProxyHandler from './instanceProxyHandler';
+import objectProxyHandler from './objectProxyHandler';
 import page from './page';
 import environment from './environment';
 import params, {updateParams} from './params';
@@ -53,7 +53,7 @@ export default class Nullstack {
 
   constructor() {
     const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
-    const proxy = new Proxy(this, instanceProxyHandler);
+    const proxy = new Proxy(this, objectProxyHandler);
     for(const method of methods) {
       if(method !== 'constructor' && typeof(this[method]) === 'function' && !this[method].name.startsWith('_')) {
         this[method] = contextualize(this[method]).bind(proxy);
