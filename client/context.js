@@ -4,7 +4,6 @@ import objectProxyHandler from './objectProxyHandler';
 import isProxyable from './isProxyable';
 
 const context = deserialize(JSON.stringify(window.context));
-//delete window.context;
 
 const contextProxyHandler = {
   set(target, name, value) {

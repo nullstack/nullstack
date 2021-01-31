@@ -43,6 +43,7 @@ export default class Nullstack {
     client.virtualDom = client.nextVirtualDom;
     client.nextVirtualDom = null;
     client.processLifecycleQueues();
+    delete window.context;
   }
 
   _self = {

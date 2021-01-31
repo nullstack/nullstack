@@ -16,11 +16,17 @@ export default function({head, body, context, instances}) {
       serializableContext[key] = value;
     }
   }
+  const serializableInstances = {};
+  for(const [key, value] of Object.entries(instances)) {
+    if(Object.keys(value).length) {
+      serializableInstances[key] = value;
+    }
+  }
   return (`<!DOCTYPE html>
 <html${page.locale ? ` lang="${page.locale}"` : ''}>
   <head>
-    <meta name="generator" content="Created with Nullstack - https://nullstack.app" />
     <meta charset="utf-8">
+    <meta name="generator" content="Created with Nullstack - https://nullstack.app" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     ${page.title ? `<title>${page.title}</title>` : ''}
     <meta property="og:image" content="${image}">
@@ -53,7 +59,7 @@ export default function({head, body, context, instances}) {
     <div id="application">${body}</div>
     <script async>
       window.page = ${JSON.stringify(page)};
-      window.instances = ${JSON.stringify(instances)};
+      window.instances = ${JSON.stringify(serializableInstances)};
       window.environment = ${JSON.stringify(environment)};
       window.settings = ${JSON.stringify(settings)};
       window.worker = ${JSON.stringify(worker)};
