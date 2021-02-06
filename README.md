@@ -1,33 +1,33 @@
 <img src='https://raw.githubusercontent.com/nullstack/nullstack/master/nullstack.png' height='60' alt='Nullstack'>
 
-Full-stack javascript components for one-dev armies.
+Componentes Full-Stack em javascript para exércitos de um dev só.
 
-## What is Nullstack?
+## O que é Nullstack?
 
-Nullstack is a full-stack framework for building progressive web applications.
+Nullstack é um framework full-stack para criar PWAs (Progressive Web Applications).
 
-It connects a stateful UI layer to specialized microservices in the same component using vanilla javascript.
+Ele conecta uma camada de UI com estados para microservições especializados no mesmo componente usando javascript puro.
 
-Focus on solving your business logic instead of writing glue code.
+Foca em resolver sua lógica de negócios ao invés de escrever código.
 
-Learn more about [Nullstack](https://nullstack.app)
+Saiba mais em [Nullstack](https://nullstack.app)
 
-## Getting Started
+## Começando
 
-replace project-name with your project name and run the command bellow to start a project: 
+troque *project-name* com o nome do seu projeto e rode o comando abaixo para começar um projeto:
 
 ```sh
 npx create-nullstack-app project-name
 ```
 
-Read the [Nullstack Documentation](https://nullstack.app/documentation)
+Leia a [Documentação do Nullstack](https://nullstack.app/documentation)
 
-## Credits
+## Créditos
 
-* Author: [Christian Mortaro](https://github.com/Mortaro)
-* Rubber duck: [Anny Figueira](https://github.com/AnnyFigueira)
-* Visual identity: [Dayson Marx](https://www.instagram.com/daysonmarx)
+* Autor: [Christian Mortaro](https://github.com/Mortaro)
+* Pato de borracha: [Anny Figueira](https://github.com/AnnyFigueira)
+* Identidade Visual: [Dayson Marx](https://www.instagram.com/daysonmarx)
 
 ## License
 
-Nullstack is released under the [MIT License](https://opensource.org/licenses/MIT).
+Nullstack é distribuido sob a licença [MIT License](https://opensource.org/licenses/MIT).
