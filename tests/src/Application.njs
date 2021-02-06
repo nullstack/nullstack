@@ -21,6 +21,8 @@ import ContextData from './ContextData';
 import DateParser from './DateParser';
 import RemoveStart from './RemoveStart';
 import StaticThis from './StaticThis';
+import ChildComponent from './ChildComponent';
+import ParentComponent from './ParentComponent';
 import './Application.css';
 
 class Application extends Nullstack {
@@ -63,6 +65,8 @@ class Application extends Nullstack {
         <DateParser route="/date-parser" />
         <RemoveStart route="/remove-start" />
         <StaticThis route="/static-this" />
+        <ChildComponent route="/child-component" />
+        <ParentComponent route="/parent-component" />
         <ErrorPage route="*" />
       </main>
     )
