@@ -5,13 +5,15 @@ import server from './server';
 import registry from './registry';
 import generator from './generator';
 import element from '../shared/element';
-import instanceProxyHandler from './instanceProxyHandler';
 import project from './project';
 import environment from './environment';
 import settings, {loadSettings} from './settings';
 import secrets, {loadSecrets} from './secrets';
 import {freezeConfigurable} from './configurable';
 import worker from './worker';
+import invoke from './invoke';
+import instanceProxyHandler from './instanceProxyHandler';
+import getProxyableMethods from '../shared/getProxyableMethods';
 
 context.server = server;
 context.project = project;
@@ -24,6 +26,7 @@ class Nullstack {
 
   static registry = registry;
   static element = element;
+  static invoke = invoke;
 
   static async start(Starter) {
     if(this.name.indexOf('Nullstack') > -1) {
@@ -48,12 +51,10 @@ class Nullstack {
   constructor(scope) {
     this._request = () => scope.request;
     this._response = () => scope.response;
-    const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
+    const methods = getProxyableMethods(this);
     const proxy = new Proxy(this, instanceProxyHandler);
     for(const method of methods) {
-      if(method !== '_request' && method !== '_response' && method !== 'constructor' && typeof(this[method]) === 'function') {
-        this[method] = this[method].bind(proxy);
-      }
+      this[method] = this[method].bind(proxy);
     }
     return proxy;
   }

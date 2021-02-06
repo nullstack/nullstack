@@ -74,15 +74,24 @@ server.start = function() {
     response.send(files['robots.txt']);
   });
 
-  app.post(`/${prefix}/:klassName/:methodName.json`, async (request, response) => {
+  app.post(`/${prefix}/:hash/:methodName.json`, async (request, response) => {
     const args = deserialize(request.body);
-    const {klassName, methodName} = request.params;
-    const key = `${klassName}.${methodName}`;
+    const {hash, methodName} = request.params;
+    const [invokerHash, boundHash] = hash.split('-');
+    const key = `${invokerHash}.${methodName}`;
+    const invokerKlass = registry[invokerHash];
+    let boundKlass = invokerKlass;
+    if(boundHash) {
+      boundKlass = registry[boundHash];
+      if(!(boundKlass.prototype instanceof invokerKlass)) {
+        return response.status(401).json({});
+      }
+    }
     const method = registry[key];
     if(method !== undefined) {
       try {
         const context = generateContext({request, response, ...args});
-        const result = await method(context);
+        const result = await method.call(boundKlass, context);
         response.json({result});
       } catch(error) {
         printError(error);

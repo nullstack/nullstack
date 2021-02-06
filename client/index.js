@@ -11,6 +11,8 @@ import params, {updateParams} from './params';
 import settings from './settings';
 import worker from './worker';
 import project from './project';
+import invoke from './invoke';
+import getProxyableMethods from '../shared/getProxyableMethods';
 
 context.page = page;
 context.router = router;
@@ -22,6 +24,7 @@ context.project = project;
 export default class Nullstack {
 
   static element = element;
+  static invoke = invoke;
 
   static start(Starter) {
     window.instances = deserialize(JSON.stringify(window.instances));
@@ -40,6 +43,7 @@ export default class Nullstack {
     client.virtualDom = client.nextVirtualDom;
     client.nextVirtualDom = null;
     client.processLifecycleQueues();
+    delete window.context;
   }
 
   _self = {
@@ -49,12 +53,10 @@ export default class Nullstack {
   }
 
   constructor() {
-    const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
+    const methods = getProxyableMethods(this);
     const proxy = new Proxy(this, instanceProxyHandler);
     for(const method of methods) {
-      if(method !== 'constructor' && typeof(this[method]) === 'function') {
-        this[method] = this[method].bind(proxy);
-      }
+      this[method] = this[method].bind(proxy);
     }
     return proxy;
   }

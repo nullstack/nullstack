@@ -12,6 +12,6 @@
   "scripts": {
     "start": "npx webpack --config node_modules/nullstack/webpack.config.js --dir=./tests --mode=development --watch",
     "build": "npx webpack --config node_modules/nullstack/webpack.config.js --dir=./tests --mode=production",
-    "test": "jest"
+    "test": "jest --testTimeout=10000 --runInBand"
   }
 }
