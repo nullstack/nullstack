@@ -22,11 +22,18 @@ npx create-nullstack-app project-name
 
 Read the [Nullstack Documentation](https://nullstack.app/documentation)
 
+## Watch the tutorials on our Youtube Channel
+
+[<img src="https://img.youtube.com/vi/l23z00GEar8/maxresdefault.jpg" height="100">](https://www.youtube.com/watch?v=l23z00GEar8&list=PL5ylYELQy1hyFbguVaShp3XujjdVXLpId)
+[<img src="https://img.youtube.com/vi/ieLVXZGXUkI/maxresdefault.jpg" height="100">](https://www.youtube.com/watch?v=ieLVXZGXUkI&list=PL5ylYELQy1hz1tcnZcP44xRxETpH9bTUe)
+
+<img src='https://raw.githubusercontent.com/nullstack/nullstack/master/nullstack.png' height='60' alt='Nullstack' />
+
+[Read the documentation](https://nullstack.app/documentation)
+
 ## Credits
 
-* Author: [Christian Mortaro](https://github.com/Mortaro)
-* Rubber duck: [Anny Figueira](https://github.com/AnnyFigueira)
-* Visual identity: [Dayson Marx](https://www.instagram.com/daysonmarx)
+Get to know the [Nullstack Contributors](https://nullstack.app/contributors)
 
 ## License
 
