@@ -1,8 +1,15 @@
-import {isBindable} from '../shared/nodes';
-import client from './client';
+export default class Bindable {
 
-export default function bindableNode(node) {
-  if(isBindable(node)) {
+  match({node}) {
+    return (
+      node !== undefined && 
+      node.attributes !== undefined && 
+      node.attributes.bind !== undefined && 
+      node.attributes.source !== undefined
+    )
+  }
+
+  transform({node, scope}) {
     const target = node.attributes.source;
     if(node.type === 'textarea') {
       node.children = [target[node.attributes.bind]];
@@ -12,6 +19,14 @@ export default function bindableNode(node) {
       node.attributes.value = target[node.attributes.bind];
     }
     node.attributes.name = node.attributes.name || node.attributes.bind;
+
+    if(scope.context.environment.client) {
+      this._attatchEvent(node);
+    }
+  }
+
+  _attatchEvent(node) {
+    const target = node.attributes.source;
     let eventName = 'oninput';
     let valueName = 'value';
     if(node.attributes.type === 'checkbox' || node.attributes.type === 'radio') {
@@ -32,7 +47,7 @@ export default function bindableNode(node) {
       } else {
         target[node.attributes.bind] = event ? event.target[valueName] : value;
       }
-      client.update();
+      //client.update();
       if(originalEvent !== undefined) {
         setTimeout(() => {
           originalEvent({...node.attributes, ...scope});
@@ -40,4 +55,5 @@ export default function bindableNode(node) {
       }
     }
   }
+
 }

@@ -1,3 +1,5 @@
+import fragment from './fragment';
+
 function flattenChildren(children) {
   children = [].concat.apply([], children).map((child) => {
     if(child === null || child === undefined) return false;
@@ -15,7 +17,7 @@ export default function element(type, attributes = {}, ...children) {
     children = [children.join('')];
   }
   if(type === 'element') {
-    type = attributes.tag || 'div';
+    type = attributes.tag || fragment;
     delete attributes.tag;
   }
   attributes.children = children;

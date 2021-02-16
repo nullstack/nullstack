@@ -8,6 +8,12 @@ import settings from './settings';
 import worker from './worker';
 import printError from './printError';
 import {generateContext} from './client';
+import generateTree from '../shared/generateTree';
+
+import Routable from '../plugins/routable';
+import Bindable from '../plugins/bindable';
+import Datable from '../plugins/datable';
+import Parameterizable from '../plugins/parameterizable';
 
 export async function prerender(request, response) {
   const context = {};
@@ -21,15 +27,24 @@ export async function prerender(request, response) {
   context.worker = {...worker, online, responsive: online};
   const scope = {};
   scope.instances = {};
-  scope.routes = {};
+  scope.segments = context.params;
   scope.request = request;
   scope.response = response;
   scope.head = '';
   scope.body = '';
   scope.context = context;
   scope.generateContext = generateContext(context);
+
+  scope.plugins = [
+    new Parameterizable({scope}),
+    new Routable({scope}),
+    new Datable({scope}),
+    new Bindable({scope})
+  ]
+
   try {
-    scope.body = await render(generator.starter(), [0], scope);
+    const tree = await generateTree(generator.starter(), scope);
+    scope.body = render(tree, scope);
     if(!online) {
       context.page.status = 200;
     }
@@ -44,7 +59,15 @@ export async function prerender(request, response) {
       for(const key in scope.instances) {
         delete scope.instances[key];
       }
-      scope.body = await render(generator.starter(), [0], scope);
+      scope.head = '';
+      scope.plugins = [
+        new Parameterizable({scope}),
+        new Routable({scope}),
+        new Datable({scope}),
+        new Bindable({scope})
+      ]
+      const tree = await generateTree(generator.starter(), scope);
+      scope.body = render(tree, scope);
     }
   }
   return scope;
