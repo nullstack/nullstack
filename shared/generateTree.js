@@ -11,13 +11,20 @@ async function generateBranch(parent, node, depth, scope) {
 
   if(isClass(node)) {
     const key = node.attributes.key || generateKey(depth);
-    if(scope.context.environment.client && scope.context.router._changed && node.attributes && node.attributes.route) {
+    if(
+      scope.context.environment.client && 
+      scope.context.router._changed &&
+      node.attributes && 
+      node.attributes.route && 
+      !scope.context.environment.static
+    ) {
       const routeDepth = depth.slice(0, -1).join('.');
       const newSegments = scope.newSegments[routeDepth];
       if(newSegments) {
         const oldSegments = scope.oldSegments[routeDepth];
         for(const segment in newSegments) {
           if(oldSegments[segment] !== newSegments[segment]) {
+            console.log('reset', {node});
             delete scope.memory[key];
             delete scope.instances[key];
           }
@@ -102,6 +109,7 @@ async function generateBranch(parent, node, depth, scope) {
 }
 
 export default async function generateTree(node, scope) {
+  console.log('scope', {...scope.memory});
   const tree = {type: 'div', attributes: {id: 'application'}, children: []};
   await generateBranch(tree, node, [0], scope);
   return tree;
