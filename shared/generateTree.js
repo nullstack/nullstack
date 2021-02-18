@@ -24,7 +24,6 @@ async function generateBranch(parent, node, depth, scope) {
         const oldSegments = scope.oldSegments[routeDepth];
         for(const segment in newSegments) {
           if(oldSegments[segment] !== newSegments[segment]) {
-            console.log('reset', {node});
             delete scope.memory[key];
             delete scope.instances[key];
           }
@@ -109,7 +108,6 @@ async function generateBranch(parent, node, depth, scope) {
 }
 
 export default async function generateTree(node, scope) {
-  console.log('scope', {...scope.memory});
   const tree = {type: 'div', attributes: {id: 'application'}, children: []};
   await generateBranch(tree, node, [0], scope);
   return tree;

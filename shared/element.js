@@ -8,19 +8,16 @@ function flattenChildren(children) {
   return [].concat.apply([], children);
 }
 
-export default function element(type, attributes = {}, ...children) {
-  if(attributes === null) {
-    attributes = {};
-  }
+export default function element(type, props, ...children) {
   children = flattenChildren(children);
   if(type === 'textarea') {
     children = [children.join('')];
   }
+  const attributes = {...props, children};
   if(type === 'element') {
     type = attributes.tag || fragment;
     delete attributes.tag;
   }
-  attributes.children = children;
   if(typeof(type) === 'function' && type.render !== undefined) {
     return {type, attributes, children: null}
   }

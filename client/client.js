@@ -1,4 +1,3 @@
-//import Scope from './scope';
 import segments from './segments';
 import router from './router';
 import rerender from './rerender';
@@ -90,7 +89,3 @@ client.processLifecycleQueues = async function() {
 }
 
 export default client;
-
-/*const client = new Scope();
-
-export default client;*/
