@@ -17,7 +17,7 @@ export default function rerender(selector, depth) {
     next.instance._self.element = selector;
   }
 
-  if(!client.hydrated) {
+  if(!client.hydrated && selector) {
     for(const element of selector.childNodes) {
       if(element.tagName && element.tagName.toLowerCase() == 'textarea' && element.childNodes.length == 0) {
         element.appendChild(document.createTextNode(''));
