@@ -12,7 +12,6 @@ class ChildComponent extends ParentComponent {
   }
 
   async hydrate() {
-    console.log('hydrate');
     this.hydratedParentThis = await this.getParentThis();
     this.hydratedChildThis = await this.getChildThis();
   }
