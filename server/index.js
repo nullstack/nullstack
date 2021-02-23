@@ -14,6 +14,7 @@ import worker from './worker';
 import invoke from './invoke';
 import instanceProxyHandler from './instanceProxyHandler';
 import getProxyableMethods from '../shared/getProxyableMethods';
+import fragment from '../shared/fragment';
 
 context.server = server;
 context.project = project;
@@ -27,6 +28,7 @@ class Nullstack {
   static registry = registry;
   static element = element;
   static invoke = invoke;
+  static fragment = fragment;
 
   static async start(Starter) {
     if(this.name.indexOf('Nullstack') > -1) {

@@ -56,7 +56,7 @@ export default function({head, body, context, instances}) {
     ${head.split('<!--#-->').join('')}
   </head>
   <body>
-    <div id="application">${body}</div>
+    ${body}
     <script async>
       window.page = ${JSON.stringify(page)};
       window.instances = ${JSON.stringify(serializableInstances)};

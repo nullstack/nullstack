@@ -1,10 +1,18 @@
-import {isParameterizable} from './nodes';
-
 import serializeParam from '../shared/serializeParam';
 import serializeSearch from '../shared/serializeSearch';
 
-export default function anchorableNode(node, router, params) {
-  if(isParameterizable(node)) {
+export default class Parameterizable {
+
+  match({node}) {
+    return (
+      node &&
+      node.attributes &&
+      (node.attributes.params || node.attributes.path)
+    )
+  }
+
+  transform({node, scope}) {
+    const {router, params} = scope.context;
     let serializedParams;
     if(node.attributes.params) {
       serializedParams = {};
@@ -20,4 +28,5 @@ export default function anchorableNode(node, router, params) {
     delete node.attributes.path;
     delete node.attributes.params;
   }
+
 }

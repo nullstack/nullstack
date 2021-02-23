@@ -42,7 +42,7 @@ const babelNullstack = {
         "@babel/plugin-proposal-class-properties",
         ["@babel/plugin-transform-react-jsx", {
           "pragma": "Nullstack.element",
-          "pragmaFrag": "'Fragment'",
+          "pragmaFrag": "Nullstack.fragment",
           "throwIfNamespace": false
         }]
       ]

@@ -37,7 +37,7 @@ class Router {
         try {
           const response = await fetch(endpoint);
           const payload = await response.json(url);
-          window.instances = payload.instances;
+          client.memory = payload.instances;
           for(const key in payload.page) {
             page[key] = payload.page[key];
           }
