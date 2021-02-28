@@ -7,7 +7,11 @@ export default function invoke(name, hash) {
   return async function _invoke(params = {}) {
     let payload;
     worker.fetching = true;
-    worker.loading[name] = params;
+    if(worker.loading[name] !== undefined) {
+      worker.loading[name] = [...worker.loading[name], params];
+    } else {
+      worker.loading[name] = [params];
+    }
     const finalHash = hash === this.constructor.hash ? hash : `${hash}-${this.constructor.hash}`;
     let url = `/${prefix}/${finalHash}/${name}.json`;
     try {
@@ -29,7 +33,11 @@ export default function invoke(name, hash) {
       worker.responsive = false;
     }
     worker.fetching = false;
-    delete worker.loading[name];
+    if(worker.loading[name]?.length === 1) {
+      delete worker.loading[name];
+    } else {
+      worker.loading[name] = worker.loading[name].filter((task) => task !== params);
+    }
     return payload;
   }
 }
