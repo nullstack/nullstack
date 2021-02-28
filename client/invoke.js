@@ -4,10 +4,10 @@ import prefix from '../shared/prefix';
 import page from './page';
 
 export default function invoke(name, hash) {
-  return async function _invoke(params) {
+  return async function _invoke(params = {}) {
     let payload;
     worker.fetching = true;
-    worker.loading[name] = true;
+    worker.loading[name] = params;
     const finalHash = hash === this.constructor.hash ? hash : `${hash}-${this.constructor.hash}`;
     let url = `/${prefix}/${finalHash}/${name}.json`;
     try {

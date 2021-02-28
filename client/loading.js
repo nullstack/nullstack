@@ -5,9 +5,6 @@ const loadingProxyHandler = {
     target[name] = value;
     client.update();
     return true;
-  },
-  get(target, name) {
-    return target[name] || false;
   }
 }
 

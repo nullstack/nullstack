@@ -29,10 +29,18 @@ class ContextWorker extends Nullstack {
     worker.headers.custom = 'custom';
     this.header = await this.inspectHeaders();
   }
+
+  static async longServerFunction({id}) {
+    await sleep(3000);
+  }
+
+  invokeServerFunction({id}) {
+    this.longServerFunction({id});
+  }
   
   render({worker}) {
     return (
-      <div> 
+      <div>
         <button onclick={this.invokeServerFunction}> Invoke </button>
         <div data-header={this.header} />
         <div data-worker={!!worker} />
@@ -42,6 +50,9 @@ class ContextWorker extends Nullstack {
         <div data-responsive={worker.responsive} />
         <div data-preload={!!worker.preload} />
         <div data-preload-path={worker.preload[0]} />
+        <div data-loading={worker.loading.longServerFunction?.id}></div>
+        <button onclick={this.invokeServerFunction} id="a">a</button>
+        <button onclick={this.invokeServerFunction} id="b">b</button>
         {worker.registration &&
           <div data-registration={worker.registration.constructor.name} />
         }

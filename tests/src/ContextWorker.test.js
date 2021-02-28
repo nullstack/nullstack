@@ -91,6 +91,24 @@ describe('ContextWorker', () => {
 
 });
 
+describe('ContextWorker', () => {
+
+  let page;
+
+  beforeAll(async () => {
+    page = await browser.newPage();
+    await page.goto('http://localhost:6969/context-worker');
+  });
+
+  test('fetching is set to the arguments of the server function when the worker is fetching', async () => {
+    await page.click('#a');
+    await page.waitForSelector('[data-loading="a"]');
+    const element = await page.$('[data-loading="a"]');
+    expect(element).toBeTruthy();
+  });
+
+});
+
 afterAll(async () => {
   browser.close();
 });
