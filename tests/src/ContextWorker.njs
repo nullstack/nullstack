@@ -39,7 +39,6 @@ class ContextWorker extends Nullstack {
   }
   
   render({worker}) {
-    console.log(worker.loading.longServerFunction, worker.loading.serverFunctionName);
     return (
       <div>
         <button onclick={this.invokeServerFunction}> Invoke </button>
@@ -51,7 +50,7 @@ class ContextWorker extends Nullstack {
         <div data-responsive={worker.responsive} />
         <div data-preload={!!worker.preload} />
         <div data-preload-path={worker.preload[0]} />
-        <div data-loading={worker.loading.longServerFunction?.[0]?.id}></div>
+        <div data-loading={worker.loading.longServerFunction?.map(({id}) => id)?.join(',')}></div>
         <button onclick={this.invokeServerFunction} id="a">a</button>
         <button onclick={this.invokeServerFunction} id="b">b</button>
         {worker.registration &&

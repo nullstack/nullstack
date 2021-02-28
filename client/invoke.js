@@ -32,12 +32,12 @@ export default function invoke(name, hash) {
     } catch(e) {
       worker.responsive = false;
     }
-    worker.fetching = false;
     if(worker.loading[name]?.length === 1) {
       delete worker.loading[name];
     } else {
       worker.loading[name] = worker.loading[name].filter((task) => task !== params);
     }
+    worker.fetching = !!Object.keys(worker.loading).length;
     return payload;
   }
 }

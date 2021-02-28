@@ -103,8 +103,17 @@ describe('ContextWorker', () => {
   test('fetching is set to the arguments of the server function when the worker is fetching', async () => {
     await page.click('#a');
     await page.waitForSelector('[data-loading="a"]');
-    const element = await page.$('[data-loading="a"]');
+    let element = await page.$('[data-loading="a"]');
     expect(element).toBeTruthy();
+
+    await page.click('#b');
+    await page.waitForSelector('[data-loading="a,b"]');
+    element = await page.$('[data-loading="a,b"]');
+    expect(element).toBeTruthy();
+
+    await page.waitForTimeout(4000);
+    element = await page.$('[data-loading="a,b"]');
+    expect(element).toBeFalsy();
   });
 
 });
