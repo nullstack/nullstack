@@ -15,7 +15,6 @@ class ContextLoading extends Nullstack {
   }
   
   render({worker}) {
-    console.log(worker.loading.serverFunctionName);
     return (
       <div> 
         <button onclick={this.invokeServerFunction}> Invoke </button>
