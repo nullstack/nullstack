@@ -7,10 +7,10 @@ export default function invoke(name, hash) {
   return async function _invoke(params = {}) {
     let payload;
     worker.fetching = true;
-    if(worker.loading[name] !== undefined) {
-      worker.loading[name] = [...worker.loading[name], params];
+    if(Object.isFrozen(worker.queues[name])) {
+      worker.queues[name] = [params];
     } else {
-      worker.loading[name] = [params];
+      worker.queues[name] = [...worker.queues[name], params];
     }
     const finalHash = hash === this.constructor.hash ? hash : `${hash}-${this.constructor.hash}`;
     let url = `/${prefix}/${finalHash}/${name}.json`;
@@ -32,12 +32,12 @@ export default function invoke(name, hash) {
     } catch(e) {
       worker.responsive = false;
     }
-    if(worker.loading[name]?.length === 1) {
-      delete worker.loading[name];
+    if(worker.queues[name]?.length === 1) {
+      delete worker.queues[name];
     } else {
-      worker.loading[name] = worker.loading[name].filter((task) => task !== params);
+      worker.queues[name] = worker.queues[name].filter((task) => task !== params);
     }
-    worker.fetching = !!Object.keys(worker.loading).length;
+    worker.fetching = !!Object.keys(worker.queues).length;
     return payload;
   }
 }

@@ -1,12 +1,25 @@
 import environment from './environment';
 import client from './client';
 import router from './router';
-import loading from './loading';
 
 const worker = {...window.worker};
 worker.online = navigator.onLine;
 delete window.worker;
-worker.loading = loading;
+
+const emptyQueue = Object.freeze([]);
+
+const queuesProxyHandler = {
+  set(target, name, value) {
+    target[name] = value;
+    client.update();
+    return true;
+  },
+  get(target, name) {	
+    return target[name] || emptyQueue;	
+  }
+}
+
+worker.queues = new Proxy({}, queuesProxyHandler);
 
 const workerProxyHandler = {
   set(target, name, value) {

@@ -4,7 +4,6 @@ import environment from './environment';
 import project from './project';
 import settings from './settings';
 import files from './files';
-import loading from './loading';
 
 import load from '!!raw-loader!../workers/load.js';
 import cacheFirst from '!!raw-loader!../workers/cacheFirst.js';
@@ -28,7 +27,16 @@ worker.enabled = environment.production;
 worker.fetching = false;
 worker.preload = [];
 worker.headers = {};
-worker.loading = loading;
+
+const emptyQueue = Object.freeze([]);
+
+const queuesProxyHandler = {
+  get() {	
+    return emptyQueue;	
+  }	
+}	
+
+worker.queues = new Proxy({}, queuesProxyHandler);	
 
 export function generateServiceWorker() {
   const sources = [];

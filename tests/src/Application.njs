@@ -9,7 +9,6 @@ import Context from './Context';
 import ContextSecrets from './ContextSecrets';
 import ContextSettings from './ContextSettings';
 import ContextEnvironment from './ContextEnvironment';
-import ContextLoading from './ContextLoading';
 import ContextWorker from './ContextWorker';
 import InstanceKey from './InstanceKey';
 import RoutesAndParams from './RoutesAndParams';
@@ -56,7 +55,6 @@ class Application extends Nullstack {
         <ContextSecrets route="/context-secrets" />
         <ContextSettings route="/context-settings" />
         <ContextEnvironment route="/context-environment" />
-        <ContextLoading route="/context-loading" />
         <ContextWorker route="/context-worker" />
         <InstanceKey route="/instance-key" />
         <RoutesAndParams route="/routes-and-params/*" />

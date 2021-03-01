@@ -15,6 +15,11 @@ describe('ContextWorker', () => {
     await page.goto('http://localhost:6969/context-worker');
   });
 
+  test('queues keys always return at least an empty array', async () => {
+    const element = await page.$('[data-queues-length="0"]');
+    expect(element).toBeTruthy();
+  });
+
   test('fetching is set to false when the worker is idle', async () => {
     const element = await page.$('[data-fetching]');
     expect(element).toBeFalsy();
@@ -102,18 +107,27 @@ describe('ContextWorker', () => {
 
   test('fetching is set to the arguments of the server function when the worker is fetching', async () => {
     await page.click('#a');
-    await page.waitForSelector('[data-loading="a"]');
-    let element = await page.$('[data-loading="a"]');
+    await page.waitForSelector('[data-queues="a"]');
+    let element = await page.$('[data-queues="a"]');
+    expect(element).toBeTruthy();
+
+    element = await page.$('[data-queues-length="1"]');
     expect(element).toBeTruthy();
 
     await page.click('#b');
-    await page.waitForSelector('[data-loading="a,b"]');
-    element = await page.$('[data-loading="a,b"]');
+    await page.waitForSelector('[data-queues="a,b"]');
+    element = await page.$('[data-queues="a,b"]');
+    expect(element).toBeTruthy();
+
+    element = await page.$('[data-queues-length="2"]');
     expect(element).toBeTruthy();
 
     await page.waitForTimeout(4000);
-    element = await page.$('[data-loading="a,b"]');
+    element = await page.$('[data-queues="a,b"]');
     expect(element).toBeFalsy();
+
+    element = await page.$('[data-queues-length="0"]');
+    expect(element).toBeTruthy();
   });
 
 });
