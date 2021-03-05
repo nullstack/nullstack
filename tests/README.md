@@ -6,22 +6,24 @@ This folder contains tests for Nullstack using Jest and Puppeteer.
 
 ## How to install
 
+In project folder:
+
 ```sh
 npm link
-cd test
+cd tests
 npm install
 npm link nullstack
 ```
 
 ## How to run the tests
 
-cd to the project folder and run the application:
+`cd` to the `tests` folder and run the application:
 
 ```sh
 npm start
 ```
 
-in another terminal cd to the project folder and run the tests:
+in another terminal `cd` to the `tests` folder and run the tests:
 
 ```sh
 npm test
