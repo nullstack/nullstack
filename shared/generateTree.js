@@ -79,7 +79,8 @@ async function generateBranch(parent, node, depth, scope) {
   }
 
   if(isFunction(node)) {
-    const children = node.type(node.attributes);
+    const argsy = node.type.name ? {...scope.context, ...node.attributes} : node.attributes;
+    const children = node.type(argsy);
     node.children = [].concat(children);
     for(let i=0; i<node.children.length; i++) {
       await generateBranch(parent, node.children[i], [...depth, i], scope);

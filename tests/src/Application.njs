@@ -23,6 +23,7 @@ import StaticThis from './StaticThis';
 import ChildComponent from './ChildComponent';
 import ParentComponent from './ParentComponent';
 import Element from './Element';
+import PureComponents from './PureComponents'
 
 import './Application.css';
 
@@ -68,6 +69,7 @@ class Application extends Nullstack {
         <ChildComponent route="/child-component" />
         <ParentComponent route="/parent-component" />
         <Element route="/element" />
+        <PureComponents route="/pure-components" />
         <ErrorPage route="*" />
       </main>
     )
