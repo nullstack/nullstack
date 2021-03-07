@@ -59,6 +59,14 @@ describe('RemoveStart', () => {
     expect(element).toBeTruthy();
   });
 
+  test('pure components receive a proxy to the context', async () => {
+    await page.focus('input')
+    await page.keyboard.type('!')
+    await page.waitForSelector('[data-string="!nullstack"]');
+    const element = await page.$('[data-string="!nullstack"]');
+    expect(element).toBeTruthy();
+  });
+
 });
 
 afterAll(async () => {

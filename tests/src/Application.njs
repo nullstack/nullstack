@@ -37,6 +37,10 @@ class Application extends Nullstack {
     ServerRequestAndResponse.start(context);
   }
 
+  prepare(context) {
+    context.string = 'nullstack';
+  }
+
   render({project, page, environment}) {
     return (
       <main>

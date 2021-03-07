@@ -79,7 +79,7 @@ async function generateBranch(parent, node, depth, scope) {
   }
 
   if(isFunction(node)) {
-    const context = node.type.name ? {...scope.context, ...node.attributes} : node.attributes;
+    const context = node.type.name ? scope.generateContext(node.attributes) : node.attributes;
     const children = node.type(context);
     node.children = [].concat(children);
     for(let i=0; i<node.children.length; i++) {

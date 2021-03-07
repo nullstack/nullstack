@@ -12,6 +12,9 @@ export function NamedComponent(context) {
 
 export const ArrowComponent = (context) => {
   return (
-    <div data-arrow={context.params.works} id={context.id} />
+    <>
+      <input data-string={context.string} bind={context.string} />
+      <div data-arrow={context.params.works} id={context.id} />
+    </>
   )
 }
