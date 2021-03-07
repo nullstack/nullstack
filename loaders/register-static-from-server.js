@@ -3,6 +3,7 @@ const parse = require('@babel/parser').parse;
 const traverse = require("@babel/traverse").default;
 
 module.exports = function(source) {
+  let hasClass = false;
   const hash = crypto.createHash('md5').update(source).digest("hex");
   let klassName;
   let klassEnd;
@@ -13,6 +14,7 @@ module.exports = function(source) {
   });
   traverse(ast, {
     ClassDeclaration(path) {
+      hasClass = true;
       klassEnd = path.node.end - 1;
       klassName = path.node.id.name;
     },
@@ -22,6 +24,7 @@ module.exports = function(source) {
       }
     }
   });
+  if(!hasClass) return source;
   let output = source.substring(0, klassEnd);
   for(const methodName of methodNames) {
     output += `${methodName} = Nullstack.invoke('${methodName}');\n`

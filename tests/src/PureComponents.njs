@@ -1,22 +1,9 @@
 import Nullstack from 'nullstack';
-
-const AnonComponent = function(context) {
-  return (
-    <div data-anon={context.params.works} id={context.id} />
-  )
-}
-
-function NamedComponent(context) {
-  return (
-    <div data-named={context.params.works} id={context.id} />
-  )
-}
-
-const ArrowComponent = (context) => {
-  return (
-    <div data-arrow={context.params.works} id={context.id} />
-  )
-}
+import { 
+  AnonComponent, 
+  NamedComponent, 
+  ArrowComponent 
+} from './PureFunctions';
 
 class Component extends Nullstack {
 
