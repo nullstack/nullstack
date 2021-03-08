@@ -2,7 +2,7 @@ import deserialize from '../shared/deserialize';
 import element from '../shared/element';
 import router from './router';
 import client from './client';
-import context from './context';
+import context, { generateContext } from './context';
 import rerender from './rerender';
 import instanceProxyHandler from './instanceProxyHandler';
 import page from './page';
@@ -29,6 +29,7 @@ context.environment = window.environment;
 client.memory = deserialize(JSON.stringify(window.instances));
 
 const scope = client;
+scope.generateContext = generateContext;
 scope.context = context;
 
 client.plugins = plugins.genPlugins(scope, true);

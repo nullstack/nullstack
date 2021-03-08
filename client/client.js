@@ -1,7 +1,7 @@
 import segments from './segments';
 import router from './router';
 import rerender from './rerender';
-import context from './context';
+import context, { generateContext } from './context';
 
 import generateTree from '../shared/generateTree';
 import plugins from '../shared/plugins';
@@ -20,6 +20,7 @@ client.virtualDom = {};
 client.selector = null;
 client.routes = {};
 client.events = {};
+client.generateContext = generateContext;
 
 client.segments = segments;
 client.renderQueue = null;
