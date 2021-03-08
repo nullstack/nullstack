@@ -1,0 +1,17 @@
+{
+  "name": "test",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "nullstack": "*",
+    "puppeteer": "^5.5.0"
+  },
+  "scripts": {
+    "start": "npx webpack --config node_modules/nullstack/webpack.config.js --dir=./tests --mode=development --watch",
+    "build": "npx webpack --config node_modules/nullstack/webpack.config.js --dir=./tests --mode=production",
+    "test": "jest --testTimeout=10000 --runInBand"
+  }
+}

@@ -1,43 +1,35 @@
 <img src='https://raw.githubusercontent.com/nullstack/nullstack/master/nullstack.png' height='60' alt='Nullstack'>
 
-Fullstack components for one man armies.
+Full-stack javascript components for one-dev armies.
 
-a.k.a the framework that solves my daily problem and maybe yours.
+## What is Nullstack?
+
+Nullstack is a full-stack framework for building progressive web applications.
+
+It connects a stateful UI layer to specialized microservices in the same component using vanilla javascript.
+
+Focus on solving your business logic instead of writing glue code.
+
+Learn more about [Nullstack](https://nullstack.app)
 
 ## Getting Started
 
-Replace PROJECT_NAME with your project name to clone the minimal template with the commands bellow:
+replace project-name with your project name and run the command bellow to start a project: 
 
 ```sh
-git clone https://github.com/nullstack/nullstack-create-app.git PROJECT_NAME
-git remote rm origin
+npx create-nullstack-app project-name
 ```
 
-Install the dependencies and start the application:
+Read the [Nullstack Documentation](https://nullstack.app/documentation)
 
-```sh
-npm install
-npm start
-```
+## Watch the tutorials on our Youtube Channel
 
-## Nullstack Examples
-
-You can check this repository with Nullstack Examples:
-
-* [Basic Component](https://github.com/nullstack/nullstack-examples/blob/master/src/01_BasicComponent.js)
-* [Context and Props](https://github.com/nullstack/nullstack-examples/blob/master/src/02_ContextAndProps.js)
-* [Events](https://github.com/nullstack/nullstack-examples/blob/master/src/03_Events.js)
-* [Inner Components](https://github.com/nullstack/nullstack-examples/blob/master/src/04_InnerComponents.js)
-* [Routes and Params](https://github.com/nullstack/nullstack-examples/blob/master/src/05_RoutesAndParams.js)
-* [Server Functions](https://github.com/nullstack/nullstack-examples/blob/master/src/06_ServerFunctions.js)
-* [Server Side Rendering](https://github.com/nullstack/nullstack-examples/blob/master/src/07_ServerSideRendering.js)
-* [Metadata](https://github.com/nullstack/nullstack-examples/blob/master/src/08_Metadata.js)
-* [Initialization](https://github.com/nullstack/nullstack-examples/blob/master/src/09_Initialization.js)
+[<img src="https://img.youtube.com/vi/l23z00GEar8/maxresdefault.jpg" height="100">](https://www.youtube.com/watch?v=l23z00GEar8&list=PL5ylYELQy1hyFbguVaShp3XujjdVXLpId)
+[<img src="https://img.youtube.com/vi/ieLVXZGXUkI/maxresdefault.jpg" height="100">](https://www.youtube.com/watch?v=ieLVXZGXUkI&list=PL5ylYELQy1hz1tcnZcP44xRxETpH9bTUe)
 
 ## Credits
 
-* Code starter: [Christian Mortaro](https://github.com/Mortaro)
-* Visual identity: [Dayson Marx](https://www.instagram.com/daysonmarx)
+Get to know the [Nullstack Contributors](https://nullstack.app/contributors)
 
 ## License
 

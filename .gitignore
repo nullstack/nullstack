@@ -1,2 +1,7 @@
 node_modules/
 package-lock.json
+tests/node_modules/
+tests/.production
+tests/.development
+tests/package-lock.json
+yarn.lock
