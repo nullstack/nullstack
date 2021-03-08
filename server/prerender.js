@@ -9,13 +9,9 @@ import worker from './worker';
 import printError from './printError';
 import {generateContext} from './client';
 import generateTree from '../shared/generateTree';
+import plugins from '../shared/plugins';
 
-import Routable from '../plugins/routable';
-import Bindable from '../plugins/bindable';
-import Datable from '../plugins/datable';
-import Parameterizable from '../plugins/parameterizable';
-
-export async function prerender(request, response) {
+export async function prerender(request, response, userPlugins) {
   const context = {};
   context.page = {image: '/image-1200x630.png', status: 200};  
   context.project = project;
@@ -35,12 +31,7 @@ export async function prerender(request, response) {
   scope.context = context;
   scope.generateContext = generateContext(context);
 
-  scope.plugins = [
-    new Parameterizable({scope}),
-    new Routable({scope}),
-    new Datable({scope}),
-    new Bindable({scope})
-  ]
+  scope.plugins = plugins.genPlugins(scope, false, userPlugins);
 
   try {
     const tree = await generateTree(generator.starter(), scope);
@@ -60,12 +51,7 @@ export async function prerender(request, response) {
         delete scope.instances[key];
       }
       scope.head = '';
-      scope.plugins = [
-        new Parameterizable({scope}),
-        new Routable({scope}),
-        new Datable({scope}),
-        new Bindable({scope})
-      ]
+      scope.plugins = plugins.genPlugins(scope, false, userPlugins);
       const tree = await generateTree(generator.starter(), scope);
       scope.body = render(tree, scope);
     }

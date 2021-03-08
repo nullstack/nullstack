@@ -4,13 +4,7 @@ import rerender from './rerender';
 import context from './context';
 
 import generateTree from '../shared/generateTree';
-
-import Routable from '../plugins/routable';
-import Bindable from '../plugins/bindable';
-import Datable from '../plugins/datable';
-import Parameterizable from '../plugins/parameterizable';
-import Anchorable from '../plugins/anchorable';
-import Objectable from '../plugins/objectable';
+import plugins from '../shared/plugins';
 
 const client = {};
 
@@ -29,6 +23,7 @@ client.events = {};
 
 client.segments = segments;
 client.renderQueue = null;
+client.userPlugins = [];
 
 client.update = async function() {
   if(client.initialized) {
@@ -36,14 +31,7 @@ client.update = async function() {
     client.renderQueue = setTimeout(async () => {
       const scope = client;
       scope.context = context;
-      scope.plugins = [
-        new Objectable({scope}),
-        new Parameterizable({scope}),
-        new Anchorable({scope}),
-        new Routable({scope}),
-        new Datable({scope}),
-        new Bindable({scope})
-      ]      
+      scope.plugins = plugins.genPlugins(scope, true, client.userPlugins);
       client.initialized = false;
       client.initiationQueue = [];
       client.renewalQueue = [];
