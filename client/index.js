@@ -16,7 +16,7 @@ import getProxyableMethods from '../shared/getProxyableMethods';
 import fragment from '../shared/fragment';
 
 import generateTree from '../shared/generateTree';
-import plugins from '../shared/plugins';
+import { instantiatePlugins, usePlugins } from '../shared/plugins';
 
 context.page = page;
 context.router = router;
@@ -32,14 +32,14 @@ const scope = client;
 scope.generateContext = generateContext;
 scope.context = context;
 
-client.plugins = plugins.genPlugins(scope, true);
+client.plugins = instantiatePlugins(scope);
 
 export default class Nullstack {
 
   static element = element;
   static invoke = invoke;
   static fragment = fragment;
-  static use = plugins.use(client.userPlugins);
+  static use = usePlugins('client');
 
   static async start(Starter) {
     window.addEventListener('popstate', () => {
@@ -52,7 +52,7 @@ export default class Nullstack {
     client.selector = document.querySelector('#application');
     client.virtualDom = await generateTree(client.initializer(), scope);
     context.environment = environment;
-    scope.plugins = plugins.genPlugins(scope, true, client.userPlugins);
+    scope.plugins = instantiatePlugins(scope);
     client.nextVirtualDom = await generateTree(client.initializer(), scope);
     rerender(client.selector, []);
     client.virtualDom = client.nextVirtualDom;

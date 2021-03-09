@@ -1,20 +1,27 @@
-import { serverPlugins, clientPlugins } from '../plugins';
+import Routable from '../plugins/routable';
+import Bindable from '../plugins/bindable';
+import Datable from '../plugins/datable';
+import Parameterizable from '../plugins/parameterizable';
+import Anchorable from '../plugins/anchorable';
+import Objectable from '../plugins/objectable';
 
-function genPlugins(scope, isClient, userPlugins = []) {
-  return [
-    ...(isClient ? clientPlugins : serverPlugins),
-    ...userPlugins
-  ].map(p => new p({ scope }));
+let plugins = [
+  Objectable,
+  Parameterizable,
+  Anchorable,
+  Routable,
+  Datable,
+  Bindable
+];
+
+export function instantiatePlugins(scope) {
+  return plugins.map(p => new p({ scope }));
 }
 
-function use(userPlugins) {
-  return async (...plugins) => {
-    plugins.flat().forEach(plugin => {
-      if (!userPlugins.includes(plugin)) {
-        userPlugins.push(plugin);
-      }
-    });
+export function usePlugins(environment) {
+  return async (...userPlugins) => {
+    plugins = [
+      ...new Set([...userPlugins.flat(), ...plugins])
+    ].filter((plugin) => plugin[environment])
   }
 }
-
-export default { genPlugins, use };

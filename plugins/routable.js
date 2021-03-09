@@ -2,6 +2,9 @@ import routeMatches from '../shared/routeMatches';
 
 export default class Routable {
 
+  static client = true;
+  static server = true;
+
   constructor({scope}) {
     scope.routes = {};
     if(!scope.oldSegments) {

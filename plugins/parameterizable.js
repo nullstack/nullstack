@@ -3,6 +3,9 @@ import serializeSearch from '../shared/serializeSearch';
 
 export default class Parameterizable {
 
+  static client = true;
+  static server = true;
+
   match({node}) {
     return (
       node &&

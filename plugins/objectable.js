@@ -1,5 +1,8 @@
 export default class Objectable {
 
+  static client = true;
+  static server = false;
+
   match({node}) {
     return (
       node &&

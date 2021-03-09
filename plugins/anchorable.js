@@ -1,5 +1,8 @@
 export default class Anchorable {
 
+  static client = true;
+  static server = false;
+
   match({node}) {
     return (
       node &&
