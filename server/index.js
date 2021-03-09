@@ -15,6 +15,7 @@ import invoke from './invoke';
 import instanceProxyHandler from './instanceProxyHandler';
 import getProxyableMethods from '../shared/getProxyableMethods';
 import fragment from '../shared/fragment';
+import plugins from '../shared/plugins';
 
 context.server = server;
 context.project = project;
@@ -23,12 +24,15 @@ context.settings = settings;
 context.secrets = secrets;
 context.worker = worker;
 
+const userPlugins = [];
+
 class Nullstack {
 
   static registry = registry;
   static element = element;
   static invoke = invoke;
   static fragment = fragment;
+  static use = plugins.use(userPlugins);
 
   static async start(Starter) {
     if(this.name.indexOf('Nullstack') > -1) {
@@ -40,7 +44,7 @@ class Nullstack {
       freezeConfigurable(secrets);
       Object.freeze(worker);
       Object.freeze(project);
-      server.start();
+      server.start(userPlugins);
     }
   }
 
