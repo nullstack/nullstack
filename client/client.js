@@ -4,7 +4,7 @@ import rerender from './rerender';
 import context, { generateContext } from './context';
 
 import generateTree from '../shared/generateTree';
-import plugins from '../shared/plugins';
+import { instantiatePlugins } from '../shared/plugins';
 
 const client = {};
 
@@ -24,7 +24,6 @@ client.generateContext = generateContext;
 
 client.segments = segments;
 client.renderQueue = null;
-client.userPlugins = [];
 
 client.update = async function() {
   if(client.initialized) {
@@ -32,7 +31,7 @@ client.update = async function() {
     client.renderQueue = setTimeout(async () => {
       const scope = client;
       scope.context = context;
-      scope.plugins = plugins.genPlugins(scope, true, client.userPlugins);
+      scope.plugins = instantiatePlugins(scope);
       client.initialized = false;
       client.initiationQueue = [];
       client.renewalQueue = [];

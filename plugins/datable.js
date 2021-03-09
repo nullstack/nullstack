@@ -2,6 +2,9 @@ import {camelize, kebabize} from '../shared/string';
 
 export default class Datable {
 
+  static client = true;
+  static server = true;
+
   match({node}) {
     return (
       node && 

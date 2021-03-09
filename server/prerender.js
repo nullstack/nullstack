@@ -9,9 +9,9 @@ import worker from './worker';
 import printError from './printError';
 import {generateContext} from './client';
 import generateTree from '../shared/generateTree';
-import plugins from '../shared/plugins';
+import { instantiatePlugins } from '../shared/plugins';
 
-export async function prerender(request, response, userPlugins) {
+export async function prerender(request, response) {
   const context = {};
   context.page = {image: '/image-1200x630.png', status: 200};  
   context.project = project;
@@ -31,7 +31,7 @@ export async function prerender(request, response, userPlugins) {
   scope.context = context;
   scope.generateContext = generateContext(context);
 
-  scope.plugins = plugins.genPlugins(scope, false, userPlugins);
+  scope.plugins = instantiatePlugins(scope);
 
   try {
     const tree = await generateTree(generator.starter(), scope);
@@ -51,7 +51,7 @@ export async function prerender(request, response, userPlugins) {
         delete scope.instances[key];
       }
       scope.head = '';
-      scope.plugins = plugins.genPlugins(scope, false, userPlugins);
+      scope.plugins = instantiatePlugins(scope);
       const tree = await generateTree(generator.starter(), scope);
       scope.body = render(tree, scope);
     }

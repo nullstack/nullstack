@@ -1,5 +1,8 @@
 export default class Vueable {
 
+  static client = true;
+  static server = true;
+
   match({ node }) {
     return (
       node &&

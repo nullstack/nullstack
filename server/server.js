@@ -33,7 +33,7 @@ for(const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'po
   }
 }
 
-server.start = function(userPlugins) {
+server.start = function() {
 
   generateManifest();
   generateServiceWorker();
@@ -106,7 +106,7 @@ server.start = function(userPlugins) {
     if(request.originalUrl.split('?')[0].indexOf('.') > -1) {
       return next();
     }
-    const scope = await prerender(request, response, userPlugins);
+    const scope = await prerender(request, response);
     if(!response.headersSent) {
       const status = scope.context.page.status;
       const html = template(scope);
