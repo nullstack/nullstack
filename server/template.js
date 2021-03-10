@@ -52,7 +52,6 @@ export default function({head, body, context, instances}) {
     ${page.schema ? `<script type="application/ld+json">${JSON.stringify(page.schema)}</script>` : ''}
     ${project.icons['180'] ? `<link rel="apple-touch-icon" sizes="180x180" href="${cdn(project.icons['180'])}">` : ''}
     <meta name="msapplication-TileColor" content="${project.backgroundColor || project.color}">
-    <meta name="theme-color" content="${project.color}">
     ${head.split('<!--#-->').join('')}
   </head>
   <body>
