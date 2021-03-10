@@ -27,7 +27,6 @@ export default function({head, body, context, instances}) {
   <head>
     <meta charset="utf-8">
     <meta name="generator" content="Created with Nullstack - https://nullstack.app" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     ${page.title ? `<title>${page.title}</title>` : ''}
     <meta property="og:image" content="${image}">
     ${page.description ? `<meta property="og:description" content="${page.description}">` : ''}
