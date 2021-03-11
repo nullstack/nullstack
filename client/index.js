@@ -16,13 +16,7 @@ import getProxyableMethods from '../shared/getProxyableMethods';
 import fragment from '../shared/fragment';
 
 import generateTree from '../shared/generateTree';
-
-import Routable from '../plugins/routable';
-import Bindable from '../plugins/bindable';
-import Datable from '../plugins/datable';
-import Parameterizable from '../plugins/parameterizable';
-import Anchorable from '../plugins/anchorable';
-import Objectable from '../plugins/objectable';
+import { instantiatePlugins, usePlugins } from '../shared/plugins';
 
 context.page = page;
 context.router = router;
@@ -38,20 +32,14 @@ const scope = client;
 scope.generateContext = generateContext;
 scope.context = context;
 
-client.plugins = [
-  new Objectable({scope}),
-  new Parameterizable({scope}),
-  new Anchorable({scope}),
-  new Routable({scope}),
-  new Datable({scope}),
-  new Bindable({scope})
-]
+client.plugins = instantiatePlugins(scope);
 
 export default class Nullstack {
 
   static element = element;
   static invoke = invoke;
   static fragment = fragment;
+  static use = usePlugins('client');
 
   static async start(Starter) {
     window.addEventListener('popstate', () => {
@@ -64,14 +52,7 @@ export default class Nullstack {
     client.selector = document.querySelector('#application');
     client.virtualDom = await generateTree(client.initializer(), scope);
     context.environment = environment;
-    scope.plugins = [
-      new Objectable({scope}),
-      new Parameterizable({scope}),
-      new Anchorable({scope}),
-      new Routable({scope}),
-      new Datable({scope}),
-      new Bindable({scope})
-    ]
+    scope.plugins = instantiatePlugins(scope);
     client.nextVirtualDom = await generateTree(client.initializer(), scope);
     rerender(client.selector, []);
     client.virtualDom = client.nextVirtualDom;

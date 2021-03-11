@@ -15,6 +15,7 @@ import invoke from './invoke';
 import instanceProxyHandler from './instanceProxyHandler';
 import getProxyableMethods from '../shared/getProxyableMethods';
 import fragment from '../shared/fragment';
+import { usePlugins } from '../shared/plugins';
 
 context.server = server;
 context.project = project;
@@ -29,6 +30,7 @@ class Nullstack {
   static element = element;
   static invoke = invoke;
   static fragment = fragment;
+  static use = usePlugins('server');
 
   static async start(Starter) {
     if(this.name.indexOf('Nullstack') > -1) {

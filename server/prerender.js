@@ -9,11 +9,7 @@ import worker from './worker';
 import printError from './printError';
 import {generateContext} from './client';
 import generateTree from '../shared/generateTree';
-
-import Routable from '../plugins/routable';
-import Bindable from '../plugins/bindable';
-import Datable from '../plugins/datable';
-import Parameterizable from '../plugins/parameterizable';
+import { instantiatePlugins } from '../shared/plugins';
 
 export async function prerender(request, response) {
   const context = {};
@@ -36,12 +32,7 @@ export async function prerender(request, response) {
   scope.context = context;
   scope.generateContext = generateContext(context);
 
-  scope.plugins = [
-    new Parameterizable({scope}),
-    new Routable({scope}),
-    new Datable({scope}),
-    new Bindable({scope})
-  ]
+  scope.plugins = instantiatePlugins(scope);
 
   try {
     const tree = await generateTree(generator.starter(), scope);
@@ -61,12 +52,7 @@ export async function prerender(request, response) {
         delete scope.instances[key];
       }
       scope.head = '';
-      scope.plugins = [
-        new Parameterizable({scope}),
-        new Routable({scope}),
-        new Datable({scope}),
-        new Bindable({scope})
-      ]
+      scope.plugins = instantiatePlugins(scope);
       const tree = await generateTree(generator.starter(), scope);
       scope.body = render(tree, scope);
     }

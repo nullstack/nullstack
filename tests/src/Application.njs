@@ -23,8 +23,9 @@ import StaticThis from './StaticThis';
 import ChildComponent from './ChildComponent';
 import ParentComponent from './ParentComponent';
 import Element from './Element';
-import PureComponents from './PureComponents';
 import Instanceable from './Instanceable';
+import PluginAttributes from './PluginAttributes';
+import PureComponents from './PureComponents'
 
 import './Application.css';
 
@@ -78,6 +79,7 @@ class Application extends Nullstack {
         <ChildComponent route="/child-component" />
         <ParentComponent route="/parent-component" />
         <Element route="/element" />
+        <PluginAttributes route="/plugin-attributes" />
         <PureComponents route="/pure-components" />
         <Instanceable route="/instanceable" key="Instanceable" />
         <ErrorPage route="*" />
