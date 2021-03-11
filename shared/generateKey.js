@@ -1,3 +1,5 @@
 export default function generateKey(depth) {
-  return 'n-' + depth.join('-');
+  const key = 'n-' + depth.join('-');
+
+  return key !== 'n-0' ? key : 'application';
 }
