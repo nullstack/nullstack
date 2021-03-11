@@ -13,6 +13,7 @@ client.hydrated = false;
 client.initializer = null;
 
 client.instances = {};
+context.instances = client.instances;
 client.initiationQueue = [];
 client.renewalQueue = [];
 client.hydrationQueue = [];

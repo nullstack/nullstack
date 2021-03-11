@@ -23,12 +23,17 @@ import StaticThis from './StaticThis';
 import ChildComponent from './ChildComponent';
 import ParentComponent from './ParentComponent';
 import Element from './Element';
+import Instanceable from './Instanceable';
 import PluginAttributes from './PluginAttributes';
 import PureComponents from './PureComponents'
 
 import './Application.css';
 
 class Application extends Nullstack {
+
+  async changeInstanceable({ instances }) {
+    await instances.Instanceable.customMethod();
+  }
 
   static async start(context) {
     ContextProject.start(context);
@@ -76,6 +81,7 @@ class Application extends Nullstack {
         <Element route="/element" />
         <PluginAttributes route="/plugin-attributes" />
         <PureComponents route="/pure-components" />
+        <Instanceable route="/instanceable" key="Instanceable" />
         <ErrorPage route="*" />
       </main>
     )

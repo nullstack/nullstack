@@ -44,7 +44,9 @@ async function generateBranch(parent, node, depth, scope) {
       }
     }
     let shouldHydrate = false;
-    if(scope.instances[key] === undefined) {
+    const shouldPrepare = scope.instances[key] === undefined;
+    scope.instances[key] = instance;
+    if(shouldPrepare) {
       if(memory === undefined) {
         instance.prepare && instance.prepare();
         if(scope.context.environment.server) {
@@ -63,7 +65,6 @@ async function generateBranch(parent, node, depth, scope) {
         instance.update && instance.update();
       }
     }
-    scope.instances[key] = instance;
     if(scope.context.environment.client) {
       scope.renewalQueue.push(instance);
     }
