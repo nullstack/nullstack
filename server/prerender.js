@@ -27,6 +27,7 @@ export async function prerender(request, response) {
   context.worker = {...worker, online, responsive: online};
   const scope = {};
   scope.instances = {};
+  context.instances = scope.instances;
   scope.segments = context.params;
   scope.request = request;
   scope.response = response;
