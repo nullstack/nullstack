@@ -14,8 +14,11 @@ let plugins = [
   Bindable
 ];
 
-export function instantiatePlugins(scope) {
-  return plugins.map(p => new p({ scope }));
+export function loadPlugins(scope) {
+  for(const plugin of plugins) {
+    plugin.load && plugin.load({scope})
+  }
+  return plugins;
 }
 
 export function usePlugins(environment) {

@@ -9,7 +9,7 @@ import worker from './worker';
 import printError from './printError';
 import {generateContext} from './client';
 import generateTree from '../shared/generateTree';
-import { instantiatePlugins } from '../shared/plugins';
+import { loadPlugins } from '../shared/plugins';
 
 export async function prerender(request, response) {
   const context = {};
@@ -32,7 +32,7 @@ export async function prerender(request, response) {
   scope.context = context;
   scope.generateContext = generateContext(context);
 
-  scope.plugins = instantiatePlugins(scope);
+  scope.plugins = loadPlugins(scope);
 
   try {
     const tree = await generateTree(generator.starter(), scope);
@@ -52,7 +52,7 @@ export async function prerender(request, response) {
         delete scope.instances[key];
       }
       scope.head = '';
-      scope.plugins = instantiatePlugins(scope);
+      scope.plugins = loadPlugins(scope);
       const tree = await generateTree(generator.starter(), scope);
       scope.body = render(tree, scope);
     }
