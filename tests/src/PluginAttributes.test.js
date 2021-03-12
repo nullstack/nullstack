@@ -32,6 +32,25 @@ describe('PluginAttributes', () => {
     await toogleElement(false, 2);
   });
 
+  const dataTester = name => async () => {
+    const p = await page.$(`[data-${name}]`);
+    expect(p).toBeTruthy();
+  };
+
+  test('plugin works only on server', dataTester('changed-server'));
+
+  test('plugin works only on client', dataTester('changed-client'));
+
+  test(
+    'plugins have access to context keys on load',
+    dataTester('access-load')
+  );
+
+  test(
+    'plugins have access to context keys on transform',
+    dataTester('access-transform')
+  );
+
 });
 
 afterAll(async () => {

@@ -7,8 +7,13 @@ function match(node) {
   )
 }
 
-function transform({ node }) {
+function transform({ node, environment, page, project, pluginData }) {
+  if (environment.server) pluginData.changedServer = true;
+  if (environment.client) pluginData.changedClient = true;
+  if (page && project && environment) pluginData.accessInTransform = true;
+
   if(!match(node)) return;
+
   const attributes = node.attributes;
 
   if (attributes['v-if'] === false) {
@@ -26,4 +31,11 @@ function transform({ node }) {
   delete node.attributes['v-html'];
 }
 
-export default { transform, client: true, server: true }
+function load(context) {
+  const { page, project, environment } = context;
+  if (page && project && environment) {
+    context.pluginData = { accessInLoad: true };
+  }
+}
+
+export default { transform, load, client: true, server: true }
