@@ -4,9 +4,7 @@ import {isClass, isFunction} from '../shared/nodes';
 async function generateBranch(parent, node, depth, scope) {
 
   for(const plugin of scope.plugins) {
-    if(plugin.match({node, depth, scope})) {
-      plugin.transform({node, depth, scope});
-    }
+    plugin.transform({node, depth, scope});
   }
 
   if(isClass(node)) {

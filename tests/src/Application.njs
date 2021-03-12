@@ -25,7 +25,7 @@ import ParentComponent from './ParentComponent';
 import Element from './Element';
 import Instanceable from './Instanceable';
 import PluginAttributes from './PluginAttributes';
-import PureComponents from './PureComponents'
+import PureComponents from './PureComponents';
 
 import './Application.css';
 
