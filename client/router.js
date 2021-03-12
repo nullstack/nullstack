@@ -12,7 +12,8 @@ class Router {
 
   event = 'nullstack.router';
 
-  _changed = false
+  _changed = false;
+  _segments = {};
 
   constructor() {
     const {hash, url} = extractLocation(window.location.pathname+window.location.search);

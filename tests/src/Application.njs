@@ -32,7 +32,7 @@ import './Application.css';
 class Application extends Nullstack {
 
   async changeInstanceable({ instances }) {
-    await instances.Instanceable.customMethod();
+    await instances.instanceable.customMethod();
   }
 
   static async start(context) {
@@ -81,7 +81,7 @@ class Application extends Nullstack {
         <Element route="/element" />
         <PluginAttributes route="/plugin-attributes" />
         <PureComponents route="/pure-components" />
-        <Instanceable route="/instanceable" key="Instanceable" />
+        <Instanceable route="/instanceable" key="instanceable" />
         <ErrorPage route="*" />
       </main>
     )

@@ -8,12 +8,12 @@ function match(node) {
   )
 }
 
-function transform({node, scope}) {
+function transform({node, router}) {
   if(!match(node)) return;
   const originalEvent = node.attributes.onclick;
   node.attributes.onclick = ({event}) => {
     event.preventDefault();
-    scope.context.router.url = node.attributes.href;
+    router.url = node.attributes.href;
     if(originalEvent) {
       setTimeout(() => {
         originalEvent({...node.attributes, event});

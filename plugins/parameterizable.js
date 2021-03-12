@@ -9,9 +9,8 @@ function match(node) {
   )
 }
 
-function transform({node, scope}) {
+function transform({node, router, params}) {
   if(!match(node)) return;
-  const {router, params} = scope.context;
   let serializedParams;
   if(node.attributes.params) {
     serializedParams = {};

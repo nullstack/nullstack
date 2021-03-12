@@ -23,7 +23,6 @@ client.routes = {};
 client.events = {};
 client.generateContext = generateContext;
 
-client.segments = segments;
 client.renderQueue = null;
 
 client.update = async function() {

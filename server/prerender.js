@@ -24,7 +24,7 @@ export async function prerender(request, response) {
   const scope = {};
   scope.instances = {};
   context.instances = scope.instances;
-  scope.segments = context.params;
+  context.router._segments = context.params;
   scope.request = request;
   scope.response = response;
   scope.head = '';
@@ -45,8 +45,8 @@ export async function prerender(request, response) {
     context.page.status = 500;
   } finally {
     if(context.page.status !== 200) {
-      for(const key in scope.routes) {
-        delete scope.routes[key];
+      for(const key in context.router._routes) {
+        delete context.router._routes[key];
       }
       for(const key in scope.instances) {
         delete scope.instances[key];

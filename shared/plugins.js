@@ -1,22 +1,28 @@
-import Routable from '../plugins/routable';
-import Bindable from '../plugins/bindable';
-import Datable from '../plugins/datable';
-import Parameterizable from '../plugins/parameterizable';
-import Anchorable from '../plugins/anchorable';
-import Objectable from '../plugins/objectable';
+import routable from '../plugins/routable';
+import bindable from '../plugins/bindable';
+import datable from '../plugins/datable';
+import parameterizable from '../plugins/parameterizable';
+import anchorable from '../plugins/anchorable';
+import objectable from '../plugins/objectable';
 
 let plugins = [
-  Objectable,
-  Parameterizable,
-  Anchorable,
-  Routable,
-  Datable,
-  Bindable
+  objectable,
+  parameterizable,
+  anchorable,
+  routable,
+  datable,
+  bindable
 ];
+
+export function transformNodes(scope, node, depth) {
+  for(const plugin of plugins) {
+    plugin.transform({...scope.context, node, depth});
+  }
+}
 
 export function loadPlugins(scope) {
   for(const plugin of plugins) {
-    plugin.load && plugin.load({scope})
+    plugin.load && plugin.load(scope.context)
   }
   return plugins;
 }

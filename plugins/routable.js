@@ -14,29 +14,28 @@ function match(node) {
   )
 }
 
-function load({scope}) {
-  scope.routes = {};
-  if(!scope.oldSegments) {
-    scope.oldSegments = {};
-    scope.newSegments = {};
+function load({router}) {
+  router._routes = {};
+  if(!router._oldSegments) {
+    router._oldSegments = {};
+    router._newSegments = {};
   } else {
-    scope.oldSegments = scope.newSegments;
-    scope.newSegments = {};
+    router._oldSegments = router._newSegments;
+    router._newSegments = {};
   }
 }
 
-function transform({node, depth, scope}) {
+function transform({node, depth, router}) {
   if(!match(node)) return;
   const routeDepth = depth.slice(0, -1).join('.');
-  if(scope.routes[routeDepth] !== undefined) {
+  if(router._routes[routeDepth] !== undefined) {
     erase(node);
   } else {
-    const url = scope.context.router.url;
-    const params = routeMatches(url, node.attributes.route);
+    const params = routeMatches(router.url, node.attributes.route);
     if(params) {
-      scope.routes[routeDepth] = true;
-      scope.newSegments[routeDepth] = params;
-      Object.assign(scope.segments, params);
+      router._routes[routeDepth] = true;
+      router._newSegments[routeDepth] = params;
+      Object.assign(router._segments, params);
     } else {
       erase(node);
     }

@@ -9,8 +9,7 @@ function attachEvent(node) {
     eventName = 'onchange';
   }
   const originalEvent = node.attributes[eventName];
-  node.attributes[eventName] = (scope) => {
-    const {event, value} = scope;
+  node.attributes[eventName] = ({event, value}) => {
     if(valueName == 'checked') {
       target[node.attributes.bind] = event.target[valueName];
     } else if(target[node.attributes.bind] === true || target[node.attributes.bind] === false) {
@@ -22,7 +21,7 @@ function attachEvent(node) {
     }
     if(originalEvent !== undefined) {
       setTimeout(() => {
-        originalEvent({...node.attributes, ...scope});
+        originalEvent({...node.attributes, event, value});
       }, 0);
     }
   }
@@ -37,7 +36,7 @@ function match(node) {
   )
 }
 
-function transform({node, scope}) {
+function transform({node, environment}) {
   if(!match(node)) return;
   const target = node.attributes.source;
   if(node.type === 'textarea') {
@@ -49,7 +48,7 @@ function transform({node, scope}) {
   }
   node.attributes.name = node.attributes.name || node.attributes.bind;
 
-  if(scope.context.environment.client) {
+  if(environment.client) {
     attachEvent(node);
   }
 }
