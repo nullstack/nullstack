@@ -35,6 +35,11 @@ describe('Instanceable', () => {
     await testCycle('title', 'Nullstack!');
   });
 
+  test("main key is 'application'", async () => {
+    const p = await page.$('[data-application-key]');
+    expect(p).toBeTruthy();
+  });
+
 });
 
 afterAll(async () => {

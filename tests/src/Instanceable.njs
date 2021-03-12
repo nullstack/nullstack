@@ -50,19 +50,28 @@ class Instanceable extends Nullstack {
   }
 
   render({ instances }) {
+    const { application } = instances;
+    const mainHasKey = (
+      application &&
+      typeof application.changeInstanceable === 'function'
+    );
+
     return (
       <div>
-        <button
-          data-change-instanceable={this.serverLoaded}
-          onclick={instances.application.changeInstanceable}
-        >
-          Mess with "instanceable" from Main
-        </button>
+        {application &&
+          <button
+            data-change-instanceable={this.serverLoaded}
+            onclick={application.changeInstanceable}
+          >
+            Mess with "instanceable" from Main
+          </button>
+        }
         <div>
           {Object.entries(this.title)
             .map(title => <Title title={title} />)
           }
         </div>
+        <p data-application-key={mainHasKey}></p>
       </div>
     )
   }
