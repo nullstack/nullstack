@@ -73,7 +73,7 @@ export default class Nullstack {
       new Bindable({scope})
     ]
     client.nextVirtualDom = await generateTree(client.initializer(), scope);
-    rerender(client.selector, []);
+    rerender(client.selector);
     client.virtualDom = client.nextVirtualDom;
     client.nextVirtualDom = null;
     client.processLifecycleQueues();

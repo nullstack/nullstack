@@ -50,7 +50,7 @@ client.update = async function() {
       client.renewalQueue = [];
       client.hydrationQueue = [];
       client.nextVirtualDom = await generateTree(client.initializer(), scope);
-      rerender(client.selector, []);
+      rerender(client.selector);
       client.virtualDom = client.nextVirtualDom;
       client.nextVirtualDom = null;
       client.processLifecycleQueues();

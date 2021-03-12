@@ -3,15 +3,10 @@ import client from './client';
 import render from './render';
 import {anchorableElement} from './anchorableNode';
 
-export default function rerender(selector, depth) {
-  
-  // refactor
-  let current = client.virtualDom;
-  let next = client.nextVirtualDom;
-  for(const level of depth) {
-    current = current.children[level];
-    next = next.children[level];
-  }
+export default function rerender(selector, current, next) {
+
+  current = current === undefined ? client.virtualDom : current;
+  next = next === undefined ? client.nextVirtualDom : next;
 
   if(next.instance) {
     next.instance._self.element = selector;
@@ -111,7 +106,7 @@ export default function rerender(selector, depth) {
     const limit = Math.max(current.children.length, next.children.length);
     if(next.children.length > current.children.length) {
       for(let i = 0; i < current.children.length; i++) {
-        rerender(selector.childNodes[i], [...depth, i]);
+        rerender(selector.childNodes[i], current.children[i], next.children[i]);
       }
       for(let i = current.children.length; i < next.children.length; i++) {
         const nextSelector = render(next.children[i]);
@@ -119,14 +114,14 @@ export default function rerender(selector, depth) {
       }
     } else if(current.children.length > next.children.length) {
       for(let i = 0; i < next.children.length; i++) {
-        rerender(selector.childNodes[i], [...depth, i]);
+        rerender(selector.childNodes[i], current.children[i], next.children[i]);
       }
       for(let i = current.children.length - 1; i >= next.children.length; i--) {
         selector.removeChild(selector.childNodes[i]);          
       }
     } else {
       for(let i = limit - 1; i > -1; i--) {
-        rerender(selector.childNodes[i], [...depth, i]);
+        rerender(selector.childNodes[i], current.children[i], next.children[i]);
       }
     }
 
