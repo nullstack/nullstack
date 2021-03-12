@@ -1,4 +1,4 @@
-function attatchEvent(node) {
+function attachEvent(node) {
   const target = node.attributes.source;
   let eventName = 'oninput';
   let valueName = 'value';
@@ -50,7 +50,7 @@ function transform({node, scope}) {
   node.attributes.name = node.attributes.name || node.attributes.bind;
 
   if(scope.context.environment.client) {
-    attatchEvent(node);
+    attachEvent(node);
   }
 }
 
