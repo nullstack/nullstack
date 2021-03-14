@@ -4,7 +4,7 @@ import rerender from './rerender';
 import context, { generateContext } from './context';
 
 import generateTree from '../shared/generateTree';
-import { instantiatePlugins } from '../shared/plugins';
+import { loadPlugins } from '../shared/plugins';
 
 const client = {};
 
@@ -23,7 +23,6 @@ client.routes = {};
 client.events = {};
 client.generateContext = generateContext;
 
-client.segments = segments;
 client.renderQueue = null;
 
 client.update = async function() {
@@ -32,13 +31,13 @@ client.update = async function() {
     client.renderQueue = setTimeout(async () => {
       const scope = client;
       scope.context = context;
-      scope.plugins = instantiatePlugins(scope);
+      scope.plugins = loadPlugins(scope);
       client.initialized = false;
       client.initiationQueue = [];
       client.renewalQueue = [];
       client.hydrationQueue = [];
       client.nextVirtualDom = await generateTree(client.initializer(), scope);
-      rerender(client.selector, []);
+      rerender(client.selector);
       client.virtualDom = client.nextVirtualDom;
       client.nextVirtualDom = null;
       client.processLifecycleQueues();

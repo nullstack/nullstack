@@ -14,8 +14,8 @@ class Instanceable extends Nullstack {
   }
 
   async changeInstance({ thisInstances, title }) {
-    const { Instanceable } = thisInstances;
-    Instanceable.title[title] += ' ' + Instanceable.title[title];
+    const { instanceable } = thisInstances;
+    instanceable.title[title] += ' ' + instanceable.title[title];
   }
 
   prepare({ instances }) {
@@ -33,10 +33,11 @@ class Instanceable extends Nullstack {
   }
 
   async customMethod({ instances }) {
+    console.log(instances)
     const title = await this.getData();
-    const { Instanceable } = instances;
-    Instanceable.title.title = title;
-    Instanceable.serverLoaded = true;
+    const { instanceable } = instances;
+    instanceable.title.title = title;
+    instanceable.serverLoaded = true;
   }
 
   renderTitle({ title }) {
@@ -49,19 +50,28 @@ class Instanceable extends Nullstack {
   }
 
   render({ instances }) {
+    const { application } = instances;
+    const mainHasKey = (
+      application &&
+      typeof application.changeInstanceable === 'function'
+    );
+
     return (
       <div>
-        <button
-          data-change-instanceable={this.serverLoaded.toString()}
-          onclick={instances.application.changeInstanceable}
-        >
-          Mess with Instanceable from Main
-        </button>
+        {application &&
+          <button
+            data-change-instanceable={this.serverLoaded}
+            onclick={application.changeInstanceable}
+          >
+            Mess with "instanceable" from Main
+          </button>
+        }
         <div>
           {Object.entries(this.title)
             .map(title => <Title title={title} />)
           }
         </div>
+        <p data-application-key={mainHasKey}></p>
       </div>
     )
   }

@@ -1,13 +1,10 @@
 import generateKey from '../shared/generateKey';
 import {isClass, isFunction} from '../shared/nodes';
+import {transformNodes} from './plugins';
 
 async function generateBranch(parent, node, depth, scope) {
 
-  for(const plugin of scope.plugins) {
-    if(plugin.match({node, depth, scope})) {
-      plugin.transform({node, depth, scope});
-    }
-  }
+  transformNodes(scope, node, depth);
 
   if(isClass(node)) {
     const key = node.attributes.key || generateKey(depth);
@@ -19,9 +16,9 @@ async function generateBranch(parent, node, depth, scope) {
       !scope.context.environment.static
     ) {
       const routeDepth = depth.slice(0, -1).join('.');
-      const newSegments = scope.newSegments[routeDepth];
+      const newSegments = scope.context.router._newSegments[routeDepth];
       if(newSegments) {
-        const oldSegments = scope.oldSegments[routeDepth];
+        const oldSegments = scope.context.router._oldSegments[routeDepth];
         for(const segment in newSegments) {
           if(oldSegments[segment] !== newSegments[segment]) {
             delete scope.memory[key];

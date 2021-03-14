@@ -30,9 +30,14 @@ describe('Instanceable', () => {
   });
 
   test("instance can use foreign methods which calls it's back", async () => {
-    await page.click('[data-change-instanceable="false"]');
-    await page.waitForSelector('[data-change-instanceable="true"]');
+    await page.click('button');
+    await page.waitForSelector('[data-change-instanceable]');
     await testCycle('title', 'Nullstack!');
+  });
+
+  test("main key is 'application'", async () => {
+    const p = await page.$('[data-application-key]');
+    expect(p).toBeTruthy();
   });
 
 });
