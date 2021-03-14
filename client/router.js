@@ -5,6 +5,7 @@ import worker from './worker';
 import page from './page';
 import windowEvent from './windowEvent';
 import client from './client';
+import segments from './segments';
 
 let redirectTimer = null;
 
@@ -13,7 +14,7 @@ class Router {
   event = 'nullstack.router';
 
   _changed = false;
-  _segments = {};
+  _segments = segments;
 
   constructor() {
     const {hash, url} = extractLocation(window.location.pathname+window.location.search);

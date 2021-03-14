@@ -1,4 +1,4 @@
-import segments from './segments';
+//import segments from './segments';
 import router from './router';
 import rerender from './rerender';
 import context, { generateContext } from './context';
@@ -19,7 +19,7 @@ client.renewalQueue = [];
 client.hydrationQueue = [];
 client.virtualDom = {};
 client.selector = null;
-client.routes = {};
+//client.routes = {};
 client.events = {};
 client.generateContext = generateContext;
 
