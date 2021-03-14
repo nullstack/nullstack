@@ -54,7 +54,7 @@ export default class Nullstack {
     context.environment = environment;
     scope.plugins = loadPlugins(scope);
     client.nextVirtualDom = await generateTree(client.initializer(), scope);
-    rerender(client.selector, []);
+    rerender(client.selector);
     client.virtualDom = client.nextVirtualDom;
     client.nextVirtualDom = null;
     client.processLifecycleQueues();
