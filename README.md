@@ -14,13 +14,15 @@ Learn more about [Nullstack](https://nullstack.app)
 
 ## Getting Started
 
-replace project-name with your project name and run the command bellow to start a project: 
+Replace `project-name` with your project name and run the command below to start a project:
 
 ```sh
 npx create-nullstack-app project-name
 ```
 
-Read the [Nullstack Documentation](https://nullstack.app/documentation)
+If you ran into problems, read about [the known `npx` bug](https://nullstack.app/getting-started#the-known-npx-bug).
+
+Read the [Nullstack Documentation](https://nullstack.app/documentation).
 
 ## Watch the tutorials on our Youtube Channel
 
