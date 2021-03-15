@@ -10,7 +10,7 @@ export default function({head, body, context, instances}) {
   const canonical = absolute(page.canonical || router.url);
   const image = cdnOrAbsolute(page.image);
   const serializableContext = {};
-  const blacklist = ['scope', 'router', 'page', 'environment', 'settings', 'worker', 'params', 'project'];
+  const blacklist = ['scope', 'router', 'page', 'environment', 'settings', 'worker', 'params', 'project', 'instances'];
   for(const [key, value] of Object.entries(context)) {
     if(!blacklist.includes(key) && typeof(value) !== 'function') {
       serializableContext[key] = value;
@@ -27,7 +27,6 @@ export default function({head, body, context, instances}) {
   <head>
     <meta charset="utf-8">
     <meta name="generator" content="Created with Nullstack - https://nullstack.app" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     ${page.title ? `<title>${page.title}</title>` : ''}
     <meta property="og:image" content="${image}">
     ${page.description ? `<meta property="og:description" content="${page.description}">` : ''}
@@ -52,7 +51,6 @@ export default function({head, body, context, instances}) {
     ${page.schema ? `<script type="application/ld+json">${JSON.stringify(page.schema)}</script>` : ''}
     ${project.icons['180'] ? `<link rel="apple-touch-icon" sizes="180x180" href="${cdn(project.icons['180'])}">` : ''}
     <meta name="msapplication-TileColor" content="${project.backgroundColor || project.color}">
-    <meta name="theme-color" content="${project.color}">
     ${head.split('<!--#-->').join('')}
   </head>
   <body>

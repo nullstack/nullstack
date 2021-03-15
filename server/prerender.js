@@ -9,11 +9,7 @@ import worker from './worker';
 import printError from './printError';
 import {generateContext} from './client';
 import generateTree from '../shared/generateTree';
-
-import Routable from '../plugins/routable';
-import Bindable from '../plugins/bindable';
-import Datable from '../plugins/datable';
-import Parameterizable from '../plugins/parameterizable';
+import { loadPlugins } from '../shared/plugins';
 
 export async function prerender(request, response) {
   const context = {};
@@ -27,7 +23,8 @@ export async function prerender(request, response) {
   context.worker = {...worker, online, responsive: online};
   const scope = {};
   scope.instances = {};
-  scope.segments = context.params;
+  context.instances = scope.instances;
+  context.router._segments = context.params;
   scope.request = request;
   scope.response = response;
   scope.head = '';
@@ -35,12 +32,7 @@ export async function prerender(request, response) {
   scope.context = context;
   scope.generateContext = generateContext(context);
 
-  scope.plugins = [
-    new Parameterizable({scope}),
-    new Routable({scope}),
-    new Datable({scope}),
-    new Bindable({scope})
-  ]
+  scope.plugins = loadPlugins(scope);
 
   try {
     const tree = await generateTree(generator.starter(), scope);
@@ -53,19 +45,14 @@ export async function prerender(request, response) {
     context.page.status = 500;
   } finally {
     if(context.page.status !== 200) {
-      for(const key in scope.routes) {
-        delete scope.routes[key];
+      for(const key in context.router._routes) {
+        delete context.router._routes[key];
       }
       for(const key in scope.instances) {
         delete scope.instances[key];
       }
       scope.head = '';
-      scope.plugins = [
-        new Parameterizable({scope}),
-        new Routable({scope}),
-        new Datable({scope}),
-        new Bindable({scope})
-      ]
+      scope.plugins = loadPlugins(scope);
       const tree = await generateTree(generator.starter(), scope);
       scope.body = render(tree, scope);
     }

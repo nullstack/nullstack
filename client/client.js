@@ -1,16 +1,9 @@
-import segments from './segments';
 import router from './router';
 import rerender from './rerender';
 import context, { generateContext } from './context';
 
 import generateTree from '../shared/generateTree';
-
-import Routable from '../plugins/routable';
-import Bindable from '../plugins/bindable';
-import Datable from '../plugins/datable';
-import Parameterizable from '../plugins/parameterizable';
-import Anchorable from '../plugins/anchorable';
-import Objectable from '../plugins/objectable';
+import { loadPlugins } from '../shared/plugins';
 
 const client = {};
 
@@ -19,16 +12,15 @@ client.hydrated = false;
 client.initializer = null;
 
 client.instances = {};
+context.instances = client.instances;
 client.initiationQueue = [];
 client.renewalQueue = [];
 client.hydrationQueue = [];
 client.virtualDom = {};
 client.selector = null;
-client.routes = {};
 client.events = {};
 client.generateContext = generateContext;
 
-client.segments = segments;
 client.renderQueue = null;
 
 client.update = async function() {
@@ -37,20 +29,13 @@ client.update = async function() {
     client.renderQueue = setTimeout(async () => {
       const scope = client;
       scope.context = context;
-      scope.plugins = [
-        new Objectable({scope}),
-        new Parameterizable({scope}),
-        new Anchorable({scope}),
-        new Routable({scope}),
-        new Datable({scope}),
-        new Bindable({scope})
-      ]      
+      scope.plugins = loadPlugins(scope);
       client.initialized = false;
       client.initiationQueue = [];
       client.renewalQueue = [];
       client.hydrationQueue = [];
       client.nextVirtualDom = await generateTree(client.initializer(), scope);
-      rerender(client.selector, []);
+      rerender(client.selector);
       client.virtualDom = client.nextVirtualDom;
       client.nextVirtualDom = null;
       client.processLifecycleQueues();
