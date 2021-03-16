@@ -55,6 +55,7 @@ class Application extends Nullstack {
         <div route="/">
           <a href={`/offline-${environment.key}`}> offline </a>
           <a href="/static-this"> static this </a>
+          <a href="/routes-and-params/a"> router with params </a>
         </div>
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
