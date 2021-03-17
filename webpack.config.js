@@ -4,8 +4,6 @@ const NodemonPlugin = require('nodemon-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
-const LiveReloadPlugin = require('webpack-livereload-plugin');
-
 const babel = {
   test: /\.js$/,
   resolve: {
@@ -132,6 +130,15 @@ function client(env, argv) {
   const folder = argv.mode === 'development' ? '.development' : '.production';
   const devtool = argv.mode === 'development' ? 'cheap-inline-module-source-map' : 'none';
   const minimize = argv.mode !== 'development';
+  let liveReload = {};
+  if(argv.mode !== 'development') {
+    liveReload = {
+      test: /liveReload.js$/,
+      use: [
+        { loader: 'ignore-loader' }
+      ]
+    }
+  }
   const plugins = [
     new MiniCssExtractPlugin({
       filename: "client.css"
@@ -147,12 +154,6 @@ function client(env, argv) {
           extensions: ['njs']
         }
       ]
-    }));
-  } else {
-    plugins.push(new LiveReloadPlugin({
-      appendScriptTag: true,
-      port: 0,
-      delay: 3000,
     }));
   }
   return {
@@ -214,7 +215,8 @@ function client(env, argv) {
             { loader: 'css-loader'},
             { loader: 'sass-loader'}
           ],
-        }
+        },
+        liveReload
       ]
     },
     target: 'web',
