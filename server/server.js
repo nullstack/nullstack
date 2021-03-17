@@ -19,6 +19,8 @@ import generateRobots from './robots';
 import prefix from '../shared/prefix';
 import printError from './printError';
 
+import liveReload from './liveReload';
+
 if (!global.fetch) {
   global.fetch = fetch;
 }
