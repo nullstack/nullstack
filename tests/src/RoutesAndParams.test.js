@@ -70,6 +70,15 @@ describe('RoutesAndParams /routes-and-params/a', () => {
     expect(element).toBeTruthy();  
   });
 
+  test('params are available when coming from external', async () => {
+    page = await browser.newPage();
+    await page.goto('http://localhost:6969/');
+    await page.click('[href="/routes-and-params/a"]');
+    await page.waitForSelector('[data-hydrated-param]');
+    const element = await page.$('[data-hydrated-param]');
+    expect(element).toBeTruthy();
+  });
+
 });
 
 describe('RoutesAndParams /routes-and-params/?boolean=true', () => {
