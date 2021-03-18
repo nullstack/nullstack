@@ -32,11 +32,13 @@ describe('ChildComponent', () => {
   });
 
   test('server functions are bound to the class in spa', async () => {
+    await page.waitForSelector('[data-hydrated-child-this="ChildComponent"]');
     const element = await page.$('[data-hydrated-child-this="ChildComponent"]');
     expect(element).toBeTruthy();
   });
 
   test('inherited server functions are bound to the class spa' , async () => {
+    await page.waitForSelector('[data-hydrated-parent-this="ChildComponent"]');
     const element = await page.$('[data-hydrated-parent-this="ChildComponent"]');
     expect(element).toBeTruthy();
   });
