@@ -18,6 +18,8 @@ import fragment from '../shared/fragment';
 import generateTree from '../shared/generateTree';
 import { loadPlugins, usePlugins } from '../shared/plugins';
 
+import './liveReload';
+
 context.page = page;
 context.router = router;
 context.settings = settings;
