@@ -5,8 +5,7 @@ function reload() {
   if(shouldReloadNext) {
     clearInterval(timer);
     timer = setTimeout(() => {
-      location.reload()
-      console.log('reload');
+      location.reload();
     }, 10)
   } else {
     shouldReloadNext = true;

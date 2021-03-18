@@ -58,6 +58,7 @@ function server(env, argv) {
       watch: path.resolve('./.development'),
       script: './.development/server.js',
       nodeArgs: ['--enable-source-maps'],
+      quiet: true
     })
   ]) : undefined;
   return {
