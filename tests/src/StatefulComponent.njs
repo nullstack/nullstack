@@ -18,6 +18,10 @@ class StatefulComponent extends Nullstack {
   incrementByOne() {
     this.count++;
   }
+
+  hydrate() {
+    console.log('AAA', this.object);
+  }
   
   render({self}) {
     return (

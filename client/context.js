@@ -1,22 +1,22 @@
 import client from './client';
 import deserialize from '../shared/deserialize';
-import objectProxyHandler from './objectProxyHandler';
-import isProxyable from './isProxyable';
+import {generateObjectProxy} from './objectProxyHandler';
 
-const context = deserialize(JSON.stringify(window.context));
+const context = {};
+
+const memory = deserialize(JSON.stringify(window.context));
+for(const key of Object.keys(memory)) {
+  context[key] = generateObjectProxy(key, memory[key]);
+}
 
 const contextProxyHandler = {
   set(target, name, value) {
-    if(isProxyable(name, value)) {
-      value._isProxy = true;
-      context[name] = new Proxy(value, objectProxyHandler);
-    } else {
-      context[name] = value;
-    }
+    context[name] = generateObjectProxy(name, value);
     client.update();
-    return Reflect.set(...arguments);
+    return true;
   },
   get(target, name) {
+    if(name === '_isProxy') return true;
     return target[name] === undefined ? context[name] : target[name];
   }
 }

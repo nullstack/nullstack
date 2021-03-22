@@ -28,6 +28,10 @@ class TwoWayBindings extends Nullstack {
   updateCharacter({value}) {
     this.character = this.array[value];
   }
+
+  hydrate() {
+    console.log('HY', this.object);
+  }
   
   render({params}) {
     return (
