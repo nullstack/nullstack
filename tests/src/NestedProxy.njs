@@ -10,10 +10,6 @@ class NestedProxy extends Nullstack {
     array: [true]
   }
 
-  hydrate() {
-    console.log(this);
-  }
-
   prepare(context) {
     context.array = [
       {object: {object: true}}
