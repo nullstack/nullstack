@@ -33,17 +33,16 @@ class Instanceable extends Nullstack {
   }
 
   async customMethod({ instances }) {
-    console.log(instances)
     const title = await this.getData();
     const { instanceable } = instances;
     instanceable.title.title = title;
     instanceable.serverLoaded = true;
   }
 
-  renderTitle({ title }) {
+  renderTitle({ title, self }) {
     return (
       title[0] !== '_isProxy' &&
-      <p data-title={title[0]}>
+      <p data-title={title[0]} data-hydrated={self.hydrated}>
         {this.title[title[0]]}
       </p>
     )

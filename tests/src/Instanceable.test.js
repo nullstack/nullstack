@@ -12,7 +12,7 @@ beforeAll(async () => {
 describe('Instanceable', () => {
 
   const testCycle = async (title, value) => {
-    const selector = `[data-title="${title}"]`;
+    const selector = `[data-title="${title}"][data-hydrated]`;
     await page.waitForSelector(selector);
     const p = await page.$(selector);
     const text = await page.evaluate(element => element.innerText, p);

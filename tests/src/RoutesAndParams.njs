@@ -3,8 +3,10 @@ import Nullstack from 'nullstack';
 class RoutesAndParams extends Nullstack {
 
   eventTriggered = false;
+  paramHydrated = false;
 
-  hydrate({router}) {
+  hydrate({router, params}) {
+    this.paramHydrated = params.id === 'a';
     window.addEventListener(router.event, () => {
       this.eventTriggered = true;
     });
@@ -48,6 +50,7 @@ class RoutesAndParams extends Nullstack {
         <div data-boolean={params.boolean} />
         <button onclick={this.setParamsDate}> date </button>
         <div data-date={params.date} />
+        <div data-hydrated-param={this.paramHydrated} />
       </div>
     )
   }

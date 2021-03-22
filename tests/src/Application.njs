@@ -26,6 +26,7 @@ import Element from './Element';
 import Instanceable from './Instanceable';
 import PluginAttributes from './PluginAttributes';
 import PureComponents from './PureComponents';
+import NestedProxy from './NestedProxy';
 
 import './Application.css';
 
@@ -55,6 +56,7 @@ class Application extends Nullstack {
         <div route="/">
           <a href={`/offline-${environment.key}`}> offline </a>
           <a href="/static-this"> static this </a>
+          <a href="/routes-and-params/a"> router with params </a>
         </div>
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
@@ -82,6 +84,7 @@ class Application extends Nullstack {
         <PluginAttributes route="/plugin-attributes" />
         <PureComponents route="/pure-components" />
         <Instanceable route="/instanceable" key="instanceable" />
+        <NestedProxy route="/nested-proxy" />
         <ErrorPage route="*" />
       </main>
     )

@@ -32,6 +32,7 @@ describe('ParentComponent', () => {
   });
 
   test('server functions are bound to the class in spa', async () => {
+    await page.waitForSelector('[data-hydrated-parent-this="ParentComponent"]');
     const element = await page.$('[data-hydrated-parent-this="ParentComponent"]');
     expect(element).toBeTruthy();
   });
