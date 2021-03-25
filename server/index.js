@@ -1,5 +1,4 @@
-
-
+import 'dotenv/config';
 import context from './context';
 import server from './server';
 import registry from './registry';

@@ -22,6 +22,7 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "css-loader": "^3.4.2",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "ignore-loader": "^0.1.2",
     "mini-css-extract-plugin": "^0.9.0",
