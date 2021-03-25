@@ -3,3 +3,4 @@ node_modules/
 .production/
 package-lock.json
 yarn.lock
+# .env  # never forget to add this in real life
