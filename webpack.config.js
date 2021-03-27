@@ -7,15 +7,6 @@ const PurgecssPlugin = require('purgecss-webpack-plugin');
 const crypto = require("crypto");
 const {readdirSync} = require('fs');
 
-const icons = {};
-const publicFiles = readdirSync(path.join(__dirname, '..', '..', 'public'));
-for(const file of publicFiles) {
-  if(file.startsWith('icon-')) {
-    const size = file.split('x')[1].split('.')[0];
-    icons[size] = '/' + file;
-  }
-}
-
 const babel = {
   test: /\.js$/,
   resolve: {
@@ -61,9 +52,17 @@ const babelNullstack = {
 };
 
 function server(env, argv) {
+  const dir = argv.dir || '../..';
+  const icons = {};
+  const publicFiles = readdirSync(path.join(__dirname, dir, 'public'));
+  for(const file of publicFiles) {
+    if(file.startsWith('icon-')) {
+      const size = file.split('x')[1].split('.')[0];
+      icons[size] = '/' + file;
+    }
+  }
   const buildKey = crypto.randomBytes(20).toString('hex');
   const folder = argv.mode === 'development' ? '.development' : '.production';
-  const dir = argv.dir || '../..';
   const devtool = argv.mode === 'development' ? 'cheap-inline-module-source-map' : 'none';
   const minimize = argv.mode !== 'development';
   const plugins = argv.mode === 'development' ? ([
@@ -215,7 +214,7 @@ function client(env, argv) {
           loader: 'string-replace-loader',
           options: {
             multiple: [
-              { search: '{{ENVIRONMENT}}', replace: 'client', flags: 'ig' }
+              { search: '{{NULLSTACK_ENVIRONMENT_NAME}}', replace: 'client', flags: 'ig' }
             ]
           }
         },

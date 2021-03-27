@@ -5,4 +5,4 @@ import vueable from './src/plugins/vueable';
 
 Nullstack.use([vueable], vueable);
 
-Nullstack.start(Application);
+export default Nullstack.start(Application);
