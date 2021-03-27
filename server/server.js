@@ -13,7 +13,7 @@ import project from './project';
 import environment from './environment';
 import registry from './registry';
 import {prerender} from './prerender';
-import files, { getFile } from './files';
+import {generateFile} from './files';
 import worker, {generateServiceWorker} from './worker';
 import generateRobots from './robots';
 import prefix from '../shared/prefix';
@@ -39,7 +39,9 @@ for(const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'po
 server.start = function() {
 
   if(!server.less && environment.production) {
-    generateManifest();
+    generateFile('client.css', server)
+    generateFile('client.js', server)
+    generateManifest(server);
     generateServiceWorker();
     generateRobots();
   }
@@ -47,36 +49,37 @@ server.start = function() {
   app.use(cors(server.cors))
 
   app.use(express.static(path.join(__dirname, '..', 'public')));
+
   app.use(bodyParser.text({limit: server.maximumPayloadSize}));
 
   app.get(`/client-${environment.key}.css`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
     response.contentType('text/css');
-    response.send(getFile('client.css', server));
+    response.send(generateFile('client.css', server));
   });
 
   app.get(`/client-${environment.key}.js`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
     response.contentType('text/javascript');
-    response.send(getFile('client.js', server));
+    response.send(generateFile('client.js', server));
   });
 
   app.get(`/manifest-${environment.key}.json`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
     response.contentType('application/manifest+json');
-    response.send(files['manifest.json']);
+    response.send(generateManifest(server));
   });
 
   if(worker.enabled) {
     app.get(`/service-worker-${environment.key}.js`, (request, response) => {
       response.setHeader('Cache-Control', 'max-age=31536000, immutable');
       response.contentType('text/javascript');
-      response.send(files['service-worker.js']);
+      response.send(generateServiceWorker());
     });
   }
 
   app.get('/robots.txt', (request, response) => {
-    response.send(files['robots.txt']);
+    response.send(generateRobots());
   });
 
   app.post(`/${prefix}/:hash/:methodName.json`, async (request, response) => {

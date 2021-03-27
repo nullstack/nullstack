@@ -39,6 +39,7 @@ const queuesProxyHandler = {
 worker.queues = new Proxy({}, queuesProxyHandler);	
 
 export function generateServiceWorker() {
+  if(files['service-worker.js']) return files['service-worker.js'];
   const sources = [];
   const context = {environment, project, settings, worker};
   let original = '';
@@ -72,6 +73,7 @@ export function generateServiceWorker() {
     sources.push(original);
   }
   files['service-worker.js'] = sources.join(`\n\n`);
+  return files['service-worker.js'];
 }
 
 export default worker;
