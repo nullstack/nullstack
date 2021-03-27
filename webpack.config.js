@@ -4,6 +4,8 @@ const NodemonPlugin = require('nodemon-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
+const crypto = require("crypto");
+
 const babel = {
   test: /\.js$/,
   resolve: {
@@ -49,6 +51,7 @@ const babelNullstack = {
 };
 
 function server(env, argv) {
+  const buildKey = crypto.randomBytes(20).toString('hex');
   const folder = argv.mode === 'development' ? '.development' : '.production';
   const dir = argv.dir || '../..';
   const devtool = argv.mode === 'development' ? 'cheap-inline-module-source-map' : 'none';
@@ -89,6 +92,15 @@ function server(env, argv) {
           options: {
             multiple: [
               { search: '{{ENVIRONMENT}}', replace: 'server', flags: 'ig' }
+            ]
+          }
+        },
+        {
+          test: /environment.js$/,
+          loader: 'string-replace-loader',
+          options: {
+            multiple: [
+              { search: '{{BUILD_KEY}}', replace: buildKey, flags: 'ig' }
             ]
           }
         },

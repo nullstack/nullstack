@@ -39,7 +39,7 @@ export default function({head, body, context, instances}) {
     ${page.locale ? `<meta property="og:locale" content="${page.locale}">` : ''}
     <link rel="shortcut icon" href="${cdn(project.favicon)}" type="image/png">
     <link rel="icon" href="${cdn(project.favicon)}" type="image/png">
-    <link rel="manifest" href="/manifest-${environment.key}.json" integrity="${integrities['manifest.json']}">
+    <link rel="manifest" href="/manifest-${environment.key}.json" integrity="${integrities['manifest.json'] || ''}">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     ${project.name ? `<meta name="application-name" content="${project.name}">` : ''}
@@ -47,7 +47,7 @@ export default function({head, body, context, instances}) {
     ${page.robots ? `<meta name="robots" content="${page.robots}" />` : ''}
     <meta name="msapplication-starturl" content="/">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    ${files['client.css'] ? `<link rel="stylesheet" href="${cdn(`/client-${environment.key}.css`)}" integrity="${integrities['client.css']}" crossorigin="anonymous">` : ''}
+    <link rel="stylesheet" href="${cdn(`/client-${environment.key}.css`)}" integrity="${integrities['client.css'] || ''}" crossorigin="anonymous">
     ${page.schema ? `<script type="application/ld+json">${JSON.stringify(page.schema)}</script>` : ''}
     ${project.icons['180'] ? `<link rel="apple-touch-icon" sizes="180x180" href="${cdn(project.icons['180'])}">` : ''}
     <meta name="msapplication-TileColor" content="${project.backgroundColor || project.color}">
@@ -67,7 +67,7 @@ export default function({head, body, context, instances}) {
       document.addEventListener('DOMContentLoaded', () => {
         const script = window.document.createElement('script');
         script.src = '${cdn(`/client-${environment.key}.js`)}';
-        script.integrity = '${integrities['client.js']}';
+        script.integrity = '${integrities['client.js'] || ''}';
         script.crossOrigin = 'anonymous';
         document.body.append(script);
       });

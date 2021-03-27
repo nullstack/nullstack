@@ -13,7 +13,7 @@ import project from './project';
 import environment from './environment';
 import registry from './registry';
 import {prerender} from './prerender';
-import files from './files';
+import files, { getFile } from './files';
 import worker, {generateServiceWorker} from './worker';
 import generateRobots from './robots';
 import prefix from '../shared/prefix';
@@ -38,9 +38,11 @@ for(const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'po
 
 server.start = function() {
 
-  generateManifest();
-  generateServiceWorker();
-  generateRobots();
+  if(!server.less && environment.production) {
+    generateManifest();
+    generateServiceWorker();
+    generateRobots();
+  }
 
   app.use(cors(server.cors))
 
@@ -50,13 +52,13 @@ server.start = function() {
   app.get(`/client-${environment.key}.css`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
     response.contentType('text/css');
-    response.send(files['client.css']);
+    response.send(getFile('client.css', server));
   });
 
   app.get(`/client-${environment.key}.js`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
     response.contentType('text/javascript');
-    response.send(files['client.js']);
+    response.send(getFile('client.js', server));
   });
 
   app.get(`/manifest-${environment.key}.json`, (request, response) => {
