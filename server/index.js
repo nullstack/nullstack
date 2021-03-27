@@ -31,17 +31,20 @@ class Nullstack {
   static fragment = fragment;
   static use = usePlugins('server');
 
-  static async start(Starter) {
+  static start(Starter) {
     if(this.name.indexOf('Nullstack') > -1) {
-      generator.starter = () => element(Starter);
-      loadSettings();
-      loadSecrets();
-      typeof(Starter.start) === 'function' && await Starter.start(context);
-      freezeConfigurable(settings);
-      freezeConfigurable(secrets);
-      Object.freeze(worker);
-      Object.freeze(project);
-      server.start();
+      (async function() {
+        generator.starter = () => element(Starter);
+        loadSettings();
+        loadSecrets();
+        typeof(Starter.start) === 'function' && await Starter.start(context);
+        freezeConfigurable(settings);
+        freezeConfigurable(secrets);
+        Object.freeze(worker);
+        Object.freeze(project);
+        server.start();
+      })()
+      return server;
     }
   }
 

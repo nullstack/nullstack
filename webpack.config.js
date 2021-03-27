@@ -65,7 +65,8 @@ function server(env, argv) {
     entry: './index.js',
     output: {
       path: path.resolve(__dirname, dir+'/'+folder),
-      filename: 'server.js'
+      filename: 'server.js',
+      libraryTarget: 'umd'
     },
     optimization: {
       minimize: minimize,

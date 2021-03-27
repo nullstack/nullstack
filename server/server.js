@@ -28,6 +28,7 @@ if (!global.fetch) {
 const app = express();
 const server = http.createServer(app);
 server.port = 5000;
+server.less = false;
 
 for(const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'post', 'put']) {
   server[methodName] = function() {
@@ -116,15 +117,17 @@ server.start = function() {
     }
   });
 
-  server.listen(server.port, () => {
-    const name = project.name ? project.name : 'Nullstack'
-    if(environment.development) {
-      liveReload(server);
-      console.log('\x1b[36m%s\x1b[0m', `${name} is running in development mode at http://localhost:${server.port}`);
-    } else {
-      console.log('\x1b[36m%s\x1b[0m', `${name} is running in production mode at http://127.0.0.1:${server.port}`);
-    }
-  });
+  if(!server.less) {
+    server.listen(server.port, () => {
+      const name = project.name ? project.name : 'Nullstack'
+      if(environment.development) {
+        liveReload(server);
+        console.log('\x1b[36m%s\x1b[0m', `${name} is running in development mode at http://localhost:${server.port}`);
+      } else {
+        console.log('\x1b[36m%s\x1b[0m', `${name} is running in production mode at http://127.0.0.1:${server.port}`);
+      }
+    });
+  }
 
 }
 
