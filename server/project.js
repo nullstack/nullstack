@@ -16,6 +16,7 @@ project.sitemap = environment.static;
 project.cdn = '';
 project.protocol = environment.development ? 'http' : 'https';
 
+/*
 const publicFiles = readdirSync(path.join(__dirname, '..', 'public'));
 
 for(const file of publicFiles) {
@@ -24,5 +25,6 @@ for(const file of publicFiles) {
     project.icons[size] = '/' + file;
   }
 }
+*/
 
 export default project;
