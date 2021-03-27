@@ -122,7 +122,7 @@ server.start = function() {
     }
   });
 
-  if(!server.less && environment.production) {
+  if(!server.less || environment.development) {
     server.listen(server.port, () => {
       const name = project.name ? project.name : 'Nullstack'
       if(environment.development) {
