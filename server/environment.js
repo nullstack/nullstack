@@ -7,7 +7,7 @@ environment.production = !environment.development;
 
 environment.static = process.argv[2] === '--static';
 
-environment.key = "{{BUILD_KEY}}"
+environment.key = "{{NULLSTACK_ENVIRONMENT_KEY}}"
 
 if(environment.development) {
   environment.key += new Date().getMilliseconds();

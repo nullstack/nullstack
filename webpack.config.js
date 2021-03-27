@@ -5,6 +5,16 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
 const crypto = require("crypto");
+const {readdirSync} = require('fs');
+
+const icons = {};
+const publicFiles = readdirSync(path.join(__dirname, '..', '..', 'public'));
+for(const file of publicFiles) {
+  if(file.startsWith('icon-')) {
+    const size = file.split('x')[1].split('.')[0];
+    icons[size] = '/' + file;
+  }
+}
 
 const babel = {
   test: /\.js$/,
@@ -91,7 +101,7 @@ function server(env, argv) {
           loader: 'string-replace-loader',
           options: {
             multiple: [
-              { search: '{{ENVIRONMENT}}', replace: 'server', flags: 'ig' }
+              { search: '{{NULLSTACK_ENVIRONMENT_NAME}}', replace: 'server', flags: 'ig' }
             ]
           }
         },
@@ -100,7 +110,16 @@ function server(env, argv) {
           loader: 'string-replace-loader',
           options: {
             multiple: [
-              { search: '{{BUILD_KEY}}', replace: buildKey, flags: 'ig' }
+              { search: '{{NULLSTACK_ENVIRONMENT_KEY}}', replace: buildKey, flags: 'ig' }
+            ]
+          }
+        },
+        {
+          test: /project.js$/,
+          loader: 'string-replace-loader',
+          options: {
+            multiple: [
+              { search: '{{NULLSTACK_PROJECT_ICONS}}', replace: JSON.stringify(icons), flags: 'ig' }
             ]
           }
         },
