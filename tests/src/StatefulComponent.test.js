@@ -54,6 +54,13 @@ describe('StatefulComponent', () => {
     expect(element).toBeTruthy();
   });
 
+  test('empty strings generate nodes', async () => {
+    await page.click('[data-fill]');
+    await page.waitForSelector('[data-empty="not"]');
+    const text = await page.$eval('[data-empty="not"]', (e) => e.innerText);
+    expect(text).toMatch('not');
+  });
+
 });
 
 afterAll(async () => {
