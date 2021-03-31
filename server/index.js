@@ -33,7 +33,7 @@ class Nullstack {
 
   static start(Starter) {
     if(this.name.indexOf('Nullstack') > -1) {
-      (async function() {
+      context.start = (async function() {
         generator.starter = () => element(Starter);
         loadSettings();
         loadSecrets();
@@ -44,7 +44,7 @@ class Nullstack {
         Object.freeze(project);
         server.start();
       })()
-      return server;
+      return context;
     }
   }
 
