@@ -28,7 +28,6 @@ if (!global.fetch) {
 const app = express();
 const server = http.createServer(app);
 server.port = 5000;
-server.less = false;
 
 for(const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'post', 'put']) {
   server[methodName] = function() {
@@ -38,7 +37,7 @@ for(const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'po
 
 server.start = function() {
 
-  if(!server.less && environment.production) {
+  if(!server.less) {
     generateFile('client.css', server)
     generateFile('client.js', server)
     generateManifest(server);

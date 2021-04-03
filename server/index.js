@@ -15,6 +15,7 @@ import instanceProxyHandler from './instanceProxyHandler';
 import getProxyableMethods from '../shared/getProxyableMethods';
 import fragment from '../shared/fragment';
 import { usePlugins } from '../shared/plugins';
+import { normalize } from 'path';
 
 context.server = server;
 context.project = project;
@@ -22,6 +23,8 @@ context.environment = environment;
 context.settings = settings;
 context.secrets = secrets;
 context.worker = worker;
+
+server.less = normalize(__filename) !== normalize(process.argv[1])
 
 class Nullstack {
 
@@ -33,7 +36,7 @@ class Nullstack {
 
   static start(Starter) {
     if(this.name.indexOf('Nullstack') > -1) {
-      context.start = (async function() {
+      context.starting = (async function() {
         generator.starter = () => element(Starter);
         loadSettings();
         loadSecrets();
@@ -44,6 +47,15 @@ class Nullstack {
         Object.freeze(project);
         server.start();
       })()
+      context.start = async function() {
+        return await context.starting;
+      }
+      context.run = async function(script) {
+        await context.start()
+        await script(context)
+        await context.exit()
+      }
+      context.exit = process.exit
       return context;
     }
   }

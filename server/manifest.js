@@ -1,7 +1,6 @@
 import {existsSync, readFileSync} from 'fs';
 import path from 'path';
 import project from './project';
-import environment from './environment'
 import {generateIntegrity} from './integrities';
 import files from './files';
 import {cdn} from './links';
@@ -34,7 +33,7 @@ export default function generateManifest(server) {
     });
   }
   const manifest = JSON.stringify(json);
-  if(!server.less && environment.production) {
+  if(!server.less) {
     generateIntegrity('manifest.json', manifest);
   }
   files['manifest.json'] = manifest;

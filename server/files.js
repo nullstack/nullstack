@@ -8,7 +8,7 @@ const files = {};
 export function generateFile(file, server) {
   if(files[file] && environment.production) return files[file];
   files[file] = readFileSync(path.join(__dirname, file), 'utf-8');
-  if(!server.less && environment.production) {
+  if(!server.less) {
     generateIntegrity(file, files[file]);
   }
   return files[file];
