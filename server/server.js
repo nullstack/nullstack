@@ -82,6 +82,7 @@ server.start = function() {
   });
 
   app.post(`/${prefix}/:hash/:methodName.json`, async (request, response) => {
+    await server.ready;
     const args = deserialize(request.body);
     const {hash, methodName} = request.params;
     const [invokerHash, boundHash] = hash.split('-');
@@ -110,6 +111,7 @@ server.start = function() {
   });
 
   app.get("*", async (request, response, next) => {
+    await server.ready;
     if(request.originalUrl.split('?')[0].indexOf('.') > -1) {
       return next();
     }

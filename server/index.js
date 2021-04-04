@@ -36,7 +36,10 @@ class Nullstack {
 
   static start(Starter) {
     if(this.name.indexOf('Nullstack') > -1) {
-      context.starting = (async function() {
+      if(server.less) {
+        server.start();
+      }
+      server.ready = (async function() {
         generator.starter = () => element(Starter);
         loadSettings();
         loadSecrets();
@@ -45,17 +48,14 @@ class Nullstack {
         freezeConfigurable(secrets);
         Object.freeze(worker);
         Object.freeze(project);
-        server.start();
+        if(!server.less) {
+          server.start();
+        }
       })()
       context.start = async function() {
-        return await context.starting;
+        await server.ready;
+        return context;
       }
-      context.run = async function(script) {
-        await context.start()
-        await script(context)
-        await context.exit()
-      }
-      context.exit = process.exit
       return context;
     }
   }
