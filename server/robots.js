@@ -2,6 +2,7 @@ import project from './project';
 import files from './files';
 
 export default function generateRobots() {
+  if(files['robots.txt']) return files['robots.txt'];
   const lines = []
   lines.push('User-Agent: *');
   if(!project.disallow.includes('/')) {
@@ -20,4 +21,5 @@ export default function generateRobots() {
     }
   }
   files['robots.txt'] = lines.join(`\n`);
+  return files['robots.txt']
 }

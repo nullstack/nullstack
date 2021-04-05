@@ -15,6 +15,7 @@ import instanceProxyHandler from './instanceProxyHandler';
 import getProxyableMethods from '../shared/getProxyableMethods';
 import fragment from '../shared/fragment';
 import { usePlugins } from '../shared/plugins';
+import { normalize } from 'path';
 
 context.server = server;
 context.project = project;
@@ -22,6 +23,8 @@ context.environment = environment;
 context.settings = settings;
 context.secrets = secrets;
 context.worker = worker;
+
+server.less = normalize(__filename) !== normalize(process.argv[1])
 
 class Nullstack {
 
@@ -31,17 +34,29 @@ class Nullstack {
   static fragment = fragment;
   static use = usePlugins('server');
 
-  static async start(Starter) {
+  static start(Starter) {
     if(this.name.indexOf('Nullstack') > -1) {
-      generator.starter = () => element(Starter);
-      loadSettings();
-      loadSecrets();
-      typeof(Starter.start) === 'function' && await Starter.start(context);
-      freezeConfigurable(settings);
-      freezeConfigurable(secrets);
-      Object.freeze(worker);
-      Object.freeze(project);
-      server.start();
+      if(server.less) {
+        server.start();
+      }
+      server.ready = (async function() {
+        generator.starter = () => element(Starter);
+        loadSettings();
+        loadSecrets();
+        typeof(Starter.start) === 'function' && await Starter.start(context);
+        freezeConfigurable(settings);
+        freezeConfigurable(secrets);
+        Object.freeze(worker);
+        Object.freeze(project);
+        if(!server.less) {
+          server.start();
+        }
+      })()
+      context.start = async function() {
+        await server.ready;
+        return context;
+      }
+      return context;
     }
   }
 

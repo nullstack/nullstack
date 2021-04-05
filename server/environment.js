@@ -1,4 +1,4 @@
-import files from './files';
+//import files from './files';
 
 const environment = {client: false, server: true};
 
@@ -7,7 +7,11 @@ environment.production = !environment.development;
 
 environment.static = process.argv[2] === '--static';
 
-environment.key = files.key;
+environment.key = "{{NULLSTACK_ENVIRONMENT_KEY}}"
+
+if(environment.development) {
+  environment.key += new Date().getMilliseconds();
+}
 
 Object.freeze(environment);
 

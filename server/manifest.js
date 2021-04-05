@@ -5,7 +5,8 @@ import {generateIntegrity} from './integrities';
 import files from './files';
 import {cdn} from './links';
 
-export default function generateManifest() {
+export default function generateManifest(server) {
+  if(files['manifest.json']) return files['manifest.json'];
   const file = path.join(__dirname, '../', 'public', 'manifest.json');
   if(existsSync(file)) {
     return readFileSync(file, 'utf-8');
@@ -32,6 +33,9 @@ export default function generateManifest() {
     });
   }
   const manifest = JSON.stringify(json);
-  generateIntegrity('manifest.json', manifest);
+  if(!server.less) {
+    generateIntegrity('manifest.json', manifest);
+  }
   files['manifest.json'] = manifest;
+  return manifest;
 }

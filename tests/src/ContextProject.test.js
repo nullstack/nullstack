@@ -132,19 +132,19 @@ describe('ContextProject', () => {
     expect(text).toMatch(/localhost:6969/);
   });
 
-  test('css bundle has integrity', async () => {
+  test('css bundle has an empty integrity in dev mode', async () => {
     const text = await page.$eval('[rel="stylesheet"]', (element) => element.integrity);
-    expect(text).toMatch(/sha512/);
+    expect(text).toMatch('');
   });
 
-  test('javacript bundle has integrity', async () => {
+  test('javacript bundle has an empty integrity in dev mode', async () => {
     const text = await page.$eval('script[integrity]', (element) => element.integrity);
-    expect(text).toMatch(/sha512/);
+    expect(text).toMatch('');
   });
 
-  test('manifest has integrity', async () => {
+  test('manifest has an empty integrity in dev mode', async () => {
     const text = await page.$eval('[rel="manifest"]', (element) => element.integrity);
-    expect(text).toMatch(/sha512/);
+    expect(text).toMatch('');
   });
 
 

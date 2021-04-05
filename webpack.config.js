@@ -4,6 +4,9 @@ const NodemonPlugin = require('nodemon-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
+const crypto = require("crypto");
+const {readdirSync} = require('fs');
+
 const babel = {
   test: /\.js$/,
   resolve: {
@@ -49,8 +52,17 @@ const babelNullstack = {
 };
 
 function server(env, argv) {
-  const folder = argv.mode === 'development' ? '.development' : '.production';
   const dir = argv.dir || '../..';
+  const icons = {};
+  const publicFiles = readdirSync(path.join(__dirname, dir, 'public'));
+  for(const file of publicFiles) {
+    if(file.startsWith('icon-')) {
+      const size = file.split('x')[1].split('.')[0];
+      icons[size] = '/' + file;
+    }
+  }
+  const buildKey = crypto.randomBytes(20).toString('hex');
+  const folder = argv.mode === 'development' ? '.development' : '.production';
   const devtool = argv.mode === 'development' ? 'cheap-inline-module-source-map' : 'none';
   const minimize = argv.mode !== 'development';
   const plugins = argv.mode === 'development' ? ([
@@ -65,7 +77,8 @@ function server(env, argv) {
     entry: './index.js',
     output: {
       path: path.resolve(__dirname, dir+'/'+folder),
-      filename: 'server.js'
+      filename: 'server.js',
+      libraryTarget: 'umd'
     },
     optimization: {
       minimize: minimize,
@@ -87,7 +100,25 @@ function server(env, argv) {
           loader: 'string-replace-loader',
           options: {
             multiple: [
-              { search: '{{ENVIRONMENT}}', replace: 'server', flags: 'ig' }
+              { search: '{{NULLSTACK_ENVIRONMENT_NAME}}', replace: 'server', flags: 'ig' }
+            ]
+          }
+        },
+        {
+          test: /environment.js$/,
+          loader: 'string-replace-loader',
+          options: {
+            multiple: [
+              { search: '{{NULLSTACK_ENVIRONMENT_KEY}}', replace: buildKey, flags: 'ig' }
+            ]
+          }
+        },
+        {
+          test: /project.js$/,
+          loader: 'string-replace-loader',
+          options: {
+            multiple: [
+              { search: '{{NULLSTACK_PROJECT_ICONS}}', replace: JSON.stringify(icons), flags: 'ig' }
             ]
           }
         },
@@ -183,7 +214,7 @@ function client(env, argv) {
           loader: 'string-replace-loader',
           options: {
             multiple: [
-              { search: '{{ENVIRONMENT}}', replace: 'client', flags: 'ig' }
+              { search: '{{NULLSTACK_ENVIRONMENT_NAME}}', replace: 'client', flags: 'ig' }
             ]
           }
         },
