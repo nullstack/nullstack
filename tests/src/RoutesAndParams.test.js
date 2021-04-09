@@ -15,6 +15,11 @@ describe('RoutesAndParams /routes-and-params', () => {
     await page.goto('http://localhost:6969/routes-and-params');
   });
 
+  test('router has a base key', async () => {
+    const element = await page.$('[data-base="http://localhost:6969"]');
+    expect(element).toBeTruthy();
+  });
+
   test('is part of the client environment', async () => {
     const element = await page.$('[data-router]');
     expect(element).toBeTruthy();

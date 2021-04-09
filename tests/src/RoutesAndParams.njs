@@ -46,6 +46,7 @@ class RoutesAndParams extends Nullstack {
         <a path="/routes-and-params/d"> path </a>
         <div data-url={router.url} />
         <div data-path={router.path} />
+        <div data-base={router.base} />
         <div data-empty={params.empty} />
         <div data-boolean={params.boolean} />
         <button onclick={this.setParamsDate}> date </button>

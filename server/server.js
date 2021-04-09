@@ -27,7 +27,7 @@ if (!global.fetch) {
 
 const app = express();
 const server = http.createServer(app);
-server.port = 5000;
+server.port = process.env['NULLSTACK_SERVER_PORT'] ? process.env['PORT'] : 5000;
 
 for(const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'post', 'put']) {
   server[methodName] = function() {
@@ -110,7 +110,7 @@ server.start = function() {
     }
   });
 
-  app.get("*", async (request, response, next) => {
+  app.get('*', async (request, response, next) => {
     server.less && await server.ready;
     if(request.originalUrl.split('?')[0].indexOf('.') > -1) {
       return next();
@@ -123,7 +123,7 @@ server.start = function() {
     }
   });
 
-  if(!server.less || environment.development) {
+  if(!server.less) {
     server.listen(server.port, () => {
       const name = project.name ? project.name : 'Nullstack'
       if(environment.development) {
