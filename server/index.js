@@ -34,7 +34,7 @@ class Nullstack {
   static fragment = fragment;
   static use = usePlugins('server');
 
-  static start(Starter) {
+  static start(Starter, ...starters) {
     if(this.name.indexOf('Nullstack') > -1) {
       if(server.less) {
         server.start();
