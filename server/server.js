@@ -27,7 +27,7 @@ if (!global.fetch) {
 
 const app = express();
 const server = http.createServer(app);
-server.port = process.env['NULLSTACK_SERVER_PORT'] ? process.env['PORT'] : 5000;
+server.port = process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 5000;
 
 for(const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'post', 'put']) {
   server[methodName] = function() {
