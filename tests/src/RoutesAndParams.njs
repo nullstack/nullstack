@@ -32,9 +32,15 @@ class RoutesAndParams extends Nullstack {
     params.date = new Date('1992-10-16');
   }
   
+  goToDocs({ router }) {
+    router.url = 'https://nullstack.app';
+  }
+
   render({router, params}) {
     return (
       <div> 
+        <a href="https://nullstack.app"> Nullstack</a>
+        <button data-absolute onclick={this.goToDocs}> Nullstack </button>
         <a href="/routes-and-params/no-hash#hash">hash</a>
         <div data-event-triggered={this.eventTriggered} />
         <div data-router={!!router} />
@@ -49,7 +55,7 @@ class RoutesAndParams extends Nullstack {
         <div data-base={router.base} />
         <div data-empty={params.empty} />
         <div data-boolean={params.boolean} />
-        <button onclick={this.setParamsDate}> date </button>
+        <button data-params onclick={this.setParamsDate}> date </button>
         <div data-date={params.date} />
         <div data-hydrated-param={this.paramHydrated} />
       </div>

@@ -46,7 +46,7 @@ describe('RoutesAndParams /routes-and-params', () => {
   });
 
   test('assignments to params convert the value to JSON', async () => {
-    await page.click('button');
+    await page.click('[data-params]');
     await page.waitForSelector('[data-date="1992-10-16T00:00:00.000Z"]');
     const element = await page.$('[data-date="1992-10-16T00:00:00.000Z"]');
     expect(element).toBeTruthy();  
@@ -214,6 +214,41 @@ describe('RoutesAndParams /routes-and-params/d?boolean=true#hash spa', () => {
 
 });
 
+describe('RoutesAndParams /routes-and-params', () => {
+
+  let page;
+
+  beforeAll(async () => {
+    page = await browser.newPage();
+    await page.goto('http://localhost:6969/routes-and-params');
+  });
+
+  test('a with absolute hrefs cause a hard redirect', async () => {
+    await page.click('[href="https://nullstack.app"]');
+    await page.waitForSelector('[href="/documentation"]');
+    const url = await page.url();
+    expect(url).toMatch('https://nullstack.app');  
+  });
+
+});
+
+describe('RoutesAndParams /routes-and-params', () => {
+
+  let page;
+
+  beforeAll(async () => {
+    page = await browser.newPage();
+    await page.goto('http://localhost:6969/routes-and-params');
+  });
+
+  test('a with absolute hrefs cause a hard redirect', async () => {
+    await page.click('[data-absolute]');
+    await page.waitForSelector('[href="/documentation"]');
+    const url = await page.url();
+    expect(url).toMatch('https://nullstack.app');  
+  });
+
+});
 
 afterAll(async () => {
   browser.close();
