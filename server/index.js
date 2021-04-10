@@ -44,6 +44,9 @@ class Nullstack {
         loadSettings();
         loadSecrets();
         typeof(Starter.start) === 'function' && await Starter.start(context);
+        for(const starter of starters) {
+          starter.start(context)
+        }
         freezeConfigurable(settings);
         freezeConfigurable(secrets);
         Object.freeze(worker);
