@@ -48,7 +48,7 @@ describe('ContextProject', () => {
   });
 
   test('has a domain key', async () => {
-    const element = await page.$('[data-domain="nullstack.app"]');
+    const element = await page.$('[data-domain="localhost"]');
     expect(element).toBeTruthy();
   });
 
@@ -177,7 +177,7 @@ describe('robots.txt', () => {
   });
 
   test('it reflects project.sitemap', async () => {
-    const index = text.indexOf('Sitemap: http://nullstack.app/sitemap.xml')
+    const index = text.indexOf('Sitemap: http://localhost:6969/sitemap.xml')
     expect(index).toBeGreaterThan(-1);
   });
 

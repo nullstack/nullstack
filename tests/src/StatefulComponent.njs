@@ -6,6 +6,7 @@ class StatefulComponent extends Nullstack {
   object = {count: 0};
   prepared = 0;
   date = new Date('1992-10-16');
+  empty = '';
 
   prepare() {
     this.prepared++;
@@ -37,6 +38,8 @@ class StatefulComponent extends Nullstack {
         <button class="set-object-to-one" source={this.object} onclick={{count: 1}}>
           =1
         </button>
+        <p data-empty={this.empty}>{this.empty}</p>
+        <button onclick={{empty: 'not'}} data-fill> fill </button>
         <>
           <div data-prepared={this.prepared} />
           <div data-count={this.count} />

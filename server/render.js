@@ -5,7 +5,7 @@ export default function render(node, scope) {
   }
 
   if(node === undefined || node.type === undefined) {
-    return node + "<!--#-->";
+    return (node || ' ') + "<!--#-->";
   }
 
   let element = `<${node.type}`;

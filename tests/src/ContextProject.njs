@@ -3,9 +3,6 @@ import Nullstack from 'nullstack';
 class ContextProject extends Nullstack {
 
   static async start({project}) {
-    project.name = 'Nullstack Tests';
-    project.shortName = 'Nullstack';
-    project.domain = 'nullstack.app';
     project.color = '#d22365';
     project.backgroundColor = '#d22365';
     project.type = 'website';

@@ -1,5 +1,5 @@
 import extractLocation from '../shared/extractLocation';
-
+import { generateBase } from './project';
 export default class Router {
 
   constructor(request, response) {
@@ -8,8 +8,8 @@ export default class Router {
   }
 
   _redirect(target) {
-    if(!this.response.headersSent) {
-      const {url} = extractLocation(target);
+    if (!this.response.headersSent) {
+      const { url } = extractLocation(target);
       this.response.redirect(url);
     }
   }
@@ -27,12 +27,16 @@ export default class Router {
   }
 
   set path(target) {
-    const {search} = extractLocation(this.request.originalUrl);
-    if(search) {
-      this._redirect(target+'?'+search);
+    const { search } = extractLocation(this.request.originalUrl);
+    if (search) {
+      this._redirect(target + '?' + search);
     } else {
       this._redirect(target);
     }
   }
 
+  get base() {
+    return generateBase()
+  }
+  
 }
