@@ -1,4 +1,4 @@
-import project from './project';
+import project, { generateBase } from './project';
 import files from './files';
 
 export default function generateRobots() {
@@ -13,9 +13,9 @@ export default function generateRobots() {
   }
   if(project.sitemap) {
     if(project.sitemap === true) {
-      lines.push(`Sitemap: ${project.protocol}://${project.domain}/sitemap.xml`);
+      lines.push(`Sitemap: ${generateBase()}/sitemap.xml`);
     } else if (project.sitemap.indexOf('//') === -1) {
-      lines.push(`Sitemap: ${project.protocol}://${project.domain}${project.sitemap}`);
+      lines.push(`Sitemap: ${generateBase()}${project.sitemap}`);
     } else {
       lines.push(`Sitemap: ${project.sitemap}`);
     }

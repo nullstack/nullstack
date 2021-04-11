@@ -62,6 +62,9 @@ class Router {
   }
 
   async _redirect(target) {
+    if (target.startsWith('http')) {
+      return (window.location.href = target);
+    }
     const {url, hash, urlWithHash} = extractLocation(target);
     if(url !== this._url || this._hash !== hash) {
       await this._update(urlWithHash, true);

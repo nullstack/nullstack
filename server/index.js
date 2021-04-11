@@ -34,7 +34,7 @@ class Nullstack {
   static fragment = fragment;
   static use = usePlugins('server');
 
-  static start(Starter) {
+  static start(Starter, ...starters) {
     if(this.name.indexOf('Nullstack') > -1) {
       if(server.less) {
         server.start();
@@ -44,6 +44,9 @@ class Nullstack {
         loadSettings();
         loadSecrets();
         typeof(Starter.start) === 'function' && await Starter.start(context);
+        for(const starter of starters) {
+          starter.start(context)
+        }
         freezeConfigurable(settings);
         freezeConfigurable(secrets);
         Object.freeze(worker);
