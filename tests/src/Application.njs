@@ -27,6 +27,7 @@ import Instanceable from './Instanceable';
 import PluginAttributes from './PluginAttributes';
 import PureComponents from './PureComponents';
 import NestedProxy from './NestedProxy';
+import FalsyNodes from './FalsyNodes';
 
 import './Application.css';
 
@@ -85,6 +86,7 @@ class Application extends Nullstack {
         <PureComponents route="/pure-components" />
         <Instanceable route="/instanceable" key="instanceable" />
         <NestedProxy route="/nested-proxy" />
+        <FalsyNodes route="/falsy-nodes" />
         <ErrorPage route="*" />
       </main>
     )

@@ -225,7 +225,7 @@ describe('RoutesAndParams /routes-and-params', () => {
 
   test('a with absolute hrefs cause a hard redirect', async () => {
     await page.click('[href="https://nullstack.app"]');
-    await page.waitForSelector('[href="/documentation"]');
+    await page.waitForSelector('[href="/contributors"]');
     const url = await page.url();
     expect(url).toMatch('https://nullstack.app');  
   });
@@ -243,7 +243,7 @@ describe('RoutesAndParams /routes-and-params', () => {
 
   test('a with absolute hrefs cause a hard redirect', async () => {
     await page.click('[data-absolute]');
-    await page.waitForSelector('[href="/documentation"]');
+    await page.waitForSelector('[href="/contributors"]');
     const url = await page.url();
     expect(url).toMatch('https://nullstack.app');  
   });
