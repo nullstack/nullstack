@@ -1,10 +1,15 @@
 import generateKey from '../shared/generateKey';
-import {isClass, isFunction} from '../shared/nodes';
+import {isClass, isFalse, isFunction} from '../shared/nodes';
 import {transformNodes} from './plugins';
 
 async function generateBranch(parent, node, depth, scope) {
 
   transformNodes(scope, node, depth);
+
+  if(isFalse(node)) {
+    parent.children.push(false);
+    return;
+  }
 
   if(isClass(node)) {
     const key = node.attributes.key || generateKey(depth);

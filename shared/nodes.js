@@ -1,5 +1,7 @@
 export function isFalse(node) {
-  return node === undefined || node === null || node === false || node.type === false;
+  if(node === undefined || node === null || node === false) return true;
+  if(typeof(node) !== 'object') return false;
+  return node.type === undefined || node.type === null || node.type === false;
 }
 
 export function isClass(node) {

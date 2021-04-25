@@ -1,11 +1,13 @@
+import { isFalse } from "../shared/nodes";
+
 export default function render(node, scope) {
 
-  if(node === false || (node !== undefined && node.type === false)) {
+  if(isFalse(node)) {
     return "<!---->";
   }
 
-  if(node === undefined || node.type === undefined) {
-    return (node || ' ') + "<!--#-->";
+  if(node.type === undefined) {
+    return (node.toString() || ' ') + "<!--#-->";
   }
 
   let element = `<${node.type}`;
