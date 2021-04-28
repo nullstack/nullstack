@@ -95,7 +95,39 @@ describe('RenderableComponent', () => {
     expect(element).toBeFalsy();
   });
 
+  test('svg component with showing-svg class should be rendered', async () => {
+    const element = await page.$('.showing-svg');
+    expect(element).toBeTruthy();
+  })
+
+  test('svg component with hidden-svg class should not be rendered', async () => {
+    const element = await page.$('.hidden-svg');
+    expect(element).toBeFalsy();
+  })
+
 });
+
+describe('RenderableComponent ?showSVG=true', () => {
+  let page;
+
+  beforeAll(async () => {
+    page = await browser.newPage();
+    await page.goto('http://localhost:6969/renderable-component');
+    await page.click('.show-svg');
+    await page.waitForSelector('svg.hidden-svg');
+  });
+
+  test('svg component with hidden-svg class should be rendered', async () => {
+    const element = await page.$('.hidden-svg');
+    expect(element).toBeTruthy();
+  })
+
+  test('svg component with showing-svg class should not be rendered', async () => {
+    const element = await page.$('.showing-svg');
+    expect(element).toBeFalsy();
+  })
+})
+
 
 describe('RenderableComponent ?condition=true', () => {
 

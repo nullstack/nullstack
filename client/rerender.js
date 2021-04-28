@@ -28,7 +28,11 @@ export default function rerender(selector, current, next) {
   }
 
   if((isFalse(current) || isFalse(next)) && current != next) {
-    const nextSelector = render(next);
+    let options;
+    if(next.type === "svg") {
+      options = { svg: true };
+    }
+    const nextSelector = render(next, options);
     return selector.replaceWith(nextSelector);
   }
 
@@ -42,6 +46,10 @@ export default function rerender(selector, current, next) {
   }
 
   if (current.type !== next.type) {
+    let options;
+    if(next.type === "svg") {
+      options = { svg: true };
+    }
     const nextSelector = render(next);
     return selector.replaceWith(nextSelector);
   }
@@ -109,6 +117,9 @@ export default function rerender(selector, current, next) {
         rerender(selector.childNodes[i], current.children[i], next.children[i]);
       }
       for(let i = current.children.length; i < next.children.length; i++) {
+        if(next.children[i] === "svg") {
+          options = { svg: true };
+        }
         const nextSelector = render(next.children[i]);
         selector.appendChild(nextSelector);
       }

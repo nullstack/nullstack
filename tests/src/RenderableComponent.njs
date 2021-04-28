@@ -6,6 +6,13 @@ class RenderableComponent extends Nullstack {
     return <div data-nested />
   }
 
+  renderSvg({class: klass}) {
+    return (<svg width={"1px"} height={"1px"} class={klass} viewBox="0 0 482 482">
+    <path d="M124 124L358 358" stroke="currentColor" stroke-width="70.2055" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M358 124L124 358" stroke="currentColor" stroke-width="70.2055" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>)
+  }
+
   renderInnerComponent({children}) {
     return (
       <div class="InnerComponent">
@@ -50,6 +57,8 @@ class RenderableComponent extends Nullstack {
         {!!params.condition && 
           <div class="condition"> conditionally rendered div </div>
         }
+        { params.showSVG ? <Svg class="hidden-svg" /> : <Svg class="showing-svg" /> }
+        <a params={{showSVG: true}} class="show-svg"> long list </a>
         <a params={{shortList: true}} class="short-list"> long list </a>
         <a params={{condition: true}} class="true-condition"> long list </a>
         <div data-condition={!!params.condition} />
