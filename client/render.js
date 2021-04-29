@@ -11,10 +11,8 @@ export default function render(node, options) {
     return document.createTextNode(node);
   }
 
-  const svg = (options && options.svg) || node.type === 'svg';
-
   let element;
-  if(svg) {
+  if(options.svg) {
     element = document.createElementNS("http://www.w3.org/2000/svg", node.type);
   } else {
     element = document.createElement(node.type);
@@ -52,7 +50,7 @@ export default function render(node, options) {
 
   if(!node.attributes.html) {
     for(let i = 0; i < node.children.length; i++) {
-      const child = render(node.children[i], {svg});
+      const child = render(node.children[i], options);
       element.appendChild(child);
     }
     

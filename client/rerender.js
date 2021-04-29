@@ -3,10 +3,17 @@ import client from './client';
 import render from './render';
 import {anchorableElement} from './anchorableNode';
 
-export default function rerender(selector, current, next) {
+export default function rerender(selector, current, next, options = {svg: false}) {
 
   current = current === undefined ? client.virtualDom : current;
   next = next === undefined ? client.nextVirtualDom : next;
+  if(options && options.svg) {
+    options.svg = true;
+  } else if (next && next.type === "svg") {
+    options.svg = true;
+  } else {
+    options.svg = false;
+  }
 
   if(next.instance) {
     next.instance._self.element = selector;
@@ -28,10 +35,6 @@ export default function rerender(selector, current, next) {
   }
 
   if((isFalse(current) || isFalse(next)) && current != next) {
-    let options;
-    if(next.type === "svg") {
-      options = { svg: true };
-    }
     const nextSelector = render(next, options);
     return selector.replaceWith(nextSelector);
   }
@@ -41,15 +44,11 @@ export default function rerender(selector, current, next) {
   }
 
   if(current.type == 'head' || next.type == 'head') {
-    const nextSelector = render(next);
+    const nextSelector = render(next, options);
     return selector.replaceWith(nextSelector);
   }
 
   if (current.type !== next.type) {
-    let options;
-    if(next.type === "svg") {
-      options = { svg: true };
-    }
     const nextSelector = render(next, options);
     return selector.replaceWith(nextSelector);
   }
@@ -114,26 +113,22 @@ export default function rerender(selector, current, next) {
     const limit = Math.max(current.children.length, next.children.length);
     if(next.children.length > current.children.length) {
       for(let i = 0; i < current.children.length; i++) {
-        rerender(selector.childNodes[i], current.children[i], next.children[i]);
+        rerender(selector.childNodes[i], current.children[i], next.children[i], options);
       }
       for(let i = current.children.length; i < next.children.length; i++) {
-        let options;
-        if(next.children[i] === "svg") {
-          options = { svg: true };
-        }
         const nextSelector = render(next.children[i], options);
         selector.appendChild(nextSelector);
       }
     } else if(current.children.length > next.children.length) {
       for(let i = 0; i < next.children.length; i++) {
-        rerender(selector.childNodes[i], current.children[i], next.children[i]);
+        rerender(selector.childNodes[i], current.children[i], next.children[i], options);
       }
       for(let i = current.children.length - 1; i >= next.children.length; i--) {
         selector.removeChild(selector.childNodes[i]);          
       }
     } else {
       for(let i = limit - 1; i > -1; i--) {
-        rerender(selector.childNodes[i], current.children[i], next.children[i]);
+        rerender(selector.childNodes[i], current.children[i], next.children[i], options);
       }
     }
 
