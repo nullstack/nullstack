@@ -7,12 +7,9 @@ export default function rerender(selector, current, next, options = {svg: false}
 
   current = current === undefined ? client.virtualDom : current;
   next = next === undefined ? client.nextVirtualDom : next;
-  if(options && options.svg) {
+  
+  if (next?.type === "svg") {
     options.svg = true;
-  } else if (next && next.type === "svg") {
-    options.svg = true;
-  } else {
-    options.svg = false;
   }
 
   if(next.instance) {

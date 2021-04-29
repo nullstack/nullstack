@@ -105,6 +105,16 @@ describe('RenderableComponent', () => {
     expect(element).toBeFalsy();
   })
 
+  test('p component with showing-p class should be rendered', async () => {
+    const element = await page.$('.showing-p');
+    expect(element).toBeFalsy();
+  })
+
+  test('b component with showing-b class should not be rendered', async () => {
+    const element = await page.$('.showing-b');
+    expect(element).toBeTruthy();
+  })
+
 });
 
 describe('RenderableComponent ?showSVG=true', () => {
@@ -124,6 +134,16 @@ describe('RenderableComponent ?showSVG=true', () => {
 
   test('svg component with showing-svg class should not be rendered', async () => {
     const element = await page.$('.showing-svg');
+    expect(element).toBeFalsy();
+  })
+
+  test('p component with showing-p class should be rendered', async () => {
+    const element = await page.$('.showing-p');
+    expect(element).toBeTruthy();
+  })
+
+  test('b component with showing-b class should not be rendered', async () => {
+    const element = await page.$('.showing-b');
     expect(element).toBeFalsy();
   })
 })

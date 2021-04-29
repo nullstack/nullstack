@@ -22,6 +22,7 @@ function Svg({showSVG}) {
   return (
     <button>
       {showSVG ?  <SvgStarFill /> : <SvgStarStroke /> }
+      {showSVG ?  <p class="showing-p">texto</p> : <b class="showing-b">bold</b> }
     </button>
   )
 }
