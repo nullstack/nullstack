@@ -50,7 +50,7 @@ export default function rerender(selector, current, next) {
     if(next.type === "svg") {
       options = { svg: true };
     }
-    const nextSelector = render(next);
+    const nextSelector = render(next, options);
     return selector.replaceWith(nextSelector);
   }
 
@@ -117,10 +117,11 @@ export default function rerender(selector, current, next) {
         rerender(selector.childNodes[i], current.children[i], next.children[i]);
       }
       for(let i = current.children.length; i < next.children.length; i++) {
+        let options;
         if(next.children[i] === "svg") {
           options = { svg: true };
         }
-        const nextSelector = render(next.children[i]);
+        const nextSelector = render(next.children[i], options);
         selector.appendChild(nextSelector);
       }
     } else if(current.children.length > next.children.length) {
