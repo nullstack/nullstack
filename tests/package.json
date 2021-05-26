@@ -14,8 +14,5 @@
     "build": "npx webpack --config node_modules/nullstack/webpack.config.js --dir=./tests --mode=production",
     "test": "jest --testTimeout=20000",
     "script": "npm run build && npx sucrase-node src/scripts/run.js"
-  },
-  "dependencies": {
-    "sucrase": "^3.18.1"
   }
 }
