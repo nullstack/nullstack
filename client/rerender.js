@@ -22,7 +22,7 @@ export default function rerender(selector, current, next) {
       }
     }
   }
-
+  // console.log(current)
   if(isFalse(current) && isFalse(next)) {
     return;
   }
@@ -121,6 +121,10 @@ export default function rerender(selector, current, next) {
       }
     } else {
       for(let i = limit - 1; i > -1; i--) {
+        if(typeof selector.childNodes[i] === 'undefined') {
+          console.warn(`There an error on '${current.type}'. Please, verify`);
+          return;
+        }
         rerender(selector.childNodes[i], current.children[i], next.children[i]);
       }
     }
