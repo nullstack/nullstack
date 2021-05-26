@@ -22,7 +22,7 @@ export default function rerender(selector, current, next) {
       }
     }
   }
-  
+
   if(isFalse(current) && isFalse(next)) {
     return;
   }
