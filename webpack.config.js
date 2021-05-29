@@ -76,7 +76,7 @@ function server(env, argv) {
   return {
     entry: './index.js',
     output: {
-      path: path.resolve(__dirname, dir+'/'+folder),
+      path: path.resolve(__dirname, dir+'/'+folder+'/'),
       filename: 'server.js',
       libraryTarget: 'umd'
     },
@@ -191,7 +191,7 @@ function client(env, argv) {
   return {
     entry: './index.js',
     output: {
-      path: path.resolve(__dirname, dir+'/'+folder),
+      path: path.resolve(__dirname, dir+'/'+folder+'/'),
       filename: 'client.js'
     },
     optimization: {
