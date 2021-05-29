@@ -52,7 +52,6 @@ const babelNullstack = {
 };
 
 function server(env, argv) {
-  console.log({__dirname})
   const dir = argv.dir || '../..';
   const icons = {};
   const publicFiles = readdirSync(path.join(__dirname, dir, 'public'));
