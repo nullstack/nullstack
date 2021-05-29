@@ -4,6 +4,7 @@ import router from './router';
 import client from './client';
 import context, { generateContext } from './context';
 import rerender from './rerender';
+import render from './render';
 import instanceProxyHandler from './instanceProxyHandler';
 import page from './page';
 import environment from './environment';

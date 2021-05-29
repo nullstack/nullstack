@@ -12,7 +12,7 @@ function path(file = '') {
 }
 
 async function copy(url, file) {
-  const content = await application.server.prerender('/'+url, {empty: true});
+  const content = await application.server.prerender('/'+url);
   const target = path(file || url)
   writeFileSync(target, content)
 }
