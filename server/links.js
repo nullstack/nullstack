@@ -1,5 +1,6 @@
-import project, { generateBase } from './project';
+import { generateBase } from './project';
 import environment from './environment';
+import worker from './worker';
 
 export function absolute(path) {
   if(path.indexOf('//') === -1) {
@@ -9,15 +10,15 @@ export function absolute(path) {
 }
 
 export function cdn(path) {
-  if(!project.cdn || environment.development) return path;
+  if(!worker.cdn) return path;
   if(path.indexOf('//') === -1) {
-    return `${project.protocol}://${project.cdn}${path}`;
+    return `${worker.cdn}${path}`;
   }  
   return path;
 }
 
 export function cdnOrAbsolute(path) {
   if(path.indexOf('//') > -1) return path;
-  if(project.cdn) return `${project.protocol}://${project.cdn}${path}`;
+  if(worker.cdn) return `${worker.cdn}${path}`;
   return `${generateBase()}${path}`;
 }

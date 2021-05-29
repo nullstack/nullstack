@@ -52,13 +52,22 @@ export default class Nullstack {
     client.currentInstance = null;
     client.initializer = () => element(Starter);
     client.selector = document.querySelector('#application');
-    client.virtualDom = await generateTree(client.initializer(), scope);
-    context.environment = environment;
-    scope.plugins = loadPlugins(scope);
-    client.nextVirtualDom = await generateTree(client.initializer(), scope);
-    rerender(client.selector);
-    client.virtualDom = client.nextVirtualDom;
-    client.nextVirtualDom = null;
+    if(environment.mode === 'spa') {
+      scope.plugins = loadPlugins(scope);
+      context.environment = environment;
+      client.virtualDom = await generateTree(client.initializer(), scope);
+      const body = render(client.virtualDom);
+      client.selector.replaceWith(body);
+      client.selector = body
+    } else {
+      client.virtualDom = await generateTree(client.initializer(), scope);
+      context.environment = environment;
+      scope.plugins = loadPlugins(scope);
+      client.nextVirtualDom = await generateTree(client.initializer(), scope);
+      rerender(client.selector);
+      client.virtualDom = client.nextVirtualDom;
+      client.nextVirtualDom = null;
+    }
     client.processLifecycleQueues();
     delete window.context;
   }

@@ -35,6 +35,26 @@ for(const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'po
   }
 }
 
+server.prerender = async function(originalUrl, options) {
+  server.less && await server.ready;
+  if(url === `/client-${environment.key}.css`) {
+    return generateFile('client.css', server)
+  }
+  if(url === `/client-${environment.key}.js`) {
+    return generateFile('client.js', server)
+  }
+  if(url === `/manifest-${environment.key}.json`) {
+    return generateManifest(server)
+  }
+  if(url === `/service-worker-${environment.key}.js`) {
+    return generateServiceWorker()
+  }
+  const request = {originalUrl}
+  const scope = await prerender(request);
+  const html = template(scope, options);
+  return html;
+}
+
 server.start = function() {
 
   if(!server.less) {

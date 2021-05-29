@@ -57,7 +57,7 @@ if(worker.enabled) {
 
 window.addEventListener('online', () => {
   proxy.online = true;
-  if(environment.static) {
+  if(environment.mode === 'ssg') {
     router._update(router.url);
   } else {
     proxy.responsive = true;

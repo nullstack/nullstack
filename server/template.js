@@ -54,16 +54,16 @@ export default function({head, body, context, instances}) {
     ${head.split('<!--#-->').join('')}
   </head>
   <body>
-    ${body}
+    ${!environment.mode === 'spa' ? '<div id="application"></div>' : body }
     <script async>
       window.page = ${JSON.stringify(page)};
-      window.instances = ${JSON.stringify(serializableInstances)};
+      window.instances = ${JSON.stringify(environment.mode === 'spa' ? {} : serializableInstances)};
       window.environment = ${JSON.stringify(environment)};
       window.settings = ${JSON.stringify(settings)};
       window.worker = ${JSON.stringify(worker)};
       window.params = ${JSON.stringify(params)};
       window.project = ${JSON.stringify(project)};
-      window.context = ${JSON.stringify(serializableContext)};
+      window.context = ${JSON.stringify(environment.mode === 'spa' ? {} : serializableContext)};
       document.addEventListener('DOMContentLoaded', () => {
         const script = window.document.createElement('script');
         script.src = '${cdn(`/client-${environment.key}.js`)}';

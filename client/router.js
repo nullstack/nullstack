@@ -32,7 +32,7 @@ class Router {
     clearTimeout(redirectTimer);
     redirectTimer = setTimeout(async () => {
       page.status = 200;
-      if(environment.static) {
+      if(environment.mode === 'ssg') {
         worker.fetching = true;
         const api = '/index.json';
         const endpoint = path === '/' ? api : path+api;

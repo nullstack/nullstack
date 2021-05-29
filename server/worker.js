@@ -27,6 +27,9 @@ worker.enabled = environment.production;
 worker.fetching = false;
 worker.preload = [];
 worker.headers = {};
+worker.api = process.env.NULLSTACK_WORKER_API ?? ''
+worker.cdn = process.env.NULLSTACK_WORKER_CDN ?? ''
+worker.protocol = process.env.NULLSTACK_WORKER_PROTOCOL ?? (environment.development ? 'http' : 'https');
 
 const emptyQueue = Object.freeze([]);
 
@@ -49,7 +52,7 @@ export function generateServiceWorker() {
   }
   sources.push(`self.context = ${JSON.stringify(context, null, 2)};`);
   sources.push(load);
-  if(environment.static) {
+  if(environment.mode === 'ssg') {
     sources.push(staticHelpers);
     sources.push(cacheFirst);
     sources.push(staleWhileRevalidate);
@@ -61,13 +64,13 @@ export function generateServiceWorker() {
     sources.push(networkOnly);
   }
   if(original.indexOf('install') === -1) {
-    sources.push(environment.static ? staticInstall : dynamicInstall);
+    sources.push(environment.mode === 'ssg' ? staticInstall : dynamicInstall);
   }
   if(original.indexOf('activate') === -1) {
     sources.push(activate);
   }
   if(original.indexOf('fetch') === -1) {
-    sources.push(environment.static ? staticFetch : dynamicFetch);
+    sources.push(environment.mode === 'ssg' ? staticFetch : dynamicFetch);
   }
   if(original) {
     sources.push(original);
