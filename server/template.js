@@ -54,7 +54,7 @@ export default function({head, body, context, instances}) {
     ${head.split('<!--#-->').join('')}
   </head>
   <body>
-    ${!environment.mode === 'spa' ? '<div id="application"></div>' : body }
+    ${environment.mode === 'spa' ? '<div id="application"></div>' : body }
     <script async>
       window.page = ${JSON.stringify(page)};
       window.instances = ${JSON.stringify(environment.mode === 'spa' ? {} : serializableInstances)};
