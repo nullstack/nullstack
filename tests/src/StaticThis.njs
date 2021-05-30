@@ -14,7 +14,7 @@ class StaticThis extends Nullstack {
   
   render() {
     return (
-      <div data-name={this.name} />
+      <div data-name={this.name === this.constructor.name} />
     )
   }
 

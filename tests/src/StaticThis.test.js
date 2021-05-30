@@ -16,7 +16,7 @@ describe('StaticThis ssr', () => {
   });
 
   test('this is bound to the class in server functions', async () => {
-    const element = await page.$('[data-name="StaticThis"]');
+    const element = await page.$('[data-name]');
     expect(element).toBeTruthy();  
   });
 
@@ -33,8 +33,8 @@ describe('StaticThis spa', () => {
   });
 
   test('this is bound to the class in server functions', async () => {
-    await page.waitForSelector('[data-name="StaticThis"]');
-    const element = await page.$('[data-name="StaticThis"]');
+    await page.waitForSelector('[data-name]');
+    const element = await page.$('[data-name]');
     expect(element).toBeTruthy();  
   });
 

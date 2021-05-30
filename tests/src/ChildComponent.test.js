@@ -17,29 +17,29 @@ describe('ChildComponent', () => {
   });
 
   test('inner components are overridable', async () => {
-    const element = await page.$('[data-current="ChildComponent"]');
+    const element = await page.$('[data-current]');
     expect(element).toBeTruthy();
   });
 
   test('server functions are bound to the class in ssr', async () => {
-    const element = await page.$('[data-child-this="ChildComponent"]');
+    const element = await page.$('[data-child-this]');
     expect(element).toBeTruthy();
   });
 
   test('inherited server functions are bound to the class ssr' , async () => {
-    const element = await page.$('[data-parent-this="ChildComponent"]');
+    const element = await page.$('[data-parent-this]');
     expect(element).toBeTruthy();
   });
 
   test('server functions are bound to the class in spa', async () => {
-    await page.waitForSelector('[data-hydrated-child-this="ChildComponent"]');
-    const element = await page.$('[data-hydrated-child-this="ChildComponent"]');
+    await page.waitForSelector('[data-hydrated-child-this]');
+    const element = await page.$('[data-hydrated-child-this]');
     expect(element).toBeTruthy();
   });
 
   test('inherited server functions are bound to the class spa' , async () => {
-    await page.waitForSelector('[data-hydrated-parent-this="ChildComponent"]');
-    const element = await page.$('[data-hydrated-parent-this="ChildComponent"]');
+    await page.waitForSelector('[data-hydrated-parent-this]');
+    const element = await page.$('[data-hydrated-parent-this]');
     expect(element).toBeTruthy();
   });
 

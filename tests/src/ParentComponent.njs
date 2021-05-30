@@ -18,8 +18,8 @@ class ParentComponent extends Nullstack {
     return (
       <div>
         <div data-current="ParentComponent" />
-        <div data-parent-this={this.parentThis} />
-        <div data-hydrated-parent-this={this.hydratedParentThis} />
+        <div data-parent-this={this.parentThis === this.constructor.name} />
+        <div data-hydrated-parent-this={this.hydratedParentThis === this.constructor.name} />
       </div>
     )
   }
