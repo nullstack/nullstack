@@ -10,7 +10,7 @@ class ContextEnvironment extends Nullstack {
         <div data-server={environment.server.toString()} />
         <div data-development={environment.development.toString()} />
         <div data-production={environment.production.toString()} />
-        <div data-static={environment.static.toString()} />
+        <div data-static={(environment.mode === 'ssg').toString()} />
         <div data-key={environment.key} />
       </div>
     )

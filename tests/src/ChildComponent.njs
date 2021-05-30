@@ -20,10 +20,10 @@ class ChildComponent extends ParentComponent {
     return (
       <div>
         <div data-current="ChildComponent" />
-        <div data-parent-this={this.parentThis} />
-        <div data-child-this={this.childThis} />
-        <div data-hydrated-parent-this={this.hydratedParentThis} />
-        <div data-hydrated-child-this={this.hydratedChildThis} />
+        <div data-parent-this={this.parentThis === this.constructor.name} />
+        <div data-child-this={this.childThis === this.constructor.name} />
+        <div data-hydrated-parent-this={this.hydratedParentThis === this.constructor.name} />
+        <div data-hydrated-child-this={this.hydratedChildThis === this.constructor.name} />
       </div>
     )
   }
