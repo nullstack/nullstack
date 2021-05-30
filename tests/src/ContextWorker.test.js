@@ -25,6 +25,11 @@ describe('ContextWorker', () => {
     expect(element).toBeFalsy();
   });
 
+  test('has a cdn key', async () => {
+    const element = await page.$('[data-cdn="http://127.0.0.1:6969"]');
+    expect(element).toBeTruthy();
+  });
+
   test('is part of the client context', async () => {
     const element = await page.$('[data-worker]');
     expect(element).toBeTruthy();

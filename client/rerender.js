@@ -121,6 +121,10 @@ export default function rerender(selector, current, next) {
       }
     } else {
       for(let i = limit - 1; i > -1; i--) {
+        if(typeof selector.childNodes[i] === 'undefined') {
+          console.error(`Virtual DOM does not match the DOM. Expected tag ${current.type} but instead found undefined. This error usually happens because of an invalid HTML hierarchy like nested forms or tables without tr.`);
+          return;
+        }
         rerender(selector.childNodes[i], current.children[i], next.children[i]);
       }
     }

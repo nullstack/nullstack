@@ -18,7 +18,7 @@ async function generateBranch(parent, node, depth, scope) {
       scope.context.router._changed &&
       node.attributes && 
       node.attributes.route && 
-      !scope.context.environment.static
+      scope.context.environment.mode !== 'ssg'
     ) {
       const routeDepth = depth.slice(0, -1).join('.');
       const newSegments = scope.context.router._newSegments[routeDepth];

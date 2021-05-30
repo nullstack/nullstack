@@ -7,12 +7,16 @@
   "devDependencies": {
     "jest": "^26.6.3",
     "nullstack": "*",
-    "puppeteer": "^5.5.0"
+    "puppeteer": "^5.5.0",
+    "webpack-cli": "^3.3.12"
   },
   "scripts": {
-    "start": "npx webpack --config node_modules/nullstack/webpack.config.js --dir=./tests --mode=development --watch",
-    "build": "npx webpack --config node_modules/nullstack/webpack.config.js --dir=./tests --mode=production",
+    "start": "npx nullstack start --input=./tests",
+    "build": "npx nullstack build --input=./tests --mode=ssr",
     "test": "jest --testTimeout=20000",
     "script": "npm run build && npx sucrase-node src/scripts/run.js"
+  },
+  "dependencies": {
+    "glob": "^7.1.7"
   }
 }

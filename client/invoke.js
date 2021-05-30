@@ -13,7 +13,7 @@ export default function invoke(name, hash) {
       worker.queues[name] = [...worker.queues[name], params];
     }
     const finalHash = hash === this.constructor.hash ? hash : `${hash}-${this.constructor.hash}`;
-    let url = `/${prefix}/${finalHash}/${name}.json`;
+    let url = `${worker.api}/${prefix}/${finalHash}/${name}.json`;
     try {
       const response = await fetch(url, {
         method: 'POST',

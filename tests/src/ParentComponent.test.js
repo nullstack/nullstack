@@ -22,18 +22,18 @@ describe('ParentComponent', () => {
   });
 
   test('server functions are bound to the class', async () => {
-    const element = await page.$('[data-parent-this="ParentComponent"]');
+    const element = await page.$('[data-parent-this]');
     expect(element).toBeTruthy();
   });
 
   test('server functions are bound to the class', async () => {
-    const element = await page.$('[data-parent-this="ParentComponent"]');
+    const element = await page.$('[data-parent-this]');
     expect(element).toBeTruthy();
   });
 
   test('server functions are bound to the class in spa', async () => {
-    await page.waitForSelector('[data-hydrated-parent-this="ParentComponent"]');
-    const element = await page.$('[data-hydrated-parent-this="ParentComponent"]');
+    await page.waitForSelector('[data-hydrated-parent-this]');
+    const element = await page.$('[data-hydrated-parent-this]');
     expect(element).toBeTruthy();
   });
 

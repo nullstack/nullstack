@@ -52,7 +52,7 @@ const babelNullstack = {
 };
 
 function server(env, argv) {
-  const dir = argv.dir || '../..';
+  const dir = argv.input || '../..';
   const icons = {};
   const publicFiles = readdirSync(path.join(__dirname, dir, 'public'));
   for(const file of publicFiles) {
@@ -62,10 +62,10 @@ function server(env, argv) {
     }
   }
   const buildKey = crypto.randomBytes(20).toString('hex');
-  const folder = argv.mode === 'development' ? '.development' : '.production';
-  const devtool = argv.mode === 'development' ? 'cheap-inline-module-source-map' : 'none';
-  const minimize = argv.mode !== 'development';
-  const plugins = argv.mode === 'development' ? ([
+  const folder = argv.environment === 'development' ? '.development' : '.production';
+  const devtool = argv.environment === 'development' ? 'cheap-inline-module-source-map' : 'none';
+  const minimize = argv.environment !== 'development';
+  const plugins = argv.environment === 'development' ? ([
     new NodemonPlugin({
       watch: path.resolve('./.development'),
       script: './.development/server.js',
@@ -76,7 +76,7 @@ function server(env, argv) {
   return {
     entry: './index.js',
     output: {
-      path: path.resolve(__dirname, dir+'/'+folder),
+      path: path.resolve(__dirname, dir+'/'+folder+'/'),
       filename: 'server.js',
       libraryTarget: 'umd'
     },
@@ -85,8 +85,8 @@ function server(env, argv) {
       minimizer: [
         new TerserPlugin({
             terserOptions: {
-                keep_classnames: true,
-                keep_fnames: true
+              //keep_classnames: true,
+              keep_fnames: true
             }
           })
         ]
@@ -158,12 +158,12 @@ function server(env, argv) {
 }
 
 function client(env, argv) {
-  const dir = argv.dir || '../..';
-  const folder = argv.mode === 'development' ? '.development' : '.production';
-  const devtool = argv.mode === 'development' ? 'cheap-inline-module-source-map' : 'none';
-  const minimize = argv.mode !== 'development';
+  const dir = argv.input || '../..';
+  const folder = argv.environment === 'development' ? '.development' : '.production';
+  const devtool = argv.environment === 'development' ? 'cheap-inline-module-source-map' : 'none';
+  const minimize = argv.environment !== 'development';
   let liveReload = {};
-  if(argv.mode !== 'development') {
+  if(argv.environment !== 'development') {
     liveReload = {
       test: /liveReload.js$/,
       use: [
@@ -176,7 +176,7 @@ function client(env, argv) {
       filename: "client.css"
     })
   ]
-  if(argv.mode === 'production') {
+  if(argv.environment === 'production') {
     plugins.push(new PurgecssPlugin({
       paths: glob.sync(`src/**/*`,  { nodir: true }),
       whitelist: ['script', 'body', 'html', 'style'],
@@ -191,7 +191,7 @@ function client(env, argv) {
   return {
     entry: './index.js',
     output: {
-      path: path.resolve(__dirname, dir+'/'+folder),
+      path: path.resolve(__dirname, dir+'/'+folder+'/'),
       filename: 'client.js'
     },
     optimization: {
@@ -199,7 +199,7 @@ function client(env, argv) {
       minimizer: [
         new TerserPlugin({
           terserOptions: {
-            keep_classnames: true,
+            //keep_classnames: true,
             keep_fnames: true
           }
         })
