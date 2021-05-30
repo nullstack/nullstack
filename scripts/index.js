@@ -1,16 +1,26 @@
 #! /usr/bin/env node
-
-process.env.NODE_ENV='production'
-console.log(__dirname)
+const command = process.argv[2]
 
 const webpack = require('webpack');
 const config = require('../webpack.config')
 
-const argv = {
-  dir: '../decouple-front-end',
-  mode: 'production'
+const environment = command === 'start' ? 'development' : 'production'
+
+const args = process.argv.slice(3)
+const params = {}
+
+for(const arg of args) {
+  const [key, value] = arg.slice(2).split('=')
+  params[key] = value
 }
 
-console.log(config.map((env) => env({}, argv)))
+const compiler = webpack(config.map((env) => env(null, {environment})))
 
-webpack(config.map((env) => env({}, argv)), (a , b) => console.log(b.toJson().errors)) //.run((err, res) => console.log(err, res));
+if(command === 'build') {
+  compiler.run();
+  if(params.mode === 'ssg' || params.mode === 'spa') {
+    require(`../builders/${params.mode}`)(params.folder)
+  }
+} else {
+  compiler.watch({}, () => {})
+}

@@ -62,10 +62,10 @@ function server(env, argv) {
     }
   }
   const buildKey = crypto.randomBytes(20).toString('hex');
-  const folder = argv.mode === 'development' ? '.development' : '.production';
-  const devtool = argv.mode === 'development' ? 'cheap-inline-module-source-map' : 'none';
-  const minimize = argv.mode !== 'development';
-  const plugins = argv.mode === 'development' ? ([
+  const folder = argv.environment === 'development' ? '.development' : '.production';
+  const devtool = argv.environment === 'development' ? 'cheap-inline-module-source-map' : 'none';
+  const minimize = argv.environment !== 'development';
+  const plugins = argv.environment === 'development' ? ([
     new NodemonPlugin({
       watch: path.resolve('./.development'),
       script: './.development/server.js',
@@ -159,11 +159,11 @@ function server(env, argv) {
 
 function client(env, argv) {
   const dir = argv.dir || '../..';
-  const folder = argv.mode === 'development' ? '.development' : '.production';
-  const devtool = argv.mode === 'development' ? 'cheap-inline-module-source-map' : 'none';
-  const minimize = argv.mode !== 'development';
+  const folder = argv.environment === 'development' ? '.development' : '.production';
+  const devtool = argv.environment === 'development' ? 'cheap-inline-module-source-map' : 'none';
+  const minimize = argv.environment !== 'development';
   let liveReload = {};
-  if(argv.mode !== 'development') {
+  if(argv.environment !== 'development') {
     liveReload = {
       test: /liveReload.js$/,
       use: [
@@ -176,7 +176,7 @@ function client(env, argv) {
       filename: "client.css"
     })
   ]
-  if(argv.mode === 'production') {
+  if(argv.environment === 'production') {
     plugins.push(new PurgecssPlugin({
       paths: glob.sync(`src/**/*`,  { nodir: true }),
       whitelist: ['script', 'body', 'html', 'style'],
