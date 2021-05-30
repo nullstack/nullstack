@@ -52,7 +52,7 @@ const babelNullstack = {
 };
 
 function server(env, argv) {
-  const dir = argv.dir || '../..';
+  const dir = argv.input || '../..';
   const icons = {};
   const publicFiles = readdirSync(path.join(__dirname, dir, 'public'));
   for(const file of publicFiles) {
@@ -85,8 +85,8 @@ function server(env, argv) {
       minimizer: [
         new TerserPlugin({
             terserOptions: {
-                keep_classnames: true,
-                keep_fnames: true
+              //keep_classnames: true,
+              keep_fnames: true
             }
           })
         ]
@@ -158,7 +158,7 @@ function server(env, argv) {
 }
 
 function client(env, argv) {
-  const dir = argv.dir || '../..';
+  const dir = argv.input || '../..';
   const folder = argv.environment === 'development' ? '.development' : '.production';
   const devtool = argv.environment === 'development' ? 'cheap-inline-module-source-map' : 'none';
   const minimize = argv.environment !== 'development';
@@ -199,7 +199,7 @@ function client(env, argv) {
       minimizer: [
         new TerserPlugin({
           terserOptions: {
-            keep_classnames: true,
+            //keep_classnames: true,
             keep_fnames: true
           }
         })
