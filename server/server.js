@@ -148,9 +148,9 @@ server.start = function() {
       const name = project.name ? project.name : 'Nullstack'
       if(environment.development) {
         liveReload(server);
-        console.log('\x1b[36m%s\x1b[0m', `${name} is running in development mode at http://localhost:${server.port}`);
+        console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${name} is ready at http://localhost:${server.port}\n`);
       } else {
-        console.log('\x1b[36m%s\x1b[0m', `${name} is running in production mode at http://127.0.0.1:${server.port}`);
+        console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${name} is ready at http://127.0.0.1:${server.port}\n`);
       }
     });
   }

@@ -83,21 +83,19 @@ module.exports = async function ssg(folder = 'ssg') {
     writeFileSync(`${path()}/sitemap.xml`, xml);
   }
 
-  async function build() {
-    if(existsSync(path())) {
-      rmSync(path(), {recursive: true});
-    }
-    mkdirSync(path())
-    await copyFolder('public')
-    await copyRoute()
-    await copyRoute(`/offline-${application.environment.key}`);
-    await copyRoute(`/404`);
-    await copyBundle(`/client-${application.environment.key}.css`)
-    await copyBundle(`/client-${application.environment.key}.js`)
-    await copyBundle(`/manifest-${application.environment.key}.json`)
-    await copyBundle(`/service-worker-${application.environment.key}.js`)
-    await createSitemap()
+  if(existsSync(path())) {
+    rmSync(path(), {recursive: true});
   }
+  mkdirSync(path())
+  await copyFolder('public')
+  await copyRoute()
+  await copyRoute(`/offline-${application.environment.key}`);
+  await copyRoute(`/404`);
+  await copyBundle(`/client-${application.environment.key}.css`)
+  await copyBundle(`/client-${application.environment.key}.js`)
+  await copyBundle(`/manifest-${application.environment.key}.json`)
+  await copyBundle(`/service-worker-${application.environment.key}.js`)
+  await createSitemap()
 
-  build()
+  console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${application.project.name} is ready at ${folder}`);
 }

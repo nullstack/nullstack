@@ -15,20 +15,18 @@ module.exports = async function spa(folder = 'spa') {
     writeFileSync(target, content)
   }
 
-  async function build() {
-    if(existsSync(path())) {
-      rmSync(path(), {recursive: true});
-    }
-    mkdirSync(path())
-    copySync(path('../public'), path());
-    await copy('/', 'index.html')
-    await copy(`client-${application.environment.key}.css`)
-    await copy(`client-${application.environment.key}.js`)
-    await copy(`manifest-${application.environment.key}.json`)
-    await copy(`service-worker-${application.environment.key}.js`)
-    await copy(`offline-${application.environment.key}`)
-    await copy(`404`)
+  if(existsSync(path())) {
+    rmSync(path(), {recursive: true});
   }
-
-  build()
+  mkdirSync(path())
+  copySync(path('../public'), path());
+  await copy('/', 'index.html')
+  await copy(`client-${application.environment.key}.css`)
+  await copy(`client-${application.environment.key}.js`)
+  await copy(`manifest-${application.environment.key}.json`)
+  await copy(`service-worker-${application.environment.key}.js`)
+  await copy(`offline-${application.environment.key}`)
+  await copy(`404`)
+  
+  console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${application.project.name} is ready at ${folder}`);
 }

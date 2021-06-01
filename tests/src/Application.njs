@@ -36,6 +36,7 @@ class Application extends Nullstack {
 
   async changeInstanceable({ instances }) {
     await instances.instanceable.customMethod();
+    // console.log('hey')
   }
 
   static async start(context) {
