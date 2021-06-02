@@ -14,7 +14,7 @@
     "start": "npx nullstack start --input=./tests",
     "build": "npx nullstack build --input=./tests --mode=ssr",
     "test": "jest --testTimeout=20000",
-    "script": "npm run build && npx sucrase-node src/scripts/run.js"
+    "script": "npx sucrase-node src/scripts/run.js"
   },
   "dependencies": {
     "glob": "^7.1.7"
