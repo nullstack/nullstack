@@ -17,21 +17,41 @@ const { input } = params;
 
 const compiler = webpack(config.map((env) => env(null, { environment, input })));
 
-function logError(stats) {
+let lastTrace = '';
+let compilingIndex = 1;
+
+function logCompiling(showCompiling) {
+  if(!showCompiling) return;
+  console.log(" ⚙️  Compiling changes...");
+}
+
+function logTrace(stats, showCompiling) {
   if(stats.hasErrors()) {
     const [file, loader, ...trace]  = stats.toJson('errors-only', {colors: true}).children[0].errors[0].split('\n');
+    const currentTrace = trace.join(' ');
+    if(lastTrace === currentTrace) return;
+    lastTrace = currentTrace;
+    logCompiling(showCompiling);
     console.log(` 💥️ There is an error preventing compilation in \x1b[31m${file}\x1b[0m`);
     for(const line of trace) {
       console.log('\x1b[31m%s\x1b[0m', '    ' + line.trim());
     }
-    console.log()
+    console.log();
+    compilingIndex = 0;
+  } else {
+    compilingIndex++;
+    if(compilingIndex % 2 === 0) {
+      logCompiling(showCompiling);
+      compilingIndex = 0;
+    }
+    lastTrace = '';
   }
 }
 
 if (command === 'build') {
-  console.log(` 🚀️ Building your application in ${params.mode} mode...`)
+  console.log(` 🚀️ Building your application in ${params.mode} mode...`);
   compiler.run((error, stats) => {
-    logError(stats)
+    logTrace(stats, false);
     if(!stats.hasErrors()) {
       if (params.mode === 'ssg' || params.mode === 'spa' || params.mode === 'ssr') {
         require(`../builders/${params.mode}`)(params.output);
@@ -39,10 +59,9 @@ if (command === 'build') {
     }
   });
 } else {
-  console.log(` 🚀️ Starting your application in ${environment} mode...`)
+  console.log(` 🚀️ Starting your application in ${environment} mode...`);
   console.log();
   compiler.watch({}, (error, stats) => {
-    console.log(" ⚙️  Compiling changes...");
-    logError(stats)
+    logTrace(stats, true);
   });
 }
