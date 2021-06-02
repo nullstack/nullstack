@@ -21,7 +21,7 @@ module.exports = async function ssg(folder = 'ssg') {
     if(url.indexOf('.') > -1) {
       return;
     }
-    console.log(`copying route: ${url}`)
+    console.log(` ⚙️  ${url}`)
     if(!existsSync(target)) {
       mkdirSync(target, {recursive: true});
     }
@@ -60,19 +60,19 @@ module.exports = async function ssg(folder = 'ssg') {
   }
 
   async function copyBundle(url) {
-    console.log(`copying bundle: ${url}`)
+    console.log(` ⚙️  ${url}`)
     const content = await application.server.prerender(url);
     const target = path(url)
     writeFileSync(target, content)
   }
 
   async function copyFolder(url) {
-    console.log(`copying folder: ${url}`)
+    console.log(` ⚙️  /${url}/`)
     copySync(path(`../${url}`), path());
   }
 
   async function createSitemap() {
-    console.log('creating: sitemap')
+    console.log(' ⚙️  /sitemap.xml')
     const timestamp = new Date().toJSON().substring(0,10);
     const urls = Object.keys(pages).map((path) => {
       const page = pages[path];
@@ -83,21 +83,21 @@ module.exports = async function ssg(folder = 'ssg') {
     writeFileSync(`${path()}/sitemap.xml`, xml);
   }
 
-  async function build() {
-    if(existsSync(path())) {
-      rmSync(path(), {recursive: true});
-    }
-    mkdirSync(path())
-    await copyFolder('public')
-    await copyRoute()
-    await copyRoute(`/offline-${application.environment.key}`);
-    await copyRoute(`/404`);
-    await copyBundle(`/client-${application.environment.key}.css`)
-    await copyBundle(`/client-${application.environment.key}.js`)
-    await copyBundle(`/manifest-${application.environment.key}.json`)
-    await copyBundle(`/service-worker-${application.environment.key}.js`)
-    await createSitemap()
+  console.log()
+  if(existsSync(path())) {
+    rmSync(path(), {recursive: true});
   }
+  mkdirSync(path())
+  await copyFolder('public')
+  await copyRoute()
+  await copyRoute(`/offline-${application.environment.key}`);
+  await copyRoute(`/404`);
+  await copyBundle(`/client-${application.environment.key}.css`)
+  await copyBundle(`/client-${application.environment.key}.js`)
+  await copyBundle(`/manifest-${application.environment.key}.json`)
+  await copyBundle(`/service-worker-${application.environment.key}.js`)
+  await createSitemap()
+  console.log()
 
-  build()
+  console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${application.project.name} is ready at ${folder}\n`);
 }
