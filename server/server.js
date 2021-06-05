@@ -120,7 +120,9 @@ server.start = function() {
       try {
         const context = generateContext({request, response, ...args});
         const result = await method.call(boundKlass, context);
-        response.json({result});
+        if (!(result instanceof http.ServerResponse)) {
+          response.json({result});
+        }
       } catch(error) {
         printError(error);
         response.status(500).json({});
