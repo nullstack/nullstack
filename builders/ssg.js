@@ -100,4 +100,5 @@ module.exports = async function ssg(folder = 'ssg') {
   console.log()
 
   console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${application.project.name} is ready at ${folder}\n`);
+  process.exit()
 }
