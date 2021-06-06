@@ -74,6 +74,7 @@ function server(env, argv) {
     })
   ]) : undefined;
   return {
+    mode: argv.environment,
     entry: './index.js',
     output: {
       path: path.resolve(__dirname, dir+'/'+folder+'/'),
@@ -189,6 +190,7 @@ function client(env, argv) {
     }));
   }
   return {
+    mode: argv.environment,
     entry: './index.js',
     output: {
       path: path.resolve(__dirname, dir+'/'+folder+'/'),

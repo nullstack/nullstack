@@ -28,6 +28,9 @@ function logCompiling(showCompiling) {
 function logTrace(stats, showCompiling) {
   if(stats.hasErrors()) {
     const [file, loader, ...trace]  = stats.toJson('errors-only', {colors: true}).children[0].errors[0].split('\n');
+    if(loader.indexOf('/nullstack/loaders') === -1) {
+      trace.unshift(loader)
+    }
     const currentTrace = trace.join(' ');
     if(lastTrace === currentTrace) return;
     lastTrace = currentTrace;
