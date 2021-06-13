@@ -52,12 +52,13 @@ function logTrace(stats, showCompiling) {
 }
 
 if (command === 'build') {
-  console.log(` 🚀️ Building your application in ${params.mode} mode...`);
+  const mode = params.mode || 'ssr';
+  console.log(` 🚀️ Building your application in ${mode} mode...`);
   compiler.run((error, stats) => {
     logTrace(stats, false);
     if(!stats.hasErrors()) {
-      if (params.mode === 'ssg' || params.mode === 'spa' || params.mode === 'ssr') {
-        require(`../builders/${params.mode}`)(params.output);
+      if (mode === 'ssg' || mode === 'spa' || mode === 'ssr') {
+        require(`../builders/${mode}`)(params.output);
       }
     }
   });
