@@ -1,4 +1,5 @@
 import { isFalse } from "../shared/nodes";
+import {sanitizeStringHtml} from "../shared/sanitizeString";
 
 export default function render(node, scope) {
 
@@ -7,7 +8,7 @@ export default function render(node, scope) {
   }
 
   if(node.type === undefined) {
-    return (node.toString() || ' ') + "<!--#-->";
+    return (sanitizeStringHtml(node.toString()) || ' ') + "<!--#-->";
   }
 
   let element = `<${node.type}`;
