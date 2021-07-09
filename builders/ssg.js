@@ -1,14 +1,14 @@
-module.exports = async function ssg(folder = 'ssg', input) {
+module.exports = async function ssg(folder = 'ssg') {
   process.env.NULLSTACK_ENVIRONMENT_MODE = 'ssg';
   
-  const dir = input || '../..';
-  const application = require(`../${dir}/.production/server`).default;
+  const dir = process.cwd();
+  const application = require(`${dir}/.production/server`).default;
   const { resolve } = require('path')
   const {existsSync, mkdirSync, writeFileSync, copySync, rmSync} = require('fs-extra');
 
   function path(file = '') {
     const target = file.startsWith('/') ? file.slice(1) : file;
-    return resolve(__dirname, `../${dir}/${folder}`, target)
+    return resolve(`${dir}/${folder}`, target)
   }
 
   const links = {};
