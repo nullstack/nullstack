@@ -1,12 +1,13 @@
 module.exports = async function spa(folder = 'spa') {
   process.env.NULLSTACK_ENVIRONMENT_MODE = 'spa';
 
-  const application = require('../../../.production/server').default
+  const dir = process.cwd();
+  const application = require(`${dir}/.production/server`).default
   const { resolve } = require('path')
   const {existsSync, mkdirSync, writeFileSync, copySync, rmSync} = require('fs-extra');
 
   function path(file = '') {
-    return resolve(__dirname, `../../../${folder}`, file)
+    return resolve(`${dir}/${folder}`, file)
   }
 
   async function copy(url, file) {

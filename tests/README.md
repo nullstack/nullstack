@@ -9,6 +9,7 @@ This folder contains tests for Nullstack using Jest and Puppeteer.
 In project folder:
 
 ```sh
+npm install
 npm link
 cd tests
 npm install
