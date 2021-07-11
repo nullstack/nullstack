@@ -1,4 +1,4 @@
-import application from '../../.development/server.js';
+const {default: application} = require('../../.development/server.js');
 
 async function getProjectName() {
   const { project } = await application.start();

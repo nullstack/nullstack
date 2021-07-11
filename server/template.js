@@ -4,6 +4,7 @@ import project from './project';
 import settings from './settings';
 import integrities from './integrities';
 import {absolute, cdn, cdnOrAbsolute} from './links';
+import { sanitizeString } from '../shared/sanitizeString';
 
 export default function({head, body, context, instances}) {
   const {page, router, worker, params} = context;
@@ -57,7 +58,7 @@ export default function({head, body, context, instances}) {
     ${environment.mode === 'spa' ? '<div id="application"></div>' : body }
     <script async>
       window.page = ${JSON.stringify(page)};
-      window.instances = ${JSON.stringify(environment.mode === 'spa' ? {} : serializableInstances)};
+      window.instances = ${sanitizeString(JSON.stringify(environment.mode === 'spa' ? {} : serializableInstances)) };
       window.environment = ${JSON.stringify(environment)};
       window.settings = ${JSON.stringify(settings)};
       window.worker = ${JSON.stringify(worker)};

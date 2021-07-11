@@ -29,6 +29,7 @@ import PureComponents from './PureComponents';
 import NestedProxy from './NestedProxy';
 import FalsyNodes from './FalsyNodes';
 import ErrorOnChildNode from './ErrorOnChildNode';
+import Vunerability from './Vunerability.njs';
 
 import './Application.css';
 
@@ -89,6 +90,7 @@ class Application extends Nullstack {
         <NestedProxy route="/nested-proxy" />
         <FalsyNodes route="/falsy-nodes" />
         <ErrorOnChildNode route="/error-on-child-node" />
+        <Vunerability route="/vunerability" />
         <ErrorPage route="*" />
       </main>
     )
