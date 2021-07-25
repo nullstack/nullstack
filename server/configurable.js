@@ -5,9 +5,6 @@ const configurableProxyHandler = {
   get(target, name) {
     if(target[name]) {
       return target[name];
-    } else {
-      const key = environment.production ? 'production' : 'development';
-      return target[key] ? target[key][name] : target[name];
     }
   }
 }
@@ -29,16 +26,11 @@ export function proxyConfigurable(target, label) {
 }
 
 export function freezeConfigurable(target) {
-  if(environment.production) {
-    for(const [key, value] of Object.entries(target.production)) {
-      target[key] = value;
-    }
-  } else {
+  if(environment.development) {
     for(const [key, value] of Object.entries(target.development)) {
       target[key] = value;
     }
   }
-  delete target.production;
   delete target.development;
   Object.freeze(target);
 }
