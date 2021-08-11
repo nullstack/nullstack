@@ -16,6 +16,7 @@ const environment = command === 'start' ? 'development' : 'production';
 const { input } = params;
 
 const compiler = webpack(config.map((env) => env(null, { environment, input })));
+process.env.PORT = require('minimist')(process.argv.slice(2)).port;
 
 let lastTrace = '';
 let compilingIndex = 1;
