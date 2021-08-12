@@ -4,19 +4,13 @@ const command = process.argv[2];
 const webpack = require('webpack');
 const config = require('../webpack.config');
 
-const args = process.argv.slice(3);
-const params = {};
-
-for (const arg of args) {
-  const [key, value] = arg.slice(2).split('=');
-  params[key] = value;
-}
+const params = require('minimist')(process.argv.slice(3));
 
 const environment = command === 'start' ? 'development' : 'production';
 const { input } = params;
 
+process.env.PORT = params.port || process.env.PORT;
 const compiler = webpack(config.map((env) => env(null, { environment, input })));
-process.env.PORT = require('minimist')(process.argv.slice(2)).port;
 
 let lastTrace = '';
 let compilingIndex = 1;
