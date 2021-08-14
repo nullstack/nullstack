@@ -4,7 +4,6 @@ const { version } = require('../package.json');
 
 let lastTrace = '';
 let compilingIndex = 1;
-const buildModes = ['ssg', 'spa', 'ssr'];
 
 const webpack = require('webpack');
 const config = require('../webpack.config');
@@ -59,24 +58,30 @@ function build({ input, mode, output }) {
   compiler.run((error, stats) => {
     logTrace(stats, false);
     if (stats.hasErrors()) return;
-    buildModes.includes(mode) && require(`../builders/${mode}`)(output);
+    require(`../builders/${mode}`)(output);
   });
 }
 
-program.command('start')
+program
+  .command('start')
   .alias('s')
-  .description('Start application')
-  .option('-p, --port <port>', 'Port to start application', 5000)
-  .option('-i, --input <input>', 'Project folder to start')
+  .description('Start application in development environment')
+  .option('-p, --port <port>', 'Port number to run the server', 5000)
+  .option('-i, --input <input>', 'Path to project that will be started')
   .action(start)
 
 program
   .command('build')
   .alias('b')
-  .description('Build application')
-  .option('-m, --mode <mode>', 'Build', 'ssr')
-  .option('-i, --input <input>', 'Project folder to build')
-  .option('-o, --output <output>', 'Build to folder')
+  .description('Build application for production environment')
+  .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles', 'ssr').choices('ssg', 'spa', 'ssr'))
+  .option('-i, --input <input>', 'Path to project that will be built')
+  .option('-o, --output <output>', 'Path to build output folder')
   .action(build)
 
-program.version(version).parse(process.argv);
+program
+  .helpOption('-h, --help', 'Learn more about a specific command');
+
+program
+  .version(version, '-v, --version', 'Nullstack version being used')
+  .parse(process.argv);
