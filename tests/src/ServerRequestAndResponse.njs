@@ -18,7 +18,6 @@ class ServerRequestAndResponse extends Nullstack {
         response.status(request.status).send(request.method);
       });
     }
-    server.port = 6969;
     server.cors = {
       origin: 'http://localhost:6969',
       optionsSuccessStatus: 200

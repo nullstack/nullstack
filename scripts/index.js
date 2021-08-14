@@ -9,9 +9,15 @@ const buildModes = ['ssg', 'spa', 'ssr'];
 const webpack = require('webpack');
 const config = require('../webpack.config');
 
-const getCompiler = ({ environment, input }) => webpack(config.map((env) => env(null, { environment, input })));
+function getCompiler(options) {
+  const configs = config.map((env) => env(null, options))
+  return webpack(configs)
+}
 
-const logCompiling = showCompiling => showCompiling && console.log(" ⚙️  Compiling changes...");
+function logCompiling(showCompiling) {
+  if(!showCompiling) return;
+  console.log(" ⚙️  Compiling changes...");
+}
 
 function logTrace(stats, showCompiling) {
   if (stats.hasErrors()) {
@@ -29,7 +35,6 @@ function logTrace(stats, showCompiling) {
     compilingIndex = 0;
     return
   }
-
   compilingIndex++;
   if (compilingIndex % 2 === 0) {
     logCompiling(showCompiling);
@@ -41,7 +46,6 @@ function logTrace(stats, showCompiling) {
 function start({ input, port }) {
   const environment = 'development';
   const compiler = getCompiler({ environment, input });
-
   process.env['NULLSTACK_SERVER_PORT'] = port;
   console.log(` 🚀️ Starting your application in ${environment} mode...`);
   console.log();
@@ -51,7 +55,6 @@ function start({ input, port }) {
 function build({ input, mode, output }) {
   const environment = 'production';
   const compiler = getCompiler({ environment, input });
-
   console.log(` 🚀️ Building your application in ${mode} mode...`);
   compiler.run((error, stats) => {
     logTrace(stats, false);
@@ -66,6 +69,7 @@ program.command('start')
   .option('-p, --port <port>', 'Port to start application', 5000)
   .option('-i, --input <input>', 'Project folder to start')
   .action(start)
+
 program
   .command('build')
   .alias('b')
