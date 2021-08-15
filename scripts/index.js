@@ -80,8 +80,8 @@ program
   .action(build)
 
 program
-  .helpOption('-h, --help', 'Learn more about a specific command');
-
-program
+  .name("nullstack")
+  .addHelpCommand(false)
+  .helpOption('-h, --help', 'Learn more about a specific command')
   .version(version, '-v, --version', 'Nullstack version being used')
   .parse(process.argv);
