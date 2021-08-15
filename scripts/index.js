@@ -8,6 +8,8 @@ let compilingIndex = 1;
 const webpack = require('webpack');
 const config = require('../webpack.config');
 
+const buildModes = ['ssg', 'spa', 'ssr']
+
 function getCompiler(options) {
   const configs = config.map((env) => env(null, options))
   return webpack(configs)
@@ -68,15 +70,17 @@ program
   .description('Start application in development environment')
   .option('-p, --port <port>', 'Port number to run the server', 5000)
   .option('-i, --input <input>', 'Path to project that will be started')
+  .helpOption('-h, --help', 'Learn more about this command')
   .action(start)
 
 program
   .command('build')
   .alias('b')
   .description('Build application for production environment')
-  .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles', 'ssr').choices('ssg', 'spa', 'ssr'))
+  .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles', 'ssr').choices(buildModes))
   .option('-i, --input <input>', 'Path to project that will be built')
   .option('-o, --output <output>', 'Path to build output folder')
+  .helpOption('-h, --help', 'Learn more about this command')
   .action(build)
 
 program
