@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
 const crypto = require("crypto");
-const {readdirSync} = require('fs');
+const { readdirSync } = require('fs');
 
 const babel = {
   test: /\.js$/,
@@ -16,7 +16,7 @@ const babel = {
     loader: 'babel-loader',
     options: {
       "presets": [
-        ["@babel/preset-env", {"targets": { node: "10" }}]
+        ["@babel/preset-env", { "targets": { node: "10" } }]
       ],
       "plugins": [
         "@babel/plugin-proposal-export-default-from",
@@ -35,7 +35,7 @@ const babelNullstack = {
     loader: 'babel-loader',
     options: {
       "presets": [
-        ["@babel/preset-env", {"targets": { node: "10" }}],
+        ["@babel/preset-env", { "targets": { node: "10" } }],
         "@babel/preset-react"
       ],
       "plugins": [
@@ -55,8 +55,8 @@ function server(env, argv) {
   const dir = argv.input || '../..';
   const icons = {};
   const publicFiles = readdirSync(path.join(__dirname, dir, 'public'));
-  for(const file of publicFiles) {
-    if(file.startsWith('icon-')) {
+  for (const file of publicFiles) {
+    if (file.startsWith('icon-')) {
       const size = file.split('x')[1].split('.')[0];
       icons[size] = '/' + file;
     }
@@ -77,7 +77,7 @@ function server(env, argv) {
     mode: argv.environment,
     entry: './index.js',
     output: {
-      path: path.resolve(__dirname, dir+'/'+folder+'/'),
+      path: path.resolve(__dirname, dir + '/' + folder + '/'),
       filename: 'server.js',
       libraryTarget: 'umd'
     },
@@ -85,12 +85,12 @@ function server(env, argv) {
       minimize: minimize,
       minimizer: [
         new TerserPlugin({
-            terserOptions: {
-              //keep_classnames: true,
-              keep_fnames: true
-            }
-          })
-        ]
+          terserOptions: {
+            //keep_classnames: true,
+            keep_fnames: true
+          }
+        })
+      ]
     },
     devtool,
     stats: 'errors-only',
@@ -144,7 +144,7 @@ function server(env, argv) {
         {
           test: /\.s?[ac]ss$/,
           use: [
-            { loader: 'ignore-loader'}
+            { loader: 'ignore-loader' }
           ]
         },
       ]
@@ -164,7 +164,7 @@ function client(env, argv) {
   const devtool = argv.environment === 'development' ? 'cheap-inline-module-source-map' : 'none';
   const minimize = argv.environment !== 'development';
   let liveReload = {};
-  if(argv.environment !== 'development') {
+  if (argv.environment !== 'development') {
     liveReload = {
       test: /liveReload.js$/,
       use: [
@@ -177,23 +177,21 @@ function client(env, argv) {
       filename: "client.css"
     })
   ]
-  if(argv.environment === 'production') {
-    plugins.push(new PurgecssPlugin({
-      paths: glob.sync(`src/**/*`,  { nodir: true }),
-      whitelist: ['script', 'body', 'html', 'style'],
-      extractors: [
-        {
-          extractor: (content) => content.match(/[A-z0-9-\+:\/]+/g),
-          extensions: ['njs']
-        }
-      ]
-    }));
+  if (argv.environment === 'production') {
+    if (argv.environment === 'production') {
+      plugins.push(new PurgecssPlugin({
+        paths: glob.sync(`src/**/*`, { nodir: true }),
+        content: ['./**/*.njs'],
+        whitelist: ['script', 'body', 'html', 'style'],
+        defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
+      }));
+    }
   }
   return {
     mode: argv.environment,
     entry: './index.js',
     output: {
-      path: path.resolve(__dirname, dir+'/'+folder+'/'),
+      path: path.resolve(__dirname, dir + '/' + folder + '/'),
       filename: 'client.js'
     },
     optimization: {
@@ -246,8 +244,8 @@ function client(env, argv) {
           test: /\.s?[ac]ss$/,
           use: [
             MiniCssExtractPlugin.loader,
-            { loader: 'css-loader'},
-            { loader: 'sass-loader'}
+            { loader: 'css-loader' },
+            { loader: 'sass-loader' }
           ],
         },
         liveReload
