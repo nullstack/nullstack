@@ -7,6 +7,7 @@ import { absolute, cdn, cdnOrAbsolute } from './links';
 import { sanitizeString } from '../shared/sanitizeString';
 
 export default function ({ head, body, context, instances }) {
+  const timestamp = environment.development ? `?timestamp=${+new Date()}` : ''
   const { page, router, worker, params } = context;
   const canonical = absolute(page.canonical || router.url);
   const image = cdnOrAbsolute(page.image);
@@ -48,7 +49,7 @@ export default function ({ head, body, context, instances }) {
     ${page.robots ? `<meta name="robots" content="${page.robots}" />` : ''}
     <meta name="msapplication-starturl" content="/">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="${cdn(`/nullstack/${environment.key}/client.css`)}" integrity="${integrities['client.css'] || ''}" crossorigin="anonymous">
+    <link rel="stylesheet" href="${cdn(`/nullstack/${environment.key}/client.css${timestamp}`)}" integrity="${integrities['client.css'] || ''}" crossorigin="anonymous">
     ${page.schema ? `<script type="application/ld+json">${JSON.stringify(page.schema)}</script>` : ''}
     ${project.icons['180'] ? `<link rel="apple-touch-icon" sizes="180x180" href="${cdn(project.icons['180'])}">` : ''}
     <meta name="msapplication-TileColor" content="${project.backgroundColor || project.color}">
@@ -67,7 +68,7 @@ export default function ({ head, body, context, instances }) {
       window.context = ${JSON.stringify(environment.mode === 'spa' ? {} : serializableContext)};
       document.addEventListener('DOMContentLoaded', () => {
         const script = window.document.createElement('script');
-        script.src = '${cdn(`/nullstack/${environment.key}/client.js`)}';
+        script.src = '${cdn(`/nullstack/${environment.key}/client.js${timestamp}`)}';
         script.integrity = '${integrities['client.js'] || ''}';
         script.crossOrigin = 'anonymous';
         document.body.append(script);
