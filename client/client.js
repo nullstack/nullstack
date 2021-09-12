@@ -23,8 +23,8 @@ client.generateContext = generateContext;
 
 client.renderQueue = null;
 
-client.update = async function() {
-  if(client.initialized) {
+client.update = async function () {
+  if (client.initialized) {
     clearInterval(client.renderQueue);
     client.renderQueue = setTimeout(async () => {
       const scope = client;
@@ -43,32 +43,36 @@ client.update = async function() {
   }
 }
 
-client.processLifecycleQueues = async function() {
-  if(!client.initialized) {
+client.processLifecycleQueues = async function () {
+  if (!client.initialized) {
     client.initialized = true;
     client.hydrated = true;
   }
   const initiationQueue = client.initiationQueue;
   const hydrationQueue = client.hydrationQueue;
-  for(const instance of initiationQueue) {
+  for (const instance of initiationQueue) {
     instance.initiate && await instance.initiate();
     instance._self.initiated = true;
   }
-  if(initiationQueue.length) {
+  if (initiationQueue.length) {
     client.update();
   }
-  for(const instance of hydrationQueue) {
+  for (const instance of hydrationQueue) {
     instance.hydrate && await instance.hydrate();
     instance._self.hydrated = true;
   }
-  if(hydrationQueue.length) {
+  if (hydrationQueue.length) {
     client.update();
   }
-  for(const key in client.instances) {
+  for (const key in client.instances) {
     const instance = client.instances[key];
-    if(!client.renewalQueue.includes(instance)) {
+    if (!client.renewalQueue.includes(instance) && !instance._self.terminated) {
       instance.terminate && await instance.terminate();
-      delete client.instances[key];
+      if (instance._self.persistent) {
+        instance._self.terminated = true
+      } else {
+        delete client.instances[key];
+      }
     }
   }
   router._changed = false;
