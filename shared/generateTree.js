@@ -12,7 +12,7 @@ async function generateBranch(parent, node, depth, scope) {
   }
 
   if (isClass(node)) {
-    const key = (node.attributes.key || generateKey(depth)) + (node.attributes.route ? scope.context.router.url : '')
+    const key = node.attributes.key ? node.attributes.key : generateKey(depth) + (node.attributes.route ? scope.context.router.url : '')
     if (
       scope.context.environment.client &&
       scope.context.router._changed &&
@@ -27,7 +27,7 @@ async function generateBranch(parent, node, depth, scope) {
         for (const segment in newSegments) {
           if (oldSegments[segment] !== newSegments[segment]) {
             delete scope.memory[key];
-            delete scope.instances[key];
+            // delete scope.instances[key];
           }
         }
       }

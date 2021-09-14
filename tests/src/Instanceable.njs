@@ -48,7 +48,7 @@ class Instanceable extends Nullstack {
     )
   }
 
-  render({ instances }) {
+  render({ instances, self }) {
     const { application } = instances;
     const mainHasKey = (
       application &&
@@ -71,6 +71,7 @@ class Instanceable extends Nullstack {
           }
         </div>
         <p data-application-key={mainHasKey}></p>
+        <div data-key={self.key} />
       </div>
     )
   }
