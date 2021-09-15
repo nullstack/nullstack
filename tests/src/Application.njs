@@ -29,7 +29,8 @@ import PureComponents from './PureComponents';
 import NestedProxy from './NestedProxy';
 import FalsyNodes from './FalsyNodes';
 import ErrorOnChildNode from './ErrorOnChildNode';
-import Vunerability from './Vunerability.njs';
+import Vunerability from './Vunerability';
+import PersistentComponent from './PersistentComponent';
 
 import './Application.css';
 
@@ -51,7 +52,7 @@ class Application extends Nullstack {
     context.string = 'nullstack';
   }
 
-  render({project, page, environment}) {
+  render({ project, page, environment }) {
     return (
       <main>
         <h1> {project.name} </h1>
@@ -91,6 +92,7 @@ class Application extends Nullstack {
         <FalsyNodes route="/falsy-nodes" />
         <ErrorOnChildNode route="/error-on-child-node" />
         <Vunerability route="/vunerability" />
+        <PersistentComponent route="/persistent-component/:id" persistent />
         <ErrorPage route="*" />
       </main>
     )
