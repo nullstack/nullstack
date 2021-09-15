@@ -1,10 +1,10 @@
 module.exports = async function ssg(folder = 'ssg') {
   process.env.NULLSTACK_ENVIRONMENT_MODE = 'ssg';
-  
+
   const dir = process.cwd();
   const application = require(`${dir}/.production/server`).default;
   const { resolve } = require('path')
-  const {existsSync, mkdirSync, writeFileSync, copySync, rmSync} = require('fs-extra');
+  const { existsSync, mkdirSync, writeFileSync, copySync, rmSync } = require('fs-extra');
 
   function path(file = '') {
     const target = file.startsWith('/') ? file.slice(1) : file;
@@ -19,15 +19,15 @@ module.exports = async function ssg(folder = 'ssg') {
 
     const content = await application.server.prerender(url);
     const target = path(url)
-    if(url.indexOf('.') > -1) {
+    if (url.indexOf('.') > -1) {
       return;
     }
     console.log(` ⚙️  ${url}`)
-    if(!existsSync(target)) {
-      mkdirSync(target, {recursive: true});
+    if (!existsSync(target)) {
+      mkdirSync(target, { recursive: true });
     }
     writeFileSync(`${target}/index.html`, content)
-    if(url !== '/') {
+    if (url !== '/') {
       writeFileSync(`${target}.html`, content)
     }
 
@@ -36,7 +36,7 @@ module.exports = async function ssg(folder = 'ssg') {
 
     const pageLookup = 'window.page = ';
     const page = content.split("\n").find((line) => line.indexOf(pageLookup) > -1).split(pageLookup)[1].slice(0, -1);
-    if(url !== `/offline-${application.environment.key}` && url !== '/404') {
+    if (url !== `/nullstack/${application.environment.key}/offline` && url !== '/404') {
       pages[url] = JSON.parse(page);
     }
 
@@ -44,17 +44,17 @@ module.exports = async function ssg(folder = 'ssg') {
     writeFileSync(`${target}/index.json`, json);
 
     const pattern = /href="(.*?)"/g;
-    while(match=pattern.exec(content)){
+    while (match = pattern.exec(content)) {
       const link = match[1].split('#')[0];
-      if(link.startsWith('/')) {
-        if(links[link] === undefined) {
+      if (link.startsWith('/')) {
+        if (links[link] === undefined) {
           links[link] = false;
         }
       }
     }
 
-    for(const link in links) {
-      if(!links[link]) {
+    for (const link in links) {
+      if (!links[link]) {
         await copyRoute(link)
       }
     }
@@ -74,7 +74,7 @@ module.exports = async function ssg(folder = 'ssg') {
 
   async function createSitemap() {
     console.log(' ⚙️  /sitemap.xml')
-    const timestamp = new Date().toJSON().substring(0,10);
+    const timestamp = new Date().toJSON().substring(0, 10);
     const urls = Object.keys(pages).map((path) => {
       const page = pages[path];
       const canonical = `https://${application.project.domain}${path}`;
@@ -85,18 +85,18 @@ module.exports = async function ssg(folder = 'ssg') {
   }
 
   console.log()
-  if(existsSync(path())) {
-    rmSync(path(), {recursive: true});
+  if (existsSync(path())) {
+    rmSync(path(), { recursive: true });
   }
   mkdirSync(path())
   await copyFolder('public')
   await copyRoute()
-  await copyRoute(`/offline-${application.environment.key}`);
+  await copyRoute(`/nullstack/${application.environment.key}/offline`);
   await copyRoute(`/404`);
-  await copyBundle(`/client-${application.environment.key}.css`)
-  await copyBundle(`/client-${application.environment.key}.js`)
-  await copyBundle(`/manifest-${application.environment.key}.json`)
-  await copyBundle(`/service-worker-${application.environment.key}.js`)
+  await copyBundle(`/nullstack/${application.environment.key}/client.css`)
+  await copyBundle(`/nullstack/${application.environment.key}/client.js`)
+  await copyBundle(`/manifest.json`)
+  await copyBundle(`/service-worker.js`)
   await createSitemap()
   console.log()
 
