@@ -6,10 +6,13 @@ const instanceProxyHandler = {
   get(target, name) {
     if(name === '_isProxy') return true;
     if(typeof(target[name]) == 'function' && !target[name].name.startsWith('_') && name !== 'constructor') {
-      return (args) => {
+      const {[name]: func} = {
+        [name]: (args) => {
         const context = generateContext({...target._attributes, ...args, self: target._self});
         return target[name](context);
+        }
       }
+      return func;
     }
     return Reflect.get(...arguments);
   },
