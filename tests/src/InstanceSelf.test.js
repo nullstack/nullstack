@@ -10,7 +10,7 @@ beforeAll(async () => {
 });
 
 describe('InstanceSelf', () => {
-  
+
   test('self is aware that the component initiated', async () => {
     await page.waitForSelector('[data-initiated]');
     const element = await page.$('[data-initiated]');
@@ -35,9 +35,9 @@ describe('InstanceSelf', () => {
     expect(element).toBeTruthy();
   });
 
-  test('self is aware of the component key', async () => {
-    await page.waitForSelector('[data-key="n-0-0-6"]');
-    const element = await page.$('[data-key="n-0-0-6"]');
+  test('self key has route appended to depth if no key is declared', async () => {
+    await page.waitForSelector('[data-key="n-0-0-6/instance-self"]');
+    const element = await page.$('[data-key="n-0-0-6/instance-self"]');
     expect(element).toBeTruthy();
   });
 
@@ -45,13 +45,13 @@ describe('InstanceSelf', () => {
     await page.waitForSelector('[data-tag="form"]');
     const element = await page.$('[data-tag="form"]');
     expect(element).toBeTruthy();
-  });  
+  });
 
   test('fragments can be nested', async () => {
     await page.waitForSelector('[data-year="1992"]');
     const element = await page.$('[data-year="1992"]');
     expect(element).toBeTruthy();
-  });  
+  });
 
 });
 

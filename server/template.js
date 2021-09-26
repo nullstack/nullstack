@@ -3,23 +3,24 @@ import environment from './environment';
 import project from './project';
 import settings from './settings';
 import integrities from './integrities';
-import {absolute, cdn, cdnOrAbsolute} from './links';
+import { absolute, cdn, cdnOrAbsolute } from './links';
 import { sanitizeString } from '../shared/sanitizeString';
 
-export default function({head, body, context, instances}) {
-  const {page, router, worker, params} = context;
+export default function ({ head, body, context, instances }) {
+  const timestamp = environment.development ? `?timestamp=${+new Date()}` : ''
+  const { page, router, worker, params } = context;
   const canonical = absolute(page.canonical || router.url);
   const image = cdnOrAbsolute(page.image);
   const serializableContext = {};
   const blacklist = ['scope', 'router', 'page', 'environment', 'settings', 'worker', 'params', 'project', 'instances'];
-  for(const [key, value] of Object.entries(context)) {
-    if(!blacklist.includes(key) && typeof(value) !== 'function') {
+  for (const [key, value] of Object.entries(context)) {
+    if (!blacklist.includes(key) && typeof (value) !== 'function') {
       serializableContext[key] = value;
     }
   }
   const serializableInstances = {};
-  for(const [key, value] of Object.entries(instances)) {
-    if(Object.keys(value).length) {
+  for (const [key, value] of Object.entries(instances)) {
+    if (Object.keys(value).length) {
       serializableInstances[key] = value;
     }
   }
@@ -40,7 +41,7 @@ export default function({head, body, context, instances}) {
     ${page.locale ? `<meta property="og:locale" content="${page.locale}">` : ''}
     <link rel="shortcut icon" href="${cdn(project.favicon)}" type="image/png">
     <link rel="icon" href="${cdn(project.favicon)}" type="image/png">
-    <link rel="manifest" href="/manifest-${environment.key}.json" integrity="${integrities['manifest.json'] || ''}">
+    <link rel="manifest" href="/manifest.json" integrity="${integrities['manifest.json'] || ''}">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     ${project.name ? `<meta name="application-name" content="${project.name}">` : ''}
@@ -48,17 +49,17 @@ export default function({head, body, context, instances}) {
     ${page.robots ? `<meta name="robots" content="${page.robots}" />` : ''}
     <meta name="msapplication-starturl" content="/">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="${cdn(`/client-${environment.key}.css`)}" integrity="${integrities['client.css'] || ''}" crossorigin="anonymous">
+    <link rel="stylesheet" href="${cdn(`/nullstack/${environment.key}/client.css${timestamp}`)}" integrity="${integrities['client.css'] || ''}" crossorigin="anonymous">
     ${page.schema ? `<script type="application/ld+json">${JSON.stringify(page.schema)}</script>` : ''}
     ${project.icons['180'] ? `<link rel="apple-touch-icon" sizes="180x180" href="${cdn(project.icons['180'])}">` : ''}
     <meta name="msapplication-TileColor" content="${project.backgroundColor || project.color}">
     ${head.split('<!--#-->').join('')}
   </head>
   <body>
-    ${environment.mode === 'spa' ? '<div id="application"></div>' : body }
+    ${environment.mode === 'spa' ? '<div id="application"></div>' : body}
     <script async>
       window.page = ${JSON.stringify(page)};
-      window.instances = ${sanitizeString(JSON.stringify(environment.mode === 'spa' ? {} : serializableInstances)) };
+      window.instances = ${sanitizeString(JSON.stringify(environment.mode === 'spa' ? {} : serializableInstances))};
       window.environment = ${JSON.stringify(environment)};
       window.settings = ${JSON.stringify(settings)};
       window.worker = ${JSON.stringify(worker)};
@@ -67,7 +68,7 @@ export default function({head, body, context, instances}) {
       window.context = ${JSON.stringify(environment.mode === 'spa' ? {} : serializableContext)};
       document.addEventListener('DOMContentLoaded', () => {
         const script = window.document.createElement('script');
-        script.src = '${cdn(`/client-${environment.key}.js`)}';
+        script.src = '${cdn(`/nullstack/${environment.key}/client.js${timestamp}`)}';
         script.integrity = '${integrities['client.js'] || ''}';
         script.crossOrigin = 'anonymous';
         document.body.append(script);

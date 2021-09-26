@@ -8,7 +8,7 @@ import render from './render';
 import instanceProxyHandler from './instanceProxyHandler';
 import page from './page';
 import environment from './environment';
-import params, {updateParams} from './params';
+import params, { updateParams } from './params';
 import settings from './settings';
 import worker from './worker';
 import project from './project';
@@ -53,7 +53,7 @@ export default class Nullstack {
     client.currentInstance = null;
     client.initializer = () => element(Starter);
     client.selector = document.querySelector('#application');
-    if(environment.mode === 'spa') {
+    if (environment.mode === 'spa') {
       scope.plugins = loadPlugins(scope);
       context.environment = environment;
       client.virtualDom = await generateTree(client.initializer(), scope);
@@ -76,13 +76,14 @@ export default class Nullstack {
   _self = {
     prerendered: false,
     initiated: false,
-    hydrated: false
+    hydrated: false,
+    terminated: false,
   }
 
   constructor() {
     const methods = getProxyableMethods(this);
     const proxy = new Proxy(this, instanceProxyHandler);
-    for(const method of methods) {
+    for (const method of methods) {
       this[method] = this[method].bind(proxy);
     }
     return proxy;
