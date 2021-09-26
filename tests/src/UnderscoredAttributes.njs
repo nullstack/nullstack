@@ -1,7 +1,6 @@
 import Nullstack from 'nullstack';
 
 function underscoredAfterConstructor(value) {
-  console.log('this', this)
   this.c = value
 }
 
