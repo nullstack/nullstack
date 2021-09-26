@@ -29,7 +29,9 @@ import PureComponents from './PureComponents';
 import NestedProxy from './NestedProxy';
 import FalsyNodes from './FalsyNodes';
 import ErrorOnChildNode from './ErrorOnChildNode';
-import Vunerability from './Vunerability.njs';
+import Vunerability from './Vunerability';
+import PersistentComponent from './PersistentComponent';
+import UnderscoredAttributes from './UnderscoredAttributes';
 
 import './Application.css';
 
@@ -51,13 +53,13 @@ class Application extends Nullstack {
     context.string = 'nullstack';
   }
 
-  render({project, page, environment}) {
+  render({ project, page, environment }) {
     return (
       <main>
         <h1> {project.name} </h1>
         {page.status !== 200 && <div route="*" data-page-status={page.status}></div>}
         <div route="/">
-          <a href={`/offline-${environment.key}`}> offline </a>
+          <a href={`/nullstack/${environment.key}/offline`}> offline </a>
           <a href="/static-this"> static this </a>
           <a href="/routes-and-params/a"> router with params </a>
         </div>
@@ -91,6 +93,8 @@ class Application extends Nullstack {
         <FalsyNodes route="/falsy-nodes" />
         <ErrorOnChildNode route="/error-on-child-node" />
         <Vunerability route="/vunerability" />
+        <PersistentComponent route="/persistent-component/:id" persistent />
+        <UnderscoredAttributes route="/underscored-attributes" />
         <ErrorPage route="*" />
       </main>
     )

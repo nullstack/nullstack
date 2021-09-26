@@ -7,6 +7,8 @@ const PurgecssPlugin = require('purgecss-webpack-plugin');
 const crypto = require("crypto");
 const { readdirSync } = require('fs');
 
+const buildKey = crypto.randomBytes(20).toString('hex');
+
 const babel = {
   test: /\.js$/,
   resolve: {
@@ -61,7 +63,6 @@ function server(env, argv) {
       icons[size] = '/' + file;
     }
   }
-  const buildKey = crypto.randomBytes(20).toString('hex');
   const folder = argv.environment === 'development' ? '.development' : '.production';
   const devtool = argv.environment === 'development' ? 'cheap-inline-module-source-map' : 'none';
   const minimize = argv.environment !== 'development';
@@ -191,6 +192,7 @@ function client(env, argv) {
     mode: argv.environment,
     entry: './index.js',
     output: {
+      publicPath: `/nullstack/${buildKey}/`,
       path: path.resolve(__dirname, dir + '/' + folder + '/'),
       filename: 'client.js'
     },

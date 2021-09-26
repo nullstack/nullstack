@@ -5,16 +5,17 @@ class RoutesAndParams extends Nullstack {
   eventTriggered = false;
   paramHydrated = false;
 
-  hydrate({router, params}) {
+  hydrate(context) {
+    const { router, params } = context;
     this.paramHydrated = params.id === 'a';
     window.addEventListener(router.event, () => {
-      this.eventTriggered = true;
+      context.eventTriggered = true;
     });
   }
 
-  renderOther({params}) {
+  renderOther({ params }) {
     return (
-      <div> 
+      <div>
         <div data-other />
         <div data-a route="/routes-and-params/a" />
         <div data-id={params.id} route="*" />
@@ -28,27 +29,27 @@ class RoutesAndParams extends Nullstack {
     )
   }
 
-  setParamsDate({params}) {
+  setParamsDate({ params }) {
     params.date = new Date('1992-10-16');
   }
-  
+
   goToDocs({ router }) {
     router.url = 'https://nullstack.app';
   }
 
-  render({router, params}) {
+  render({ router, params, eventTriggered }) {
     return (
-      <div> 
+      <div>
         <a href="https://nullstack.app"> Nullstack</a>
         <button data-absolute onclick={this.goToDocs}> Nullstack </button>
         <a href="/routes-and-params/no-hash#hash">hash</a>
-        <div data-event-triggered={this.eventTriggered} />
+        <div data-event-triggered={eventTriggered} />
         <div data-router={!!router} />
         <div route="/routes-and-params" data-route="/routes-and-params" />
         <Other route="/routes-and-params/:id" />
         <Wildcard route="/routes-and-params/*" />
         <a href="/routes-and-params/a"> a </a>
-        <a params={{framework: 'nullstack'}}> string </a>
+        <a params={{ framework: 'nullstack' }}> string </a>
         <a path="/routes-and-params/d"> path </a>
         <div data-url={router.url} />
         <div data-path={router.path} />
