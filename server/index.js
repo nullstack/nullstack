@@ -6,9 +6,9 @@ import generator from './generator';
 import element from '../shared/element';
 import project from './project';
 import environment from './environment';
-import settings, {loadSettings} from './settings';
-import secrets, {loadSecrets} from './secrets';
-import {freezeConfigurable} from './configurable';
+import settings, { loadSettings } from './settings';
+import secrets, { loadSecrets } from './secrets';
+import { freezeConfigurable } from './configurable';
 import worker from './worker';
 import invoke from './invoke';
 import instanceProxyHandler from './instanceProxyHandler';
@@ -35,27 +35,27 @@ class Nullstack {
   static use = usePlugins('server');
 
   static start(Starter, ...starters) {
-    if(this.name.indexOf('Nullstack') > -1) {
-      if(server.less) {
+    if (this.name.indexOf('Nullstack') > -1) {
+      if (server.less) {
         server.start();
       }
-      server.ready = (async function() {
+      server.ready = (async function () {
         generator.starter = () => element(Starter);
         loadSettings();
         loadSecrets();
-        typeof(Starter.start) === 'function' && await Starter.start(context);
-        for(const starter of starters) {
+        typeof (Starter.start) === 'function' && await Starter.start(context);
+        for (const starter of starters) {
           starter.start(context)
         }
         freezeConfigurable(settings);
         freezeConfigurable(secrets);
         Object.freeze(worker);
         Object.freeze(project);
-        if(!server.less) {
+        if (!server.less) {
           server.start();
         }
       })()
-      context.start = async function() {
+      context.start = async function () {
         await server.ready;
         return context;
       }
@@ -74,7 +74,7 @@ class Nullstack {
     this._response = () => scope.response;
     const methods = getProxyableMethods(this);
     const proxy = new Proxy(this, instanceProxyHandler);
-    for(const method of methods) {
+    for (const method of methods) {
       this[method] = this[method].bind(proxy);
     }
     return proxy;
@@ -82,8 +82,8 @@ class Nullstack {
 
   toJSON() {
     const serialized = {};
-    for(const name of Object.getOwnPropertyNames(this)) {
-      if(typeof(this[name]) !== 'function' && !name.startsWith('_') && name !== 'attributes') {
+    for (const name of Object.getOwnPropertyNames(this)) {
+      if (typeof (this[name]) !== 'function' && !name.startsWith('_') && name !== 'attributes') {
         serialized[name] = this[name];
       }
     }

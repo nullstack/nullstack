@@ -31,6 +31,7 @@ import FalsyNodes from './FalsyNodes';
 import ErrorOnChildNode from './ErrorOnChildNode';
 import Vunerability from './Vunerability';
 import PersistentComponent from './PersistentComponent';
+import UnderscoredAttributes from './UnderscoredAttributes';
 
 import './Application.css';
 
@@ -93,6 +94,7 @@ class Application extends Nullstack {
         <ErrorOnChildNode route="/error-on-child-node" />
         <Vunerability route="/vunerability" />
         <PersistentComponent route="/persistent-component/:id" persistent />
+        <UnderscoredAttributes route="/underscored-attributes" />
         <ErrorPage route="*" />
       </main>
     )
