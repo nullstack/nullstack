@@ -4,12 +4,15 @@ import { generateContext } from './context';
 
 const instanceProxyHandler = {
   get(target, name) {
-    if (name === '_isProxy') return true;
-    if (!name.startsWith('_') && typeof (target[name]) == 'function' && name !== 'constructor') {
-      return (args) => {
-        const context = generateContext({ ...target._attributes, ...args, self: target._self });
+   if(name === '_isProxy') return true;
+   if (!name.startsWith('_') && typeof (target[name]) == 'function' && name !== 'constructor') {
+      const {[name]: func} = {
+        [name]: (args) => {
+        const context = generateContext({...target._attributes, ...args, self: target._self});
         return target[name](context);
+        }
       }
+      return func;
     }
     return Reflect.get(...arguments);
   },
