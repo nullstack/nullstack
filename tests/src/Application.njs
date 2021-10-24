@@ -32,6 +32,7 @@ import ErrorOnChildNode from './ErrorOnChildNode';
 import Vunerability from './Vunerability';
 import PersistentComponent from './PersistentComponent';
 import UnderscoredAttributes from './UnderscoredAttributes';
+import WindowDependency from './WindowDependency';
 
 import './Application.css';
 
@@ -55,7 +56,7 @@ class Application extends Nullstack {
 
   render({ project, page, environment }) {
     return (
-      <main>
+      <main data-window={WindowDependency.key}>
         <h1> {project.name} </h1>
         {page.status !== 200 && <div route="*" data-page-status={page.status}></div>}
         <div route="/">
