@@ -17,6 +17,8 @@ import fragment from '../shared/fragment';
 import { usePlugins } from '../shared/plugins';
 import { normalize } from 'path';
 
+globalThis.window = {}
+
 context.server = server;
 context.project = project;
 context.environment = environment;
