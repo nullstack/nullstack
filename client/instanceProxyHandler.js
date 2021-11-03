@@ -5,7 +5,7 @@ import { generateContext } from './context';
 const instanceProxyHandler = {
   get(target, name) {
     if (name === '_isProxy') return true;
-    if (!name.startsWith('_') && typeof (target[name]) == 'function' && name !== 'constructor') {
+    if (!target[name]?.name?.startsWith('_') && !name.startsWith('_') && typeof (target[name]) == 'function' && name !== 'constructor') {
       const { [name]: named } = {
         [name]: (args) => {
           const context = generateContext({ ...target._attributes, ...args, self: target._self });
@@ -17,7 +17,7 @@ const instanceProxyHandler = {
     return Reflect.get(...arguments);
   },
   set(target, name, value) {
-    if (!name.startsWith('_')) {
+    if (!value?.name?.startsWith('_') && !name.startsWith('_')) {
       target[name] = generateObjectProxy(name, value);
       client.update();
     } else {
