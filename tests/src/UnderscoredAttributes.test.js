@@ -38,6 +38,11 @@ describe('UnderscoredAttributes', () => {
     expect(element).toBeTruthy();
   });
 
+  test('keys assigned with a function that name is underscored do not receive the context as argument', async () => {
+    const element = await page.$('[data-e="1"]');
+    expect(element).toBeTruthy();
+  });
+
 });
 
 afterAll(async () => {
