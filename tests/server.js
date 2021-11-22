@@ -9,14 +9,14 @@ import ServerRequestAndResponse from './src/ServerRequestAndResponse';
 
 Nullstack.use([vueable], vueable);
 
-const application = Nullstack.start(Application);
+const context = Nullstack.start(Application);
 
-application.start = async function () {
-  await ContextProject.start(application);
-  await ContextSecrets.start(application);
-  await ContextSettings.start(application);
-  await ContextWorker.start(application);
-  await ServerRequestAndResponse.start(application);
+context.start = async function () {
+  await ContextProject.start(context);
+  await ContextSecrets.start(context);
+  await ContextSettings.start(context);
+  await ContextWorker.start(context);
+  await ServerRequestAndResponse.start(context);
 }
 
-export default application
+export default context
