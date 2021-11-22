@@ -1,7 +1,8 @@
-const {default: application} = require('../../.development/server.js');
+const { default: application } = require('../../.development/server.js');
 
 async function getProjectName() {
-  const { project } = await application.start();
+  await application.start();
+  const { project } = application
   console.log(project.name);
 }
 

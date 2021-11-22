@@ -76,7 +76,7 @@ function server(env, argv) {
   ]) : undefined;
   return {
     mode: argv.environment,
-    entry: './index.js',
+    entry: './server.js',
     output: {
       path: path.resolve(__dirname, dir + '/' + folder + '/'),
       filename: 'server.js',
@@ -190,7 +190,7 @@ function client(env, argv) {
   }
   return {
     mode: argv.environment,
-    entry: './index.js',
+    entry: './client.js',
     output: {
       publicPath: `/nullstack/${buildKey}/`,
       path: path.resolve(__dirname, dir + '/' + folder + '/'),

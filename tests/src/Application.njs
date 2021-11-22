@@ -1,40 +1,39 @@
 import Nullstack from 'nullstack';
-import RenderableComponent from './RenderableComponent';
-import StatefulComponent from './StatefulComponent';
-import FullStackLifecycle from './FullStackLifecycle';
-import InstanceSelf from './InstanceSelf';
-import ContextProject from './ContextProject';
-import ServerFunctions from './ServerFunctions';
+import './Application.css';
+import ChildComponent from './ChildComponent';
 import Context from './Context';
+import ContextData from './ContextData';
+import ContextEnvironment from './ContextEnvironment';
+import ContextPage from './ContextPage';
+import ContextProject from './ContextProject';
 import ContextSecrets from './ContextSecrets';
 import ContextSettings from './ContextSettings';
-import ContextEnvironment from './ContextEnvironment';
 import ContextWorker from './ContextWorker';
-import InstanceKey from './InstanceKey';
-import RoutesAndParams from './RoutesAndParams';
-import ContextPage from './ContextPage';
-import TwoWayBindings from './TwoWayBindings';
-import ServerRequestAndResponse from './ServerRequestAndResponse';
-import ErrorPage from './ErrorPage';
-import ContextData from './ContextData';
 import DateParser from './DateParser';
-import RemoveStart from './RemoveStart';
-import StaticThis from './StaticThis';
-import ChildComponent from './ChildComponent';
-import ParentComponent from './ParentComponent';
 import Element from './Element';
+import ErrorOnChildNode from './ErrorOnChildNode';
+import ErrorPage from './ErrorPage';
+import FalsyNodes from './FalsyNodes';
+import FullStackLifecycle from './FullStackLifecycle';
 import Instanceable from './Instanceable';
+import InstanceKey from './InstanceKey';
+import InstanceSelf from './InstanceSelf';
+import NestedProxy from './NestedProxy';
+import ParentComponent from './ParentComponent';
+import PersistentComponent from './PersistentComponent';
 import PluginAttributes from './PluginAttributes';
 import PureComponents from './PureComponents';
-import NestedProxy from './NestedProxy';
-import FalsyNodes from './FalsyNodes';
-import ErrorOnChildNode from './ErrorOnChildNode';
-import Vunerability from './Vunerability';
-import PersistentComponent from './PersistentComponent';
+import RemoveStart from './RemoveStart';
+import RenderableComponent from './RenderableComponent';
+import RoutesAndParams from './RoutesAndParams';
+import ServerFunctions from './ServerFunctions';
+import ServerRequestAndResponse from './ServerRequestAndResponse';
+import StatefulComponent from './StatefulComponent';
+import StaticThis from './StaticThis';
+import TwoWayBindings from './TwoWayBindings';
 import UnderscoredAttributes from './UnderscoredAttributes';
+import Vunerability from './Vunerability';
 import WindowDependency from './WindowDependency';
-
-import './Application.css';
 
 class Application extends Nullstack {
 
@@ -42,22 +41,16 @@ class Application extends Nullstack {
     await instances.instanceable.customMethod();
   }
 
-  static async start(context) {
-    ContextProject.start(context);
-    ContextSecrets.start(context);
-    ContextSettings.start(context);
-    ContextWorker.start(context);
-    ServerRequestAndResponse.start(context);
-  }
-
   prepare(context) {
     context.string = 'nullstack';
+    context.startValue = 1;
+    context.startTimedValue = 0;
   }
 
-  render({ project, page, environment }) {
+  render({ project, page, environment, startValue, startTimedValue }) {
     return (
       <main data-window={WindowDependency.key}>
-        <h1> {project.name} </h1>
+        <h1 data-start-value={startValue} data-start-timed-value={startTimedValue} > {project.name} </h1>
         {page.status !== 200 && <div route="*" data-page-status={page.status}></div>}
         <div route="/">
           <a href={`/nullstack/${environment.key}/offline`}> offline </a>

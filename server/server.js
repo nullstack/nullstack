@@ -1,25 +1,25 @@
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import express from 'express';
 import http from 'http';
-import path from 'path';
-import bodyParser from 'body-parser';
 import fetch from 'node-fetch';
-import cors from 'cors';
-
+import path from 'path';
 import deserialize from '../shared/deserialize';
-import template from './template';
-import generateManifest from './manifest';
-import { generateContext } from './context';
-import project from './project';
-import environment from './environment';
-import registry from './registry';
-import { prerender } from './prerender';
-import { generateFile } from './files';
-import worker, { generateServiceWorker } from './worker';
-import generateRobots from './robots';
 import prefix from '../shared/prefix';
-import printError from './printError';
-
+import { generateContext } from './context';
+import environment from './environment';
+import { generateFile } from './files';
 import liveReload from './liveReload';
+import generateManifest from './manifest';
+import { prerender } from './prerender';
+import printError from './printError';
+import project from './project';
+import registry from './registry';
+import generateRobots from './robots';
+import template from './template';
+import worker, { generateServiceWorker } from './worker';
+
+
 
 if (!global.fetch) {
   global.fetch = fetch;

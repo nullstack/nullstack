@@ -1,21 +1,21 @@
 import 'dotenv/config';
-import context from './context';
-import server from './server';
-import registry from './registry';
-import generator from './generator';
-import element from '../shared/element';
-import project from './project';
-import environment from './environment';
-import settings, { loadSettings } from './settings';
-import secrets, { loadSecrets } from './secrets';
-import { freezeConfigurable } from './configurable';
-import worker from './worker';
-import invoke from './invoke';
-import instanceProxyHandler from './instanceProxyHandler';
-import getProxyableMethods from '../shared/getProxyableMethods';
-import fragment from '../shared/fragment';
-import { usePlugins } from '../shared/plugins';
 import { normalize } from 'path';
+import element from '../shared/element';
+import fragment from '../shared/fragment';
+import getProxyableMethods from '../shared/getProxyableMethods';
+import { usePlugins } from '../shared/plugins';
+import { freezeConfigurable } from './configurable';
+import context from './context';
+import environment from './environment';
+import generator from './generator';
+import instanceProxyHandler from './instanceProxyHandler';
+import invoke from './invoke';
+import project from './project';
+import registry from './registry';
+import secrets, { loadSecrets } from './secrets';
+import server from './server';
+import settings, { loadSettings } from './settings';
+import worker from './worker';
 
 globalThis.window = {}
 
@@ -36,31 +36,26 @@ class Nullstack {
   static fragment = fragment;
   static use = usePlugins('server');
 
-  static start(Starter, ...starters) {
+  static start(Starter) {
     if (this.name.indexOf('Nullstack') > -1) {
       if (server.less) {
         server.start();
       }
-      server.ready = (async function () {
-        generator.starter = () => element(Starter);
-        loadSettings();
-        loadSecrets();
-        typeof (Starter.start) === 'function' && await Starter.start(context);
-        for (const starter of starters) {
-          starter.start(context)
-        }
-        freezeConfigurable(settings);
-        freezeConfigurable(secrets);
-        Object.freeze(worker);
-        Object.freeze(project);
-        if (!server.less) {
-          server.start();
-        }
-      })()
-      context.start = async function () {
-        await server.ready;
-        return context;
-      }
+      setTimeout(() => {
+        server.ready = (async function () {
+          generator.starter = () => element(Starter);
+          loadSettings();
+          loadSecrets();
+          typeof context.start === 'function' && await context.start(context);
+          freezeConfigurable(settings);
+          freezeConfigurable(secrets);
+          Object.freeze(worker);
+          Object.freeze(project);
+          if (!server.less) {
+            server.start();
+          }
+        })()
+      }, 0)
       return context;
     }
   }
