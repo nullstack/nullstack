@@ -38,14 +38,14 @@ class Nullstack {
 
   static start(Starter) {
     if (this.name.indexOf('Nullstack') > -1) {
-      if (server.less) {
-        server.start();
-      }
+      loadSettings();
+      loadSecrets();
       setTimeout(() => {
+        if (server.less) {
+          server.start();
+        }
         server.ready = (async function () {
           generator.starter = () => element(Starter);
-          loadSettings();
-          loadSecrets();
           typeof context.start === 'function' && await context.start(context);
           freezeConfigurable(settings);
           freezeConfigurable(secrets);
