@@ -6,7 +6,7 @@ import fetch from 'node-fetch';
 import path from 'path';
 import deserialize from '../shared/deserialize';
 import prefix from '../shared/prefix';
-import { generateContext } from './context';
+import context, { generateContext } from './context';
 import environment from './environment';
 import { generateFile } from './files';
 import liveReload from './liveReload';
@@ -19,8 +19,6 @@ import generateRobots from './robots';
 import template from './template';
 import worker, { generateServiceWorker } from './worker';
 
-
-
 if (!global.fetch) {
   global.fetch = fetch;
 }
@@ -29,6 +27,11 @@ const app = express();
 const server = http.createServer(app);
 server.port = process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 5000;
 
+app.use(async (request, response, next) => {
+  context.start && await context.start()
+  next()
+})
+
 for (const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'post', 'put']) {
   server[methodName] = function () {
     app[methodName](...arguments);
@@ -36,7 +39,6 @@ for (const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'p
 }
 
 server.prerender = async function (originalUrl, options) {
-  server.less && await server.ready;
   if (originalUrl === `/nullstack/${environment.key}/client.css`) {
     return generateFile('client.css', server)
   }
@@ -108,7 +110,6 @@ server.start = function () {
   });
 
   app.post(`/${prefix}/:hash/:methodName.json`, async (request, response) => {
-    server.less && await server.ready;
     const args = deserialize(request.body);
     const { hash, methodName } = request.params;
     const [invokerHash, boundHash] = hash.split('-');
@@ -137,7 +138,6 @@ server.start = function () {
   });
 
   app.get('*', async (request, response, next) => {
-    server.less && await server.ready;
     if (request.originalUrl.split('?')[0].indexOf('.') > -1) {
       return next();
     }
