@@ -11,6 +11,21 @@ Nullstack.use([vueable], vueable);
 
 const context = Nullstack.start(Application);
 
+const methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT'];
+
+context.server.use('/api', (request, response, next) => {
+  request.status = 200;
+  if (!response.headersSent) {
+    next();
+  }
+});
+
+for (const method of methods) {
+  context.server[method.toLowerCase()]('/api', (request, response) => {
+    response.status(request.status).send(request.method);
+  });
+}
+
 context.start = async function () {
   await ContextProject.start(context);
   await ContextSecrets.start(context);

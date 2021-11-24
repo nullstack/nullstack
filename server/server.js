@@ -6,7 +6,7 @@ import fetch from 'node-fetch';
 import path from 'path';
 import deserialize from '../shared/deserialize';
 import prefix from '../shared/prefix';
-import { generateContext } from './context';
+import context, { generateContext } from './context';
 import environment from './environment';
 import { generateFile } from './files';
 import liveReload from './liveReload';
@@ -17,9 +17,7 @@ import project from './project';
 import registry from './registry';
 import generateRobots from './robots';
 import template from './template';
-import worker, { generateServiceWorker } from './worker';
-
-
+import { generateServiceWorker } from './worker';
 
 if (!global.fetch) {
   global.fetch = fetch;
@@ -29,6 +27,11 @@ const app = express();
 const server = http.createServer(app);
 server.port = process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 5000;
 
+app.use(async (request, response, next) => {
+  context.start && await context.start()
+  next()
+})
+
 for (const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'post', 'put']) {
   server[methodName] = function () {
     app[methodName](...arguments);
@@ -36,7 +39,6 @@ for (const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'p
 }
 
 server.prerender = async function (originalUrl, options) {
-  server.less && await server.ready;
   if (originalUrl === `/nullstack/${environment.key}/client.css`) {
     return generateFile('client.css', server)
   }
@@ -56,14 +58,6 @@ server.prerender = async function (originalUrl, options) {
 }
 
 server.start = function () {
-
-  if (!server.less) {
-    generateFile('client.css', server)
-    generateFile('client.js', server)
-    generateManifest(server);
-    generateServiceWorker();
-    generateRobots();
-  }
 
   app.use(cors(server.cors))
 
@@ -95,20 +89,17 @@ server.start = function () {
     response.send(generateManifest(server));
   });
 
-  if (worker.enabled) {
-    app.get(`/service-worker.js`, (request, response) => {
-      response.setHeader('Cache-Control', 'max-age=31536000, immutable');
-      response.contentType('text/javascript');
-      response.send(generateServiceWorker());
-    });
-  }
+  app.get(`/service-worker.js`, (request, response) => {
+    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.contentType('text/javascript');
+    response.send(generateServiceWorker());
+  });
 
   app.get('/robots.txt', (request, response) => {
     response.send(generateRobots());
   });
 
   app.post(`/${prefix}/:hash/:methodName.json`, async (request, response) => {
-    server.less && await server.ready;
     const args = deserialize(request.body);
     const { hash, methodName } = request.params;
     const [invokerHash, boundHash] = hash.split('-');
@@ -137,7 +128,6 @@ server.start = function () {
   });
 
   app.get('*', async (request, response, next) => {
-    server.less && await server.ready;
     if (request.originalUrl.split('?')[0].indexOf('.') > -1) {
       return next();
     }

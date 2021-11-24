@@ -4,7 +4,6 @@ import element from '../shared/element';
 import fragment from '../shared/fragment';
 import getProxyableMethods from '../shared/getProxyableMethods';
 import { usePlugins } from '../shared/plugins';
-import { freezeConfigurable } from './configurable';
 import context from './context';
 import environment from './environment';
 import generator from './generator';
@@ -40,22 +39,8 @@ class Nullstack {
     if (this.name.indexOf('Nullstack') > -1) {
       loadSettings();
       loadSecrets();
-      setTimeout(() => {
-        if (server.less) {
-          server.start();
-        }
-        server.ready = (async function () {
-          generator.starter = () => element(Starter);
-          typeof context.start === 'function' && await context.start(context);
-          freezeConfigurable(settings);
-          freezeConfigurable(secrets);
-          Object.freeze(worker);
-          Object.freeze(project);
-          if (!server.less) {
-            server.start();
-          }
-        })()
-      }, 0)
+      generator.starter = () => element(Starter);
+      setTimeout(server.start, 0)
       return context;
     }
   }
