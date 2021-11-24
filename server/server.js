@@ -17,7 +17,7 @@ import project from './project';
 import registry from './registry';
 import generateRobots from './robots';
 import template from './template';
-import worker, { generateServiceWorker } from './worker';
+import { generateServiceWorker } from './worker';
 
 if (!global.fetch) {
   global.fetch = fetch;
@@ -59,14 +59,6 @@ server.prerender = async function (originalUrl, options) {
 
 server.start = function () {
 
-  if (!server.less) {
-    generateFile('client.css', server)
-    generateFile('client.js', server)
-    generateManifest(server);
-    generateServiceWorker();
-    generateRobots();
-  }
-
   app.use(cors(server.cors))
 
   app.use(express.static(path.join(__dirname, '..', 'public')));
@@ -97,13 +89,11 @@ server.start = function () {
     response.send(generateManifest(server));
   });
 
-  if (worker.enabled) {
-    app.get(`/service-worker.js`, (request, response) => {
-      response.setHeader('Cache-Control', 'max-age=31536000, immutable');
-      response.contentType('text/javascript');
-      response.send(generateServiceWorker());
-    });
-  }
+  app.get(`/service-worker.js`, (request, response) => {
+    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.contentType('text/javascript');
+    response.send(generateServiceWorker());
+  });
 
   app.get('/robots.txt', (request, response) => {
     response.send(generateRobots());
