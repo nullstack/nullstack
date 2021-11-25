@@ -101,6 +101,7 @@ function createResponse(callback) {
 }
 
 server.prerender = async function (originalUrl, options) {
+  server.start()
   return new Promise((resolve, reject) => {
     app._router.handle(
       createRequest(originalUrl),
@@ -110,9 +111,14 @@ server.prerender = async function (originalUrl, options) {
   })
 }
 
+server.started = false;
+
 server.start = function () {
 
-  app.use(cors(server.cors))
+  if (server.started) return;
+  server.started = true;
+
+  app.use(cors(server.cors));
 
   app.use(express.static(path.join(__dirname, '..', 'public')));
 

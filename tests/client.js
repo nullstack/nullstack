@@ -7,8 +7,8 @@ Nullstack.use([vueable], vueable);
 const context = Nullstack.start(Application);
 
 context.start = function () {
-  context.startValue = 2
-  setTimeout(() => context.startTimedValue = 1, 1000)
+  context.startValue = true
+  setTimeout(() => context.startTimedValue = true, 1000)
 }
 
 export default context;

@@ -18,6 +18,7 @@ import FullStackLifecycle from './FullStackLifecycle';
 import Instanceable from './Instanceable';
 import InstanceKey from './InstanceKey';
 import InstanceSelf from './InstanceSelf';
+import IsomorphicStartup from './IsomorphicStartup';
 import NestedProxy from './NestedProxy';
 import ParentComponent from './ParentComponent';
 import PersistentComponent from './PersistentComponent';
@@ -43,14 +44,12 @@ class Application extends Nullstack {
 
   prepare(context) {
     context.string = 'nullstack';
-    context.startValue = 1;
-    context.startTimedValue = 0;
   }
 
-  render({ project, page, environment, startValue, startTimedValue }) {
+  render({ project, page, environment }) {
     return (
       <main data-window={WindowDependency.key}>
-        <h1 data-start-value={startValue} data-start-timed-value={startTimedValue} > {project.name} </h1>
+        <h1> {project.name} </h1>
         {page.status !== 200 && <div route="*" data-page-status={page.status}></div>}
         <div route="/">
           <a href={`/nullstack/${environment.key}/offline`}> offline </a>
@@ -89,6 +88,7 @@ class Application extends Nullstack {
         <Vunerability route="/vunerability" />
         <PersistentComponent route="/persistent-component/:id" persistent />
         <UnderscoredAttributes route="/underscored-attributes" />
+        <IsomorphicStartup route="/isomorphic-startup" />
         <ErrorPage route="*" />
       </main>
     )

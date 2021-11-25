@@ -32,6 +32,7 @@ context.start = async function () {
   await ContextSettings.start(context);
   await ContextWorker.start(context);
   await ServerRequestAndResponse.start(context);
+  context.startValue = true
 }
 
 export default context
