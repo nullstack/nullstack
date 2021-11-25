@@ -93,11 +93,8 @@ module.exports = async function ssg(folder = 'ssg') {
   console.log(` ⚙️  /.production/`)
   copySync(path(`../.production`), path(), { filter });
   await copyRoute()
-  console.log('routes done')
   await copyRoute(`/nullstack/${application.environment.key}/offline`);
-  console.log('off done')
   await copyRoute(`/404`);
-  console.log('404 done')
   await copyBundle(`/manifest.json`)
   await copyBundle(`/service-worker.js`)
   await createSitemap()
