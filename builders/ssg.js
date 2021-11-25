@@ -8,7 +8,7 @@ module.exports = async function ssg(folder = 'ssg') {
 
   function path(file = '') {
     const target = file.startsWith('/') ? file.slice(1) : file;
-    return resolve(`${dir}/${folder}`, target)
+    return resolve(`${dir}/${folder}`, target).split('?')[0]
   }
 
   const links = {};
@@ -16,12 +16,12 @@ module.exports = async function ssg(folder = 'ssg') {
 
   async function copyRoute(url = '/') {
     links[url] = true;
-
-    const content = await application.server.prerender(url);
-    const target = path(url)
     if (url.indexOf('.') > -1) {
       return;
     }
+    const content = await application.server.prerender(url);
+    const target = path(url)
+
     console.log(` ⚙️  ${url}`)
     if (!existsSync(target)) {
       mkdirSync(target, { recursive: true });
@@ -67,11 +67,6 @@ module.exports = async function ssg(folder = 'ssg') {
     writeFileSync(target, content)
   }
 
-  async function copyFolder(url) {
-    console.log(` ⚙️  /${url}/`)
-    copySync(path(`../${url}`), path());
-  }
-
   async function createSitemap() {
     console.log(' ⚙️  /sitemap.xml')
     const timestamp = new Date().toJSON().substring(0, 10);
@@ -84,17 +79,25 @@ module.exports = async function ssg(folder = 'ssg') {
     writeFileSync(`${path()}/sitemap.xml`, xml);
   }
 
+  function filter(src, dest) {
+    return dest.endsWith(folder) || (src.includes('client') && !src.includes('.txt'))
+  }
+
   console.log()
   if (existsSync(path())) {
     rmSync(path(), { recursive: true });
   }
   mkdirSync(path())
-  await copyFolder('public')
+  console.log(` ⚙️  /public/`)
+  copySync(path(`../public`), path());
+  console.log(` ⚙️  /.production/`)
+  copySync(path(`../.production`), path(), { filter });
   await copyRoute()
+  console.log('routes done')
   await copyRoute(`/nullstack/${application.environment.key}/offline`);
+  console.log('off done')
   await copyRoute(`/404`);
-  await copyBundle(`/nullstack/${application.environment.key}/client.css`)
-  await copyBundle(`/nullstack/${application.environment.key}/client.js`)
+  console.log('404 done')
   await copyBundle(`/manifest.json`)
   await copyBundle(`/service-worker.js`)
   await createSitemap()
