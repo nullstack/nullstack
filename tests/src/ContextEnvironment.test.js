@@ -17,11 +17,13 @@ describe('ContextEnvironment', () => {
   });
 
   test('has a client key', async () => {
+    await page.waitForSelector('[data-client="true"]');
     const element = await page.$('[data-client="true"]');
     expect(element).toBeTruthy();
   });
 
   test('has a server key', async () => {
+    await page.waitForSelector('[data-server="false"]');
     const element = await page.$('[data-server="false"]');
     expect(element).toBeTruthy();
   });

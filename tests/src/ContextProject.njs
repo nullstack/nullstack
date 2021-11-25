@@ -2,7 +2,7 @@ import Nullstack from 'nullstack';
 
 class ContextProject extends Nullstack {
 
-  static async start({project}) {
+  static async start({ project }) {
     project.color = '#d22365';
     project.backgroundColor = '#d22365';
     project.type = 'website';
@@ -18,10 +18,10 @@ class ContextProject extends Nullstack {
     project.disallow = ['/admin'];
     project.sitemap = true;
   }
-  
-  render({project}) {
+
+  render({ project }) {
     return (
-      <div> 
+      <div>
         <div data-project={!!project} />
         <div data-name={project.name} />
         <div data-short-name={project.shortName} />

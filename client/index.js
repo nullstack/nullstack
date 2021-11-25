@@ -1,25 +1,23 @@
 import deserialize from '../shared/deserialize';
 import element from '../shared/element';
-import router from './router';
+import fragment from '../shared/fragment';
+import generateTree from '../shared/generateTree';
+import getProxyableMethods from '../shared/getProxyableMethods';
+import { loadPlugins, usePlugins } from '../shared/plugins';
 import client from './client';
 import context, { generateContext } from './context';
-import rerender from './rerender';
-import render from './render';
-import instanceProxyHandler from './instanceProxyHandler';
-import page from './page';
 import environment from './environment';
+import instanceProxyHandler from './instanceProxyHandler';
+import invoke from './invoke';
+import './liveReload';
+import page from './page';
 import params, { updateParams } from './params';
+import project from './project';
+import render from './render';
+import rerender from './rerender';
+import router from './router';
 import settings from './settings';
 import worker from './worker';
-import project from './project';
-import invoke from './invoke';
-import getProxyableMethods from '../shared/getProxyableMethods';
-import fragment from '../shared/fragment';
-
-import generateTree from '../shared/generateTree';
-import { loadPlugins, usePlugins } from '../shared/plugins';
-
-import './liveReload';
 
 context.page = page;
 context.router = router;
@@ -44,33 +42,38 @@ export default class Nullstack {
   static fragment = fragment;
   static use = usePlugins('client');
 
-  static async start(Starter) {
-    window.addEventListener('popstate', () => {
-      router._popState();
-    });
-    client.routes = {};
-    updateParams(router.url);
-    client.currentInstance = null;
-    client.initializer = () => element(Starter);
-    client.selector = document.querySelector('#application');
-    if (environment.mode === 'spa') {
-      scope.plugins = loadPlugins(scope);
-      context.environment = environment;
-      client.virtualDom = await generateTree(client.initializer(), scope);
-      const body = render(client.virtualDom);
-      client.selector.replaceWith(body);
-      client.selector = body
-    } else {
-      client.virtualDom = await generateTree(client.initializer(), scope);
-      context.environment = environment;
-      scope.plugins = loadPlugins(scope);
-      client.nextVirtualDom = await generateTree(client.initializer(), scope);
-      rerender(client.selector);
-      client.virtualDom = client.nextVirtualDom;
-      client.nextVirtualDom = null;
-    }
-    client.processLifecycleQueues();
-    delete window.context;
+  static start(Starter) {
+    setTimeout(async () => {
+      window.addEventListener('popstate', () => {
+        router._popState();
+      });
+      client.routes = {};
+      updateParams(router.url);
+      client.currentInstance = null;
+      client.initializer = () => element(Starter);
+      client.selector = document.querySelector('#application');
+      if (environment.mode === 'spa') {
+        scope.plugins = loadPlugins(scope);
+        typeof context.start === 'function' && await context.start(context);
+        context.environment = environment;
+        client.virtualDom = await generateTree(client.initializer(), scope);
+        const body = render(client.virtualDom);
+        client.selector.replaceWith(body);
+        client.selector = body
+      } else {
+        client.virtualDom = await generateTree(client.initializer(), scope);
+        context.environment = environment;
+        scope.plugins = loadPlugins(scope);
+        typeof context.start === 'function' && await context.start(context);
+        client.nextVirtualDom = await generateTree(client.initializer(), scope);
+        rerender(client.selector);
+        client.virtualDom = client.nextVirtualDom;
+        client.nextVirtualDom = null;
+      }
+      client.processLifecycleQueues();
+      delete window.context;
+    }, 0)
+    return generateContext({});
   }
 
   _self = {
