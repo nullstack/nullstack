@@ -1,25 +1,23 @@
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import express from 'express';
 import http from 'http';
-import path from 'path';
-import bodyParser from 'body-parser';
 import fetch from 'node-fetch';
-import cors from 'cors';
-
+import path from 'path';
 import deserialize from '../shared/deserialize';
-import template from './template';
-import generateManifest from './manifest';
-import { generateContext } from './context';
-import project from './project';
-import environment from './environment';
-import registry from './registry';
-import { prerender } from './prerender';
-import { generateFile } from './files';
-import worker, { generateServiceWorker } from './worker';
-import generateRobots from './robots';
 import prefix from '../shared/prefix';
-import printError from './printError';
-
+import context, { generateContext } from './context';
+import environment from './environment';
+import { generateFile } from './files';
 import liveReload from './liveReload';
+import generateManifest from './manifest';
+import { prerender } from './prerender';
+import printError from './printError';
+import project from './project';
+import registry from './registry';
+import generateRobots from './robots';
+import template from './template';
+import { generateServiceWorker } from './worker';
 
 if (!global.fetch) {
   global.fetch = fetch;
@@ -29,61 +27,116 @@ const app = express();
 const server = http.createServer(app);
 server.port = process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 5000;
 
+app.use(async (request, response, next) => {
+  typeof context.start === 'function' && await context.start()
+  next()
+})
+
 for (const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'post', 'put']) {
   server[methodName] = function () {
     app[methodName](...arguments);
   }
 }
 
-server.prerender = async function (originalUrl, options) {
-  server.less && await server.ready;
-  if (originalUrl === `/nullstack/${environment.key}/client.css`) {
-    return generateFile('client.css', server)
+function createRequest(path) {
+  return {
+    method: "GET",
+    host: "",
+    cookies: {},
+    query: {},
+    url: path,
+    headers: {},
   }
-  if (originalUrl === `/nullstack/${environment.key}/client.js`) {
-    return generateFile('client.js', server)
-  }
-  if (originalUrl === `/manifest.json`) {
-    return generateManifest(server)
-  }
-  if (originalUrl === `/service-worker.js`) {
-    return generateServiceWorker()
-  }
-  const request = { originalUrl }
-  const scope = await prerender(request);
-  const html = template(scope, options);
-  return html;
 }
+
+function createResponse(callback) {
+  const res = {
+    _removedHeader: {},
+    _statusCode: 200,
+    statusMessage: 'OK',
+    get statusCode() {
+      return this._statusCode
+    },
+    set statusCode(status) {
+      this._statusCode = status
+      this.status(status)
+    }
+  };
+  const headers = {};
+  let code = 200;
+  res.set = res.header = (x, y) => {
+    if (arguments.length === 2) {
+      res.setHeader(x, y);
+    } else {
+      for (const key in x) {
+        res.setHeader(key, x[key]);
+      }
+    }
+    return res;
+  }
+  res.setHeader = (x, y) => {
+    headers[x] = y;
+    headers[x.toLowerCase()] = y;
+    return res;
+  };
+  res.getHeader = (x) => headers[x];
+  res.redirect = function (_code, url) {
+    if (typeof (_code) !== 'number') {
+      code = 301;
+      url = _code;
+    } else {
+      code = _code;
+    }
+    res.setHeader("Location", url);
+    res.end();
+  };
+  res.status = res.sendStatus = function (number) {
+    code = number;
+    return res;
+  };
+  res.end = res.send = res.write = function (data) {
+    if (callback) callback(code, data, headers);
+  };
+  return res;
+}
+
+server.prerender = async function (originalUrl, options) {
+  server.start()
+  return new Promise((resolve, reject) => {
+    app._router.handle(
+      createRequest(originalUrl),
+      createResponse((code, data, headers) => resolve(data)),
+      () => { }
+    )
+  })
+}
+
+server.started = false;
 
 server.start = function () {
 
-  if (!server.less) {
-    generateFile('client.css', server)
-    generateFile('client.js', server)
-    generateManifest(server);
-    generateServiceWorker();
-    generateRobots();
-  }
+  if (server.started) return;
+  server.started = true;
 
-  app.use(cors(server.cors))
+  app.use(cors(server.cors));
 
   app.use(express.static(path.join(__dirname, '..', 'public')));
 
   app.use(bodyParser.text({ limit: server.maximumPayloadSize }));
 
-  app.get(`/nullstack/${environment.key}/:number.client.js`, (request, response) => {
+  app.get(`/:number.client.js`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
     response.contentType('text/css');
     response.send(generateFile(`${request.params.number}.client.js`, server));
   });
 
-  app.get(`/nullstack/${environment.key}/client.css`, (request, response) => {
+  app.get(`/client.css`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
     response.contentType('text/css');
     response.send(generateFile('client.css', server));
   });
 
-  app.get(`/nullstack/${environment.key}/client.js`, (request, response) => {
+  app.get(`/client.js`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
     response.contentType('text/javascript');
     response.send(generateFile('client.js', server));
@@ -95,20 +148,17 @@ server.start = function () {
     response.send(generateManifest(server));
   });
 
-  if (worker.enabled) {
-    app.get(`/service-worker.js`, (request, response) => {
-      response.setHeader('Cache-Control', 'max-age=31536000, immutable');
-      response.contentType('text/javascript');
-      response.send(generateServiceWorker());
-    });
-  }
+  app.get(`/service-worker.js`, (request, response) => {
+    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.contentType('text/javascript');
+    response.send(generateServiceWorker());
+  });
 
   app.get('/robots.txt', (request, response) => {
     response.send(generateRobots());
   });
 
   app.post(`/${prefix}/:hash/:methodName.json`, async (request, response) => {
-    server.less && await server.ready;
     const args = deserialize(request.body);
     const { hash, methodName } = request.params;
     const [invokerHash, boundHash] = hash.split('-');
@@ -137,7 +187,6 @@ server.start = function () {
   });
 
   app.get('*', async (request, response, next) => {
-    server.less && await server.ready;
     if (request.originalUrl.split('?')[0].indexOf('.') > -1) {
       return next();
     }

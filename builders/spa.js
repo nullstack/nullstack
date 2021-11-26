@@ -3,34 +3,32 @@ module.exports = async function spa(folder = 'spa') {
 
   const dir = process.cwd();
   const application = require(`${dir}/.production/server`).default
-  const { resolve } = require('path')
   const { existsSync, mkdirSync, writeFileSync, copySync, rmSync } = require('fs-extra');
-
-  function path(file = '') {
-    return resolve(`${dir}/${folder}`, file)
-  }
+  const path = `${dir}/${folder}`;
 
   async function copy(url, file) {
-    console.log(` ⚙️  /${file || url}`)
-    const content = await application.server.prerender('/' + url);
-    const target = path(file || url)
+    console.log(` ⚙️  ${file || url}`)
+    const content = await application.server.prerender(url);
+    const target = `${dir}/${folder}${file || url}`
     writeFileSync(target, content)
   }
 
-  console.log()
-  if (existsSync(path())) {
-    rmSync(path(), { recursive: true });
+  function filter(src, dest) {
+    return dest.endsWith(folder) || (src.includes('client') && !src.includes('.txt'))
   }
-  mkdirSync(path())
+
+  console.log()
+  if (existsSync(path)) {
+    rmSync(path, { recursive: true });
+  }
+  mkdirSync(path)
   console.log(` ⚙️  /public/`)
-  copySync(path('../public'), path());
-  await copy('/', 'index.html')
-  await copy(`/nullstack/${application.environment.key}client.css`)
-  await copy(`/nullstack/${application.environment.key}client.js`)
+  copySync(`${dir}/public`, path);
+  await copy('/', '/index.html')
+  console.log(` ⚙️  /.production/`)
+  copySync(`${dir}/.production`, path, { filter })
   await copy(`/manifest.json`)
   await copy(`/service-worker.js`)
-  await copy(`/nullstack/${application.environment.key}offline`)
-  await copy(`404`)
   console.log()
 
   console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${application.project.name} is ready at ${folder}\n`);

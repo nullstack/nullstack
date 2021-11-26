@@ -2,9 +2,6 @@ function install(event) {
   const urls = [
     '/',
     ...self.context.worker.preload,
-    '/nullstack/' + self.context.environment.key + '/offline',
-    '/nullstack/' + self.context.environment.key + '/client.css',
-    '/nullstack/' + self.context.environment.key + '/client.js',
     '/manifest.json'
   ];
   event.waitUntil(async function () {
