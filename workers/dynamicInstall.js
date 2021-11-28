@@ -2,7 +2,10 @@ function install(event) {
   const urls = [
     '/',
     ...self.context.worker.preload,
-    '/manifest.json'
+    '/manifest.json',
+    `/client.css?fingerprint=${self.context.environment.key}`,
+    `{{SCRIPTS}}`,
+    `/nullstack/${self.context.environment.key}/offline/index.html`
   ];
   event.waitUntil(async function () {
     const cache = await caches.open(self.context.environment.key);
