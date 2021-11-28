@@ -16,7 +16,7 @@ function getCompiler(options) {
 }
 
 function logCompiling(showCompiling) {
-  if(!showCompiling) return;
+  if (!showCompiling) return;
   console.log(" ⚙️  Compiling changes...");
 }
 
@@ -47,7 +47,9 @@ function logTrace(stats, showCompiling) {
 function start({ input, port }) {
   const environment = 'development';
   const compiler = getCompiler({ environment, input });
-  process.env['NULLSTACK_SERVER_PORT'] = port;
+  if (port) {
+    process.env['NULLSTACK_SERVER_PORT'] = port;
+  }
   console.log(` 🚀️ Starting your application in ${environment} mode...`);
   console.log();
   compiler.watch({}, (error, stats) => logTrace(stats, true));
@@ -68,7 +70,7 @@ program
   .command('start')
   .alias('s')
   .description('Start application in development environment')
-  .option('-p, --port <port>', 'Port number to run the server', 5000)
+  .option('-p, --port <port>', 'Port number to run the server')
   .option('-i, --input <input>', 'Path to project that will be started')
   .helpOption('-h, --help', 'Learn more about this command')
   .action(start)
