@@ -55,7 +55,7 @@ function start({ input, port }) {
   compiler.watch({}, (error, stats) => logTrace(stats, true));
 }
 
-function build({ input, mode, output }) {
+function build({ input, output, mode = 'ssr' }) {
   const environment = 'production';
   const compiler = getCompiler({ environment, input });
   console.log(` 🚀️ Building your application in ${mode} mode...`);
@@ -79,7 +79,7 @@ program
   .command('build')
   .alias('b')
   .description('Build application for production environment')
-  .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles', 'ssr').choices(buildModes))
+  .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles').choices(buildModes))
   .option('-i, --input <input>', 'Path to project that will be built')
   .option('-o, --output <output>', 'Path to build output folder')
   .helpOption('-h, --help', 'Learn more about this command')
