@@ -5,12 +5,11 @@ import dynamicInstall from '!!raw-loader!../workers/dynamicInstall.js';
 import load from '!!raw-loader!../workers/load.js';
 import networkDataFirst from '!!raw-loader!../workers/networkDataFirst.js';
 import networkFirst from '!!raw-loader!../workers/networkFirst.js';
-import networkOnly from '!!raw-loader!../workers/networkOnly.js';
 import staleWhileRevalidate from '!!raw-loader!../workers/staleWhileRevalidate.js';
 import staticFetch from '!!raw-loader!../workers/staticFetch.js';
 import staticHelpers from '!!raw-loader!../workers/staticHelpers.js';
 import staticInstall from '!!raw-loader!../workers/staticInstall.js';
-import { existsSync, readdirSync, readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import path from 'path';
 import environment from './environment';
 import files from './files';
@@ -46,8 +45,6 @@ export function generateServiceWorker() {
   if (existsSync(file)) {
     original = readFileSync(file, 'utf-8');
   }
-  const bundleFolder = path.join(__dirname, '../', environment.production ? '.production' : '.development')
-  const scripts = readdirSync(bundleFolder).filter((filename) => filename.includes('client.js')).map((filename) => `/${filename}?fingerprint=${environment.key}`)
   sources.push(`self.context = ${JSON.stringify(context, null, 2)};`);
   sources.push(load);
   if (environment.mode === 'ssg') {
@@ -59,7 +56,7 @@ export function generateServiceWorker() {
   } else {
     sources.push(cacheFirst);
     sources.push(staleWhileRevalidate);
-    sources.push(networkOnly);
+    sources.push(networkFirst);
   }
   if (original.indexOf('install') === -1) {
     sources.push(environment.mode === 'ssg' ? staticInstall : dynamicInstall);
@@ -73,7 +70,7 @@ export function generateServiceWorker() {
   if (original) {
     sources.push(original);
   }
-  files['service-worker.js'] = sources.join(`\n\n`).replace(`{{SCRIPTS}}`, scripts.join(', \n'));
+  files['service-worker.js'] = sources.join(`\n\n`);
   return files['service-worker.js'];
 }
 
