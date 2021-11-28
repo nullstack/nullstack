@@ -29,6 +29,12 @@ describe('RemoveStart', () => {
     expect(element).toBeTruthy();
   });
 
+  test('the context start should run only once', async () => {
+    await page.waitForSelector('[data-client-start-incremental-value="1"]');
+    const element = await page.$('[data-client-start-incremental-value="1"]');
+    expect(element).toBeTruthy();
+  });
+
 });
 
 afterAll(async () => {

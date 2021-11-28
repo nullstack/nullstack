@@ -26,13 +26,16 @@ for (const method of methods) {
   });
 }
 
+context.startIncrementalValue = 0;
+
 context.start = async function () {
   await ContextProject.start(context);
   await ContextSecrets.start(context);
   await ContextSettings.start(context);
   await ContextWorker.start(context);
   await ServerRequestAndResponse.start(context);
-  context.startValue = true
+  context.startValue = true;
+  context.startIncrementalValue++;
 }
 
 export default context

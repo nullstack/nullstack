@@ -2,7 +2,7 @@ let shouldReloadNext = false;
 let timer = null;
 
 function reload() {
-  if(shouldReloadNext) {
+  if (shouldReloadNext) {
     clearInterval(timer);
     timer = setTimeout(() => {
       location.reload();
@@ -13,7 +13,7 @@ function reload() {
 }
 
 function liveReload() {
-  const socket = new WebSocket('ws://' + location.host);
+  const socket = new WebSocket(`${location.protocol.replace('http', 'ws')}//${location.host}`);
   socket.addEventListener('open', reload);
   socket.addEventListener('close', liveReload);
 }

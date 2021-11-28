@@ -1,9 +1,5 @@
-import {proxyConfigurable} from './configurable';
+import { createConfigurable } from './configurable';
 
-const settings = {};
+const secrets = createConfigurable('SETTINGS');
 
-const {proxy, loader} = proxyConfigurable(settings, 'SETTINGS');
-
-export const loadSettings = loader;
-
-export default proxy;
+export default secrets;

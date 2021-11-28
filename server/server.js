@@ -27,8 +27,14 @@ const app = express();
 const server = http.createServer(app);
 server.port = process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 5000;
 
+let contextStarted = false
+let serverStarted = false
+
 app.use(async (request, response, next) => {
-  typeof context.start === 'function' && await context.start()
+  if (!contextStarted) {
+    typeof context.start === 'function' && await context.start();
+    contextStarted = true;
+  }
   next()
 })
 
@@ -111,12 +117,10 @@ server.prerender = async function (originalUrl, options) {
   })
 }
 
-server.started = false;
-
 server.start = function () {
 
-  if (server.started) return;
-  server.started = true;
+  if (serverStarted) return;
+  serverStarted = true;
 
   app.use(cors(server.cors));
 

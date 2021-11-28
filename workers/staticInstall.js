@@ -1,6 +1,7 @@
 function install(event) {
   const urls = [
     '/',
+    ...self.context.worker.preload,
     ...self.context.worker.preload.map(toAPI),
     '/manifest.json'
   ];

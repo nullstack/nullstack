@@ -31,16 +31,6 @@ describe('ContextSettings', () => {
     expect(element).toBeTruthy();
   });
 
-  test('keys assigned to development stay only in the context of the development environment', async () => {
-    const element = await page.$('[data-development-only="settings"]');
-    expect(element).toBeTruthy();
-  });
-
-  test('keys assigned to production stay only in the context of the production environment', async () => {
-    const element = await page.$('[data-production-only="settings"]');
-    expect(element).toBeFalsy();
-  });
-
 });
 
 afterAll(async () => {
