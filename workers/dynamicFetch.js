@@ -9,7 +9,7 @@ function dynamicStrategy(event) {
     if (url.pathname.indexOf('.') > -1) {
       return event.respondWith(staleWhileRevalidate(event));
     }
-    event.respondWith(networkOnly(event));
+    event.respondWith(networkFirst(event));
   }());
 }
 
