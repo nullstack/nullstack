@@ -8,12 +8,7 @@ async function networkDataFirst(event) {
     await cache.put(api, dataResponse);
     return response;
   } catch (error) {
-    const fallbackResponse = await cache.match(`/nullstack/${self.context.environment.key}/offline/index.html`);
-    const cachedDataResponse = await cache.match(api);
-    if (cachedDataResponse) {
-      return await injectData(fallbackResponse, cachedDataResponse);
-    } else {
-      return fallbackResponse;
-    }
+    const cachedDataResponse = await cache.match(url);
+    return cachedDataResponse || await cache.match(`/nullstack/${self.context.environment.key}/offline/index.html`);
   }
 }

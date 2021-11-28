@@ -1,9 +1,8 @@
-import environment from './environment';
 import client from './client';
+import environment from './environment';
 import router from './router';
 
 const worker = { ...window.worker };
-worker.online = navigator.onLine;
 delete window.worker;
 
 const emptyQueue = Object.freeze([]);
