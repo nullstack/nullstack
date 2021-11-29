@@ -9,7 +9,7 @@ import staleWhileRevalidate from '!!raw-loader!../workers/staleWhileRevalidate.j
 import staticFetch from '!!raw-loader!../workers/staticFetch.js';
 import staticHelpers from '!!raw-loader!../workers/staticHelpers.js';
 import staticInstall from '!!raw-loader!../workers/staticInstall.js';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readdirSync, readFileSync } from 'fs';
 import path from 'path';
 import environment from './environment';
 import files from './files';
@@ -45,6 +45,8 @@ export function generateServiceWorker() {
   if (existsSync(file)) {
     original = readFileSync(file, 'utf-8');
   }
+  const bundleFolder = path.join(__dirname, '../', environment.production ? '.production' : '.development')
+  const scripts = readdirSync(bundleFolder).filter((filename) => filename.includes('client.js')).map((filename) => `/${filename}?fingerprint=${environment.key}`)
   sources.push(`self.context = ${JSON.stringify(context, null, 2)};`);
   sources.push(load);
   if (environment.mode === 'ssg') {
@@ -70,7 +72,7 @@ export function generateServiceWorker() {
   if (original) {
     sources.push(original);
   }
-  files['service-worker.js'] = sources.join(`\n\n`);
+  files['service-worker.js'] = sources.join(`\n\n`).replace(`{{SCRIPTS}}`, scripts.join(', \n'));;
   return files['service-worker.js'];
 }
 

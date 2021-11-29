@@ -1,79 +1,219 @@
-import activate from '!!raw-loader!../workers/activate.js';
-import cacheFirst from '!!raw-loader!../workers/cacheFirst.js';
-import dynamicFetch from '!!raw-loader!../workers/dynamicFetch.js';
-import dynamicInstall from '!!raw-loader!../workers/dynamicInstall.js';
-import load from '!!raw-loader!../workers/load.js';
-import networkDataFirst from '!!raw-loader!../workers/networkDataFirst.js';
-import networkFirst from '!!raw-loader!../workers/networkFirst.js';
-import staleWhileRevalidate from '!!raw-loader!../workers/staleWhileRevalidate.js';
-import staticFetch from '!!raw-loader!../workers/staticFetch.js';
-import staticHelpers from '!!raw-loader!../workers/staticHelpers.js';
-import staticInstall from '!!raw-loader!../workers/staticInstall.js';
-import { existsSync, readdirSync, readFileSync } from 'fs';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import express from 'express';
+import http from 'http';
+import fetch from 'node-fetch';
 import path from 'path';
+import deserialize from '../shared/deserialize';
+import prefix from '../shared/prefix';
+import context, { generateContext } from './context';
 import environment from './environment';
-import files from './files';
+import { generateFile } from './files';
+import liveReload from './liveReload';
+import generateManifest from './manifest';
+import { prerender } from './prerender';
+import printError from './printError';
 import project from './project';
-import settings from './settings';
+import registry from './registry';
+import generateRobots from './robots';
+import template from './template';
+import { generateServiceWorker } from './worker';
 
-const worker = {};
+if (!global.fetch) {
+  global.fetch = fetch;
+}
 
-worker.enabled = environment.production;
-worker.fetching = false;
-worker.preload = [];
-worker.headers = {};
-worker.api = process.env.NULLSTACK_WORKER_API ?? ''
-worker.cdn = process.env.NULLSTACK_WORKER_CDN ?? ''
-worker.protocol = process.env.NULLSTACK_WORKER_PROTOCOL ?? (environment.development ? 'http' : 'https');
+const app = express();
+const server = http.createServer(app);
+server.port = process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 5000;
 
-const emptyQueue = Object.freeze([]);
+let contextStarted = false
+let serverStarted = false
 
-const queuesProxyHandler = {
-  get() {
-    return emptyQueue;
+app.use(async (request, response, next) => {
+  if (!contextStarted) {
+    typeof context.start === 'function' && await context.start();
+    contextStarted = true;
+  }
+  next()
+})
+
+for (const methodName of ['use', 'delete', 'get', 'head', 'options', 'patch', 'post', 'put']) {
+  server[methodName] = function () {
+    app[methodName](...arguments);
   }
 }
 
-worker.queues = new Proxy({}, queuesProxyHandler);
-
-export function generateServiceWorker() {
-  if (files['service-worker.js']) return files['service-worker.js'];
-  const sources = [];
-  const context = { environment, project, settings, worker };
-  let original = '';
-  const file = path.join(__dirname, '../', 'public', 'service-worker.js');
-  if (existsSync(file)) {
-    original = readFileSync(file, 'utf-8');
+function createRequest(path) {
+  return {
+    method: "GET",
+    host: "",
+    cookies: {},
+    query: {},
+    url: path,
+    headers: {},
   }
-  const bundleFolder = path.join(__dirname, '../', environment.production ? '.production' : '.development')
-  const scripts = readdirSync(bundleFolder).filter((filename) => filename.includes('client.js')).map((filename) => `/${filename}?fingerprint=${environment.key}`)
-  sources.push(`self.context = ${JSON.stringify(context, null, 2)};`);
-  sources.push(load);
-  if (environment.mode === 'ssg') {
-    sources.push(staticHelpers);
-    sources.push(cacheFirst);
-    sources.push(staleWhileRevalidate);
-    sources.push(networkFirst);
-    sources.push(networkDataFirst);
-  } else {
-    sources.push(cacheFirst);
-    sources.push(staleWhileRevalidate);
-    sources.push(networkFirst);
-  }
-  if (original.indexOf('install') === -1) {
-    sources.push(environment.mode === 'ssg' ? staticInstall : dynamicInstall);
-  }
-  if (original.indexOf('activate') === -1) {
-    sources.push(activate);
-  }
-  if (original.indexOf('fetch') === -1) {
-    sources.push(environment.mode === 'ssg' ? staticFetch : dynamicFetch);
-  }
-  if (original) {
-    sources.push(original);
-  }
-  files['service-worker.js'] = sources.join(`\n\n`).replace(`{{SCRIPTS}}`, scripts.join(', \n'));
-  return files['service-worker.js'];
 }
 
-export default worker;
+function createResponse(callback) {
+  const res = {
+    _removedHeader: {},
+    _statusCode: 200,
+    statusMessage: 'OK',
+    get statusCode() {
+      return this._statusCode
+    },
+    set statusCode(status) {
+      this._statusCode = status
+      this.status(status)
+    }
+  };
+  const headers = {};
+  let code = 200;
+  res.set = res.header = (x, y) => {
+    if (arguments.length === 2) {
+      res.setHeader(x, y);
+    } else {
+      for (const key in x) {
+        res.setHeader(key, x[key]);
+      }
+    }
+    return res;
+  }
+  res.setHeader = (x, y) => {
+    headers[x] = y;
+    headers[x.toLowerCase()] = y;
+    return res;
+  };
+  res.getHeader = (x) => headers[x];
+  res.redirect = function (_code, url) {
+    if (typeof (_code) !== 'number') {
+      code = 301;
+      url = _code;
+    } else {
+      code = _code;
+    }
+    res.setHeader("Location", url);
+    res.end();
+  };
+  res.status = res.sendStatus = function (number) {
+    code = number;
+    return res;
+  };
+  res.end = res.send = res.write = function (data) {
+    if (callback) callback(code, data, headers);
+  };
+  return res;
+}
+
+server.prerender = async function (originalUrl, options) {
+  server.start()
+  return new Promise((resolve, reject) => {
+    app._router.handle(
+      createRequest(originalUrl),
+      createResponse((code, data, headers) => resolve(data)),
+      () => { }
+    )
+  })
+}
+
+server.start = function () {
+
+  if (serverStarted) return;
+  serverStarted = true;
+
+  app.use(cors(server.cors));
+
+  app.use(express.static(path.join(__dirname, '..', 'public')));
+
+  app.use(bodyParser.text({ limit: server.maximumPayloadSize }));
+
+  app.get(`/:number.client.js`, (request, response) => {
+    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.contentType('text/css');
+    response.send(generateFile(`${request.params.number}.client.js`, server));
+  });
+
+  app.get(`/client.css`, (request, response) => {
+    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.contentType('text/css');
+    response.send(generateFile('client.css', server));
+  });
+
+  app.get(`/client.js`, (request, response) => {
+    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.contentType('text/javascript');
+    response.send(generateFile('client.js', server));
+  });
+
+  app.get(`/manifest.json`, (request, response) => {
+    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.contentType('application/manifest+json');
+    response.send(generateManifest(server));
+  });
+
+  app.get(`/service-worker.js`, (request, response) => {
+    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.contentType('text/javascript');
+    response.send(generateServiceWorker());
+  });
+
+  app.get('/robots.txt', (request, response) => {
+    response.send(generateRobots());
+  });
+
+  app.post(`/${prefix}/:hash/:methodName.json`, async (request, response) => {
+    const args = deserialize(request.body);
+    const { hash, methodName } = request.params;
+    const [invokerHash, boundHash] = hash.split('-');
+    const key = `${invokerHash}.${methodName}`;
+    const invokerKlass = registry[invokerHash];
+    let boundKlass = invokerKlass;
+    if (boundHash) {
+      boundKlass = registry[boundHash];
+      if (!(boundKlass.prototype instanceof invokerKlass)) {
+        return response.status(401).json({});
+      }
+    }
+    const method = registry[key];
+    if (method !== undefined) {
+      try {
+        const context = generateContext({ request, response, ...args });
+        const result = await method.call(boundKlass, context);
+        response.json({ result });
+      } catch (error) {
+        printError(error);
+        response.status(500).json({});
+      }
+    } else {
+      response.status(404).json({});
+    }
+  });
+
+  app.get('*', async (request, response, next) => {
+    if (request.originalUrl.split('?')[0].indexOf('.') > -1) {
+      return next();
+    }
+    const scope = await prerender(request, response);
+    if (!response.headersSent) {
+      const status = scope.context.page.status;
+      const html = template(scope);
+      response.status(status).send(html);
+    }
+  });
+
+  if (!server.less) {
+    server.listen(server.port, () => {
+      const name = project.name ? project.name : 'Nullstack'
+      if (environment.development) {
+        liveReload(server);
+        console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${name} is ready at http://localhost:${server.port}\n`);
+      } else {
+        console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${name} is ready at http://127.0.0.1:${server.port}\n`);
+      }
+    });
+  }
+
+}
+
+export default server;
