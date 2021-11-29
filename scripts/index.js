@@ -16,7 +16,7 @@ function getCompiler(options) {
 }
 
 function logCompiling(showCompiling) {
-  if(!showCompiling) return;
+  if (!showCompiling) return;
   console.log(" ⚙️  Compiling changes...");
 }
 
@@ -47,13 +47,15 @@ function logTrace(stats, showCompiling) {
 function start({ input, port }) {
   const environment = 'development';
   const compiler = getCompiler({ environment, input });
-  process.env['NULLSTACK_SERVER_PORT'] = port;
+  if (port) {
+    process.env['NULLSTACK_SERVER_PORT'] = port;
+  }
   console.log(` 🚀️ Starting your application in ${environment} mode...`);
   console.log();
   compiler.watch({}, (error, stats) => logTrace(stats, true));
 }
 
-function build({ input, mode, output }) {
+function build({ input, output, mode = 'ssr' }) {
   const environment = 'production';
   const compiler = getCompiler({ environment, input });
   console.log(` 🚀️ Building your application in ${mode} mode...`);
@@ -68,7 +70,7 @@ program
   .command('start')
   .alias('s')
   .description('Start application in development environment')
-  .option('-p, --port <port>', 'Port number to run the server', 5000)
+  .option('-p, --port <port>', 'Port number to run the server')
   .option('-i, --input <input>', 'Path to project that will be started')
   .helpOption('-h, --help', 'Learn more about this command')
   .action(start)
@@ -77,7 +79,7 @@ program
   .command('build')
   .alias('b')
   .description('Build application for production environment')
-  .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles', 'ssr').choices(buildModes))
+  .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles').choices(buildModes))
   .option('-i, --input <input>', 'Path to project that will be built')
   .option('-o, --output <output>', 'Path to build output folder')
   .helpOption('-h, --help', 'Learn more about this command')

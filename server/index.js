@@ -11,9 +11,9 @@ import instanceProxyHandler from './instanceProxyHandler';
 import invoke from './invoke';
 import project from './project';
 import registry from './registry';
-import secrets, { loadSecrets } from './secrets';
+import secrets from './secrets';
 import server from './server';
-import settings, { loadSettings } from './settings';
+import settings from './settings';
 import worker from './worker';
 
 globalThis.window = {}
@@ -37,8 +37,6 @@ class Nullstack {
 
   static start(Starter) {
     if (this.name.indexOf('Nullstack') > -1) {
-      loadSettings();
-      loadSecrets();
       generator.starter = () => element(Starter);
       setTimeout(server.start, 0)
       return context;

@@ -54,6 +54,7 @@ export default class Nullstack {
       client.selector = document.querySelector('#application');
       if (environment.mode === 'spa') {
         scope.plugins = loadPlugins(scope);
+        worker.online = navigator.onLine;
         typeof context.start === 'function' && await context.start(context);
         context.environment = environment;
         client.virtualDom = await generateTree(client.initializer(), scope);
@@ -64,6 +65,7 @@ export default class Nullstack {
         client.virtualDom = await generateTree(client.initializer(), scope);
         context.environment = environment;
         scope.plugins = loadPlugins(scope);
+        worker.online = navigator.onLine;
         typeof context.start === 'function' && await context.start(context);
         client.nextVirtualDom = await generateTree(client.initializer(), scope);
         rerender(client.selector);
