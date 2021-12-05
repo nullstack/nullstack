@@ -162,8 +162,9 @@ server.start = function () {
     response.send(generateRobots());
   });
 
-  app.post(`/${prefix}/:hash/:methodName.json`, async (request, response) => {
-    const args = deserialize(request.body);
+  app.all(`/${prefix}/:hash/:methodName.json`, async (request, response) => {
+    const payload = request.method === 'GET' ? request.query.payload : request.body;
+    const args = deserialize(payload);
     const { hash, methodName } = request.params;
     const [invokerHash, boundHash] = hash.split('-');
     const key = `${invokerHash}.${methodName}`;
