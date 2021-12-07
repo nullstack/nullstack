@@ -17,6 +17,7 @@ class ContextProject extends Nullstack {
     project.favicon = '/favicon-96x96.png';
     project.disallow = ['/admin'];
     project.sitemap = true;
+    project.viewport = 'width=device-width, initial-scale=1, shrink-to-fit=no';
   }
 
   render({ project }) {
@@ -39,6 +40,7 @@ class ContextProject extends Nullstack {
         <div data-disallow={!!project.disallow} />
         <div data-disallow-admin={project.disallow[0]} />
         <div data-sitemap={project.sitemap} />
+        <div data-viewport={project.viewport} />
       </div>
     )
   }

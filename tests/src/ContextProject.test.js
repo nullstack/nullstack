@@ -117,6 +117,11 @@ describe('ContextProject', () => {
     expect(element).toBeTruthy();
   });
 
+  test('has a viewport key', async () => {
+    const element = await page.$('[data-viewport="width=device-width, initial-scale=1, shrink-to-fit=no"]');
+    expect(element).toBeTruthy();
+  });
+
   test('css bundle can use a cdn', async () => {
     const text = await page.$eval('[rel="stylesheet"]', (element) => element.href);
     expect(text).toMatch(/127\.0\.0\.1:6969/);
@@ -142,7 +147,7 @@ describe('ContextProject', () => {
     expect(text).toMatch('');
   });
 
-
+  
 });
 
 describe('robots.txt', () => {

@@ -47,7 +47,7 @@ export default function ({ head, body, context, instances }) {
     ${project.name ? `<meta name="apple-mobile-web-app-title" content="${project.name}">` : ''}
     ${page.robots ? `<meta name="robots" content="${page.robots}" />` : ''}
     <meta name="msapplication-starturl" content="/">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="${project.viewport || 'width=device-width, initial-scale=1, shrink-to-fit=no'}">
     <link rel="stylesheet" href="${cdn(`/client.css?fingerprint=${environment.key}${timestamp}`)}" integrity="${integrities['client.css'] || ''}" crossorigin="anonymous">
     ${page.schema ? `<script type="application/ld+json">${JSON.stringify(page.schema)}</script>` : ''}
     ${project.icons['180'] ? `<link rel="apple-touch-icon" sizes="180x180" href="${cdn(project.icons['180'])}">` : ''}
