@@ -35,6 +35,7 @@ import TwoWayBindings from './TwoWayBindings';
 import UnderscoredAttributes from './UnderscoredAttributes';
 import Vunerability from './Vunerability';
 import WindowDependency from './WindowDependency';
+import WorkerVerbs from './WorkerVerbs';
 
 class Application extends Nullstack {
 
@@ -89,6 +90,7 @@ class Application extends Nullstack {
         <PersistentComponent route="/persistent-component/:id" persistent />
         <UnderscoredAttributes route="/underscored-attributes" />
         <IsomorphicStartup route="/isomorphic-startup" />
+        <WorkerVerbs route="/worker-verbs" />
         <ErrorPage route="*" />
       </main>
     )
