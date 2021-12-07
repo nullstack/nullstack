@@ -17,7 +17,7 @@ class ContextProject extends Nullstack {
     project.favicon = '/favicon-96x96.png';
     project.disallow = ['/admin'];
     project.sitemap = true;
-    project.viewport = 'width=device-width, initial-scale=1, shrink-to-fit=no';
+    project.viewport = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no viewport-fit=cover';
   }
 
   render({ project }) {
