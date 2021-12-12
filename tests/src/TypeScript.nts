@@ -1,11 +1,7 @@
 import Nullstack from 'nullstack';
 
-interface Self {
-  initiated: boolean
-}
-
 interface ClientContext {
-  self: Self
+  self: Context['self']
 }
 
 class TypeScript extends Nullstack {
