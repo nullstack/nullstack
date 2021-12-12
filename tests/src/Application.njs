@@ -32,6 +32,7 @@ import ServerRequestAndResponse from './ServerRequestAndResponse';
 import StatefulComponent from './StatefulComponent';
 import StaticThis from './StaticThis';
 import TwoWayBindings from './TwoWayBindings';
+import TypeScript from './TypeScript';
 import UnderscoredAttributes from './UnderscoredAttributes';
 import Vunerability from './Vunerability';
 import WindowDependency from './WindowDependency';
@@ -91,6 +92,7 @@ class Application extends Nullstack {
         <UnderscoredAttributes route="/underscored-attributes" />
         <IsomorphicStartup route="/isomorphic-startup" />
         <WorkerVerbs route="/worker-verbs" />
+        <TypeScript route="/typescript" />
         <ErrorPage route="*" />
       </main>
     )

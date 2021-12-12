@@ -1,0 +1,32 @@
+import Nullstack from 'nullstack';
+
+interface Self {
+  initiated: boolean
+}
+
+interface ClientContext {
+  self: Self
+}
+
+class TypeScript extends Nullstack {
+
+  count: number = 1;
+
+  incrementByCount({ count }: ClientContext & { count: number }) {
+    this.count += count
+  }
+
+  render({ self }: ClientContext) {
+    return (
+      <button
+        data-initiated={self.initiated}
+        data-count={this.count}
+        count={this.count}
+        onclick={this.incrementByCount}
+      > TS </button>
+    )
+  }
+
+}
+
+export default TypeScript;
