@@ -4,7 +4,7 @@ class LazyComponent extends Nullstack {
 
   render() {
     return (
-      <div> LazyComponent </div>
+      <div data-lazy> LazyComponent </div>
     )
   }
 
