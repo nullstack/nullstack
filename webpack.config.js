@@ -88,7 +88,7 @@ function server(env, argv) {
     }
   }
   const folder = argv.environment === 'development' ? '.development' : '.production';
-  const devtool = argv.environment === 'development' ? 'cheap-inline-module-source-map' : 'none';
+  const devtool = argv.environment === 'development' ? 'inline-cheap-module-source-map' : false;
   const minimize = argv.environment !== 'development';
   const plugins = argv.environment === 'development' ? ([
     new NodemonPlugin({
@@ -181,14 +181,17 @@ function server(env, argv) {
       __dirname: false,
       __filename: false,
     },
-    plugins
+    plugins,
+    cache: {
+      type: 'filesystem'
+    }
   }
 }
 
 function client(env, argv) {
   const dir = argv.input || '../..';
   const folder = argv.environment === 'development' ? '.development' : '.production';
-  const devtool = argv.environment === 'development' ? 'cheap-inline-module-source-map' : 'none';
+  const devtool = argv.environment === 'development' ? 'inline-cheap-module-source-map' : false;
   const minimize = argv.environment !== 'development';
   let liveReload = {};
   if (argv.environment !== 'development') {
@@ -284,7 +287,10 @@ function client(env, argv) {
       ]
     },
     target: 'web',
-    plugins
+    plugins,
+    cache: {
+      type: 'filesystem'
+    }
   }
 }
 
