@@ -192,7 +192,7 @@ function client(env, argv) {
     mode: argv.environment,
     entry: './client.js',
     output: {
-      // publicPath: `/nullstack/${buildKey}/`,
+      publicPath: `/`,
       path: path.resolve(__dirname, dir + '/' + folder + '/'),
       filename: 'client.js'
     },
