@@ -1,3 +1,6 @@
+import { NullstackClientContext } from './ClientContext'
+import { NullstackPlugin } from './Plugin'
+import { NullstackServerContext } from './ServerContext'
 
 export * from './ClientContext'
 export * from './Environment'
@@ -13,15 +16,10 @@ export * from './ServerContext'
 export * from './Settings'
 export * from './Worker'
 
-interface Nullstack {
-  new(someParam: any): Nullstack
+declare module 'nullstack' {
+  export default class Nullstack {
+    static start?(App: any): NullstackClientContext | NullstackServerContext
+    static use?(Plugin: NullstackPlugin)
+  }
+
 }
-
-// declare module 'nullstack' {
-//   export default class Nullstack {
-//     constructor()
-//     static start?(App: any): NullstackClientContext | NullstackServerContext
-//     static use?(Plugin: NullstackPlugin)
-//   }
-
-// }
