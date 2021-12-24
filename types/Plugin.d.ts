@@ -1,4 +1,6 @@
-type ElementNode = {
+import { NullstackClientContext } from './ClientContext';
+
+type NullstackNode = {
   type: string | boolean,
   attributes: {
     route: string,
@@ -8,27 +10,32 @@ type ElementNode = {
   children: any[]
 };
 
-interface ContextNode extends Context {
-  node: ElementNode
+interface NullstackNodeContext extends NullstackClientContext {
+  node: NullstackNode
 }
 
-type ElementPlugin = {
+export type NullstackPlugin = {
+
   /**
    * Runs transformation to node element
    * @param context Context with node attributes
    */
-  transform(context: ContextNode),
+  transform(context: NullstackNodeContext),
+
   /**
    * Load something when plugin installs
    * @param context Application context
    */
-  load?(context: Context),
+  load?(context: NullstackClientContext),
+
   /**
-   * Use plugin in server context
+   * Use plugin in the server environment
    */
   server?: boolean,
+
   /**
-   * Use plugin in client context
+   * Use plugin in the client environment
    */
   client?: boolean
+
 };
