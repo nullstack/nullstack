@@ -20,6 +20,7 @@ class TypeScript extends Nullstack {
   render({ self }: NullstackClientContext) {
     return (
       <div data-count={this.count}>
+        <input bind={this.count} />
         <button
           data-initiated={self.initiated}
           value={1}
