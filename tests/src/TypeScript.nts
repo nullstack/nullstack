@@ -1,25 +1,33 @@
 import Nullstack from 'nullstack';
+import { NullstackClientContext } from 'nullstack/types';
 
-interface ClientContext {
-  self: Context['self']
+interface TypeScriptClientContext extends NullstackClientContext {
+  value: number
 }
 
 class TypeScript extends Nullstack {
 
   count: number = 1;
 
-  incrementByCount({ count }: ClientContext & { count: number }) {
-    this.count += count
+  incrementByCount({ value }: TypeScriptClientContext) {
+    this.count += value
   }
 
-  render({ self }: ClientContext) {
+  renderInnerComponent() {
+    return <div data-inner-component />
+  }
+
+  render({ self }: NullstackClientContext) {
     return (
-      <button
-        data-initiated={self.initiated}
-        data-count={this.count}
-        count={this.count}
-        onclick={this.incrementByCount}
-      > TS </button>
+      <div data-count={this.count}>
+        <input bind={this.count} />
+        <button
+          data-initiated={self.initiated}
+          value={1}
+          onclick={this.incrementByCount}
+        > TS </button>
+        <InnerComponent />
+      </div>
     )
   }
 

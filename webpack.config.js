@@ -173,17 +173,16 @@ function server(env, argv) {
           loader: path.resolve('./node_modules/nullstack/loaders/register-static-from-server.js'),
         },
         {
-          test: /.(njs|nts)$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/add-source-to-node.js'),
-        },
-
-        {
           test: /\.s?[ac]ss$/,
           use: [
             { loader: 'ignore-loader' }
           ]
         },
         nullstackTypescript,
+        {
+          test: /.(njs|nts)$/,
+          loader: path.resolve('./node_modules/nullstack/loaders/add-source-to-node.js'),
+        },
         {
           test: /.(njs|nts)$/,
           loader: path.resolve('./node_modules/nullstack/loaders/register-inner-components.js'),
@@ -233,7 +232,7 @@ function client(env, argv) {
     mode: argv.environment,
     entry: './client.js',
     output: {
-      publicPath: `/nullstack/${buildKey}/`,
+      publicPath: `/`,
       path: path.resolve(__dirname, dir + '/' + folder + '/'),
       filename: 'client.js'
     },
@@ -264,7 +263,6 @@ function client(env, argv) {
         },
         babel,
         nullstackJavascript,
-
         {
           test: /.(njs|nts)$/,
           loader: path.resolve('./node_modules/nullstack/loaders/remove-import-from-client.js'),
@@ -278,11 +276,6 @@ function client(env, argv) {
           loader: path.resolve('./node_modules/nullstack/loaders/remove-static-from-client.js'),
         },
         {
-          test: /.(njs|nts)$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/add-source-to-node.js'),
-        },
-
-        {
           test: /\.s?[ac]ss$/,
           use: [
             MiniCssExtractPlugin.loader,
@@ -292,6 +285,10 @@ function client(env, argv) {
         },
         liveReload,
         nullstackTypescript,
+        {
+          test: /.(njs|nts)$/,
+          loader: path.resolve('./node_modules/nullstack/loaders/add-source-to-node.js'),
+        },
         {
           test: /.(njs|nts)$/,
           loader: path.resolve('./node_modules/nullstack/loaders/register-inner-components.js'),

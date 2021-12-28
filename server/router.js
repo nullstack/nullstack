@@ -2,6 +2,8 @@ import extractLocation from '../shared/extractLocation';
 import { generateBase } from './project';
 export default class Router {
 
+  previous = null
+
   constructor(request, response) {
     this.request = request;
     this.response = response;
@@ -38,5 +40,5 @@ export default class Router {
   get base() {
     return generateBase()
   }
-  
+
 }

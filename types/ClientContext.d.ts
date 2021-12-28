@@ -1,43 +1,44 @@
-/// <reference path="./Page.d.ts"/>
-/// <reference path="./Project.d.ts"/>
-/// <reference path="./Worker.d.ts"/>
-/// <reference path="./Self.d.ts"/>
-/// <reference path="./Environment.d.ts"/>
-/// <reference path="./Server.d.ts"/>
-/// <reference path="./UserDefined.d.ts"/>
-/// <reference path="./Router.d.ts"/>
+import { NullstackEnvironment } from "./Environment";
+import { NullstackPage } from "./Page";
+import { NullstackParams } from "./Params";
+import { NullstackProject } from "./Project";
+import { NullstackRouter } from "./Router";
+import { NullstackSelf } from "./Self";
+import { NullstackSettings } from "./Settings";
+import { NullstackWorker } from "./Worker";
 
 /**
  * https://nullstack.app/context
  */
-type Context = {
+export type NullstackClientContext = {
+
   /**
    * Information about the document `head` metatags.
    *  
    * https://nullstack.app/context-page
    */
-  page?: Page,
+  page?: NullstackPage,
 
   /**
    * Information about the app manifest and some metatags.
    *
    * https://nullstack.app/context-project
    */
-  project?: Project,
+  project?: NullstackProject,
 
   /**
    * Gives you granular control of your PWA behavior.
    * 
    * https://nullstack.app/service-worker
    */
-  worker?: CtxWorker,
+  worker?: NullstackWorker,
 
   /**
    * It gives you information about the instance lifecycle and it's unique [key](https://nullstack.app/instance-self#instance-key).
    * 
    * https://nullstack.app/instance-self
    */
-  self?: Self,
+  self?: NullstackSelf,
 
   /**
    * It gives you information about the element dataset.
@@ -66,32 +67,7 @@ type Context = {
    * 
    * https://nullstack.app/context-environment
    */
-  environment?: Environment,
-
-  /**
-   * The server key is a proxy around the [Express](https://expressjs.com/) instance that runs Nullstack under the hood.
-   * 
-   * Only on server.
-   * 
-   * https://nullstack.app/server-request-and-response
-   */
-  server?: Server,
-  /**
-   * Original `request` object from [Express](https://expressjs.com/)
-   * 
-   * Only on server.
-   * 
-   * https://nullstack.app/server-request-and-response
-   */
-  request?: object,
-  /**
-   * Original `response` object from [Express](https://expressjs.com/)
-   * 
-   * Only on server.
-   * 
-   * https://nullstack.app/server-request-and-response
-   */
-  response?: object,
+  environment?: NullstackEnvironment,
 
   /**
    * Each query string param is mapped to this object.
@@ -100,14 +76,14 @@ type Context = {
    * @example
    * "/?expanded=true&page=2" === {expanded: true, page: 2}
    */
-  params?: Params,
+  params?: NullstackParams,
 
   /**
    * Nullstack router.
    * 
    * https://nullstack.app/routes-and-params#router
    */
-  router?: Router,
+  router?: NullstackRouter,
 
   /**
    * You can assign any key with any type of public information.
@@ -116,16 +92,7 @@ type Context = {
    * 
    * https://nullstack.app/context-settings
    */
-  settings?: Settings,
-
-  /**
-   * You can assign any key with any type of private information.
-   * 
-   * .env `NULLSTACK_SECRETS_PRIVATE_KEY` -> `secrets.privateKey`
-   * 
-   * https://nullstack.app/context-secrets
-   */
-  secrets?: Secrets,
+  settings?: NullstackSettings,
 
   /**
    * Children elements of this component.
@@ -133,5 +100,7 @@ type Context = {
    * https://nullstack.app/renderable-components#components-with-children
    */
   children?: any,
+
   [key: string]: any
+
 };

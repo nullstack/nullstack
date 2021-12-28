@@ -19,6 +19,7 @@ import Instanceable from './Instanceable';
 import InstanceKey from './InstanceKey';
 import InstanceSelf from './InstanceSelf';
 import IsomorphicStartup from './IsomorphicStartup';
+import LazyComponentLoader from './LazyComponentLoader';
 import NestedProxy from './NestedProxy';
 import ParentComponent from './ParentComponent';
 import PersistentComponent from './PersistentComponent';
@@ -93,6 +94,7 @@ class Application extends Nullstack {
         <IsomorphicStartup route="/isomorphic-startup" />
         <WorkerVerbs route="/worker-verbs" />
         <TypeScript route="/typescript" />
+        <LazyComponentLoader route="/lazy-component" />
         <ErrorPage route="*" />
       </main>
     )

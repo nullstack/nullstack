@@ -59,6 +59,7 @@ class RoutesAndParams extends Nullstack {
         <button data-params onclick={this.setParamsDate}> date </button>
         <div data-date={params.date} />
         <div data-hydrated-param={this.paramHydrated} />
+        <div data-previous={String(router.previous)} />
       </div>
     )
   }
