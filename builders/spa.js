@@ -1,4 +1,5 @@
-module.exports = async function spa(folder = 'spa') {
+module.exports = async function spa({ output, cache }) {
+  const folder = output || 'spa';
   process.env.NULLSTACK_ENVIRONMENT_MODE = 'spa';
 
   const dir = process.cwd();
@@ -32,5 +33,10 @@ module.exports = async function spa(folder = 'spa') {
   console.log()
 
   console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${application.project.name} is ready at ${folder}\n`);
-  process.exit()
+
+  if (cache) {
+    console.log('Storing cache...');
+  } else {
+    process.exit();
+  }
 }

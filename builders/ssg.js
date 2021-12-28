@@ -1,4 +1,5 @@
-module.exports = async function ssg(folder = 'ssg') {
+module.exports = async function ssg({ output, cache }) {
+  const folder = output || 'ssg';
   process.env.NULLSTACK_ENVIRONMENT_MODE = 'ssg';
 
   const dir = process.cwd();
@@ -101,5 +102,10 @@ module.exports = async function ssg(folder = 'ssg') {
   console.log()
 
   console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${application.project.name} is ready at ${folder}\n`);
-  process.exit()
+
+  if (cache) {
+    console.log('Storing cache...');
+  } else {
+    process.exit();
+  }
 }
