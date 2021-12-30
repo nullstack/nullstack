@@ -25,7 +25,11 @@ if (!global.fetch) {
 
 const app = express();
 const server = http.createServer(app);
-server.port = process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 5000;
+server.port = process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'];
+if (!server.port) {
+  console.log('\x1b[31mYou must specify a port in the .env file!\x1b[0m');
+  process.exit();
+}
 
 let contextStarted = false
 let serverStarted = false
