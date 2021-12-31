@@ -10,7 +10,7 @@ beforeAll(async () => {
 });
 
 describe('ServerFunctions', () => {
-  
+
   test('instance can use returned values', async () => {
     await page.click('.set-count-to-one');
     await page.waitForSelector('[data-count="1"]');
@@ -33,8 +33,8 @@ describe('ServerFunctions', () => {
   });
 
   test('server functions have access to node.js environment', async () => {
-    await page.waitForSelector(`[data-statement="import Nullstack from 'nullstack';"]`);
-    const element = await page.$(`[data-statement="import Nullstack from 'nullstack';"]`);
+    await page.waitForSelector(`[data-statement="// server function works"]`);
+    const element = await page.$(`[data-statement="// server function works"]`);
     expect(element).toBeTruthy();
   });
 
@@ -46,6 +46,18 @@ describe('ServerFunctions', () => {
 
   test('isomorphic imports stay in the client', async () => {
     const element = await page.$('[data-client-only]');
+    expect(element).toBeTruthy();
+  });
+
+  test('server functions can be invoked from the constructor constant on server', async () => {
+    await page.waitForSelector('[data-double-plus-one-server]');
+    const element = await page.$('[data-double-plus-one-server]');
+    expect(element).toBeTruthy();
+  });
+
+  test('server functions can be invoked from the constructor constant on client', async () => {
+    await page.waitForSelector('[data-double-plus-one-client]');
+    const element = await page.$('[data-double-plus-one-client]');
     expect(element).toBeTruthy();
   });
 
