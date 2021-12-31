@@ -13,6 +13,7 @@ import DateParser from './DateParser';
 import Element from './Element';
 import ErrorOnChildNode from './ErrorOnChildNode';
 import ErrorPage from './ErrorPage';
+import ExternalServerFunctions from './ExternalServerFunctions';
 import FalsyNodes from './FalsyNodes';
 import FullStackLifecycle from './FullStackLifecycle';
 import Instanceable from './Instanceable';
@@ -24,6 +25,7 @@ import NestedProxy from './NestedProxy';
 import ParentComponent from './ParentComponent';
 import PersistentComponent from './PersistentComponent';
 import PluginAttributes from './PluginAttributes';
+import PublicServerFunctions from './PublicServerFunctions.njs';
 import PureComponents from './PureComponents';
 import RemoveStart from './RemoveStart';
 import RenderableComponent from './RenderableComponent';
@@ -95,6 +97,8 @@ class Application extends Nullstack {
         <WorkerVerbs route="/worker-verbs" />
         <TypeScript route="/typescript" />
         <LazyComponentLoader route="/lazy-component" />
+        <PublicServerFunctions key="publicServerFunctions" />
+        <ExternalServerFunctions route="/external-server-functions" />
         <ErrorPage route="*" />
       </main>
     )
