@@ -36,6 +36,7 @@ import StatefulComponent from './StatefulComponent';
 import StaticThis from './StaticThis';
 import TwoWayBindings from './TwoWayBindings';
 import TypeScript from './TypeScript';
+import UndefinedNodes from './UndefinedNodes';
 import UnderscoredAttributes from './UnderscoredAttributes';
 import Vunerability from './Vunerability';
 import WindowDependency from './WindowDependency';
@@ -60,6 +61,7 @@ class Application extends Nullstack {
           <a href={`/nullstack/${environment.key}/offline`}> offline </a>
           <a href="/static-this"> static this </a>
           <a href="/routes-and-params/a"> router with params </a>
+          <a href="/undefined-nodes"> undefined nodes </a>
         </div>
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
@@ -99,6 +101,7 @@ class Application extends Nullstack {
         <LazyComponentLoader route="/lazy-component" />
         <PublicServerFunctions key="publicServerFunctions" />
         <ExternalServerFunctions route="/external-server-functions" />
+        <UndefinedNodes route="/undefined-nodes" />
         <ErrorPage route="*" />
       </main>
     )
