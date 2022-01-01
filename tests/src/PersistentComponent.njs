@@ -21,7 +21,7 @@ class PersistentComponent extends Nullstack {
   }
 
   render({ self, instances }) {
-    const aCount = instances['n-0-0-33/persistent-component/a']?.count
+    const aCount = instances['PersistentComponent/0-0-33/persistent-component/a']?.count
     return (
       <div data-count={this.count} data-key={self.key} data-a-count={aCount}>
         <a href="/persistent-component/a"> a </a>
