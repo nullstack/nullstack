@@ -21,16 +21,6 @@ describe('Falsy Nodes', () => {
     expect(truth).toBeTruthy();
   });
 
-  test('Undefined inner component nodes should render a comment', async () => {
-    const truth = await page.$eval('[data-undefined]', (e) => e.childNodes[0] instanceof Comment);
-    expect(truth).toBeTruthy();
-  });
-
-  test('Inner component without return should render a comment', async () => {
-    const truth = await page.$eval('[data-no-return]', (e) => e.childNodes[0] instanceof Comment);
-    expect(truth).toBeTruthy();
-  });
-
   test('Zero nodes should render a text node', async () => {
     const truth = await page.$eval('[data-zero]', (e) => e.innerText === '0');
     expect(truth).toBeTruthy();
