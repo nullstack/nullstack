@@ -1,5 +1,4 @@
 export default function (error) {
-  console.log({ error })
   const lines = error.stack.split(`\n`);
   let initiator = lines.find((line) => line.indexOf('Proxy') > -1);
   if (initiator) {
