@@ -12,10 +12,9 @@ export default function invoke(name, hash) {
     } else {
       worker.queues[name] = [...worker.queues[name], params];
     }
-    const finalHash = hash === this.constructor.hash ? hash : `${hash}-${this.constructor.hash}`;
+    const finalHash = hash === this.hash ? hash : `${hash}-${this.hash}`;
     let url = `${worker.api}/${prefix}/${finalHash}/${name}.json`;
     let body = JSON.stringify(params || {});
-
     const options = {
       headers: worker.headers,
       mode: 'cors',

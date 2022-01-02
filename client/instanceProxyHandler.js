@@ -1,10 +1,11 @@
-import { generateObjectProxy } from './objectProxyHandler';
 import client from './client';
 import { generateContext } from './context';
+import { generateObjectProxy } from './objectProxyHandler';
 
 const instanceProxyHandler = {
   get(target, name) {
     if (name === '_isProxy') return true;
+    if (target.constructor[name]?.name === '_invoke') return target.constructor[name].bind(target.constructor)
     if (!target[name]?.name?.startsWith('_') && !name.startsWith('_') && typeof (target[name]) == 'function' && name !== 'constructor') {
       const { [name]: named } = {
         [name]: (args) => {
@@ -21,7 +22,7 @@ const instanceProxyHandler = {
       target[name] = generateObjectProxy(name, value);
       client.update();
     } else {
-      target[name] = value
+      target[name] = value;
     }
     return true;
   }

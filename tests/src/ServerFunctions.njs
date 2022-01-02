@@ -1,9 +1,7 @@
+// server function works
+import { readFileSync } from 'fs';
 import Nullstack from 'nullstack';
-import {
-  readFileSync, readir
-} from 'fs';
-import Context from './Context';
-import {serverOnly, clientOnly} from './helpers';
+import { clientOnly, serverOnly } from './helpers';
 
 class ServerFunctions extends Nullstack {
 
@@ -21,22 +19,21 @@ class ServerFunctions extends Nullstack {
     this.count = await this.getCountAsOne();
   }
 
-  static async getCount({to}) {
+  static async getCount({ to }) {
     return to;
   }
 
   async setCountToTwo() {
-    this.count = await this.getCount({to: 2});
+    this.count = await this.getCount({ to: 2 });
   }
 
-  
-  static async getDate({input}) {
+  static async getDate({ input }) {
     return input;
   }
 
   async setDate() {
     const input = new Date('1992-10-16');
-    const output = await this.getDate({input});
+    const output = await this.getDate({ input });
     this.year = output.getFullYear();
   }
 
@@ -52,18 +49,24 @@ class ServerFunctions extends Nullstack {
     return text.split(`\n`)[0].trim();
   }
 
+  static async getDoublePlusOne({ number }) {
+    return number * 2 + 1
+  }
+
   async initiate() {
     this.statement = await this.useNodeFileSystem();
     this.response = await this.useFetchInNode();
+    this.doublePlusOneServer = await ServerFunctions.getDoublePlusOne({ number: 34 })
   }
-  
+
   async hydrate() {
     this.clientOnly = clientOnly();
+    this.doublePlusOneClient = await ServerFunctions.getDoublePlusOne({ number: 34 })
   }
-  
+
   render() {
     return (
-      <div> 
+      <div>
         <button class="set-count-to-one" onclick={this.setCountToOne}>1</button>
         <button class="set-count-to-two" onclick={this.setCountToTwo}>2</button>
         <button class="set-date" onclick={this.setDate}>1992</button>
@@ -72,6 +75,8 @@ class ServerFunctions extends Nullstack {
         <div data-statement={this.statement} />
         <div data-response={this.response} />
         <div data-client-only={this.clientOnly} />
+        <div data-double-plus-one-server={this.doublePlusOneServer === 69} />
+        <div data-double-plus-one-client={this.doublePlusOneClient === 69} />
       </div>
     )
   }

@@ -13,6 +13,7 @@ import DateParser from './DateParser';
 import Element from './Element';
 import ErrorOnChildNode from './ErrorOnChildNode';
 import ErrorPage from './ErrorPage';
+import ExternalServerFunctions from './ExternalServerFunctions';
 import FalsyNodes from './FalsyNodes';
 import FullStackLifecycle from './FullStackLifecycle';
 import Instanceable from './Instanceable';
@@ -24,6 +25,7 @@ import NestedProxy from './NestedProxy';
 import ParentComponent from './ParentComponent';
 import PersistentComponent from './PersistentComponent';
 import PluginAttributes from './PluginAttributes';
+import PublicServerFunctions from './PublicServerFunctions.njs';
 import PureComponents from './PureComponents';
 import RemoveStart from './RemoveStart';
 import RenderableComponent from './RenderableComponent';
@@ -34,6 +36,7 @@ import StatefulComponent from './StatefulComponent';
 import StaticThis from './StaticThis';
 import TwoWayBindings from './TwoWayBindings';
 import TypeScript from './TypeScript';
+import UndefinedNodes from './UndefinedNodes';
 import UnderscoredAttributes from './UnderscoredAttributes';
 import Vunerability from './Vunerability';
 import WindowDependency from './WindowDependency';
@@ -58,6 +61,7 @@ class Application extends Nullstack {
           <a href={`/nullstack/${environment.key}/offline`}> offline </a>
           <a href="/static-this"> static this </a>
           <a href="/routes-and-params/a"> router with params </a>
+          <a href="/undefined-nodes"> undefined nodes </a>
         </div>
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
@@ -95,6 +99,9 @@ class Application extends Nullstack {
         <WorkerVerbs route="/worker-verbs" />
         <TypeScript route="/typescript" />
         <LazyComponentLoader route="/lazy-component" />
+        <PublicServerFunctions key="publicServerFunctions" />
+        <ExternalServerFunctions route="/external-server-functions" />
+        <UndefinedNodes route="/undefined-nodes" />
         <ErrorPage route="*" />
       </main>
     )
