@@ -25,14 +25,8 @@ if (!global.fetch) {
 
 const app = express();
 const server = http.createServer(app);
-if (!server.less) {
-  server.port = process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'];
 
-  if (!server.port) {
-    console.log('\x1b[31mYou must specify a port in the .env file!\x1b[0m');
-    process.exit();
-  }
-}
+server.port ??= process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'];
 
 let contextStarted = false
 let serverStarted = false
@@ -211,6 +205,11 @@ server.start = function () {
   });
 
   if (!server.less) {
+    if (!server.port) {
+      console.log('\x1b[31mServer port is not defined!\x1b[0m');
+      process.exit();
+    }
+  
     server.listen(server.port, () => {
       const name = project.name ? project.name : 'Nullstack'
       if (environment.development) {
