@@ -179,14 +179,12 @@ function client(env, argv) {
     })
   ]
   if (argv.environment === 'production') {
-    if (argv.environment === 'production') {
-      plugins.push(new PurgecssPlugin({
-        paths: glob.sync(`src/**/*`, { nodir: true }),
-        content: ['./**/*.njs'],
-        whitelist: ['script', 'body', 'html', 'style'],
-        defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
-      }));
-    }
+    plugins.push(new PurgecssPlugin({
+      paths: glob.sync(`src/**/*`, { nodir: true }),
+      content: ['./**/*.njs'],
+      whitelist: ['script', 'body', 'html', 'style'],
+      defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
+    }));
   }
   return {
     mode: argv.environment,
