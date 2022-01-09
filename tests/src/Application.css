@@ -3,17 +3,17 @@
 }
 
 .class-\[custom\] {
-  background: transparent
+  background: red;
 }
 
-.class-0\.5 {
-  background: transparent
+.class-05 {
+  background: green;
 }
 
 .class {
-  background: transparent
+  background: blue;
 }
 
-.unused {
-  background: transparent
+.should-be-removed {
+  background: yellow;
 }

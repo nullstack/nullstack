@@ -1,9 +1,15 @@
 const { readFileSync } = require('fs');
+const { promisify } = require('util');
+const exec = promisify(require('child_process').exec);
 
 let css;
 
+const unused = '.unused'
+
 beforeAll(async () => {
+  await exec('npm run build');
   css = readFileSync('.production/client.css', 'utf-8')
+  console.log(css)
 });
 
 describe('.production', () => {
@@ -24,7 +30,7 @@ describe('.production', () => {
   })
 
   test('unused classes are removed during purge', async () => {
-    const hasClass = css.includes('.unused')
+    const hasClass = css.includes(unused)
     expect(hasClass).toBeFalsy();
   })
 
