@@ -1,3 +1,19 @@
 #application * {
   display: block;
 }
+
+.class-\[custom\] {
+  background: transparent
+}
+
+.class-0\.5 {
+  background: transparent
+}
+
+.class {
+  background: transparent
+}
+
+.unused {
+  background: transparent
+}
