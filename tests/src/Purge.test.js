@@ -9,7 +9,6 @@ const unused = '.unused'
 beforeAll(async () => {
   await exec('npm run build');
   css = readFileSync('.production/client.css', 'utf-8')
-  console.log(css)
 });
 
 describe('.production', () => {
