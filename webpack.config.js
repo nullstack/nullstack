@@ -209,7 +209,7 @@ function client(env, argv) {
         paths: glob.sync(`src/**/*`, { nodir: true }),
         content: ['./**/*.njs'],
         whitelist: ['script', 'body', 'html', 'style'],
-        defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
+        defaultExtractor: content => content.match(/[\w-/:\\\.\[\]]+(?<!:)/g) || [],
       }));
     }
   }

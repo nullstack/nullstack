@@ -20,12 +20,12 @@ describe('.production', () => {
   })
 
   test('used classes with brackets stay after purge', async () => {
-    const hasClass = css.includes('.class-\[custom\]')
+    const hasClass = css.includes('.class-\\[custom\\]')
     expect(hasClass).toBeTruthy();
   })
 
   test('used classes with dots stay after purge', async () => {
-    const hasClass = css.includes('.class-0\.5')
+    const hasClass = css.includes('.class-0\\.5')
     expect(hasClass).toBeTruthy();
   })
 
