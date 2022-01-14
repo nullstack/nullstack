@@ -2,7 +2,7 @@ import Nullstack from 'nullstack';
 
 class WorkerVerbs extends Nullstack {
 
-  static async getter({ request }) {
+  static async getterSomething({ request }) {
     return request.method;
   }
 
@@ -31,7 +31,7 @@ class WorkerVerbs extends Nullstack {
   }
 
   async hydrate() {
-    this.getter = await this.getter()
+    this.getter = await this.getterSomething()
     this.get = await this.getSomething()
     this.put = await this.putSomething()
     this.patch = await this.patchSomething()

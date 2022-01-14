@@ -1,10 +1,21 @@
 import generateKey from '../shared/generateKey';
-import { isClass, isFalse, isFunction } from '../shared/nodes';
+import { isClass, isFalse, isFunction, isUndefined } from '../shared/nodes';
 import { transformNodes } from './plugins';
 
 async function generateBranch(parent, node, depth, scope) {
 
   transformNodes(scope, node, depth);
+
+  if (isUndefined(node)) {
+    let message = 'Attempting to render an undefined node. \n'
+    if (node === undefined) {
+      message += 'This error usually happens because of a missing return statement around JSX or returning undefined from a renderable function.';
+    } else {
+      message += 'This error usually happens because of a missing import statement or a typo on a component tag';
+    }
+    throw new Error(message)
+    return;
+  }
 
   if (isFalse(node)) {
     parent.children.push(false);
@@ -12,7 +23,7 @@ async function generateBranch(parent, node, depth, scope) {
   }
 
   if (isClass(node)) {
-    const key = node.attributes.key ? node.attributes.key : generateKey(depth) + (node.attributes.route ? scope.context.router.url : '')
+    const key = node.attributes.key ? node.attributes.key : generateKey(node, depth) + (node.attributes.route ? scope.context.router.url : '')
     if (
       scope.context.environment.client &&
       scope.context.router._changed &&
@@ -27,7 +38,6 @@ async function generateBranch(parent, node, depth, scope) {
         for (const segment in newSegments) {
           if (oldSegments[segment] !== newSegments[segment]) {
             delete scope.memory[key];
-            // delete scope.instances[key];
           }
         }
       }

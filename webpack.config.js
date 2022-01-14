@@ -12,7 +12,7 @@ const buildKey = crypto.randomBytes(20).toString('hex');
 const babel = {
   test: /\.js$/,
   resolve: {
-    extensions: ['.njs', '.js']
+    extensions: ['.njs', '.js', '.nts', '.ts']
   },
   use: {
     loader: 'babel-loader',
@@ -28,21 +28,45 @@ const babel = {
   }
 };
 
-const babelNullstack = {
-  test: /\.njs$/,
+const nullstackJavascript = {
+  test: /\.(njs|nts)$/,
   resolve: {
-    extensions: ['.njs', '.js']
+    extensions: ['.njs', '.js', '.nts', '.ts']
   },
   use: {
     loader: 'babel-loader',
     options: {
       "presets": [
         ["@babel/preset-env", { "targets": { node: "10" } }],
-        "@babel/preset-react"
+        "@babel/preset-react",
       ],
       "plugins": [
         "@babel/plugin-proposal-export-default-from",
         "@babel/plugin-proposal-class-properties",
+        ["@babel/plugin-transform-react-jsx", {
+          "pragma": "Nullstack.element",
+          "pragmaFrag": "Nullstack.fragment",
+          "throwIfNamespace": false
+        }]
+      ]
+    }
+  }
+};
+
+const nullstackTypescript = {
+  test: /\.nts$/,
+  resolve: {
+    extensions: ['.njs', '.js', '.nts', '.ts']
+  },
+  use: {
+    loader: 'babel-loader',
+    options: {
+      "presets": [
+        ["@babel/preset-env", { "targets": { node: "10" } }],
+        "@babel/preset-react",
+      ],
+      "plugins": [
+        ["@babel/plugin-transform-typescript", { isTSX: true, allExtensions: true, tsxPragma: "Nullstack.element", tsxPragmaFrag: "Nullstack.fragment" }],
         ["@babel/plugin-transform-react-jsx", {
           "pragma": "Nullstack.element",
           "pragmaFrag": "Nullstack.fragment",
@@ -125,28 +149,29 @@ function server(env, argv) {
           }
         },
         babel,
-        babelNullstack,
+        nullstackJavascript,
         {
-          test: /.njs$/,
+          test: /.(njs|nts)$/,
           loader: path.resolve('./node_modules/nullstack/loaders/inject-nullstack.js'),
         },
         {
-          test: /.njs$/,
+          test: /.(njs|nts)$/,
           loader: path.resolve('./node_modules/nullstack/loaders/register-static-from-server.js'),
-        },
-        {
-          test: /.njs$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/add-source-to-node.js'),
-        },
-        {
-          test: /.njs$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/register-inner-components.js'),
         },
         {
           test: /\.s?[ac]ss$/,
           use: [
             { loader: 'ignore-loader' }
           ]
+        },
+        nullstackTypescript,
+        {
+          test: /.(njs|nts)$/,
+          loader: path.resolve('./node_modules/nullstack/loaders/add-source-to-node.js'),
+        },
+        {
+          test: /.(njs|nts)$/,
+          loader: path.resolve('./node_modules/nullstack/loaders/register-inner-components.js'),
         },
       ]
     },
@@ -183,7 +208,7 @@ function client(env, argv) {
       paths: glob.sync(`src/**/*`, { nodir: true }),
       content: ['./**/*.njs'],
       whitelist: ['script', 'body', 'html', 'style'],
-      defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || [],
+      defaultExtractor: content => content.match(/[\w-/:\\\.\[\]]+(?<!:)/g) || [],
     }));
   }
   return {
@@ -209,6 +234,7 @@ function client(env, argv) {
     stats: 'errors-only',
     module: {
       rules: [
+
         {
           test: /nullstack.js$/,
           loader: 'string-replace-loader',
@@ -219,26 +245,18 @@ function client(env, argv) {
           }
         },
         babel,
-        babelNullstack,
+        nullstackJavascript,
         {
-          test: /.njs$/,
+          test: /.(njs|nts)$/,
           loader: path.resolve('./node_modules/nullstack/loaders/remove-import-from-client.js'),
         },
         {
-          test: /.njs$/,
+          test: /.(njs|nts)$/,
           loader: path.resolve('./node_modules/nullstack/loaders/inject-nullstack.js'),
         },
         {
-          test: /.njs$/,
+          test: /.(njs|nts)$/,
           loader: path.resolve('./node_modules/nullstack/loaders/remove-static-from-client.js'),
-        },
-        {
-          test: /.njs$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/add-source-to-node.js'),
-        },
-        {
-          test: /.njs$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/register-inner-components.js'),
         },
         {
           test: /\.s?[ac]ss$/,
@@ -248,7 +266,16 @@ function client(env, argv) {
             { loader: 'sass-loader' }
           ],
         },
-        liveReload
+        liveReload,
+        nullstackTypescript,
+        {
+          test: /.(njs|nts)$/,
+          loader: path.resolve('./node_modules/nullstack/loaders/add-source-to-node.js'),
+        },
+        {
+          test: /.(njs|nts)$/,
+          loader: path.resolve('./node_modules/nullstack/loaders/register-inner-components.js'),
+        },
       ]
     },
     target: 'web',

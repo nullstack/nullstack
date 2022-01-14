@@ -36,8 +36,8 @@ describe('InstanceSelf', () => {
   });
 
   test('self key has route appended to depth if no key is declared', async () => {
-    await page.waitForSelector('[data-key="n-0-0-6/instance-self"]');
-    const element = await page.$('[data-key="n-0-0-6/instance-self"]');
+    await page.waitForSelector('[data-key="InstanceSelf/0-0-6/instance-self"]');
+    const element = await page.$('[data-key="InstanceSelf/0-0-6/instance-self"]');
     expect(element).toBeTruthy();
   });
 
