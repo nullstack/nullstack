@@ -1,4 +1,4 @@
-export default function generateKey(depth) {
-  if(depth.length === 1) return 'application';
-  return 'n-' + depth.join('-');
+export default function generateKey(node, depth) {
+  if (depth.length === 1) return 'application';
+  return node.type.name + '/' + depth.join('-');
 }

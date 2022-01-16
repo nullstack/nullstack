@@ -17,8 +17,8 @@ describe('PersistentComponent instantiated', () => {
   });
 
   test('components should create a new instance when matching a dynamic segment', async () => {
-    await page.waitForSelector('[data-key="n-0-0-33/persistent-component/a"]');
-    const element = await page.$('[data-key="n-0-0-33/persistent-component/a"]');
+    await page.waitForSelector('[data-key="PersistentComponent/0-0-33/persistent-component/a"]');
+    const element = await page.$('[data-key="PersistentComponent/0-0-33/persistent-component/a"]');
     expect(element).toBeTruthy();
   });
 
@@ -33,7 +33,7 @@ describe('PersistentComponent terminated', () => {
     await page.goto('http://localhost:6969/persistent-component/a');
     await page.waitForSelector('[href="/persistent-component/b"]');
     await page.click('[href="/persistent-component/b"]');
-    await page.waitForSelector('[data-key="n-0-0-33/persistent-component/b"]');
+    await page.waitForSelector('[data-key="PersistentComponent/0-0-33/persistent-component/b"]');
   });
 
   test('components should call terminate when leaving the dom', async () => {
@@ -59,9 +59,9 @@ describe('PersistentComponent reinstantiated', () => {
     await page.goto('http://localhost:6969/persistent-component/a');
     await page.waitForSelector('[href="/persistent-component/b"]');
     await page.click('[href="/persistent-component/b"]');
-    await page.waitForSelector('[data-key="n-0-0-33/persistent-component/b"]');
+    await page.waitForSelector('[data-key="PersistentComponent/0-0-33/persistent-component/b"]');
     await page.click('[href="/persistent-component/a"]');
-    await page.waitForSelector('[data-key="n-0-0-33/persistent-component/a"]');
+    await page.waitForSelector('[data-key="PersistentComponent/0-0-33/persistent-component/a"]');
   });
 
   test('components should not be prepared a second time', async () => {

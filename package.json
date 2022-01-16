@@ -1,6 +1,6 @@
 {
   "name": "nullstack",
-  "version": "0.12.4",
+  "version": "0.13.0",
   "description": "Full-stack Javascript Components for one-dev armies",
   "main": "nullstack.js",
   "author": "Mortaro",
@@ -10,7 +10,11 @@
   "bin": {
     "nullstack": "./scripts/index.js"
   },
+  "types": "./types/index.d.ts",
   "dependencies": {
+    "@babel/plugin-transform-typescript": "^7.16.1",
+    "typescript": "^4.5.3",
+    "ts-loader": "^9.2.6",
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.2.2",
     "@babel/node": "^7.2.2",
