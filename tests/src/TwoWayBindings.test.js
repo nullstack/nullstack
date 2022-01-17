@@ -36,6 +36,11 @@ describe('ContextPage', () => {
     expect(value).toMatch('a');
   });
 
+  test('binding to undefined sets the value to an empty string', async () => {
+    const value = await page.$eval('[data-undeclared]', (element) => element.value);
+    expect(value).toMatch('');
+  });
+
   test('checkboxes can be bound', async () => {
     const value = await page.$eval('[name="boolean"]', (element) => element.checked);
     expect(value).toBeTruthy();

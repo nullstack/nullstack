@@ -27,6 +27,7 @@ import PersistentComponent from './PersistentComponent';
 import PluginAttributes from './PluginAttributes';
 import PublicServerFunctions from './PublicServerFunctions.njs';
 import PureComponents from './PureComponents';
+import Purge from './Purge';
 import RemoveStart from './RemoveStart';
 import RenderableComponent from './RenderableComponent';
 import RoutesAndParams from './RoutesAndParams';
@@ -102,6 +103,7 @@ class Application extends Nullstack {
         <PublicServerFunctions key="publicServerFunctions" />
         <ExternalServerFunctions route="/external-server-functions" />
         <UndefinedNodes route="/undefined-nodes" />
+        <Purge route="/purge" />
         <ErrorPage route="*" />
       </main>
     )

@@ -1,3 +1,23 @@
 #application * {
   display: block;
 }
+
+.class-\[custom\] {
+  background: red;
+}
+
+.class-0\.5 {
+  background: blue;
+}
+
+.class-05 {
+  background: green;
+}
+
+.class {
+  background: blue;
+}
+
+.should-be-removed {
+  background: yellow;
+}
