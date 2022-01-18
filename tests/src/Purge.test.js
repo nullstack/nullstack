@@ -1,13 +1,10 @@
 const { readFileSync } = require('fs');
-const { promisify } = require('util');
-const exec = promisify(require('child_process').exec);
 
 let css;
 
 const unused = '.unused'
 
 beforeAll(async () => {
-  await exec('npm run build');
   css = readFileSync('.production/client.css', 'utf-8')
 });
 
