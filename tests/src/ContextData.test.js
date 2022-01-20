@@ -1,10 +1,6 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-let page;
+const browser = context;
 
 beforeAll(async () => {
-  browser = await puppeteer.launch();
   page = await browser.newPage();
   await page.goto('http://localhost:6969/context-data');
 });
@@ -28,8 +24,4 @@ describe('ContextData', () => {
     expect(element).toBeTruthy();
   });
 
-});
-
-afterAll(async () => {
-  browser.close();
 });

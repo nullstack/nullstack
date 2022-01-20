@@ -1,10 +1,4 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-});
+const browser = context;
 
 describe('ErrorPage 500', () => {
 
@@ -67,8 +61,4 @@ describe('ErrorPage offline', () => {
     expect([200, 304]).toContain(status);
   });
 
-});
-
-afterAll(async () => {
-  browser.close();
 });

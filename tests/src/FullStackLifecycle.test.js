@@ -1,10 +1,4 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-let page;
-
 beforeAll(async () => {
-  browser = await puppeteer.launch();
   page = await browser.newPage();
   await page.goto('http://localhost:6969/full-stack-lifecycle');
 });
@@ -42,8 +36,4 @@ describe('FullStackLifecycle', () => {
     expect(element).toBeFalsy();
   });
 
-});
-
-afterAll(async () => {
-  browser.close();
 });

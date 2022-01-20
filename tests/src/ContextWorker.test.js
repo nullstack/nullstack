@@ -1,10 +1,4 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-});
+const browser = context;
 
 describe('ContextWorker', () => {
 
@@ -135,8 +129,4 @@ describe('ContextWorker', () => {
     expect(element).toBeTruthy();
   });
 
-});
-
-afterAll(async () => {
-  browser.close();
 });

@@ -1,12 +1,3 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-});
-
-
 describe('PersistentComponent instantiated', () => {
 
   let page;
@@ -89,8 +80,3 @@ describe('PersistentComponent reinstantiated', () => {
   });
 
 });
-
-afterAll(async () => {
-  browser.close();
-});
-

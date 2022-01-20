@@ -1,10 +1,4 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-});
+const browser = context;
 
 describe('ContextProject', () => {
   
@@ -181,8 +175,4 @@ describe('robots.txt', () => {
     expect(index).toBeGreaterThan(-1);
   });
 
-});
-
-afterAll(async () => {
-  browser.close();
 });
