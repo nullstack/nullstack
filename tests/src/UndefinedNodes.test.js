@@ -1,9 +1,6 @@
-const puppeteer = require('puppeteer');
-
-let browser;
+const browser = context;
 
 beforeAll(async () => {
-  browser = await puppeteer.launch();
   page = await browser.newPage();
 });
 
@@ -82,8 +79,3 @@ describe('UndefinedNodes undeclaredVariable', () => {
   });
 
 })
-
-
-afterAll(async () => {
-  browser.close();
-});

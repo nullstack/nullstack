@@ -1,3 +1,5 @@
+const browser = context;
+
 describe('PersistentComponent instantiated', () => {
 
   let page;

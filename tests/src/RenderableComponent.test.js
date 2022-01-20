@@ -1,10 +1,4 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-});
+const browser = context;
 
 describe('RenderableComponent', () => {
 
@@ -146,8 +140,4 @@ describe('RenderableComponent ?shortList=true', () => {
     expect(element.length).toBe(3);
   });
 
-});
-
-afterAll(async () => {
-  browser.close();
 });

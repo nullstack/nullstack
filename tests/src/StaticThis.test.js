@@ -1,10 +1,4 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-});
+const browser = context;
 
 describe('StaticThis ssr', () => {
 
@@ -38,9 +32,4 @@ describe('StaticThis spa', () => {
     expect(element).toBeTruthy();  
   });
 
-});
-
-
-afterAll(async () => {
-  browser.close();
 });

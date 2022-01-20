@@ -14,7 +14,7 @@
   "scripts": {
     "start": "npx nullstack start --input=./tests --port=6969",
     "build": "npx nullstack build --input=./tests --mode=ssr",
-    "test": "npm run build && jest Routes ServerFunctions Purge Application ChildComponent Context DateParser Element Error FalsyNodes FullStackLifecycle Instance IsomorphicStartup LazyComponent NestedProxy ParentComponent PersistentComponent PluginAttributes",
+    "test": "npm run build && jest",
     "script": "node src/scripts/run.js"
   },
   "dependencies": {
