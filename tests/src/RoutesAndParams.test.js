@@ -1,10 +1,4 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-});
+const browser = context;
 
 describe('RoutesAndParams /routes-and-params', () => {
 
@@ -271,8 +265,4 @@ describe('RoutesAndParams /routes-and-params?previous=true', () => {
     expect(element).toBeTruthy();
   });
 
-});
-
-afterAll(async () => {
-  browser.close();
 });
