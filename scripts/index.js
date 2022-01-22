@@ -61,7 +61,7 @@ function build({ input, output, mode = 'ssr' }) {
   console.log(` 🚀️ Building your application in ${mode} mode...`);
   compiler.run((error, stats) => {
     logTrace(stats, false);
-    if (stats.hasErrors()) return;
+    if (stats.hasErrors()) process.exit(1);
     require(`../builders/${mode}`)(output);
   });
 }
