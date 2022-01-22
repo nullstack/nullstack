@@ -13,7 +13,7 @@
   "scripts": {
     "start": "npx nullstack start --input=./tests --port=6969",
     "build": "npx nullstack build --input=./tests --mode=ssr",
-    "test": "jest --testTimeout=20000",
+    "test": "npm run build && jest --testTimeout=20000",
     "script": "node src/scripts/run.js"
   },
   "dependencies": {
