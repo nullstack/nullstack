@@ -1,7 +1,5 @@
-const browser = context;
-
 beforeAll(async () => {
-  page = await browser.newPage();
+  page = await context.newPage();
 });
 
 describe('Application', () => {

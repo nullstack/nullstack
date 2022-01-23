@@ -1,7 +1,5 @@
-const browser = context;
-
 beforeAll(async () => {
-  page = await browser.newPage();
+  page = await context.newPage();
 });
 
 describe('UndefinedNodes WithoutReturn', () => {
@@ -9,7 +7,7 @@ describe('UndefinedNodes WithoutReturn', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
   });
 
   test('renderable functions without return should raise an error', async () => {
@@ -24,7 +22,7 @@ describe('UndefinedNodes WithoutUndefinedReturn', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
   });
 
   test('renderable functions with undefined return should raise an error', async () => {
@@ -39,7 +37,7 @@ describe('UndefinedNodes WithoutRetunr', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
   });
 
   test('tagging a renderable function that does not exist should raise an error', async () => {
@@ -54,7 +52,7 @@ describe('UndefinedNodes ForgotToImport', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
   });
 
   test('tagging a renderable function that was not imported should raise an error', async () => {
@@ -69,7 +67,7 @@ describe('UndefinedNodes undeclaredVariable', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/undefined-nodes?undeclaredVariable=true');
   });
 

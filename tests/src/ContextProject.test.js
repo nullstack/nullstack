@@ -1,11 +1,9 @@
-const browser = context;
-
 describe('ContextProject', () => {
   
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
   });
 
   test('cors can be enabled', async () => {
@@ -21,7 +19,7 @@ describe('ContextProject', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/context-project');
     await page.waitForSelector('[data-project]');
   });
@@ -150,7 +148,7 @@ describe('robots.txt', () => {
   let text;
   
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/robots.txt');
     text = await page.evaluate(() => document.body.innerHTML);
   });

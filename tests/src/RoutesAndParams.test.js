@@ -1,11 +1,9 @@
-const browser = context;
-
 describe('RoutesAndParams /routes-and-params', () => {
 
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/routes-and-params');
   });
 
@@ -53,7 +51,7 @@ describe('RoutesAndParams /routes-and-params/a', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/routes-and-params');
     await page.click('[href="/routes-and-params/a"]');
     await page.waitForSelector('[data-a]');
@@ -70,7 +68,7 @@ describe('RoutesAndParams /routes-and-params/a', () => {
   });
 
   test('params are available when coming from external', async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/');
     await page.click('[href="/routes-and-params/a"]');
     await page.waitForSelector('[data-hydrated-param]');
@@ -85,7 +83,7 @@ describe('RoutesAndParams /routes-and-params/?boolean=true', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/routes-and-params/?boolean=true');
   });
 
@@ -116,7 +114,7 @@ describe('RoutesAndParams /routes-and-params?boolean=false', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/routes-and-params?boolean=false');
   });
 
@@ -132,7 +130,7 @@ describe('RoutesAndParams /routes-and-params/c', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/routes-and-params/c');
   });
 
@@ -153,7 +151,7 @@ describe('RoutesAndParams /routes-and-params/c', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/routes-and-params/c/a');
   });
 
@@ -169,7 +167,7 @@ describe('RoutesAndParams /routes-and-params/d?boolean=true#hash ssr', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/routes-and-params/d?boolean=true#hash');
   });
 
@@ -190,7 +188,7 @@ describe('RoutesAndParams /routes-and-params/d?boolean=true#hash spa', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/routes-and-params/d?boolean=true#hash');
     await page.click('[href="/routes-and-params/no-hash#hash"]');
     await page.waitForSelector('[data-url="/routes-and-params/no-hash"]');
@@ -213,7 +211,7 @@ describe('RoutesAndParams /routes-and-params', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/routes-and-params');
   });
 
@@ -231,7 +229,7 @@ describe('RoutesAndParams /routes-and-params', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/routes-and-params');
   });
 
@@ -249,7 +247,7 @@ describe('RoutesAndParams /routes-and-params?previous=true', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/routes-and-params?previous=true');
   });
 

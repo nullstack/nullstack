@@ -1,11 +1,9 @@
-const browser = context;
-
 describe('RenderableComponent', () => {
 
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/renderable-component');
   });
 
@@ -96,7 +94,7 @@ describe('RenderableComponent ?condition=true', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/renderable-component');
     await page.click('.true-condition');
     await page.waitForSelector('[data-condition]');
@@ -129,7 +127,7 @@ describe('RenderableComponent ?shortList=true', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/renderable-component');
     await page.click('.short-list');
     await page.waitForSelector('[data-short-list]');

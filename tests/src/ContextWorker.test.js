@@ -1,11 +1,9 @@
-const browser = context;
-
 describe('ContextWorker', () => {
 
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/context-worker');
   });
 
@@ -81,7 +79,7 @@ describe('ContextWorker', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/context-worker');
   });
 
@@ -100,7 +98,7 @@ describe('ContextWorker', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/context-worker');
   });
 

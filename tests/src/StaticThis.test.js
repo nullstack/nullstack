@@ -1,11 +1,9 @@
-const browser = context;
-
 describe('StaticThis ssr', () => {
 
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/static-this');
   });
 
@@ -21,7 +19,7 @@ describe('StaticThis spa', () => {
   let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
+    page = await context.newPage();
     await page.goto('http://localhost:6969/');
     await page.click('[href="/static-this"]');
   });
