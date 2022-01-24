@@ -1,4 +1,4 @@
-const CI = Boolean(process.env.CI || false);
+const CI = !!process.env.CI;
 
 module.exports = {
   preset: "jest-puppeteer",

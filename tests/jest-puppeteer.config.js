@@ -1,5 +1,5 @@
 // get environment variable
-const CI = Boolean(process.env.CI || false);
+const CI = !!process.env.CI;
 
 const baseOptions = {
   server: {
