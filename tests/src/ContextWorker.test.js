@@ -1,9 +1,6 @@
 describe('ContextWorker', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await context.newPage();
     await page.goto('http://localhost:6969/context-worker');
   });
 
@@ -76,10 +73,7 @@ describe('ContextWorker', () => {
 
 describe('ContextWorker', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await context.newPage();
     await page.goto('http://localhost:6969/context-worker');
   });
 
@@ -95,10 +89,7 @@ describe('ContextWorker', () => {
 
 describe('ContextWorker', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await context.newPage();
     await page.goto('http://localhost:6969/context-worker');
   });
 

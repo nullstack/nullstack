@@ -1,9 +1,6 @@
 describe('PersistentComponent instantiated', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await context.newPage();
     await page.goto('http://localhost:6969/persistent-component/a');
   });
 
@@ -17,10 +14,7 @@ describe('PersistentComponent instantiated', () => {
 
 describe('PersistentComponent terminated', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await context.newPage();
     await page.goto('http://localhost:6969/persistent-component/a');
     await page.waitForSelector('[href="/persistent-component/b"]');
     await page.click('[href="/persistent-component/b"]');
@@ -43,10 +37,7 @@ describe('PersistentComponent terminated', () => {
 
 describe('PersistentComponent reinstantiated', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await context.newPage();
     await page.goto('http://localhost:6969/persistent-component/a');
     await page.waitForSelector('[href="/persistent-component/b"]');
     await page.click('[href="/persistent-component/b"]');

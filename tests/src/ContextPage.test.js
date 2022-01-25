@@ -1,5 +1,4 @@
 beforeAll(async () => {
-  page = await context.newPage();
   await page.goto('http://localhost:6969/context-page');
 });
 
@@ -88,6 +87,5 @@ describe('ContextPage', () => {
     const element = await page.$('[data-page-status="401"]');
     expect(element).toBeTruthy();  
   });
-
 
 });

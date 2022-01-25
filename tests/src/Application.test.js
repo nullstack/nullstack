@@ -1,7 +1,3 @@
-beforeAll(async () => {
-  page = await context.newPage();
-});
-
 describe('Application', () => {
 
   test('the application is running', async () => {

@@ -1,6 +1,4 @@
 beforeAll(async () => {
-  page = await context.newPage();
-
   await page.goto('http://localhost:6969/error-on-child-node');
 });
 

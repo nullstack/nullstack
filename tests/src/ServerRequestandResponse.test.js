@@ -1,5 +1,4 @@
 beforeAll(async () => {
-  page = await context.newPage();
   await page.goto('http://localhost:6969/server-request-and-response');
 });
 

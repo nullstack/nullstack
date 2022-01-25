@@ -1,10 +1,4 @@
 describe('ContextProject', () => {
-  
-  let page;
-
-  beforeAll(async () => {
-    page = await context.newPage();
-  });
 
   test('cors can be enabled', async () => {
     const response = await page.goto('http://localhost:6969/context-project');
@@ -15,11 +9,8 @@ describe('ContextProject', () => {
 });
 
 describe('ContextProject', () => {
-  
-  let page;
 
   beforeAll(async () => {
-    page = await context.newPage();
     await page.goto('http://localhost:6969/context-project');
     await page.waitForSelector('[data-project]');
   });
@@ -139,16 +130,13 @@ describe('ContextProject', () => {
     expect(text).toMatch('');
   });
 
-  
 });
 
 describe('robots.txt', () => {
-  
-  let page;
+
   let text;
-  
+
   beforeAll(async () => {
-    page = await context.newPage();
     await page.goto('http://localhost:6969/robots.txt');
     text = await page.evaluate(() => document.body.innerHTML);
   });
