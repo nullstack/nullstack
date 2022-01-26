@@ -29,6 +29,12 @@ describe('FullStackLifecycle', () => {
     expect(element).toBeTruthy();
   });
 
+  test('launch should run', async () => {
+    await page.waitForSelector('[data-launched]');
+    const element = await page.$('[data-launched]');
+    expect(element).toBeTruthy();
+  });
+
   test('update should run', async () => {
     await page.waitForSelector('[data-updated]');
     const element = await page.$('[data-updated]');

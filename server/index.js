@@ -46,7 +46,8 @@ class Nullstack {
   _self = {
     prerendered: true,
     initiated: false,
-    hydrated: false
+    hydrated: false,
+    terminated: false,
   }
 
   constructor(scope) {

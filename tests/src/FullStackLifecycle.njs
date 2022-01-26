@@ -4,6 +4,7 @@ class FullStackLifecycle extends Nullstack {
 
   prepared = false;
   initiated = false;
+  launched = true;
   hydrated = false;
   updated = false;
 
@@ -15,17 +16,21 @@ class FullStackLifecycle extends Nullstack {
     this.initiated = true;
   }
 
+  launch() {
+    this.launched = true
+  }
+
   hydrate() {
     this.hydrated = true;
   }
 
   update() {
-    if(!this.updated) {
+    if (!this.updated) {
       this.updated = true;
     }
   }
-  
-  async terminate({params}) {
+
+  async terminate({ params }) {
     params.terminated = true;
   }
 
@@ -34,6 +39,7 @@ class FullStackLifecycle extends Nullstack {
       <div class="FullStackLifecycle">
         <div data-prepared={this.prepared} />
         <div data-initiated={this.initiated} />
+        <div data-launched={this.launched} />
         <div data-hydrated={this.hydrated} />
         <div data-updated={this.updated} />
         <a href="/"> Terminate </a>
