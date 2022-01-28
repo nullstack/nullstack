@@ -4,7 +4,7 @@ class FullStackLifecycle extends Nullstack {
 
   prepared = false;
   initiated = false;
-  launched = true;
+  launched = false;
   hydrated = false;
   updated = false;
 
