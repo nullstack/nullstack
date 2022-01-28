@@ -13,8 +13,10 @@ class PersistentComponent extends Nullstack {
     this.count = -1;
   }
 
-  launch() {
-    this.launchCount++
+  launch({ self }) {
+    if (self.initiated) {
+      this.launchCount++
+    }
   }
 
   async hydrate() {

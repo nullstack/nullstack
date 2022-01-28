@@ -63,6 +63,7 @@ class Application extends Nullstack {
           <a href="/static-this"> static this </a>
           <a href="/routes-and-params/a"> router with params </a>
           <a href="/undefined-nodes"> undefined nodes </a>
+          <a href="/full-stack-lifecycle"> lifecycle </a>
         </div>
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />

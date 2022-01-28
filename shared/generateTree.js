@@ -58,7 +58,10 @@ async function generateBranch(parent, node, depth, scope) {
       }
     }
     let shouldHydrate = false;
-    const shouldLaunch = !instance._self.prerendered || (instance._self.persistent && instance._self.terminated)
+    const shouldLaunch = instance._self.initiated && (
+      !instance._self.prerendered ||
+      (instance._self.persistent && instance._self.terminated)
+    )
     if (instance._self.terminated) {
       shouldHydrate = true;
       instance._self.terminated = false;
