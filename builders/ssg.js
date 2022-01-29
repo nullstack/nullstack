@@ -5,7 +5,7 @@ module.exports = async function ssg({ output, cache }) {
   const dir = process.cwd();
   const application = require(`${dir}/.production/server`).default;
   const { resolve } = require('path')
-  const { existsSync, mkdirSync, writeFileSync, copySync, rmSync } = require('fs-extra');
+  const { existsSync, mkdirSync, writeFileSync, copySync, removeSync } = require('fs-extra');
 
   function path(file = '') {
     const target = file.startsWith('/') ? file.slice(1) : file;
@@ -86,7 +86,7 @@ module.exports = async function ssg({ output, cache }) {
 
   console.log()
   if (existsSync(path())) {
-    rmSync(path(), { recursive: true });
+    removeSync(path());
   }
   mkdirSync(path())
   console.log(` ⚙️  /public/`)
