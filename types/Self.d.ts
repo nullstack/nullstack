@@ -4,6 +4,8 @@ export type NullstackSelf = {
 
   hydrated: boolean,
 
+  terminated: boolean,
+
   prerendered: boolean,
 
   /**

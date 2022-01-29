@@ -3,7 +3,7 @@ module.exports = async function spa(folder = 'spa') {
 
   const dir = process.cwd();
   const application = require(`${dir}/.production/server`).default
-  const { existsSync, mkdirSync, writeFileSync, copySync, rmSync } = require('fs-extra');
+  const { existsSync, mkdirSync, writeFileSync, copySync, removeSync } = require('fs-extra');
   const path = `${dir}/${folder}`;
 
   async function copy(url, file) {
@@ -19,7 +19,7 @@ module.exports = async function spa(folder = 'spa') {
 
   console.log()
   if (existsSync(path)) {
-    rmSync(path, { recursive: true });
+    removeSync(path);
   }
   mkdirSync(path)
   console.log(` ⚙️  /public/`)
