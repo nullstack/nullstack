@@ -1,17 +1,6 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-});
-
 describe('ContextWorker', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/context-worker');
   });
 
@@ -84,10 +73,7 @@ describe('ContextWorker', () => {
 
 describe('ContextWorker', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/context-worker');
   });
 
@@ -103,10 +89,7 @@ describe('ContextWorker', () => {
 
 describe('ContextWorker', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/context-worker');
   });
 
@@ -135,8 +118,4 @@ describe('ContextWorker', () => {
     expect(element).toBeTruthy();
   });
 
-});
-
-afterAll(async () => {
-  browser.close();
 });

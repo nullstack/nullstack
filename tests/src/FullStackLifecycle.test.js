@@ -1,17 +1,6 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-});
-
 describe('FullStackLifecycle ssr', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/full-stack-lifecycle');
   });
 
@@ -74,10 +63,7 @@ describe('FullStackLifecycle ssr', () => {
 
 describe('FullStackLifecycle spa', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/');
     await page.click('a[href="/full-stack-lifecycle"]')
   });
@@ -137,8 +123,4 @@ describe('FullStackLifecycle spa', () => {
     expect(element).toBeFalsy();
   });
 
-});
-
-afterAll(async () => {
-  browser.close();
 });
