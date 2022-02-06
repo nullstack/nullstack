@@ -1,18 +1,4 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-});
-
 describe('ContextProject', () => {
-  
-  let page;
-
-  beforeAll(async () => {
-    page = await browser.newPage();
-  });
 
   test('cors can be enabled', async () => {
     const response = await page.goto('http://localhost:6969/context-project');
@@ -23,11 +9,8 @@ describe('ContextProject', () => {
 });
 
 describe('ContextProject', () => {
-  
-  let page;
 
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/context-project');
     await page.waitForSelector('[data-project]');
   });
@@ -147,16 +130,13 @@ describe('ContextProject', () => {
     expect(text).toMatch('');
   });
 
-  
 });
 
 describe('robots.txt', () => {
-  
-  let page;
+
   let text;
-  
+
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/robots.txt');
     text = await page.evaluate(() => document.body.innerHTML);
   });
@@ -181,8 +161,4 @@ describe('robots.txt', () => {
     expect(index).toBeGreaterThan(-1);
   });
 
-});
-
-afterAll(async () => {
-  browser.close();
 });

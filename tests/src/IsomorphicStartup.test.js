@@ -1,11 +1,4 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-let page;
-
 beforeAll(async () => {
-  browser = await puppeteer.launch();
-  page = await browser.newPage();
   await page.goto('http://localhost:6969/isomorphic-startup');
 });
 
@@ -35,8 +28,4 @@ describe('RemoveStart', () => {
     expect(element).toBeTruthy();
   });
 
-});
-
-afterAll(async () => {
-  browser.close();
 });

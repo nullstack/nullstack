@@ -9,6 +9,18 @@ const { readdirSync } = require('fs');
 
 const buildKey = crypto.randomBytes(20).toString('hex');
 
+function cacheFactory(args, folder, name) {
+  if (args.cache || args.environment === 'development') {
+    return {
+      type: 'filesystem',
+      cacheDirectory: path.resolve(`./${folder}/.cache`),
+      name
+    };
+  } else {
+    return false;
+  }
+}
+
 const babel = {
   test: /\.js$/,
   resolve: {
@@ -88,7 +100,7 @@ function server(env, argv) {
     }
   }
   const folder = argv.environment === 'development' ? '.development' : '.production';
-  const devtool = argv.environment === 'development' ? 'cheap-inline-module-source-map' : 'none';
+  const devtool = argv.environment === 'development' ? 'inline-cheap-module-source-map' : false;
   const minimize = argv.environment !== 'development';
   const plugins = argv.environment === 'development' ? ([
     new NodemonPlugin({
@@ -113,7 +125,9 @@ function server(env, argv) {
           terserOptions: {
             //keep_classnames: true,
             keep_fnames: true
-          }
+          },
+          // workaround: disable parallel to allow caching server
+          parallel: argv.cache ? false : require('os').cpus().length - 1
         })
       ]
     },
@@ -180,14 +194,15 @@ function server(env, argv) {
       __dirname: false,
       __filename: false,
     },
-    plugins
+    plugins,
+    cache: cacheFactory(argv, folder, 'server')
   }
 }
 
 function client(env, argv) {
   const dir = argv.input || '../..';
   const folder = argv.environment === 'development' ? '.development' : '.production';
-  const devtool = argv.environment === 'development' ? 'cheap-inline-module-source-map' : 'none';
+  const devtool = argv.environment === 'development' ? 'inline-cheap-module-source-map' : false;
   const minimize = argv.environment !== 'development';
   let liveReload = {};
   if (argv.environment !== 'development') {
@@ -207,7 +222,7 @@ function client(env, argv) {
     plugins.push(new PurgecssPlugin({
       paths: glob.sync(`src/**/*`, { nodir: true }),
       content: ['./**/*.njs'],
-      whitelist: ['script', 'body', 'html', 'style'],
+      safelist: ['script', 'body', 'html', 'style'],
       defaultExtractor: content => content.match(/[\w-/:\\\.\[\]]+(?<!:)/g) || [],
     }));
   }
@@ -279,7 +294,8 @@ function client(env, argv) {
       ]
     },
     target: 'web',
-    plugins
+    plugins,
+    cache: cacheFactory(argv, folder, 'client')
   }
 }
 

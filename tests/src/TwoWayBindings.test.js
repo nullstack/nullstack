@@ -1,11 +1,4 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-let page;
-
 beforeAll(async () => {
-  browser = await puppeteer.launch();
-  page = await browser.newPage();
   await page.goto('http://localhost:6969/two-way-bindings?page=1');
 });
 
@@ -93,8 +86,4 @@ describe('ContextPage', () => {
 
   // test extra params bringHappiness
 
-});
-
-afterAll(async () => {
-  browser.close();
 });

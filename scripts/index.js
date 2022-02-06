@@ -22,7 +22,8 @@ function logCompiling(showCompiling) {
 
 function logTrace(stats, showCompiling) {
   if (stats.hasErrors()) {
-    const [file, loader, ...trace] = stats.toJson('errors-only', { colors: true }).children[0].errors[0].split('\n');
+    const { moduleName: file, message } = stats.toJson('errors-only', { colors: true }).children[0].errors[0];
+    const [loader, ...trace] = message.split('\n');
     if (loader.indexOf('/nullstack/loaders') === -1) trace.unshift(loader)
     const currentTrace = trace.join(' ');
     if (lastTrace === currentTrace) return;
@@ -55,14 +56,14 @@ function start({ input, port }) {
   compiler.watch({}, (error, stats) => logTrace(stats, true));
 }
 
-function build({ input, output, mode = 'ssr' }) {
+function build({ input, output, cache, mode = 'ssr' }) {
   const environment = 'production';
-  const compiler = getCompiler({ environment, input });
+  const compiler = getCompiler({ environment, input, cache });
   console.log(` 🚀️ Building your application in ${mode} mode...`);
   compiler.run((error, stats) => {
     logTrace(stats, false);
     if (stats.hasErrors()) process.exit(1);
-    require(`../builders/${mode}`)(output);
+    require(`../builders/${mode}`)({ output, cache });
   });
 }
 
@@ -82,6 +83,7 @@ program
   .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles').choices(buildModes))
   .option('-i, --input <input>', 'Path to project that will be built')
   .option('-o, --output <output>', 'Path to build output folder')
+  .option('-c, --cache', 'Cache build results in .production folder')
   .helpOption('-h, --help', 'Learn more about this command')
   .action(build)
 

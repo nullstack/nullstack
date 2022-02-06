@@ -1,13 +1,3 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-let page;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-  page = await browser.newPage();
-});
-
 describe('Application', () => {
 
   test('the application is running', async () => {
@@ -32,8 +22,4 @@ describe('Application', () => {
     expect(element).toBeTruthy();
   });
 
-});
-
-afterAll(async () => {
-  browser.close();
 });
