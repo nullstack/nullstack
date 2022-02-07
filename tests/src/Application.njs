@@ -1,6 +1,7 @@
 import Nullstack from 'nullstack';
 import './Application.css';
 import ChildComponent from './ChildComponent';
+import ComponentTernary from './ComponentTernary';
 import Context from './Context';
 import ContextData from './ContextData';
 import ContextEnvironment from './ContextEnvironment';
@@ -105,6 +106,7 @@ class Application extends Nullstack {
         <ExternalServerFunctions route="/external-server-functions" />
         <UndefinedNodes route="/undefined-nodes" />
         <Purge route="/purge" />
+        <ComponentTernary route="/component-ternary" />
         <ErrorPage route="*" />
       </main>
     )
