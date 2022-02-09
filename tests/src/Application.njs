@@ -1,4 +1,5 @@
 import Nullstack from 'nullstack';
+import AnchorModifiers from './AnchorModifiers';
 import './Application.css';
 import ChildComponent from './ChildComponent';
 import ComponentTernary from './ComponentTernary';
@@ -107,6 +108,7 @@ class Application extends Nullstack {
         <UndefinedNodes route="/undefined-nodes" />
         <Purge route="/purge" />
         <ComponentTernary route="/component-ternary" />
+        <AnchorModifiers route="/anchor-modifiers" />
         <ErrorPage route="*" />
       </main>
     )
