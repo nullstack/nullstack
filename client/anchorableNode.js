@@ -1,11 +1,12 @@
-import router from './router';
+import router from './router'
 
 export function anchorableElement(element) {
-  const links = element.querySelectorAll('a[href^="/"]:not([target])');
-  for(const link of links) {
+  const links = element.querySelectorAll('a[href^="/"]:not([target])')
+  for (const link of links) {
     link.onclick = (event) => {
-      event.preventDefault();
-      router.url = link.getAttribute('href');
-    };
+      if (event.ctrlKey || event.shiftKey) return
+      event.preventDefault()
+      router.url = link.getAttribute('href')
+    }
   }
 }
