@@ -98,6 +98,7 @@ module.exports = async function ssg({ output, cache }) {
   await copyRoute(`/404`);
   await copyBundle(`/manifest.json`)
   await copyBundle(`/service-worker.js`)
+  await copyBundle('/robots.txt')
   await createSitemap()
   console.log()
 
