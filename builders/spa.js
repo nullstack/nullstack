@@ -30,6 +30,7 @@ module.exports = async function spa({ output, cache }) {
   copySync(`${dir}/.production`, path, { filter })
   await copy(`/manifest.json`)
   await copy(`/service-worker.js`)
+  await copy('/robots.txt')
   console.log()
 
   console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${application.project.name} is ready at ${folder}\n`);
