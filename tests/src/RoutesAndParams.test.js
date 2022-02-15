@@ -230,3 +230,30 @@ describe('RoutesAndParams /routes-and-params?previous=true', () => {
   });
 
 });
+
+describe('RoutesAndParams /routes-and-params/inner-html', () => {
+
+  const htmlRoute = 'routes-and-params/inner-html?hideLink=';
+
+  async function redirectAndKeepState(hiddenLink = '') {
+    await page.goto(`http://localhost:6969/${htmlRoute}${hiddenLink}`);
+    await page.waitForSelector('[data-show-link="click"]');
+    await page.click('[data-show-link="click"]');
+    await page.waitForSelector('[data-show-link="clicked"]');
+    await page.waitForSelector('[data-shown-link]');
+    await page.waitForSelector(`[href="/${htmlRoute}${hiddenLink}"]`);
+    await page.click(`[href="/${htmlRoute}${hiddenLink}"]`);
+    return page.$('[data-show-link="clicked"]');
+  }
+
+  test('html route injected from start do not refresh', async () => {
+    const element = await redirectAndKeepState();
+    expect(element).toBeTruthy();
+  });
+
+  test('html route injected after first render do not refresh', async () => {
+    const element = await redirectAndKeepState('true');
+    expect(element).toBeTruthy();
+  });
+
+});
