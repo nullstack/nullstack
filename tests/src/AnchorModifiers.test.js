@@ -12,18 +12,11 @@ describe('AnchorModifiers jsx', () => {
     expect(url).toEqual('http://localhost:6969/anchor-modifiers');
   });
 
-  test('Clicking html link with control opens in new tab', async () => {
-    await page.keyboard.down('Control');
+  test('Clicking html link with control or meta opens in new tab', async () => {
+    const key = process.platform === 'darwin' ? 'Meta' : 'Control'
+    await page.keyboard.down(key);
     await page.click('[href="/anchor-modifiers?source=html"]');
-    await page.keyboard.up('Control');
-    const url = await page.url()
-    expect(url).toEqual('http://localhost:6969/anchor-modifiers');
-  });
-
-  test('Clicking html link with cmd opens in new window', async () => {
-    await page.keyboard.down('Meta');
-    await page.click('[href="/anchor-modifiers?source=html"]');
-    await page.keyboard.up('Meta');
+    await page.keyboard.up(key);
     const url = await page.url()
     expect(url).toEqual('http://localhost:6969/anchor-modifiers');
   });
@@ -44,18 +37,11 @@ describe('AnchorModifiers jsx', () => {
     expect(url).toEqual('http://localhost:6969/anchor-modifiers');
   });
 
-  test('Clicking jsx link with control opens in new tab', async () => {
-    await page.keyboard.down('Control');
+  test('Clicking jsx link with control or meta opens in new tab', async () => {
+    const key = process.platform === 'darwin' ? 'Meta' : 'Control'
+    await page.keyboard.down(key);
     await page.click('[href="/anchor-modifiers?source=jsx"]');
-    await page.keyboard.up('Control');
-    const url = await page.url()
-    expect(url).toEqual('http://localhost:6969/anchor-modifiers');
-  });
-
-  test('Clicking jsx link with cmd opens in new window', async () => {
-    await page.keyboard.down('Meta');
-    await page.click('[href="/anchor-modifiers?source=jsx"]');
-    await page.keyboard.up('Meta');
+    await page.keyboard.up(key);
     const url = await page.url()
     expect(url).toEqual('http://localhost:6969/anchor-modifiers');
   });
