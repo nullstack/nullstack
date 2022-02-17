@@ -20,6 +20,14 @@ describe('AnchorModifiers jsx', () => {
     expect(url).toEqual('http://localhost:6969/anchor-modifiers');
   });
 
+  test('Clicking html link with cmd opens in new window', async () => {
+    await page.keyboard.down('Meta');
+    await page.click('[href="/anchor-modifiers?source=html"]');
+    await page.keyboard.up('Meta');
+    const url = await page.url()
+    expect(url).toEqual('http://localhost:6969/anchor-modifiers');
+  });
+
   test('Clicking html link with alt downloads the link', async () => {
     await page.keyboard.down('Alt');
     await page.click('[href="/anchor-modifiers?source=html"]');
@@ -40,6 +48,14 @@ describe('AnchorModifiers jsx', () => {
     await page.keyboard.down('Control');
     await page.click('[href="/anchor-modifiers?source=jsx"]');
     await page.keyboard.up('Control');
+    const url = await page.url()
+    expect(url).toEqual('http://localhost:6969/anchor-modifiers');
+  });
+
+  test('Clicking jsx link with cmd opens in new window', async () => {
+    await page.keyboard.down('Meta');
+    await page.click('[href="/anchor-modifiers?source=jsx"]');
+    await page.keyboard.up('Meta');
     const url = await page.url()
     expect(url).toEqual('http://localhost:6969/anchor-modifiers');
   });
