@@ -6,7 +6,7 @@ export function anchorableElement(element) {
     if (link.dataset.nullstack) return
     link.dataset.nullstack = true
     link.addEventListener('click', (event) => {
-      if (!event.ctrlKey && !event.shiftKey && !event.altKey) {
+      if (!event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
         event.preventDefault()
         router.url = link.getAttribute('href')
       }

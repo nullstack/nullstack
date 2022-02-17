@@ -13,7 +13,7 @@ function transform({ node, router }) {
   const originalEvent = node.attributes.onclick
   node.attributes.default = true
   node.attributes.onclick = ({ event }) => {
-    if (!event.ctrlKey && !event.shiftKey && !event.altKey) {
+    if (!event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
       event.preventDefault()
       router.url = node.attributes.href
     }
