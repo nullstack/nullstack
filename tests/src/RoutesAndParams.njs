@@ -4,8 +4,11 @@ class RoutesAndParams extends Nullstack {
 
   eventTriggered = false;
   paramHydrated = false;
-  shownLink = true;
-  htmlLinkBtn = '';
+  innerHTMLData = {
+    shownLink: true,
+    btnText: '',
+    doubleLink: false
+  };
 
   hydrate(context) {
     const { router, params } = context;
@@ -13,8 +16,8 @@ class RoutesAndParams extends Nullstack {
     window.addEventListener(router.event, () => {
       context.eventTriggered = true;
     });
-    this.shownLink = !params.hideLink;
-    this.htmlLinkBtn = 'click';
+    this.innerHTMLData.shownLink = !params.hideLink;
+    this.innerHTMLData.btnText = 'click';
   }
 
   renderOther({ params }) {
@@ -34,17 +37,31 @@ class RoutesAndParams extends Nullstack {
   }
 
   renderInnerHTML({ params, route }) {
-    const html = `
+    const { innerHTMLData } = this;
+    let html = `
       <a href="${route}?hideLink=${params.hideLink}"> innerHTML </a>
     `
+    const showLink = () => {
+      innerHTMLData.btnText = 'clicked'
+      innerHTMLData.shownLink = true
+    }
+    html = !innerHTMLData.doubleLink
+      ? html
+      : `${html}${html.replace('> inner', 'data-link2> inner')}`
+
     return (
-      <div data-shown-link={this.shownLink}>
+      <div data-shown-link={innerHTMLData.shownLink}>
         <button
-          onclick={{shownLink: true, htmlLinkBtn: 'clicked'}}
-          data-show-link={this.htmlLinkBtn}
-          html={this.htmlLinkBtn}
+          onclick={showLink}
+          data-show-link={innerHTMLData.btnText}
+          html={innerHTMLData.btnText}
         />
-        <div html={this.shownLink ? html : ''} />
+        <button
+          onclick={() => innerHTMLData.doubleLink = true}
+          data-double-link
+          html="doubleLinks"
+        />
+        <div html={innerHTMLData.shownLink ? html : ''} />
       </div>
     )
   }
