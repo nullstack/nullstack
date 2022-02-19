@@ -29,15 +29,17 @@ export default function render(node, options) {
       element.innerHTML = node.attributes[name];
       anchorableElement(element);
     } else if (name.startsWith('on')) {
-      const eventName = name.replace('on', '');
-      const key = '_event.' + eventName;
-      node[key] = (event) => {
-        if (node.attributes.default !== true) {
-          event.preventDefault();
-        }
-        node.attributes[name]({ ...node.attributes, event });
-      };
-      element.addEventListener(eventName, node[key]);
+      if (node.attributes[name] !== undefined) {
+        const eventName = name.replace('on', '');
+        const key = '_event.' + eventName;
+        node[key] = (event) => {
+          if (node.attributes.default !== true) {
+            event.preventDefault();
+          }
+          node.attributes[name]({ ...node.attributes, event });
+        };
+        element.addEventListener(eventName, node[key]);
+      }
     } else {
       const type = typeof (node.attributes[name]);
       if (type !== 'object' && type !== 'function') {
