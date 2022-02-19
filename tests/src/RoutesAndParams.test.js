@@ -233,41 +233,40 @@ describe('RoutesAndParams /routes-and-params?previous=true', () => {
 
 describe('RoutesAndParams /routes-and-params/inner-html', () => {
 
-  const htmlRoute = 'routes-and-params/inner-html?hideLink=';
+  const htmlRoute = 'routes-and-params/inner-html';
 
-  async function showLink(urlEnd = '') {
-    await page.goto(`http://localhost:6969/${htmlRoute}${urlEnd}`);
+  test('html route injected from start do not refresh', async () => {
+    await page.goto(`http://localhost:6969/${htmlRoute}`);
     await page.waitForSelector('[data-show-link="click"]');
     await page.click('[data-show-link="click"]');
     await page.waitForSelector('[data-show-link="clicked"]');
-    await page.waitForSelector('[data-shown-link]');
-  }
-
-  async function redirectAndKeepState(urlEnd = '', doubleLink = false) {
-    await showLink(urlEnd);
-    let selector = `href="/${htmlRoute}${urlEnd}"`;
-    if (doubleLink) {
-      await page.click('[data-double-link]');
-      selector = 'data-link2';
-    }
-    await page.waitForSelector(`[${selector}]`);
-    await page.click(`[${selector}]`);
-    return page.$('[data-show-link="clicked"]');
-  }
-
-  test('html route injected from start do not refresh', async () => {
-    const element = await redirectAndKeepState();
+    await page.waitForSelector(`[href="/${htmlRoute}"]`);
+    await page.click(`[href="/${htmlRoute}"]`);
+    const element = await page.$('[data-show-link="clicked"]');
     expect(element).toBeTruthy();
   });
 
   test('html route injected after first render do not refresh', async () => {
-    const element = await redirectAndKeepState('true');
+    await page.goto(`http://localhost:6969/${htmlRoute}?hideLink=true`);
+    await page.waitForSelector('[data-show-link="click"]');
+    await page.click('[data-show-link="click"]');
+    await page.waitForSelector('[data-show-link="clicked"]');
+    await page.waitForSelector(`[href="/${htmlRoute}?hideLink=true"]`);
+    await page.click(`[href="/${htmlRoute}?hideLink=true"]`);
+    const element = await page.$('[data-show-link="clicked"]');
     expect(element).toBeTruthy();
   });
 
   test('html route added beside existent do not refresh', async () => {
-    const element2 = await redirectAndKeepState('', true);
-    expect(element2).toBeTruthy();
+    await page.goto(`http://localhost:6969/${htmlRoute}`);
+    await page.waitForSelector('[data-show-link="click"]');
+    await page.click('[data-show-link="click"]');
+    await page.waitForSelector('[data-show-link="clicked"]');
+    await page.click('[data-double-link]');
+    await page.waitForSelector('[data-link2]');
+    await page.click('[data-link2]');
+    const element = await page.$('[data-show-link="clicked"]');
+    expect(element).toBeTruthy();
   });
 
 });

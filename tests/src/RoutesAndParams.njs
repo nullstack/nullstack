@@ -37,31 +37,29 @@ class RoutesAndParams extends Nullstack {
   }
 
   renderInnerHTML({ params, route }) {
-    const { innerHTMLData } = this;
-    let html = `
-      <a href="${route}?hideLink=${params.hideLink}"> innerHTML </a>
+    const hideLinkParam = params.hideLink ? '?hideLink=true' : '';
+    const link = (dataset = '') => `
+      <a href="${route}${hideLinkParam}" ${dataset}>innerHTML</a>
     `
-    const showLink = () => {
-      innerHTMLData.btnText = 'clicked'
-      innerHTMLData.shownLink = true
+    const doubleLink = link() + link('data-link2');
+    const html = !this.innerHTMLData.doubleLink ? link() : doubleLink;
+    const updateHTMLData = (newVal) => () => {
+      this.innerHTMLData = { ...this.innerHTMLData, ...newVal };
     }
-    html = !innerHTMLData.doubleLink
-      ? html
-      : `${html}${html.replace('> inner', 'data-link2> inner')}`
 
     return (
-      <div data-shown-link={innerHTMLData.shownLink}>
+      <div>
         <button
-          onclick={showLink}
-          data-show-link={innerHTMLData.btnText}
-          html={innerHTMLData.btnText}
+          onclick={updateHTMLData({ btnText: 'clicked', shownLink: true })}
+          data-show-link={this.innerHTMLData.btnText}
+          html={this.innerHTMLData.btnText}
         />
         <button
-          onclick={() => innerHTMLData.doubleLink = true}
+          onclick={updateHTMLData({ doubleLink: true })}
           data-double-link
           html="doubleLinks"
         />
-        <div html={innerHTMLData.shownLink ? html : ''} />
+        <div html={this.innerHTMLData.shownLink ? html : ''} />
       </div>
     )
   }
