@@ -4,6 +4,8 @@ class RoutesAndParams extends Nullstack {
 
   eventTriggered = false;
   paramHydrated = false;
+  shownLink = true;
+  htmlLinkBtn = '';
 
   hydrate(context) {
     const { router, params } = context;
@@ -11,6 +13,8 @@ class RoutesAndParams extends Nullstack {
     window.addEventListener(router.event, () => {
       context.eventTriggered = true;
     });
+    this.shownLink = !params.hideLink;
+    this.htmlLinkBtn = 'click';
   }
 
   renderOther({ params }) {
@@ -26,6 +30,22 @@ class RoutesAndParams extends Nullstack {
   renderWildcard() {
     return (
       <div data-wildcard />
+    )
+  }
+
+  renderInnerHTML({ params, route }) {
+    const html = `
+      <a href="${route}?hideLink=${params.hideLink}"> innerHTML </a>
+    `
+    return (
+      <div data-shown-link={this.shownLink}>
+        <button
+          onclick={{shownLink: true, htmlLinkBtn: 'clicked'}}
+          data-show-link={this.htmlLinkBtn}
+          html={this.htmlLinkBtn}
+        />
+        <div html={this.shownLink ? html : ''} />
+      </div>
     )
   }
 
@@ -46,6 +66,7 @@ class RoutesAndParams extends Nullstack {
         <div data-event-triggered={eventTriggered} />
         <div data-router={!!router} />
         <div route="/routes-and-params" data-route="/routes-and-params" />
+        <InnerHTML route="/routes-and-params/inner-html" />
         <Other route="/routes-and-params/:id" />
         <Wildcard route="/routes-and-params/*" />
         <a href="/routes-and-params/a"> a </a>

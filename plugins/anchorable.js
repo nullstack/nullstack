@@ -13,9 +13,10 @@ function transform({ node, router }) {
   const originalEvent = node.attributes.onclick
   node.attributes.default = true
   node.attributes.onclick = ({ event }) => {
-    if (event.ctrlKey || event.shiftKey) return
-    event.preventDefault()
-    router.url = node.attributes.href
+    if (!event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
+      event.preventDefault()
+      router.url = node.attributes.href
+    }
     if (originalEvent) {
       setTimeout(() => {
         originalEvent({ ...node.attributes, event })
