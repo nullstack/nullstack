@@ -54,4 +54,14 @@ describe('StatefulComponent', () => {
     expect(text).toMatch('not');
   });
 
+  test('rendered attributes undefined values do not raise errors', async () => {
+    await page.click('[data-toggle]');
+    await page.waitForSelector('[data-undefined-event]');
+    await page.click('[data-undefined-event]');
+    let hasConsoleError = false
+    page.on("console", () => hasConsoleError = true)
+    await page.waitForTimeout(2000)
+    expect(hasConsoleError).toBeFalsy();
+  });
+
 });
