@@ -1,17 +1,6 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-});
-
 describe('RoutesAndParams /routes-and-params', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/routes-and-params');
   });
 
@@ -56,10 +45,7 @@ describe('RoutesAndParams /routes-and-params', () => {
 
 describe('RoutesAndParams /routes-and-params/a', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/routes-and-params');
     await page.click('[href="/routes-and-params/a"]');
     await page.waitForSelector('[data-a]');
@@ -76,7 +62,6 @@ describe('RoutesAndParams /routes-and-params/a', () => {
   });
 
   test('params are available when coming from external', async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/');
     await page.click('[href="/routes-and-params/a"]');
     await page.waitForSelector('[data-hydrated-param]');
@@ -88,10 +73,7 @@ describe('RoutesAndParams /routes-and-params/a', () => {
 
 describe('RoutesAndParams /routes-and-params/?boolean=true', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/routes-and-params/?boolean=true');
   });
 
@@ -119,10 +101,7 @@ describe('RoutesAndParams /routes-and-params/?boolean=true', () => {
 
 describe('RoutesAndParams /routes-and-params?boolean=false', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/routes-and-params?boolean=false');
   });
 
@@ -135,10 +114,7 @@ describe('RoutesAndParams /routes-and-params?boolean=false', () => {
 
 describe('RoutesAndParams /routes-and-params/c', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/routes-and-params/c');
   });
 
@@ -156,10 +132,7 @@ describe('RoutesAndParams /routes-and-params/c', () => {
 
 describe('RoutesAndParams /routes-and-params/c', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/routes-and-params/c/a');
   });
 
@@ -172,10 +145,7 @@ describe('RoutesAndParams /routes-and-params/c', () => {
 
 describe('RoutesAndParams /routes-and-params/d?boolean=true#hash ssr', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/routes-and-params/d?boolean=true#hash');
   });
 
@@ -193,10 +163,7 @@ describe('RoutesAndParams /routes-and-params/d?boolean=true#hash ssr', () => {
 
 describe('RoutesAndParams /routes-and-params/d?boolean=true#hash spa', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/routes-and-params/d?boolean=true#hash');
     await page.click('[href="/routes-and-params/no-hash#hash"]');
     await page.waitForSelector('[data-url="/routes-and-params/no-hash"]');
@@ -216,10 +183,7 @@ describe('RoutesAndParams /routes-and-params/d?boolean=true#hash spa', () => {
 
 describe('RoutesAndParams /routes-and-params', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/routes-and-params');
   });
 
@@ -234,10 +198,7 @@ describe('RoutesAndParams /routes-and-params', () => {
 
 describe('RoutesAndParams /routes-and-params', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/routes-and-params');
   });
 
@@ -252,10 +213,7 @@ describe('RoutesAndParams /routes-and-params', () => {
 
 describe('RoutesAndParams /routes-and-params?previous=true', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/routes-and-params?previous=true');
   });
 
@@ -273,6 +231,36 @@ describe('RoutesAndParams /routes-and-params?previous=true', () => {
 
 });
 
-afterAll(async () => {
-  browser.close();
+describe('RoutesAndParams /routes-and-params/inner-html', () => {
+
+  beforeAll(async () => {
+    await page.goto('http://localhost:6969/routes-and-params/inner-html');
+    await page.click('[data-html-click]');
+  });
+
+  test('html route injected from start do not refresh', async () => {
+    await page.click('[data-initial-html] a');
+    await page.waitForSelector(`[data-html-clicked]`);
+    const element = await page.$('[data-html-clicked]');
+    expect(element).toBeTruthy();
+  });
+
+  test('html route injected after first render do not refresh', async () => {
+    await page.click('[data-show-conditional-html]');
+    await page.waitForSelector(`[data-conditional-html] a`);
+    await page.click('[data-conditional-html] a');
+    await page.waitForSelector(`[data-html-clicked]`);
+    const element = await page.$('[data-html-clicked]');
+    expect(element).toBeTruthy();
+  });
+
+  test('html route added beside existent do not refresh', async () => {
+    await page.click('[data-update-initial-html]');
+    await page.waitForSelector(`[data-initial-html] a:nth-child(2)`);
+    await page.click('[data-initial-html] a:nth-child(2)');
+    await page.waitForSelector(`[data-html-clicked]`);
+    const element = await page.$('[data-html-clicked]');
+    expect(element).toBeTruthy();
+  });
+
 });

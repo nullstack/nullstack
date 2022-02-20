@@ -1,9 +1,9 @@
-import router from './router';
-import rerender from './rerender';
-import context, { generateContext } from './context';
-
 import generateTree from '../shared/generateTree';
 import { loadPlugins } from '../shared/plugins';
+import context, { generateContext } from './context';
+import rerender from './rerender';
+import router from './router';
+
 
 const client = {};
 
@@ -53,6 +53,7 @@ client.processLifecycleQueues = async function () {
   for (const instance of initiationQueue) {
     instance.initiate && await instance.initiate();
     instance._self.initiated = true;
+    instance.launch && instance.launch()
   }
   if (initiationQueue.length) {
     client.update();

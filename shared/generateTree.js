@@ -51,12 +51,17 @@ async function generateBranch(parent, node, depth, scope) {
     if (scope.memory) {
       memory = scope.memory[key];
       if (memory) {
+        instance._self.prerendered = true;
         instance._self.initiated = true;
         Object.assign(instance, memory);
         delete scope.memory[key];
       }
     }
     let shouldHydrate = false;
+    const shouldLaunch = instance._self.initiated && (
+      !instance._self.prerendered ||
+      (instance._self.persistent && instance._self.terminated)
+    )
     if (instance._self.terminated) {
       shouldHydrate = true;
       instance._self.terminated = false;
@@ -69,6 +74,7 @@ async function generateBranch(parent, node, depth, scope) {
         if (scope.context.environment.server) {
           instance.initiate && await instance.initiate();
           instance._self.initiated = true;
+          instance.launch && instance.launch();
         } else {
           scope.initiationQueue.push(instance);
         }
@@ -77,6 +83,7 @@ async function generateBranch(parent, node, depth, scope) {
     }
     if (scope.hydrationQueue) {
       if (shouldHydrate) {
+        shouldLaunch && instance.launch && instance.launch();
         scope.hydrationQueue.push(instance);
       } else if (instance._self.initiated == true) {
         instance.update && instance.update();

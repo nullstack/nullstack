@@ -1,18 +1,8 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-});
-
 describe('ErrorPage 500', () => {
 
-  let page;
   let response;
 
   beforeAll(async () => {
-    page = await browser.newPage();
     response = await page.goto('http://localhost:6969/error-page?status=500');
   });  
 
@@ -31,12 +21,6 @@ describe('ErrorPage 500', () => {
 
 describe('ErrorPage 404', () => {
 
-  let page;
-
-  beforeAll(async () => {
-    page = await browser.newPage();
-  });  
-
   test('pages with status 404 have a 404 status', async () => {
     const response = await page.goto('http://localhost:6969/error-page');
     const status = response.status();
@@ -53,12 +37,6 @@ describe('ErrorPage 404', () => {
 
 describe('ErrorPage offline', () => {
 
-  let page;
-
-  beforeAll(async () => {
-    page = await browser.newPage();
-  });  
-
   test('the offline template should always have a 200 status', async () => {
     await page.goto('http://localhost:6969');
     const link = await page.$eval('a', (element) => element.href);
@@ -67,8 +45,4 @@ describe('ErrorPage offline', () => {
     expect([200, 304]).toContain(status);
   });
 
-});
-
-afterAll(async () => {
-  browser.close();
 });

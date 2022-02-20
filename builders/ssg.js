@@ -1,10 +1,11 @@
-module.exports = async function ssg(folder = 'ssg') {
+module.exports = async function ssg({ output, cache }) {
+  const folder = output || 'ssg';
   process.env.NULLSTACK_ENVIRONMENT_MODE = 'ssg';
 
   const dir = process.cwd();
   const application = require(`${dir}/.production/server`).default;
   const { resolve } = require('path')
-  const { existsSync, mkdirSync, writeFileSync, copySync, rmSync } = require('fs-extra');
+  const { existsSync, mkdirSync, writeFileSync, copySync, removeSync } = require('fs-extra');
 
   function path(file = '') {
     const target = file.startsWith('/') ? file.slice(1) : file;
@@ -85,7 +86,7 @@ module.exports = async function ssg(folder = 'ssg') {
 
   console.log()
   if (existsSync(path())) {
-    rmSync(path(), { recursive: true });
+    removeSync(path());
   }
   mkdirSync(path())
   console.log(` ⚙️  /public/`)
@@ -97,9 +98,15 @@ module.exports = async function ssg(folder = 'ssg') {
   await copyRoute(`/404`);
   await copyBundle(`/manifest.json`)
   await copyBundle(`/service-worker.js`)
+  await copyBundle('/robots.txt')
   await createSitemap()
   console.log()
 
   console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${application.project.name} is ready at ${folder}\n`);
-  process.exit()
+
+  if (cache) {
+    console.log('Storing cache...');
+  } else {
+    process.exit();
+  }
 }

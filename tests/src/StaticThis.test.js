@@ -1,17 +1,6 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-});
-
 describe('StaticThis ssr', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/static-this');
   });
 
@@ -24,10 +13,7 @@ describe('StaticThis ssr', () => {
 
 describe('StaticThis spa', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/');
     await page.click('[href="/static-this"]');
   });
@@ -38,9 +24,4 @@ describe('StaticThis spa', () => {
     expect(element).toBeTruthy();  
   });
 
-});
-
-
-afterAll(async () => {
-  browser.close();
 });

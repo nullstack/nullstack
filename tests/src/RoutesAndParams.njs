@@ -1,5 +1,4 @@
 import Nullstack from 'nullstack';
-
 class RoutesAndParams extends Nullstack {
 
   eventTriggered = false;
@@ -29,6 +28,19 @@ class RoutesAndParams extends Nullstack {
     )
   }
 
+  renderInnerHTML() {
+    const html = `<a href="/routes-and-params/inner-html">a</a>`
+    return (
+      <div>
+        <button data-html-click data-html-clicked={this.clickedHTML} onclick={{ clickedHTML: true }}>click html</button>
+        <button onclick={{ updatedHTML: true }} data-update-initial-html>update html</button>
+        <div data-initial-html html={this.updatedHTML ? html + html : html} />
+        <button onclick={{ visibleHTML: true }} data-show-conditional-html>show html</button>
+        {this.visibleHTML && <div data-conditional-html html={html} />}
+      </div>
+    )
+  }
+
   setParamsDate({ params }) {
     params.date = new Date('1992-10-16');
   }
@@ -46,6 +58,7 @@ class RoutesAndParams extends Nullstack {
         <div data-event-triggered={eventTriggered} />
         <div data-router={!!router} />
         <div route="/routes-and-params" data-route="/routes-and-params" />
+        <InnerHTML route="/routes-and-params/inner-html" />
         <Other route="/routes-and-params/:id" />
         <Wildcard route="/routes-and-params/*" />
         <a href="/routes-and-params/a"> a </a>

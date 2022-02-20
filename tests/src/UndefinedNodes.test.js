@@ -1,19 +1,4 @@
-const puppeteer = require('puppeteer');
-
-let browser;
-
-beforeAll(async () => {
-  browser = await puppeteer.launch();
-  page = await browser.newPage();
-});
-
 describe('UndefinedNodes WithoutReturn', () => {
-
-  let page;
-
-  beforeAll(async () => {
-    page = await browser.newPage();
-  });
 
   test('renderable functions without return should raise an error', async () => {
     const response = await page.goto('http://localhost:6969/undefined-nodes?withoutReturn=true');
@@ -24,12 +9,6 @@ describe('UndefinedNodes WithoutReturn', () => {
 
 describe('UndefinedNodes WithoutUndefinedReturn', () => {
 
-  let page;
-
-  beforeAll(async () => {
-    page = await browser.newPage();
-  });
-
   test('renderable functions with undefined return should raise an error', async () => {
     const response = await page.goto('http://localhost:6969/undefined-nodes?withoutUndefinedReturn=true');
     expect(response.status()).toEqual(500)
@@ -38,12 +17,6 @@ describe('UndefinedNodes WithoutUndefinedReturn', () => {
 })
 
 describe('UndefinedNodes WithoutRetunr', () => {
-
-  let page;
-
-  beforeAll(async () => {
-    page = await browser.newPage();
-  });
 
   test('tagging a renderable function that does not exist should raise an error', async () => {
     const response = await page.goto('http://localhost:6969/undefined-nodes?withoutRetunr=true');
@@ -54,12 +27,6 @@ describe('UndefinedNodes WithoutRetunr', () => {
 
 describe('UndefinedNodes ForgotToImport', () => {
 
-  let page;
-
-  beforeAll(async () => {
-    page = await browser.newPage();
-  });
-
   test('tagging a renderable function that was not imported should raise an error', async () => {
     const response = await page.goto('http://localhost:6969/undefined-nodes?forgotToImport=true');
     expect(response.status()).toEqual(500)
@@ -69,10 +36,7 @@ describe('UndefinedNodes ForgotToImport', () => {
 
 describe('UndefinedNodes undeclaredVariable', () => {
 
-  let page;
-
   beforeAll(async () => {
-    page = await browser.newPage();
     await page.goto('http://localhost:6969/undefined-nodes?undeclaredVariable=true');
   });
 
@@ -82,8 +46,3 @@ describe('UndefinedNodes undeclaredVariable', () => {
   });
 
 })
-
-
-afterAll(async () => {
-  browser.close();
-});
