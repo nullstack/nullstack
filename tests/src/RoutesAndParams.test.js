@@ -230,3 +230,37 @@ describe('RoutesAndParams /routes-and-params?previous=true', () => {
   });
 
 });
+
+describe('RoutesAndParams /routes-and-params/inner-html', () => {
+
+  beforeAll(async () => {
+    await page.goto('http://localhost:6969/routes-and-params/inner-html');
+    await page.click('[data-html-click]');
+  });
+
+  test('html route injected from start do not refresh', async () => {
+    await page.click('[data-initial-html] a');
+    await page.waitForSelector(`[data-html-clicked]`);
+    const element = await page.$('[data-html-clicked]');
+    expect(element).toBeTruthy();
+  });
+
+  test('html route injected after first render do not refresh', async () => {
+    await page.click('[data-show-conditional-html]');
+    await page.waitForSelector(`[data-conditional-html] a`);
+    await page.click('[data-conditional-html] a');
+    await page.waitForSelector(`[data-html-clicked]`);
+    const element = await page.$('[data-html-clicked]');
+    expect(element).toBeTruthy();
+  });
+
+  test('html route added beside existent do not refresh', async () => {
+    await page.click('[data-update-initial-html]');
+    await page.waitForSelector(`[data-initial-html] a:nth-child(2)`);
+    await page.click('[data-initial-html] a:nth-child(2)');
+    await page.waitForSelector(`[data-html-clicked]`);
+    const element = await page.$('[data-html-clicked]');
+    expect(element).toBeTruthy();
+  });
+
+});

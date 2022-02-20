@@ -60,8 +60,8 @@ export default function rerender(selector, current, next) {
       if (name === 'html') {
         if (next.attributes[name] !== current.attributes[name]) {
           selector.innerHTML = next.attributes[name];
-          anchorableElement(selector);
         }
+        anchorableElement(selector);
       } else if (name === 'checked') {
         if (next.attributes[name] !== selector.value) {
           selector.checked = next.attributes[name];
