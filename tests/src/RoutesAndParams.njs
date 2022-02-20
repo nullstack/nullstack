@@ -1,14 +1,8 @@
 import Nullstack from 'nullstack';
-
 class RoutesAndParams extends Nullstack {
 
   eventTriggered = false;
   paramHydrated = false;
-  innerHTMLData = {
-    shownLink: true,
-    btnText: '',
-    doubleLink: false
-  };
 
   hydrate(context) {
     const { router, params } = context;
@@ -16,8 +10,6 @@ class RoutesAndParams extends Nullstack {
     window.addEventListener(router.event, () => {
       context.eventTriggered = true;
     });
-    this.innerHTMLData.shownLink = !params.hideLink;
-    this.innerHTMLData.btnText = 'click';
   }
 
   renderOther({ params }) {
@@ -36,30 +28,15 @@ class RoutesAndParams extends Nullstack {
     )
   }
 
-  renderInnerHTML({ params, route }) {
-    const hideLinkParam = params.hideLink ? '?hideLink=true' : '';
-    const link = (dataset = '') => `
-      <a href="${route}${hideLinkParam}" ${dataset}>innerHTML</a>
-    `
-    const doubleLink = link() + link('data-link2');
-    const html = !this.innerHTMLData.doubleLink ? link() : doubleLink;
-    const updateHTMLData = (newVal) => () => {
-      this.innerHTMLData = { ...this.innerHTMLData, ...newVal };
-    }
-
+  renderInnerHTML() {
+    const html = `<a href="/routes-and-params/inner-html">a</a>`
     return (
       <div>
-        <button
-          onclick={updateHTMLData({ btnText: 'clicked', shownLink: true })}
-          data-show-link={this.innerHTMLData.btnText}
-          html={this.innerHTMLData.btnText}
-        />
-        <button
-          onclick={updateHTMLData({ doubleLink: true })}
-          data-double-link
-          html="doubleLinks"
-        />
-        <div html={this.innerHTMLData.shownLink ? html : ''} />
+        <button data-html-click data-html-clicked={this.clickedHTML} onclick={{ clickedHTML: true }}>click html</button>
+        <button onclick={{ updatedHTML: true }} data-update-initial-html>update html</button>
+        <div data-initial-html html={this.updatedHTML ? html + html : html} />
+        <button onclick={{ visibleHTML: true }} data-show-conditional-html>show html</button>
+        {this.visibleHTML && <div data-conditional-html html={html} />}
       </div>
     )
   }

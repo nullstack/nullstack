@@ -233,39 +233,33 @@ describe('RoutesAndParams /routes-and-params?previous=true', () => {
 
 describe('RoutesAndParams /routes-and-params/inner-html', () => {
 
-  const htmlRoute = 'routes-and-params/inner-html';
+  beforeAll(async () => {
+    await page.goto('http://localhost:6969/routes-and-params/inner-html');
+    await page.click('[data-html-click]');
+  });
 
   test('html route injected from start do not refresh', async () => {
-    await page.goto(`http://localhost:6969/${htmlRoute}`);
-    await page.waitForSelector('[data-show-link="click"]');
-    await page.click('[data-show-link="click"]');
-    await page.waitForSelector('[data-show-link="clicked"]');
-    await page.waitForSelector(`[href="/${htmlRoute}"]`);
-    await page.click(`[href="/${htmlRoute}"]`);
-    const element = await page.$('[data-show-link="clicked"]');
+    await page.click('[data-initial-html] a');
+    await page.waitForSelector(`[data-html-clicked]`);
+    const element = await page.$('[data-html-clicked]');
     expect(element).toBeTruthy();
   });
 
   test('html route injected after first render do not refresh', async () => {
-    await page.goto(`http://localhost:6969/${htmlRoute}?hideLink=true`);
-    await page.waitForSelector('[data-show-link="click"]');
-    await page.click('[data-show-link="click"]');
-    await page.waitForSelector('[data-show-link="clicked"]');
-    await page.waitForSelector(`[href="/${htmlRoute}?hideLink=true"]`);
-    await page.click(`[href="/${htmlRoute}?hideLink=true"]`);
-    const element = await page.$('[data-show-link="clicked"]');
+    await page.click('[data-show-conditional-html]');
+    await page.waitForSelector(`[data-conditional-html] a`);
+    await page.click('[data-conditional-html] a');
+    await page.waitForSelector(`[data-html-clicked]`);
+    const element = await page.$('[data-html-clicked]');
     expect(element).toBeTruthy();
   });
 
   test('html route added beside existent do not refresh', async () => {
-    await page.goto(`http://localhost:6969/${htmlRoute}`);
-    await page.waitForSelector('[data-show-link="click"]');
-    await page.click('[data-show-link="click"]');
-    await page.waitForSelector('[data-show-link="clicked"]');
-    await page.click('[data-double-link]');
-    await page.waitForSelector('[data-link2]');
-    await page.click('[data-link2]');
-    const element = await page.$('[data-show-link="clicked"]');
+    await page.click('[data-update-initial-html]');
+    await page.waitForSelector(`[data-initial-html] a:nth-child(2)`);
+    await page.click('[data-initial-html] a:nth-child(2)');
+    await page.waitForSelector(`[data-html-clicked]`);
+    const element = await page.$('[data-html-clicked]');
     expect(element).toBeTruthy();
   });
 
