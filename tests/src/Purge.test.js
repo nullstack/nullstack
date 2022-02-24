@@ -20,6 +20,11 @@ describe('.production', () => {
     expect(hasClass).toBeTruthy();
   })
 
+  test('used classes with arbitraty value and variable stay after purge', async () => {
+    const hasClass = css.includes('\\[color\\:var\\(--custom-var-value\\)\\]')
+    expect(hasClass).toBeTruthy();
+  })
+
   test('used classes with dots stay after purge', async () => {
     const hasClass = css.includes('.class-0\\.5')
     expect(hasClass).toBeTruthy();
