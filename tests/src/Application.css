@@ -2,6 +2,11 @@
   display: block;
 }
 
+
+:root {
+  --custom-var-value: red;
+}
+
 .class-\[custom\] {
   background: red;
 }
@@ -20,4 +25,8 @@
 
 .should-be-removed {
   background: yellow;
+}
+
+.\[color\:var\(--custom-var-value\)\] {
+  color: var(--custom-var-value);
 }
