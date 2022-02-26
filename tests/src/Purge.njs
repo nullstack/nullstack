@@ -4,7 +4,7 @@ class Purge extends Nullstack {
 
   render() {
     return (
-      <div class="class class-[custom] class-0.5"> Purge </div>
+      <div class="class class-[custom] [color:var(--custom-var-value)] class-0.5"> Purge </div>
     )
   }
 
