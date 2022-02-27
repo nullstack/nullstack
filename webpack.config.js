@@ -6,6 +6,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
 const crypto = require("crypto");
 const { readdirSync } = require('fs');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 const buildKey = crypto.randomBytes(20).toString('hex');
 
@@ -216,14 +217,15 @@ function client(env, argv) {
   const plugins = [
     new MiniCssExtractPlugin({
       filename: "client.css"
-    })
+    }),
+    new NodePolyfillPlugin()
   ]
   if (argv.environment === 'production') {
     plugins.push(new PurgecssPlugin({
       paths: glob.sync(`src/**/*`, { nodir: true }),
       content: ['./**/*.njs'],
       safelist: ['script', 'body', 'html', 'style'],
-      defaultExtractor: content => content.match(/[\w-/:\\\.\[\]]+(?<!:)/g) || [],
+      defaultExtractor: content => content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || [],
     }));
   }
   return {
@@ -277,7 +279,7 @@ function client(env, argv) {
           test: /\.s?[ac]ss$/,
           use: [
             MiniCssExtractPlugin.loader,
-            { loader: 'css-loader' },
+            { loader: 'css-loader', options: { url: false } },
             { loader: 'sass-loader' }
           ],
         },

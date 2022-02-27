@@ -22,7 +22,9 @@ function logCompiling(showCompiling) {
 
 function logTrace(stats, showCompiling) {
   if (stats.hasErrors()) {
-    const { moduleName: file, message } = stats.toJson('errors-only', { colors: true }).children[0].errors[0];
+    const response = stats.toJson('errors-only', { colors: true })
+    const error = response.errors[0] || response.children[0].errors[0];
+    const { moduleName: file, message } = error
     const [loader, ...trace] = message.split('\n');
     if (loader.indexOf('/nullstack/loaders') === -1) trace.unshift(loader)
     const currentTrace = trace.join(' ');

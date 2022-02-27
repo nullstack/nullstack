@@ -1,6 +1,6 @@
 {
   "name": "nullstack",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "description": "Full-stack Javascript Components for one-dev armies",
   "main": "nullstack.js",
   "author": "Mortaro",
@@ -35,6 +35,7 @@
     "ignore-loader": "^0.1.2",
     "mini-css-extract-plugin": "^2.4.5",
     "node-fetch": "2.6.7",
+    "node-polyfill-webpack-plugin": "^1.1.4",
     "nodemon-webpack-plugin": "^4.3.1",
     "purgecss-webpack-plugin": "^4.1.3",
     "raw-loader": "^4.0.2",
