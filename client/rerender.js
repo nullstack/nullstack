@@ -122,7 +122,11 @@ export default function rerender(selector, current, next) {
     } else {
       for (let i = limit - 1; i > -1; i--) {
         if (typeof selector.childNodes[i] === 'undefined') {
-          throw new Error(`Virtual DOM does not match the DOM. Expected tag ${current.type} but instead found undefined. This error usually happens because of an invalid HTML hierarchy like nested forms or tables without tr.`);
+          console.error(
+            `${current.type.toUpperCase()} expected tag ${current.children[i].type.toUpperCase()} to be child at index ${i} but instead found undefined. This error usually happens because of an invalid HTML hierarchy or changes in comparisons after serialization.`,
+            selector
+          )
+          throw new Error('Virtual DOM does not match the DOM.')
           return;
         }
         rerender(selector.childNodes[i], current.children[i], next.children[i]);
