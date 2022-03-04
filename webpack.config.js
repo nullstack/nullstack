@@ -26,10 +26,10 @@ const babel = {
   test: /\.js$/,
   resolve: {
     extensions: ['.njs', '.js', '.nts', '.ts'],
-    fallback: {
-      "console": require.resolve("console-browserify")
+    // fallback: {
+      // "console": require.resolve("console-browserify")
       // "console": false
-    }
+    // }
   },
   use: {
     loader: 'babel-loader',
@@ -230,10 +230,9 @@ function client(env, argv) {
     new MiniCssExtractPlugin({
       filename: "client.css"
     }),
-    // new NodePolyfillPlugin({
-    //   excludeAliases: ["console"]
-    // })
-    new NodePolyfillPlugin()
+    new NodePolyfillPlugin({
+      excludeAliases: ["console"]
+    })
   ]
   if (argv.environment === 'production') {
     plugins.push(new PurgecssPlugin({
