@@ -25,7 +25,11 @@ function cacheFactory(args, folder, name) {
 const babel = {
   test: /\.js$/,
   resolve: {
-    extensions: ['.njs', '.js', '.nts', '.ts']
+    extensions: ['.njs', '.js', '.nts', '.ts'],
+    fallback: {
+      "console": require.resolve("console-browserify")
+      // "console": false
+    }
   },
   use: {
     loader: 'babel-loader',
@@ -44,7 +48,11 @@ const babel = {
 const nullstackJavascript = {
   test: /\.(njs|nts)$/,
   resolve: {
-    extensions: ['.njs', '.js', '.nts', '.ts']
+    extensions: ['.njs', '.js', '.nts', '.ts'],
+    fallback: {
+      "console": require.resolve("console-browserify")
+      // "console": false
+    }
   },
   use: {
     loader: 'babel-loader',
@@ -69,7 +77,11 @@ const nullstackJavascript = {
 const nullstackTypescript = {
   test: /\.nts$/,
   resolve: {
-    extensions: ['.njs', '.js', '.nts', '.ts']
+    extensions: ['.njs', '.js', '.nts', '.ts'],
+    fallback: {
+      "console": require.resolve("console-browserify")
+      // "console": false
+    }
   },
   use: {
     loader: 'babel-loader',
@@ -218,9 +230,10 @@ function client(env, argv) {
     new MiniCssExtractPlugin({
       filename: "client.css"
     }),
-    new NodePolyfillPlugin({
-      excludeAliases: ["console"]
-    })
+    // new NodePolyfillPlugin({
+    //   excludeAliases: ["console"]
+    // })
+    new NodePolyfillPlugin()
   ]
   if (argv.environment === 'production') {
     plugins.push(new PurgecssPlugin({
