@@ -25,7 +25,7 @@ function cacheFactory(args, folder, name) {
 const babel = {
   test: /\.js$/,
   resolve: {
-    extensions: ['.njs', '.js', '.nts', '.ts']
+    extensions: ['.njs', '.js', '.nts', '.ts'],
   },
   use: {
     loader: 'babel-loader',
@@ -44,7 +44,10 @@ const babel = {
 const nullstackJavascript = {
   test: /\.(njs|nts)$/,
   resolve: {
-    extensions: ['.njs', '.js', '.nts', '.ts']
+    extensions: ['.njs', '.js', '.nts', '.ts'],
+    fallback: {
+      "console": require.resolve("console-browserify")
+    }
   },
   use: {
     loader: 'babel-loader',
@@ -69,7 +72,10 @@ const nullstackJavascript = {
 const nullstackTypescript = {
   test: /\.nts$/,
   resolve: {
-    extensions: ['.njs', '.js', '.nts', '.ts']
+    extensions: ['.njs', '.js', '.nts', '.ts'],
+    fallback: {
+      "console": require.resolve("console-browserify")
+    }
   },
   use: {
     loader: 'babel-loader',
