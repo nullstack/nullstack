@@ -26,6 +26,9 @@ const babel = {
   test: /\.js$/,
   resolve: {
     extensions: ['.njs', '.js', '.nts', '.ts'],
+    fallback: {
+      "console": false
+    }
   },
   use: {
     loader: 'babel-loader',
@@ -46,7 +49,7 @@ const nullstackJavascript = {
   resolve: {
     extensions: ['.njs', '.js', '.nts', '.ts'],
     fallback: {
-      "console": require.resolve("console-browserify")
+      "console": false
     }
   },
   use: {
@@ -74,7 +77,7 @@ const nullstackTypescript = {
   resolve: {
     extensions: ['.njs', '.js', '.nts', '.ts'],
     fallback: {
-      "console": require.resolve("console-browserify")
+      "console": false
     }
   },
   use: {
