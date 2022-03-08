@@ -22,12 +22,6 @@ describe('Polyfill', () => {
     expect(element).toBeTruthy();
   });
 
-  test('client has a polyfill for node console', async () => {
-    await page.waitForSelector('[data-console="object"]');
-    const element = await page.$('[data-console="object"]');
-    expect(element).toBeTruthy();
-  });
-
   test('client has a polyfill for node constants', async () => {
     await page.waitForSelector('[data-constants="object"]');
     const element = await page.$('[data-constants="object"]');

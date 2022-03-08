@@ -218,7 +218,9 @@ function client(env, argv) {
     new MiniCssExtractPlugin({
       filename: "client.css"
     }),
-    new NodePolyfillPlugin()
+    new NodePolyfillPlugin({
+      excludeAliases: ["console"]
+    })
   ]
   if (argv.environment === 'production') {
     plugins.push(new PurgecssPlugin({

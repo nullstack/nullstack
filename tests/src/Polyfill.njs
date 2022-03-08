@@ -1,6 +1,5 @@
 import assert from 'assert';
 import buffer from 'buffer';
-import console from 'console';
 import constants from 'constants';
 import crypto from 'crypto';
 import domain from 'domain';
@@ -35,7 +34,6 @@ class Polyfill extends Nullstack {
         data-buffer-global={this.buffer}
         data-assert={typeof assert}
         data-buffer={typeof buffer}
-        data-console={typeof console}
         data-constants={typeof constants}
         data-crypto={typeof crypto}
         data-domain={typeof domain}
