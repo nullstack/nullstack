@@ -2,8 +2,6 @@ const { readFileSync } = require('fs');
 
 let css;
 
-const unused = '.unused'
-
 beforeAll(async () => {
   css = readFileSync('.production/client.css', 'utf-8')
 });
@@ -31,7 +29,7 @@ describe('.production', () => {
   })
 
   test('unused classes are removed during purge', async () => {
-    const hasClass = css.includes(unused)
+    const hasClass = css.includes('.should-be-removed')
     expect(hasClass).toBeFalsy();
   })
 
