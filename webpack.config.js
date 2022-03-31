@@ -1,9 +1,7 @@
 const path = require('path');
-const glob = require('glob');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
-const PurgecssPlugin = require('purgecss-webpack-plugin');
 const crypto = require("crypto");
 const { readdirSync } = require('fs');
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
@@ -222,14 +220,6 @@ function client(env, argv) {
       excludeAliases: ["console"]
     })
   ]
-  if (argv.environment === 'production') {
-    plugins.push(new PurgecssPlugin({
-      paths: glob.sync(`src/**/*`, { nodir: true }),
-      content: ['./**/*.njs'],
-      safelist: ['script', 'body', 'html', 'style'],
-      defaultExtractor: content => content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || [],
-    }));
-  }
   return {
     mode: argv.environment,
     entry: './client.js',
