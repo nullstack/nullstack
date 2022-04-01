@@ -6,7 +6,7 @@ beforeAll(async () => {
   css = readFileSync('.production/client.css', 'utf-8')
 });
 
-describe('.production', () => {
+describe('WebpackCustomPlugin Purge', () => {
 
   test('used classes stay after purge', async () => {
     const hasClass = css.includes('.class')
