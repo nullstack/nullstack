@@ -6,7 +6,10 @@ let lastTrace = '';
 let compilingIndex = 1;
 
 const webpack = require('webpack');
-const config = require('../webpack.config');
+const path = require('path');
+const { existsSync } = require('fs');
+const customConfig = path.resolve(process.cwd(), './webpack.config.js');
+const config = existsSync(customConfig) ? require(customConfig) : require('../webpack.config');
 
 const buildModes = ['ssg', 'spa', 'ssr']
 
