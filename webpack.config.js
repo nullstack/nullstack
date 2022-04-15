@@ -26,7 +26,7 @@ const babel = {
     extensions: ['.njs', '.js', '.nts', '.ts']
   },
   use: {
-    loader: 'babel-loader',
+    loader: require.resolve('babel-loader'),
     options: {
       "presets": [
         ["@babel/preset-env", { "targets": { node: "10" } }]
@@ -45,7 +45,7 @@ const nullstackJavascript = {
     extensions: ['.njs', '.js', '.nts', '.ts']
   },
   use: {
-    loader: 'babel-loader',
+    loader: require.resolve('babel-loader'),
     options: {
       "presets": [
         ["@babel/preset-env", { "targets": { node: "10" } }],
@@ -70,7 +70,7 @@ const nullstackTypescript = {
     extensions: ['.njs', '.js', '.nts', '.ts']
   },
   use: {
-    loader: 'babel-loader',
+    loader: require.resolve('babel-loader'),
     options: {
       "presets": [
         ["@babel/preset-env", { "targets": { node: "10" } }],
@@ -136,7 +136,7 @@ function server(env, argv) {
       rules: [
         {
           test: /nullstack.js$/,
-          loader: 'string-replace-loader',
+          loader: require.resolve('string-replace-loader'),
           options: {
             multiple: [
               { search: '{{NULLSTACK_ENVIRONMENT_NAME}}', replace: 'server', flags: 'ig' }
@@ -145,7 +145,7 @@ function server(env, argv) {
         },
         {
           test: /environment.js$/,
-          loader: 'string-replace-loader',
+          loader: require.resolve('string-replace-loader'),
           options: {
             multiple: [
               { search: '{{NULLSTACK_ENVIRONMENT_KEY}}', replace: buildKey, flags: 'ig' }
@@ -154,7 +154,7 @@ function server(env, argv) {
         },
         {
           test: /project.js$/,
-          loader: 'string-replace-loader',
+          loader: require.resolve('string-replace-loader'),
           options: {
             multiple: [
               { search: '{{NULLSTACK_PROJECT_ICONS}}', replace: JSON.stringify(icons), flags: 'ig' }
@@ -174,7 +174,7 @@ function server(env, argv) {
         {
           test: /\.s?[ac]ss$/,
           use: [
-            { loader: 'ignore-loader' }
+            { loader: require.resolve('ignore-loader') }
           ]
         },
         nullstackTypescript,
@@ -208,7 +208,7 @@ function client(env, argv) {
     liveReload = {
       test: /liveReload.js$/,
       use: [
-        { loader: 'ignore-loader' }
+        { loader: require.resolve('ignore-loader') }
       ]
     }
   }
@@ -245,7 +245,7 @@ function client(env, argv) {
       rules: [
         {
           test: /nullstack.js$/,
-          loader: 'string-replace-loader',
+          loader: require.resolve('string-replace-loader'),
           options: {
             multiple: [
               { search: '{{NULLSTACK_ENVIRONMENT_NAME}}', replace: 'client', flags: 'ig' }
@@ -270,8 +270,8 @@ function client(env, argv) {
           test: /\.s?[ac]ss$/,
           use: [
             MiniCssExtractPlugin.loader,
-            { loader: 'css-loader', options: { url: false } },
-            { loader: 'sass-loader' }
+            { loader: require.resolve('css-loader'), options: { url: false } },
+            { loader: require.resolve('sass-loader') }
           ],
         },
         liveReload,
