@@ -89,9 +89,9 @@ const nullstackTypescript = {
 };
 
 function server(env, argv) {
-  const dir = argv.input || '../..';
+  const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd();
   const icons = {};
-  const publicFiles = readdirSync(path.join(__dirname, dir, 'public'));
+  const publicFiles = readdirSync(path.join(dir, 'public'));
   for (const file of publicFiles) {
     if (file.startsWith('icon-')) {
       const size = file.split('x')[1].split('.')[0];
@@ -113,7 +113,7 @@ function server(env, argv) {
     mode: argv.environment,
     entry: './server.js',
     output: {
-      path: path.resolve(__dirname, dir + '/' + folder + '/'),
+      path: path.join(dir, folder),
       filename: 'server.js',
       libraryTarget: 'umd'
     },
@@ -199,7 +199,7 @@ function server(env, argv) {
 }
 
 function client(env, argv) {
-  const dir = argv.input || '../..';
+  const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd();
   const folder = argv.environment === 'development' ? '.development' : '.production';
   const devtool = argv.environment === 'development' ? 'inline-cheap-module-source-map' : false;
   const minimize = argv.environment !== 'development';
@@ -225,7 +225,7 @@ function client(env, argv) {
     entry: './client.js',
     output: {
       publicPath: `/`,
-      path: path.resolve(__dirname, dir + '/' + folder + '/'),
+      path: path.join(dir, folder),
       filename: 'client.js'
     },
     optimization: {
@@ -243,7 +243,6 @@ function client(env, argv) {
     stats: 'errors-only',
     module: {
       rules: [
-
         {
           test: /nullstack.js$/,
           loader: 'string-replace-loader',
