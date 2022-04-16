@@ -1,4 +1,4 @@
-import deserialize from '../shared/deserialize';
+import state from './state'
 import element from '../shared/element';
 import fragment from '../shared/fragment';
 import generateTree from '../shared/generateTree';
@@ -25,9 +25,9 @@ context.settings = settings;
 context.worker = worker;
 context.params = params;
 context.project = project;
-context.environment = window.environment;
+context.environment = state.environment;
 
-client.memory = deserialize(JSON.stringify(window.instances));
+client.memory = state.instances;
 
 const scope = client;
 scope.generateContext = generateContext;
@@ -73,7 +73,7 @@ export default class Nullstack {
         client.nextVirtualDom = null;
       }
       client.processLifecycleQueues();
-      delete window.context;
+      delete state.context;
     }, 0)
     return generateContext({});
   }

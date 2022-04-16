@@ -23,6 +23,11 @@ export default function ({ head, body, context, instances }) {
       serializableInstances[key] = value;
     }
   }
+  const state = {
+    page, environment, settings, worker, params, project,
+    instances: environment.mode === 'spa' ? {} : serializableInstances,
+    context: environment.mode === 'spa' ? {} : serializableContext
+  };
   return (`<!DOCTYPE html>
 <html${page.locale ? ` lang="${page.locale}"` : ''}>
   <head>
@@ -52,27 +57,12 @@ export default function ({ head, body, context, instances }) {
     ${page.schema ? `<script type="application/ld+json">${JSON.stringify(page.schema)}</script>` : ''}
     ${project.icons['180'] ? `<link rel="apple-touch-icon" sizes="180x180" href="${cdn(project.icons['180'])}">` : ''}
     <meta name="msapplication-TileColor" content="${project.backgroundColor || project.color}">
+    <meta name="nullstack" content="${encodeURI(sanitizeString(JSON.stringify(state)))}">
     ${head.split('<!--#-->').join('')}
+    <script src="${cdn(`/client.js?fingerprint=${environment.key}${timestamp}`)}" integrity="${integrities['client.js'] || ''}" defer crossorigin="anonymous"></script>
   </head>
   <body>
     ${environment.mode === 'spa' ? '<div id="application"></div>' : body}
-    <script async>
-      window.page = ${JSON.stringify(page)};
-      window.instances = ${sanitizeString(JSON.stringify(environment.mode === 'spa' ? {} : serializableInstances))};
-      window.environment = ${JSON.stringify(environment)};
-      window.settings = ${JSON.stringify(settings)};
-      window.worker = ${JSON.stringify(worker)};
-      window.params = ${JSON.stringify(params)};
-      window.project = ${JSON.stringify(project)};
-      window.context = ${JSON.stringify(environment.mode === 'spa' ? {} : serializableContext)};
-      document.addEventListener('DOMContentLoaded', () => {
-        const script = window.document.createElement('script');
-        script.src = '${cdn(`/client.js?fingerprint=${environment.key}${timestamp}`)}';
-        script.integrity = '${integrities['client.js'] || ''}';
-        script.crossOrigin = 'anonymous';
-        document.body.append(script);
-      });
-    </script>
   </body>
 </html>`)
 }

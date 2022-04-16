@@ -1,20 +1,21 @@
 import client from './client';
 import windowEvent from './windowEvent';
+import state from './state';
 
 const page = {
-  ...window.page,
+  ...state.page,
   event: 'nullstack.page'
 }
 
-delete window.page;
+delete state.page;
 
 const pageProxyHandler = {
   set(target, name, value) {
-    if(name === 'title') {
+    if (name === 'title') {
       document.title = value;
     }
     const result = Reflect.set(...arguments);
-    if(name === 'title') {
+    if (name === 'title') {
       windowEvent('page');
     }
     client.update();

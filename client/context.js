@@ -1,12 +1,11 @@
 import client from './client';
-import deserialize from '../shared/deserialize';
-import {generateObjectProxy} from './objectProxyHandler';
+import { generateObjectProxy } from './objectProxyHandler';
+import state from './state';
 
 const context = {};
 
-const memory = deserialize(JSON.stringify(window.context));
-for(const key of Object.keys(memory)) {
-  context[key] = generateObjectProxy(key, memory[key]);
+for (const key of Object.keys(state.context)) {
+  context[key] = generateObjectProxy(key, state.context[key]);
 }
 
 const contextProxyHandler = {
@@ -16,7 +15,7 @@ const contextProxyHandler = {
     return true;
   },
   get(target, name) {
-    if(name === '_isProxy') return true;
+    if (name === '_isProxy') return true;
     return target[name] === undefined ? context[name] : target[name];
   }
 }
