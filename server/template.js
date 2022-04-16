@@ -45,7 +45,7 @@ export default function ({ head, body, context, instances }) {
     ${page.locale ? `<meta property="og:locale" content="${page.locale}">` : ''}
     <link rel="shortcut icon" href="${cdn(project.favicon)}" type="image/png">
     <link rel="icon" href="${cdn(project.favicon)}" type="image/png">
-    <link rel="manifest" href="/manifest.json" integrity="${integrities['manifest.json'] || ''}">
+    <link rel="manifest" href="/manifest.webmanifest" integrity="${integrities['manifest.webmanifest'] || ''}">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     ${project.name ? `<meta name="application-name" content="${project.name}">` : ''}

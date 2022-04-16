@@ -96,7 +96,7 @@ module.exports = async function ssg({ output, cache }) {
   await copyRoute()
   await copyRoute(`/nullstack/${application.environment.key}/offline`);
   await copyRoute(`/404`);
-  await copyBundle(`/manifest.json`)
+  await copyBundle(`/manifest.webmanifest`)
   await copyBundle(`/service-worker.js`)
   await copyBundle('/robots.txt')
   await createSitemap()

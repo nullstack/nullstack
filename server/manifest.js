@@ -1,14 +1,14 @@
-import {existsSync, readFileSync} from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import path from 'path';
 import project from './project';
-import {generateIntegrity} from './integrities';
+import { generateIntegrity } from './integrities';
 import files from './files';
-import {cdn} from './links';
+import { cdn } from './links';
 
 export default function generateManifest(server) {
-  if(files['manifest.json']) return files['manifest.json'];
-  const file = path.join(__dirname, '../', 'public', 'manifest.json');
-  if(existsSync(file)) {
+  if (files['manifest.webmanifest']) return files['manifest.webmanifest'];
+  const file = path.join(__dirname, '../', 'public', 'manifest.webmanifest');
+  if (existsSync(file)) {
     return readFileSync(file, 'utf-8');
   }
   const json = {
@@ -20,10 +20,10 @@ export default function generateManifest(server) {
     "orientation": project.orientation,
     "scope": project.scope,
     "start_url": project.root,
-    "icons": [],    
+    "icons": [],
     "splash_pages": null
   }
-  for(const size in project.icons) {
+  for (const size in project.icons) {
     const icon = project.icons[size];
     json.icons.push({
       "src": cdn(icon),
@@ -33,9 +33,9 @@ export default function generateManifest(server) {
     });
   }
   const manifest = JSON.stringify(json);
-  if(!server.less) {
-    generateIntegrity('manifest.json', manifest);
+  if (!server.less) {
+    generateIntegrity('manifest.webmanifest', manifest);
   }
-  files['manifest.json'] = manifest;
+  files['manifest.webmanifest'] = manifest;
   return manifest;
 }
