@@ -9,6 +9,8 @@ environment.mode = process.env.NULLSTACK_ENVIRONMENT_MODE || 'ssr';
 
 environment.key = "{{NULLSTACK_ENVIRONMENT_KEY}}"
 
+environment.name = process.env.NULLSTACK_ENVIRONMENT_NAME || '';
+
 Object.freeze(environment);
 
 export default environment;

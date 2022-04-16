@@ -41,4 +41,9 @@ describe('ContextEnvironment', () => {
     expect(element).toBeTruthy();
   });
 
+  test('has a key with the environment name', async () => {
+    const element = await page.$('[data-name="test"]');
+    expect(element).toBeTruthy();
+  });
+
 });
