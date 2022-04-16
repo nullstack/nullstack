@@ -16,10 +16,7 @@ export * from './ServerContext'
 export * from './Settings'
 export * from './Worker'
 
-declare module 'nullstack' {
-  export default class Nullstack {
-    static start?(App: any): NullstackClientContext | NullstackServerContext
-    static use?(Plugin: NullstackPlugin)
-  }
-
+export default class Nullstack {
+  static start?(App: any): NullstackClientContext | NullstackServerContext
+  static use?(Plugin: NullstackPlugin)
 }
