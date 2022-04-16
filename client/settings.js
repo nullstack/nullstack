@@ -1,5 +1,7 @@
-const settings = {...window.settings};
-delete window.settings;
+import state from './state';
+
+const settings = { ...state.settings };
+delete state.settings;
 
 Object.freeze(settings);
 

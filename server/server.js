@@ -147,7 +147,7 @@ server.start = function () {
     response.send(generateFile('client.js', server));
   });
 
-  app.get(`/manifest.json`, (request, response) => {
+  app.get(`/manifest.webmanifest`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
     response.contentType('application/manifest+json');
     response.send(generateManifest(server));
@@ -209,7 +209,7 @@ server.start = function () {
       console.log('\x1b[31mServer port is not defined!\x1b[0m');
       process.exit();
     }
-  
+
     server.listen(server.port, () => {
       const name = project.name ? project.name : 'Nullstack'
       if (environment.development) {

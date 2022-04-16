@@ -1,6 +1,8 @@
-const project = {...window.project};
+import state from './state'
 
-delete window.project;
+const project = { ...state.project };
+
+delete state.project;
 
 Object.freeze(project);
 
