@@ -1,11 +1,11 @@
-type NullstackLogo = {
+type NullstackLogoProps = {
   light?: boolean
   monotone?: boolean
   duotone?: boolean
   height?: string | number
 }
 
-export default function Logo({ light, height, monotone }: NullstackLogo) {
+export default function Logo({ light, height, monotone }: NullstackLogoProps) {
   const themeColor = light ? '#fff' : '#2d3748';
   const accentColor = monotone ? themeColor : '#d22365';
   return (
