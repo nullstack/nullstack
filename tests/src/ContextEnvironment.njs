@@ -1,8 +1,8 @@
 import Nullstack from 'nullstack';
 
 class ContextEnvironment extends Nullstack {
-  
-  render({environment}) {
+
+  render({ environment }) {
     return (
       <div>
         <div data-environment={!!environment} />
@@ -11,6 +11,7 @@ class ContextEnvironment extends Nullstack {
         <div data-development={environment.development.toString()} />
         <div data-production={environment.production.toString()} />
         <div data-static={(environment.mode === 'ssg').toString()} />
+        <div data-name={environment.name} />
         <div data-key={environment.key} />
       </div>
     )

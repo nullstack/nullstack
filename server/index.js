@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import './dotenv';
 import { normalize } from 'path';
 import element from '../shared/element';
 import fragment from '../shared/fragment';
