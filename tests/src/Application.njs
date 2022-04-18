@@ -27,7 +27,6 @@ import NestedProxy from './NestedProxy';
 import ParentComponent from './ParentComponent';
 import PersistentComponent from './PersistentComponent';
 import PluginAttributes from './PluginAttributes';
-import Polyfill from './Polyfill';
 import PublicServerFunctions from './PublicServerFunctions.njs';
 import PureComponents from './PureComponents';
 import WebpackCustomPlugin from './WebpackCustomPlugin';
@@ -110,7 +109,6 @@ class Application extends Nullstack {
         <WebpackCustomPlugin route="/webpack-custom-plugin" />
         <ComponentTernary route="/component-ternary" />
         <AnchorModifiers route="/anchor-modifiers" />
-        <Polyfill route="/polyfill" />
         <ErrorPage route="*" />
       </main>
     )
