@@ -1,12 +1,9 @@
 const path = require('path');
-const glob = require('glob');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
-const PurgecssPlugin = require('purgecss-webpack-plugin');
 const crypto = require("crypto");
 const { readdirSync } = require('fs');
-const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 const buildKey = crypto.randomBytes(20).toString('hex');
 
@@ -28,7 +25,7 @@ const babel = {
     extensions: ['.njs', '.js', '.nts', '.ts']
   },
   use: {
-    loader: 'babel-loader',
+    loader: require.resolve('babel-loader'),
     options: {
       "presets": [
         ["@babel/preset-env", { "targets": { node: "10" } }]
@@ -47,7 +44,7 @@ const nullstackJavascript = {
     extensions: ['.njs', '.js', '.nts', '.ts']
   },
   use: {
-    loader: 'babel-loader',
+    loader: require.resolve('babel-loader'),
     options: {
       "presets": [
         ["@babel/preset-env", { "targets": { node: "10" } }],
@@ -72,7 +69,7 @@ const nullstackTypescript = {
     extensions: ['.njs', '.js', '.nts', '.ts']
   },
   use: {
-    loader: 'babel-loader',
+    loader: require.resolve('babel-loader'),
     options: {
       "presets": [
         ["@babel/preset-env", { "targets": { node: "10" } }],
@@ -91,9 +88,9 @@ const nullstackTypescript = {
 };
 
 function server(env, argv) {
-  const dir = argv.input || '../..';
+  const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd();
   const icons = {};
-  const publicFiles = readdirSync(path.join(__dirname, dir, 'public'));
+  const publicFiles = readdirSync(path.join(dir, 'public'));
   for (const file of publicFiles) {
     if (file.startsWith('icon-')) {
       const size = file.split('x')[1].split('.')[0];
@@ -115,7 +112,7 @@ function server(env, argv) {
     mode: argv.environment,
     entry: './server.js',
     output: {
-      path: path.resolve(__dirname, dir + '/' + folder + '/'),
+      path: path.join(dir, folder),
       filename: 'server.js',
       libraryTarget: 'umd'
     },
@@ -138,7 +135,7 @@ function server(env, argv) {
       rules: [
         {
           test: /nullstack.js$/,
-          loader: 'string-replace-loader',
+          loader: require.resolve('string-replace-loader'),
           options: {
             multiple: [
               { search: '{{NULLSTACK_ENVIRONMENT_NAME}}', replace: 'server', flags: 'ig' }
@@ -147,7 +144,7 @@ function server(env, argv) {
         },
         {
           test: /environment.js$/,
-          loader: 'string-replace-loader',
+          loader: require.resolve('string-replace-loader'),
           options: {
             multiple: [
               { search: '{{NULLSTACK_ENVIRONMENT_KEY}}', replace: buildKey, flags: 'ig' }
@@ -156,7 +153,7 @@ function server(env, argv) {
         },
         {
           test: /project.js$/,
-          loader: 'string-replace-loader',
+          loader: require.resolve('string-replace-loader'),
           options: {
             multiple: [
               { search: '{{NULLSTACK_PROJECT_ICONS}}', replace: JSON.stringify(icons), flags: 'ig' }
@@ -176,7 +173,7 @@ function server(env, argv) {
         {
           test: /\.s?[ac]ss$/,
           use: [
-            { loader: 'ignore-loader' }
+            { loader: require.resolve('ignore-loader') }
           ]
         },
         nullstackTypescript,
@@ -201,7 +198,7 @@ function server(env, argv) {
 }
 
 function client(env, argv) {
-  const dir = argv.input || '../..';
+  const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd();
   const folder = argv.environment === 'development' ? '.development' : '.production';
   const devtool = argv.environment === 'development' ? 'inline-cheap-module-source-map' : false;
   const minimize = argv.environment !== 'development';
@@ -210,32 +207,21 @@ function client(env, argv) {
     liveReload = {
       test: /liveReload.js$/,
       use: [
-        { loader: 'ignore-loader' }
+        { loader: require.resolve('ignore-loader') }
       ]
     }
   }
   const plugins = [
     new MiniCssExtractPlugin({
       filename: "client.css"
-    }),
-    new NodePolyfillPlugin({
-      excludeAliases: ["console"]
     })
   ]
-  if (argv.environment === 'production') {
-    plugins.push(new PurgecssPlugin({
-      paths: glob.sync(`src/**/*`, { nodir: true }),
-      content: ['./**/*.njs'],
-      safelist: ['script', 'body', 'html', 'style'],
-      defaultExtractor: content => content.match(/[^<>"'`\s]*[^<>"'`\s:]/g) || [],
-    }));
-  }
   return {
     mode: argv.environment,
     entry: './client.js',
     output: {
       publicPath: `/`,
-      path: path.resolve(__dirname, dir + '/' + folder + '/'),
+      path: path.join(dir, folder),
       filename: 'client.js'
     },
     optimization: {
@@ -253,10 +239,9 @@ function client(env, argv) {
     stats: 'errors-only',
     module: {
       rules: [
-
         {
           test: /nullstack.js$/,
-          loader: 'string-replace-loader',
+          loader: require.resolve('string-replace-loader'),
           options: {
             multiple: [
               { search: '{{NULLSTACK_ENVIRONMENT_NAME}}', replace: 'client', flags: 'ig' }
@@ -281,8 +266,8 @@ function client(env, argv) {
           test: /\.s?[ac]ss$/,
           use: [
             MiniCssExtractPlugin.loader,
-            { loader: 'css-loader', options: { url: false } },
-            { loader: 'sass-loader' }
+            { loader: require.resolve('css-loader'), options: { url: false } },
+            { loader: require.resolve('sass-loader') }
           ],
         },
         liveReload,

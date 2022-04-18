@@ -1,5 +1,5 @@
-const environment = {...window.environment, client: true, server: false};
-//delete window.environment;
+import state from './state';
+const environment = { ...state.environment, client: true, server: false };
 
 Object.freeze(environment);
 

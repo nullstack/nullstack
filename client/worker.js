@@ -1,9 +1,10 @@
 import client from './client';
 import environment from './environment';
 import router from './router';
+import state from './state'
 
-const worker = { ...window.worker };
-delete window.worker;
+const worker = { ...state.worker };
+delete state.worker;
 
 const emptyQueue = Object.freeze([]);
 

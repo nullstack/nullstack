@@ -2,7 +2,7 @@ function install(event) {
   const urls = [
     '/',
     ...self.context.worker.preload,
-    '/manifest.json',
+    '/manifest.webmanifest',
     `/client.css?fingerprint=${self.context.environment.key}`,
     `{{SCRIPTS}}`
   ];

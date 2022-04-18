@@ -28,7 +28,7 @@ module.exports = async function spa({ output, cache }) {
   await copy('/', '/index.html')
   console.log(` ⚙️  /.production/`)
   copySync(`${dir}/.production`, path, { filter })
-  await copy(`/manifest.json`)
+  await copy(`/manifest.webmanifest`)
   await copy(`/service-worker.js`)
   await copy('/robots.txt')
   console.log()

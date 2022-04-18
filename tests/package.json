@@ -9,15 +9,14 @@
     "nullstack": "*",
     "puppeteer": "^5.5.0",
     "jest-puppeteer": "^6.0.3",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^3.3.12",
+    "glob": "^7.1.7",
+    "purgecss-webpack-plugin": "^4.1.3"
   },
   "scripts": {
-    "start": "npx nullstack start --input=./tests --port=6969",
-    "build": "npx nullstack build --input=./tests --mode=ssr",
+    "start": "npx nullstack start --input=./tests --port=6969 --env=test",
+    "build": "npx nullstack build --input=./tests --mode=ssr --env=test",
     "test": "npm run build && jest",
     "script": "node src/scripts/run.js"
-  },
-  "dependencies": {
-    "glob": "^7.1.7"
   }
 }

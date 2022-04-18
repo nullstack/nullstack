@@ -3,7 +3,8 @@ const parse = require('@babel/parser').parse;
 const traverse = require("@babel/traverse").default;
 
 module.exports = function removeStaticFromClient(source) {
-  const hash = crypto.createHash('md5').update(source).digest("hex");
+  const id = this.resourcePath.replace(this.rootContext, '')
+  const hash = crypto.createHash('md5').update(id).digest("hex");
   let hashPosition;
   const injections = {};
   const positions = [];
