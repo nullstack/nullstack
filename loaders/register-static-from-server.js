@@ -4,7 +4,9 @@ const traverse = require("@babel/traverse").default;
 
 module.exports = function (source) {
   let hasClass = false;
-  const hash = crypto.createHash('md5').update(source).digest("hex");
+  const legacyHash = crypto.createHash('md5').update(source).digest("hex");
+  const id = this.resourcePath.replace(this.rootContext, '')
+  const hash = crypto.createHash('md5').update(id).digest("hex");
   let klassName;
   let klassEnd;
   const methodNames = [];
@@ -32,7 +34,9 @@ module.exports = function (source) {
   output += source.substring(klassEnd);
   for (const methodName of methodNames) {
     output += `\nNullstack.registry["${hash}.${methodName}"] = ${klassName}.${methodName};`
+    output += `\nNullstack.registry["${legacyHash}.${methodName}"] = ${klassName}.${methodName};`
   }
   output += `\nNullstack.registry["${hash}"] = ${klassName};`
+  output += `\nNullstack.registry["${legacyHash}"] = ${klassName};`
   return output;
 }

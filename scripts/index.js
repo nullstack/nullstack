@@ -6,7 +6,10 @@ let lastTrace = '';
 let compilingIndex = 1;
 
 const webpack = require('webpack');
-const config = require('../webpack.config');
+const path = require('path');
+const { existsSync } = require('fs');
+const customConfig = path.resolve(process.cwd(), './webpack.config.js');
+const config = existsSync(customConfig) ? require(customConfig) : require('../webpack.config');
 
 const buildModes = ['ssg', 'spa', 'ssr']
 
@@ -47,20 +50,26 @@ function logTrace(stats, showCompiling) {
   lastTrace = '';
 }
 
-function start({ input, port }) {
+function start({ input, port, env }) {
   const environment = 'development';
   const compiler = getCompiler({ environment, input });
   if (port) {
     process.env['NULLSTACK_SERVER_PORT'] = port;
+  }
+  if (env) {
+    process.env['NULLSTACK_ENVIRONMENT_NAME'] = env;
   }
   console.log(` 🚀️ Starting your application in ${environment} mode...`);
   console.log();
   compiler.watch({}, (error, stats) => logTrace(stats, true));
 }
 
-function build({ input, output, cache, mode = 'ssr' }) {
+function build({ input, output, cache, env, mode = 'ssr' }) {
   const environment = 'production';
   const compiler = getCompiler({ environment, input, cache });
+  if (env) {
+    process.env['NULLSTACK_ENVIRONMENT_NAME'] = env;
+  }
   console.log(` 🚀️ Building your application in ${mode} mode...`);
   compiler.run((error, stats) => {
     logTrace(stats, false);
@@ -75,6 +84,7 @@ program
   .description('Start application in development environment')
   .option('-p, --port <port>', 'Port number to run the server')
   .option('-i, --input <input>', 'Path to project that will be started')
+  .option('-e, --env <name>', 'Name of the environment file that should be loaded')
   .helpOption('-h, --help', 'Learn more about this command')
   .action(start)
 
@@ -86,6 +96,7 @@ program
   .option('-i, --input <input>', 'Path to project that will be built')
   .option('-o, --output <output>', 'Path to build output folder')
   .option('-c, --cache', 'Cache build results in .production folder')
+  .option('-e, --env <name>', 'Name of the environment file that should be loaded')
   .helpOption('-h, --help', 'Learn more about this command')
   .action(build)
 

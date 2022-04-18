@@ -2,7 +2,8 @@ import router from './router';
 import getQueryStringParams from '../shared/getQueryStringParams';
 import seserializeParam from '../shared/serializeParam';
 import serializeSearch from '../shared/serializeSearch';
-import segments, {resetSegments} from './segments';
+import segments, { resetSegments } from './segments';
+import state from './state';
 
 const paramsProxyHandler = {
   set(target, name, value) {
@@ -13,22 +14,22 @@ const paramsProxyHandler = {
     return true;
   },
   get(target, name) {
-    if(target[name] === false) return false;
-    if(segments[name] === false) return false;
+    if (target[name] === false) return false;
+    if (segments[name] === false) return false;
     return target[name] || segments[name] || '';
   }
 }
 
-const params = {...window.params};
+const params = { ...state.params };
 
-delete window.params;
+delete state.params;
 
 const proxy = new Proxy(params, paramsProxyHandler);
 
 export function updateParams(query) {
   resetSegments();
   const delta = getQueryStringParams(query);
-  for(const key of Object.keys({...delta, ...params})) {
+  for (const key of Object.keys({ ...delta, ...params })) {
     params[key] = delta[key];
   }
   return proxy;
