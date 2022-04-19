@@ -107,7 +107,7 @@ function server(env, argv) {
       nodeArgs: ['--enable-source-maps'],
       quiet: true
     })
-  ]) : undefined;
+  ]) : [];
   return {
     mode: argv.environment,
     entry: './server.js',
