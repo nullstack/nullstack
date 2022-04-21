@@ -57,7 +57,7 @@ export default function ({ head, body, context, instances }) {
     ${page.schema ? `<script type="application/ld+json">${JSON.stringify(page.schema)}</script>` : ''}
     ${project.icons['180'] ? `<link rel="apple-touch-icon" sizes="180x180" href="${cdn(project.icons['180'])}">` : ''}
     <meta name="msapplication-TileColor" content="${project.backgroundColor || project.color}">
-    <meta name="nullstack" content="${encodeURI(sanitizeString(JSON.stringify(state)))}">
+    <meta name="nullstack" content="${encodeURIComponent(sanitizeString(JSON.stringify(state)))}">
     ${head.split('<!--#-->').join('')}
     <script src="${cdn(`/client.js?fingerprint=${environment.key}${timestamp}`)}" integrity="${integrities['client.js'] || ''}" defer crossorigin="anonymous"></script>
   </head>
