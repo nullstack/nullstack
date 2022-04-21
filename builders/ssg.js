@@ -32,16 +32,15 @@ module.exports = async function ssg({ output, cache }) {
       writeFileSync(`${target}.html`, content)
     }
 
-    const instancesLookup = 'window.instances = ';
-    const instances = content.split("\n").find((line) => line.indexOf(instancesLookup) > -1).split(instancesLookup)[1].slice(0, -1);
+    const stateLookup = '<meta name="nullstack" content="';
+    const state = content.split("\n").find((line) => line.indexOf(stateLookup) > -1).split(stateLookup)[1].slice(0, -2);
+    const { instances, page } = JSON.parse(decodeURIComponent(state));
 
-    const pageLookup = 'window.page = ';
-    const page = content.split("\n").find((line) => line.indexOf(pageLookup) > -1).split(pageLookup)[1].slice(0, -1);
     if (url !== `/nullstack/${application.environment.key}/offline` && url !== '/404') {
-      pages[url] = JSON.parse(page);
+      pages[url] = page;
     }
 
-    const json = `{"instances": ${instances}, "page": ${page}}`;
+    const json = JSON.stringify({ instances, page });
     writeFileSync(`${target}/index.json`, json);
 
     const pattern = /href="(.*?)"/g;
