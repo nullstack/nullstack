@@ -34,7 +34,7 @@ module.exports = async function ssg({ output, cache }) {
 
     const stateLookup = '<meta name="nullstack" content="';
     const state = content.split("\n").find((line) => line.indexOf(stateLookup) > -1).split(stateLookup)[1].slice(0, -2);
-    const { instances, page } = JSON.parse(decodeURI(state));
+    const { instances, page } = JSON.parse(decodeURIComponent(state));
 
     if (url !== `/nullstack/${application.environment.key}/offline` && url !== '/404') {
       pages[url] = page;
