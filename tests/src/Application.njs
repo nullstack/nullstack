@@ -44,6 +44,7 @@ import UnderscoredAttributes from './UnderscoredAttributes';
 import Vunerability from './Vunerability';
 import WindowDependency from './WindowDependency';
 import WorkerVerbs from './WorkerVerbs';
+import MetatagState from './MetatagState';
 
 class Application extends Nullstack {
 
@@ -109,6 +110,7 @@ class Application extends Nullstack {
         <WebpackCustomPlugin route="/webpack-custom-plugin" />
         <ComponentTernary route="/component-ternary" />
         <AnchorModifiers route="/anchor-modifiers" />
+        <MetatagState route="/metatag-state" />
         <ErrorPage route="*" />
       </main>
     )
