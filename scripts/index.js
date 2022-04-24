@@ -50,7 +50,7 @@ function logTrace(stats, showCompiling) {
   lastTrace = '';
 }
 
-function start({ input, port, env }) {
+function start({ input, port, env, output, mode = 'ssr' }) {
   const environment = 'development';
   const compiler = getCompiler({ environment, input });
   if (port) {
@@ -61,7 +61,12 @@ function start({ input, port, env }) {
   }
   console.log(` 🚀️ Starting your application in ${environment} mode...`);
   console.log();
-  compiler.watch({}, (error, stats) => logTrace(stats, true));
+  compiler.watch({}, (error, stats) => {
+    logTrace(stats, true)
+    if (!stats.hasErrors() && mode !== 'ssr') {
+      require(`../builders/${mode}`)({ output, environment });
+    };
+  });
 }
 
 function build({ input, output, cache, env, mode = 'ssr' }) {
@@ -74,7 +79,7 @@ function build({ input, output, cache, env, mode = 'ssr' }) {
   compiler.run((error, stats) => {
     logTrace(stats, false);
     if (stats.hasErrors()) process.exit(1);
-    require(`../builders/${mode}`)({ output, cache });
+    require(`../builders/${mode}`)({ output, cache, environment });
   });
 }
 
@@ -82,8 +87,10 @@ program
   .command('start')
   .alias('s')
   .description('Start application in development environment')
+  .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles').choices(buildModes))
   .option('-p, --port <port>', 'Port number to run the server')
   .option('-i, --input <input>', 'Path to project that will be started')
+  .option('-o, --output <output>', 'Path to build output folder')
   .option('-e, --env <name>', 'Name of the environment file that should be loaded')
   .helpOption('-h, --help', 'Learn more about this command')
   .action(start)

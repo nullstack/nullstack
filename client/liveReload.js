@@ -1,3 +1,5 @@
+import worker from './worker'
+
 let shouldReloadNext = false;
 let timer = null;
 
@@ -13,7 +15,8 @@ function reload() {
 }
 
 function liveReload() {
-  const socket = new WebSocket(`${location.protocol.replace('http', 'ws')}//${location.host}`);
+  const url = worker.api ? `${worker.api.replace('http', 'ws')}` : `${location.protocol.replace('http', 'ws')}//${location.host}`
+  const socket = new WebSocket(url);
   socket.addEventListener('open', reload);
   socket.addEventListener('close', liveReload);
 }

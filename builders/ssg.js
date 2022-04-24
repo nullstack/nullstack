@@ -1,9 +1,9 @@
-module.exports = async function ssg({ output, cache }) {
+module.exports = async function ssg({ output, cache, environment }) {
   const folder = output || 'ssg';
   process.env.NULLSTACK_ENVIRONMENT_MODE = 'ssg';
 
   const dir = process.cwd();
-  const application = require(`${dir}/.production/server`).default;
+  const application = require(`${dir}/.${environment}/server`).default;
   const { resolve } = require('path')
   const { existsSync, mkdirSync, writeFileSync, copySync, removeSync } = require('fs-extra');
 
@@ -90,8 +90,8 @@ module.exports = async function ssg({ output, cache }) {
   mkdirSync(path())
   console.log(` ⚙️  /public/`)
   copySync(path(`../public`), path());
-  console.log(` ⚙️  /.production/`)
-  copySync(path(`../.production`), path(), { filter });
+  console.log(` ⚙️  /.${environment}/`)
+  copySync(path(`../.${environment}`), path(), { filter });
   await copyRoute()
   await copyRoute(`/nullstack/${application.environment.key}/offline`);
   await copyRoute(`/404`);
