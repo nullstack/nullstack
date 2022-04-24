@@ -105,7 +105,7 @@ module.exports = async function ssg({ output, cache, environment }) {
 
   if (cache) {
     console.log('Storing cache...');
-  } else {
+  } else if (environment === 'production') {
     process.exit();
   }
 }
