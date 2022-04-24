@@ -45,6 +45,8 @@ import Vunerability from './Vunerability';
 import WindowDependency from './WindowDependency';
 import WorkerVerbs from './WorkerVerbs';
 import MetatagState from './MetatagState';
+import TypeScriptExtension from './TypeScriptExtension';
+import JavaScriptExtension from './JavaScriptExtension';
 
 class Application extends Nullstack {
 
@@ -111,6 +113,8 @@ class Application extends Nullstack {
         <ComponentTernary route="/component-ternary" />
         <AnchorModifiers route="/anchor-modifiers" />
         <MetatagState route="/metatag-state" />
+        <JavaScriptExtension route="/javascript-extension" />
+        <TypeScriptExtension route="/typescript-extension" generic />
         <ErrorPage route="*" />
       </main>
     )
