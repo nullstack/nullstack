@@ -1,9 +1,9 @@
-module.exports = async function spa({ output, cache }) {
+module.exports = async function spa({ output, cache, environment }) {
   const folder = output || 'spa';
   process.env.NULLSTACK_ENVIRONMENT_MODE = 'spa';
 
   const dir = process.cwd();
-  const application = require(`${dir}/.production/server`).default
+  const application = require(`${dir}/.${environment}/server`).default
   const { existsSync, mkdirSync, writeFileSync, copySync, removeSync } = require('fs-extra');
   const path = `${dir}/${folder}`;
 
@@ -26,8 +26,8 @@ module.exports = async function spa({ output, cache }) {
   console.log(` ⚙️  /public/`)
   copySync(`${dir}/public`, path);
   await copy('/', '/index.html')
-  console.log(` ⚙️  /.production/`)
-  copySync(`${dir}/.production`, path, { filter })
+  console.log(` ⚙️  /.${environment}/`)
+  copySync(`${dir}/.${environment}`, path, { filter })
   await copy(`/manifest.webmanifest`)
   await copy(`/service-worker.js`)
   await copy('/robots.txt')
@@ -37,7 +37,7 @@ module.exports = async function spa({ output, cache }) {
 
   if (cache) {
     console.log('Storing cache...');
-  } else {
+  } else if (environment === 'production') {
     process.exit();
   }
 }

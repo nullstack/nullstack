@@ -16,7 +16,8 @@ export * from './ServerContext'
 export * from './Settings'
 export * from './Worker'
 
-export default class Nullstack {
+export default class Nullstack<Type = any> {
+  constructor(props?: Type)
   static start?(App: any): NullstackClientContext | NullstackServerContext
   static use?(Plugin: NullstackPlugin)
 }
