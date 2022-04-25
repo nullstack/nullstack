@@ -24,18 +24,27 @@ function cacheFactory(args, folder, name) {
   }
 }
 
-const babel = {
+function terserMinimizer(file, _sourceMap) {
+  return require('@swc/core').minify(file, {
+    keepClassnames: true,
+    keepFnames: true
+  })
+}
+
+const swc = {
   test: /\.js$/,
   use: {
-    loader: require.resolve('babel-loader'),
+    loader: require.resolve('swc-loader'),
     options: {
-      "presets": [
-        ["@babel/preset-env", { "targets": { node: "10" } }]
-      ],
-      "plugins": [
-        "@babel/plugin-proposal-export-default-from",
-        "@babel/plugin-proposal-class-properties"
-      ]
+      jsc: {
+        parser: {
+          syntax: "ecmascript",
+          exportDefaultFrom: true
+        }
+      },
+      env: {
+        targets: { node: "10" }
+      }
     }
   }
 };
@@ -43,21 +52,25 @@ const babel = {
 const nullstackJavascript = {
   test: /\.(njs|nts|jsx|tsx)$/,
   use: {
-    loader: require.resolve('babel-loader'),
+    loader: require.resolve('swc-loader'),
     options: {
-      "presets": [
-        ["@babel/preset-env", { "targets": { node: "10" } }],
-        "@babel/preset-react",
-      ],
-      "plugins": [
-        "@babel/plugin-proposal-export-default-from",
-        "@babel/plugin-proposal-class-properties",
-        ["@babel/plugin-transform-react-jsx", {
-          "pragma": "Nullstack.element",
-          "pragmaFrag": "Nullstack.fragment",
-          "throwIfNamespace": false
-        }]
-      ]
+      jsc: {
+        parser: {
+          syntax: "ecmascript",
+          exportDefaultFrom: true,
+          jsx: true
+        },
+        transform: {
+          react: {
+            pragma: "Nullstack.element",
+            pragmaFrag: "Nullstack.fragment",
+            throwIfNamespace: true
+          }
+        }
+      },
+      env: {
+        targets: { node: "10" }
+      }
     }
   }
 };
@@ -65,20 +78,25 @@ const nullstackJavascript = {
 const nullstackTypescript = {
   test: /\.(nts|tsx)$/,
   use: {
-    loader: require.resolve('babel-loader'),
+    loader: require.resolve('swc-loader'),
     options: {
-      "presets": [
-        ["@babel/preset-env", { "targets": { node: "10" } }],
-        "@babel/preset-react",
-      ],
-      "plugins": [
-        ["@babel/plugin-transform-typescript", { isTSX: true, allExtensions: true, tsxPragma: "Nullstack.element", tsxPragmaFrag: "Nullstack.fragment" }],
-        ["@babel/plugin-transform-react-jsx", {
-          "pragma": "Nullstack.element",
-          "pragmaFrag": "Nullstack.fragment",
-          "throwIfNamespace": false
-        }]
-      ]
+      jsc: {
+        parser: {
+          syntax: "typescript",
+          exportDefaultFrom: true,
+          tsx: true
+        },
+        transform: {
+          react: {
+            pragma: "Nullstack.element",
+            pragmaFrag: "Nullstack.fragment",
+            throwIfNamespace: true
+          }
+        }
+      },
+      env: {
+        targets: { node: "10" }
+      }
     }
   }
 };
@@ -120,10 +138,7 @@ function server(env, argv) {
       minimize: minimize,
       minimizer: [
         new TerserPlugin({
-          terserOptions: {
-            //keep_classnames: true,
-            keep_fnames: true
-          },
+          minify: terserMinimizer,
           // workaround: disable parallel to allow caching server
           parallel: argv.cache ? false : require('os').cpus().length - 1
         })
@@ -169,7 +184,7 @@ function server(env, argv) {
             ]
           }
         },
-        babel,
+        swc,
         nullstackJavascript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
@@ -246,10 +261,7 @@ function client(env, argv) {
       minimize: minimize,
       minimizer: [
         new TerserPlugin({
-          terserOptions: {
-            //keep_classnames: true,
-            keep_fnames: true
-          }
+          minify: terserMinimizer
         })
       ]
     },
@@ -269,7 +281,7 @@ function client(env, argv) {
             ]
           }
         },
-        babel,
+        swc,
         nullstackJavascript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
