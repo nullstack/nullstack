@@ -29,6 +29,13 @@ export type NullstackRouter = {
    * 
    * https://nullstack.app/routes-and-params#custom-events
    */
-  event: string
+  event: string,
+
+  /**
+   * The previous route including params
+   * @example `/?origin=social_media`
+   * @default null
+   */
+  previous: string
 
 };
