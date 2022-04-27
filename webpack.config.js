@@ -7,6 +7,11 @@ const { readdirSync } = require('fs');
 
 const buildKey = crypto.randomBytes(20).toString('hex');
 
+function getLoader(loader) {
+  const loaders = path.resolve('./node_modules/nullstack/loaders');
+  return path.join(loaders, loader);
+}
+
 function cacheFactory(args, folder, name) {
   if (args.cache || args.environment === 'development') {
     return {
@@ -19,70 +24,79 @@ function cacheFactory(args, folder, name) {
   }
 }
 
-const babel = {
+function terserMinimizer(file, _sourceMap) {
+  return require('@swc/core').minify(file, {
+    keepClassnames: true,
+    keepFnames: true
+  })
+}
+
+const swc = {
   test: /\.js$/,
-  resolve: {
-    extensions: ['.njs', '.js', '.nts', '.ts', '.tsx', '.jsx']
-  },
   use: {
-    loader: require.resolve('babel-loader'),
+    loader: require.resolve('swc-loader'),
     options: {
-      "presets": [
-        ["@babel/preset-env", { "targets": { node: "10" } }]
-      ],
-      "plugins": [
-        "@babel/plugin-proposal-export-default-from",
-        "@babel/plugin-proposal-class-properties"
-      ]
+      jsc: {
+        parser: {
+          syntax: "ecmascript",
+          exportDefaultFrom: true
+        }
+      },
+      env: {
+        targets: { node: "10" }
+      }
     }
   }
 };
 
 const nullstackJavascript = {
   test: /\.(njs|nts|jsx|tsx)$/,
-  resolve: {
-    extensions: ['.njs', '.js', '.nts', '.ts', '.tsx', '.jsx']
-  },
   use: {
-    loader: require.resolve('babel-loader'),
+    loader: require.resolve('swc-loader'),
     options: {
-      "presets": [
-        ["@babel/preset-env", { "targets": { node: "10" } }],
-        "@babel/preset-react",
-      ],
-      "plugins": [
-        "@babel/plugin-proposal-export-default-from",
-        "@babel/plugin-proposal-class-properties",
-        ["@babel/plugin-transform-react-jsx", {
-          "pragma": "Nullstack.element",
-          "pragmaFrag": "Nullstack.fragment",
-          "throwIfNamespace": false
-        }]
-      ]
+      jsc: {
+        parser: {
+          syntax: "ecmascript",
+          exportDefaultFrom: true,
+          jsx: true
+        },
+        transform: {
+          react: {
+            pragma: "Nullstack.element",
+            pragmaFrag: "Nullstack.fragment",
+            throwIfNamespace: true
+          }
+        }
+      },
+      env: {
+        targets: { node: "10" }
+      }
     }
   }
 };
 
 const nullstackTypescript = {
   test: /\.(nts|tsx)$/,
-  resolve: {
-    extensions: ['.njs', '.js', '.nts', '.ts', '.tsx', '.jsx']
-  },
   use: {
-    loader: require.resolve('babel-loader'),
+    loader: require.resolve('swc-loader'),
     options: {
-      "presets": [
-        ["@babel/preset-env", { "targets": { node: "10" } }],
-        "@babel/preset-react",
-      ],
-      "plugins": [
-        ["@babel/plugin-transform-typescript", { isTSX: true, allExtensions: true, tsxPragma: "Nullstack.element", tsxPragmaFrag: "Nullstack.fragment" }],
-        ["@babel/plugin-transform-react-jsx", {
-          "pragma": "Nullstack.element",
-          "pragmaFrag": "Nullstack.fragment",
-          "throwIfNamespace": false
-        }]
-      ]
+      jsc: {
+        parser: {
+          syntax: "typescript",
+          exportDefaultFrom: true,
+          tsx: true
+        },
+        transform: {
+          react: {
+            pragma: "Nullstack.element",
+            pragmaFrag: "Nullstack.fragment",
+            throwIfNamespace: true
+          }
+        }
+      },
+      env: {
+        targets: { node: "10" }
+      }
     }
   }
 };
@@ -97,10 +111,11 @@ function server(env, argv) {
       icons[size] = '/' + file;
     }
   }
-  const folder = argv.environment === 'development' ? '.development' : '.production';
-  const devtool = argv.environment === 'development' ? 'inline-cheap-module-source-map' : false;
-  const minimize = argv.environment !== 'development';
-  const plugins = argv.environment === 'development' ? ([
+  const isDev = argv.environment === 'development';
+  const folder = isDev ? '.development' : '.production';
+  const devtool = isDev ? 'inline-cheap-module-source-map' : false;
+  const minimize = !isDev;
+  const plugins = isDev ? ([
     new NodemonPlugin({
       watch: path.resolve('./.development'),
       script: './.development/server.js',
@@ -116,14 +131,14 @@ function server(env, argv) {
       filename: 'server.js',
       libraryTarget: 'umd'
     },
+    resolve: {
+      extensions: ['.njs', '.js', '.nts', '.ts', '.tsx', '.jsx']
+    },
     optimization: {
       minimize: minimize,
       minimizer: [
         new TerserPlugin({
-          terserOptions: {
-            //keep_classnames: true,
-            keep_fnames: true
-          },
+          minify: terserMinimizer,
           // workaround: disable parallel to allow caching server
           parallel: argv.cache ? false : require('os').cpus().length - 1
         })
@@ -135,56 +150,70 @@ function server(env, argv) {
       rules: [
         {
           test: /nullstack.js$/,
-          loader: require.resolve('string-replace-loader'),
+          loader: getLoader('string-replace.js'),
           options: {
             multiple: [
-              { search: '{{NULLSTACK_ENVIRONMENT_NAME}}', replace: 'server', flags: 'ig' }
+              {
+                search: /{{NULLSTACK_ENVIRONMENT_NAME}}/ig,
+                replace: 'server'
+              }
             ]
           }
         },
         {
           test: /environment.js$/,
-          loader: require.resolve('string-replace-loader'),
+          loader: getLoader('string-replace.js'),
           options: {
             multiple: [
-              { search: '{{NULLSTACK_ENVIRONMENT_KEY}}', replace: buildKey, flags: 'ig' }
+              {
+                search: /{{NULLSTACK_ENVIRONMENT_KEY}}/ig,
+                replace: buildKey
+              }
             ]
           }
         },
         {
           test: /project.js$/,
-          loader: require.resolve('string-replace-loader'),
+          loader: getLoader('string-replace.js'),
           options: {
             multiple: [
-              { search: '{{NULLSTACK_PROJECT_ICONS}}', replace: JSON.stringify(icons), flags: 'ig' }
+              {
+                search: /{{NULLSTACK_PROJECT_ICONS}}/ig,
+                replace: JSON.stringify(icons)
+              }
             ]
           }
         },
-        babel,
+        swc,
         nullstackJavascript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/inject-nullstack.js'),
+          loader: getLoader('inject-nullstack.js'),
         },
         {
           test: /\.(njs|nts|jsx|tsx)$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/register-static-from-server.js'),
+          loader: getLoader('register-static-from-server.js'),
         },
         {
           test: /\.s?[ac]ss$/,
           use: [
-            { loader: require.resolve('ignore-loader') }
+            { loader: getLoader('ignore-import.js') }
           ]
         },
         nullstackTypescript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/add-source-to-node.js'),
+          loader: getLoader('add-source-to-node.js'),
         },
         {
           test: /\.(njs|nts|jsx|tsx)$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/register-inner-components.js'),
+          loader: getLoader('register-inner-components.js'),
         },
+        {
+          issuer: /worker.js/,
+          resourceQuery: /raw/,
+          type: 'asset/source',
+        }
       ]
     },
     target: 'node',
@@ -199,15 +228,16 @@ function server(env, argv) {
 
 function client(env, argv) {
   const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd();
-  const folder = argv.environment === 'development' ? '.development' : '.production';
-  const devtool = argv.environment === 'development' ? 'inline-cheap-module-source-map' : false;
-  const minimize = argv.environment !== 'development';
+  const isDev = argv.environment === 'development';
+  const folder = isDev ? '.development' : '.production';
+  const devtool = isDev ? 'inline-cheap-module-source-map' : false;
+  const minimize = !isDev;
   let liveReload = {};
-  if (argv.environment !== 'development') {
+  if (!isDev) {
     liveReload = {
       test: /liveReload.js$/,
       use: [
-        { loader: require.resolve('ignore-loader') }
+        { loader: getLoader('ignore-import.js') }
       ]
     }
   }
@@ -224,14 +254,14 @@ function client(env, argv) {
       path: path.join(dir, folder),
       filename: 'client.js'
     },
+    resolve: {
+      extensions: ['.njs', '.js', '.nts', '.ts', '.tsx', '.jsx']
+    },
     optimization: {
       minimize: minimize,
       minimizer: [
         new TerserPlugin({
-          terserOptions: {
-            //keep_classnames: true,
-            keep_fnames: true
-          }
+          minify: terserMinimizer
         })
       ]
     },
@@ -241,26 +271,29 @@ function client(env, argv) {
       rules: [
         {
           test: /nullstack.js$/,
-          loader: require.resolve('string-replace-loader'),
+          loader: getLoader('string-replace.js'),
           options: {
             multiple: [
-              { search: '{{NULLSTACK_ENVIRONMENT_NAME}}', replace: 'client', flags: 'ig' }
+              {
+                search: /{{NULLSTACK_ENVIRONMENT_NAME}}/ig,
+                replace: 'client'
+              }
             ]
           }
         },
-        babel,
+        swc,
         nullstackJavascript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/remove-import-from-client.js'),
+          loader: getLoader('remove-import-from-client.js'),
         },
         {
           test: /\.(njs|nts|jsx|tsx)$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/inject-nullstack.js'),
+          loader: getLoader('inject-nullstack.js'),
         },
         {
           test: /\.(njs|nts|jsx|tsx)$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/remove-static-from-client.js'),
+          loader: getLoader('remove-static-from-client.js'),
         },
         {
           test: /\.s?[ac]ss$/,
@@ -274,11 +307,11 @@ function client(env, argv) {
         nullstackTypescript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/add-source-to-node.js'),
+          loader: getLoader('add-source-to-node.js'),
         },
         {
           test: /\.(njs|nts|jsx|tsx)$/,
-          loader: path.resolve('./node_modules/nullstack/loaders/register-inner-components.js'),
+          loader: getLoader('register-inner-components.js'),
         },
       ]
     },
