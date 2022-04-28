@@ -117,7 +117,8 @@ function server(env, argv) {
   const minimize = !isDev;
   const plugins = isDev ? ([
     new NodemonPlugin({
-      watch: path.resolve('./.development'),
+      ext: '*',
+      watch: [".env", ".env.*", './.development/*.*'],
       script: './.development/server.js',
       nodeArgs: ['--enable-source-maps'],
       quiet: true
