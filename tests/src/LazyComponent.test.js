@@ -10,4 +10,10 @@ describe('LazyComponent', () => {
     expect(element).toBeTruthy();
   });
 
+  test('lazy components need to be safelisted in order to call server functions', async () => {
+    await page.waitForSelector('[data-safelisted]');
+    const element = await page.$('[data-safelisted]');
+    expect(element).toBeTruthy();
+  });
+
 });

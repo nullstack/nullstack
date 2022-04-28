@@ -129,6 +129,7 @@ function server(env, argv) {
     output: {
       path: path.join(dir, folder),
       filename: 'server.js',
+      chunkFilename: '[chunkhash].server.js',
       libraryTarget: 'umd'
     },
     resolve: {
@@ -252,7 +253,8 @@ function client(env, argv) {
     output: {
       publicPath: `/`,
       path: path.join(dir, folder),
-      filename: 'client.js'
+      filename: 'client.js',
+      chunkFilename: '[chunkhash].client.js',
     },
     resolve: {
       extensions: ['.njs', '.js', '.nts', '.ts', '.tsx', '.jsx']
