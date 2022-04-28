@@ -23,7 +23,7 @@ async function generateBranch(parent, node, depth, scope) {
   }
 
   if (isClass(node)) {
-    const key = node.attributes.key ? node.attributes.key : generateKey(node, depth) + (node.attributes.route ? scope.context.router.url : '')
+    const key = node.attributes.key ? node.attributes.key : generateKey(node, depth) + (node.attributes.route ? (scope.context.environment.mode === 'ssg' ? scope.context.router.path : scope.context.router.url) : '')
     if (
       scope.context.environment.client &&
       scope.context.router._changed &&
