@@ -1,25 +1,25 @@
 export type NullstackSelf = {
 
-  initiated: boolean,
+  initiated: boolean;
 
-  hydrated: boolean,
+  hydrated: boolean;
 
-  terminated: boolean,
+  terminated: boolean;
 
-  prerendered: boolean,
+  prerendered: boolean;
 
   /**
    * If the component is persistent
-   * 
-   * https://nullstack.app/persistent-components
+   *
+   * @see https://nullstack.app/persistent-components
    */
   persistent: boolean,
 
   /**
    * Only available after hydration
    */
-  element?: HTMLElement,
+  element?: HTMLElement;
 
-  key: string
+  key: string;
 
 };
