@@ -5,7 +5,7 @@ export type NullstackProject = {
   /**
    * Name of the project
    *
-   * https://nullstack.app/context-project
+   * @see https://nullstack.app/context-project
    */
   name: string,
 
@@ -31,11 +31,11 @@ export type NullstackProject = {
   /**
    * App icons size/path
    * 
-   * If not declared, Nullstack searchs for `icon-[WIDTH]x[HEIGHT].png` in **public** folder
+   * If not declared, Nullstack searches for an `icon-[WIDTH]x[HEIGHT].png` in **public** folder
    * 
    * @example { '72': '/icon-72x72.png' }
    */
-  icons: object,
+  icons: Record<string, string>,
 
   /**
    * Relative or absolute url to favicon

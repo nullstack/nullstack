@@ -11,7 +11,7 @@ export type NullstackSelf = {
   /**
    * If the component is persistent
    * 
-   * https://nullstack.app/persistent-components
+   * @see https://nullstack.app/persistent-components
    */
   persistent: boolean,
 

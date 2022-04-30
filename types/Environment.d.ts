@@ -13,7 +13,7 @@ export type NullstackEnvironment = {
   /**
    * md5 hash of the current environment folder outputs.
    * 
-   * https://nullstack.app/context-environment
+   * @see https://nullstack.app/context-environment
    */
   key: string
 
