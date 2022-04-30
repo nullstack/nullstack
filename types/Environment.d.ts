@@ -1,20 +1,20 @@
 export type NullstackEnvironment = {
 
-  client: boolean,
+  client: boolean;
 
-  server: boolean,
+  server: boolean;
 
-  development: boolean,
+  development: boolean;
 
-  production: boolean,
+  production: boolean;
 
-  static: boolean,
+  static: boolean;
 
   /**
    * md5 hash of the current environment folder outputs.
-   * 
+   *
    * @see https://nullstack.app/context-environment
    */
-  key: string
+  key: string;
 
 };
