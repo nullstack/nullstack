@@ -1,5 +1,3 @@
 export type NullstackSettings = {
-
-  [key: string]: string | boolean
-
+  [key: string]: string | boolean;
 };

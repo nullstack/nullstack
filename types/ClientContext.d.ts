@@ -8,99 +8,105 @@ import { NullstackSettings } from "./Settings";
 import { NullstackWorker } from "./Worker";
 
 /**
- * https://nullstack.app/context
+ * @see https://nullstack.app/context
  */
 export type NullstackClientContext = {
 
   /**
    * Information about the document `head` metatags.
-   *  
-   * https://nullstack.app/context-page
+   *
+   * @see https://nullstack.app/context-page
    */
-  page?: NullstackPage,
+  page?: NullstackPage;
 
   /**
    * Information about the app manifest and some metatags.
    *
-   * https://nullstack.app/context-project
+   * @see https://nullstack.app/context-project
    */
-  project?: NullstackProject,
+  project?: NullstackProject;
 
   /**
    * Gives you granular control of your PWA behavior.
-   * 
-   * https://nullstack.app/service-worker
+   *
+   * @see https://nullstack.app/service-worker
    */
-  worker?: NullstackWorker,
+  worker?: NullstackWorker;
 
   /**
-   * It gives you information about the instance lifecycle and it's unique [key](https://nullstack.app/instance-self#instance-key).
-   * 
-   * https://nullstack.app/instance-self
+   * It gives you information about the instance lifecycle and it's unique key.
+   *
+   * @see https://nullstack.app/instance-self
+   * @see https://nullstack.app/instance-self#instance-key
    */
-  self?: NullstackSelf,
+  self?: NullstackSelf;
 
   /**
    * It gives you information about the element dataset.
-   * 
    * Any `data-*` attributes will receive a respective camelized key on this object.
-   * 
-   * Only on client.
-   * 
-   * https://nullstack.app/context-data
+   *
+   * @scope client
+   * @see https://nullstack.app/context-data
    */
-  data?: object,
+  data?: Record<string, string>;
 
   /**
    * It gives you all active instances of the application.
-   * 
    * Adding a [key](https://nullstack.app/instance-self#instance-key) to a Component adds it here.
-   * 
-   * Only on client.
-   * 
-   * https://nullstack.app/context-instances
+   *
+   * @scope client
+   * @see https://nullstack.app/context-instances
    */
-  instances?: object,
+  instances?: Record<string, any>;
 
   /**
    * It gives you information about the current environment.
-   * 
-   * https://nullstack.app/context-environment
+   *
+   * @see https://nullstack.app/context-environment
    */
-  environment?: NullstackEnvironment,
+  environment?: NullstackEnvironment;
 
   /**
    * Each query string param is mapped to this object.
-   * 
-   * https://nullstack.app/routes-and-params#params
+   *
+   * @see https://nullstack.app/routes-and-params#params
    * @example
-   * "/?expanded=true&page=2" === {expanded: true, page: 2}
+   * ```
+   * "/?expanded=true&page=2" ===
+   *   {expanded: true, page: 2}
+   * ```
    */
-  params?: NullstackParams,
+  params?: NullstackParams;
 
   /**
    * Nullstack router.
-   * 
-   * https://nullstack.app/routes-and-params#router
+   *
+   * @see https://nullstack.app/routes-and-params#router
    */
-  router?: NullstackRouter,
+  router?: NullstackRouter;
 
   /**
    * You can assign any key with any type of public information.
-   * 
-   * .env `NULLSTACK_SETTINGS_PUBLIC_KEY` -> `settings.publicKey`
-   * 
-   * https://nullstack.app/context-settings
+   *
+   * @example
+   * ```
+   * // .env NULLSTACK_SETTINGS_PUBLIC_KEY
+   * settings.publicKey
+   * ```
+   * @see https://nullstack.app/context-settings
    */
-  settings?: NullstackSettings,
+  settings?: NullstackSettings;
 
   /**
    * Children elements of this component.
-   * 
-   * https://nullstack.app/renderable-components#components-with-children
+   *
+   * @see https://nullstack.app/renderable-components#components-with-children
    */
-  children?: any,
+  children?: any;
 
-  [key: string]: any
+  /**
+   * Custom context prop.
+   */
+  [key: string]: any;
 
 };

@@ -1,28 +1,28 @@
 export type NullstackServer = {
 
-  get()
+  get();
 
-  post()
+  post();
 
-  put()
+  put();
 
-  patch()
+  patch();
 
-  delete()
+  delete();
 
-  options()
+  options();
 
-  head()
+  head();
 
-  use()
+  use();
 
-  port: number,
+  port: number;
 
-  maximumPayloadSize: string,
+  maximumPayloadSize: string;
 
   /**
    * Will be passed as the argument to [express cors plugin](https://expressjs.com/en/resources/middleware/cors.html).
    */
-  cors: object
+  cors: object;
 
 };
