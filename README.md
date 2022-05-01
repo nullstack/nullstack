@@ -4,7 +4,9 @@ Feature-Driven Fullstack JavaScript Components
 
 ## What is Nullstack?
 
-Write the back-end and the front-end of a feature in a single component and let the framework decide where the code should run.
+Nullstack is a Feature-Driven fullstack JavaScript framework that helps you build isomorphic applications and stay focused on shipping products to production.
+
+Write the backend and frontend of a feature in a single component and let the framework decide where the code should run.
 
 Nullstack provides you all the tools you need to stay focused on the product.
 
