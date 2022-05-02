@@ -25,7 +25,7 @@ export default function invoke(name, hash) {
     }
     if (/get[A-Z]([*]*)/.test(name)) {
       options.method = 'GET';
-      url += `?payload=${body}`;
+      url += `?payload=${encodeURIComponent(body)}`;
     } else {
       options.body = body;
       if (/patch[A-Z]([*]*)/.test(name)) {
