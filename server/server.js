@@ -165,7 +165,7 @@ server.start = function () {
 
   app.all(`/${prefix}/:hash/:methodName.json`, async (request, response) => {
     const payload = request.method === 'GET' ? request.query.payload : request.body;
-    const args = deserialize(decodeURIComponent(payload));
+    const args = deserialize(payload);
     const { hash, methodName } = request.params;
     const [invokerHash, boundHash] = hash.split('-');
     const key = `${invokerHash}.${methodName}`;

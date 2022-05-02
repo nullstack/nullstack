@@ -3,6 +3,8 @@ import { readFileSync } from 'fs';
 import Nullstack from 'nullstack';
 import { clientOnly, serverOnly } from './helpers';
 
+const decodedString = "! * ' ( ) ; : @ & = + $ , / ? % # [ ]"
+
 class ServerFunctions extends Nullstack {
 
   count = 0;
@@ -53,6 +55,10 @@ class ServerFunctions extends Nullstack {
     return number * 2 + 1
   }
 
+  static async getEncodedString({ string }) {
+    return string === decodedString
+  }
+
   async initiate() {
     this.statement = await this.useNodeFileSystem();
     this.response = await this.useFetchInNode();
@@ -62,6 +68,7 @@ class ServerFunctions extends Nullstack {
   async hydrate() {
     this.clientOnly = clientOnly();
     this.doublePlusOneClient = await ServerFunctions.getDoublePlusOne({ number: 34 })
+    this.acceptsSpecialCharacters = await this.getEncodedString({ string: decodedString })
   }
 
   render() {
@@ -77,6 +84,7 @@ class ServerFunctions extends Nullstack {
         <div data-client-only={this.clientOnly} />
         <div data-double-plus-one-server={this.doublePlusOneServer === 69} />
         <div data-double-plus-one-client={this.doublePlusOneClient === 69} />
+        <div data-accepts-special-characters={this.acceptsSpecialCharacters} />
       </div>
     )
   }
