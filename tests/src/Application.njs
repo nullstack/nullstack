@@ -30,7 +30,6 @@ import PluginAttributes from './PluginAttributes';
 import PublicServerFunctions from './PublicServerFunctions.njs';
 import PureComponents from './PureComponents';
 import WebpackCustomPlugin from './WebpackCustomPlugin';
-import RemoveStart from './RemoveStart';
 import RenderableComponent from './RenderableComponent';
 import RoutesAndParams from './RoutesAndParams';
 import ServerFunctions from './ServerFunctions';

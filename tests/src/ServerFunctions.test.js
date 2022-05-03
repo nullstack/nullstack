@@ -60,4 +60,10 @@ describe('ServerFunctions', () => {
     expect(element).toBeTruthy();
   });
 
+  test('server functions starting with underline are removed from client', async () => {
+    await page.waitForSelector('[data-underline-removed-from-client]');
+    const element = await page.$('[data-underline-removed-from-client]');
+    expect(element).toBeTruthy();
+  });
+
 });

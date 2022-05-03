@@ -59,6 +59,10 @@ class ServerFunctions extends Nullstack {
     return string === decodedString
   }
 
+  static async _privateFunction() {
+    return true
+  }
+
   async initiate() {
     this.statement = await this.useNodeFileSystem();
     this.response = await this.useFetchInNode();
@@ -66,6 +70,7 @@ class ServerFunctions extends Nullstack {
   }
 
   async hydrate() {
+    this.underlineRemovedFromClient = !ServerFunctions._privateFunction;
     this.clientOnly = clientOnly();
     this.doublePlusOneClient = await ServerFunctions.getDoublePlusOne({ number: 34 })
     this.acceptsSpecialCharacters = await this.getEncodedString({ string: decodedString })
@@ -85,6 +90,7 @@ class ServerFunctions extends Nullstack {
         <div data-double-plus-one-server={this.doublePlusOneServer === 69} />
         <div data-double-plus-one-client={this.doublePlusOneClient === 69} />
         <div data-accepts-special-characters={this.acceptsSpecialCharacters} />
+        <div data-underline-removed-from-client={this.underlineRemovedFromClient} />
       </div>
     )
   }
