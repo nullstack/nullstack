@@ -37,7 +37,7 @@ module.exports = function removeStaticFromClient(source) {
     const injection = injections[position];
     if (position && injection) {
       const location = injection.end - position;
-      if (injection.name.split(/[A-Z]/)[0] === 'start') {
+      if (injection.name.startsWith('_')) {
         code = code.substring(location).trimStart();
       } else {
         code = `static ${injection.name} = Nullstack.invoke('${injection.name}', '${hash}');` + code.substring(location);
