@@ -61,10 +61,13 @@ client.processLifecycleQueues = async function processLifecycleQueues() {
     instance._self.hydrated = true
   }
   shouldUpdate && client.update()
+  shouldUpdate = false
   while (client.hydrationQueue.length) {
+    shouldUpdate = true
     const instance = client.hydrationQueue.shift()
     client.realHydrationQueue.push(instance)
   }
+  shouldUpdate && client.update()
   for (const key in client.instances) {
     const instance = client.instances[key]
     if (!client.renewalQueue.includes(instance) && !instance._self.terminated) {
