@@ -1,7 +1,6 @@
 import Nullstack from 'nullstack';
 class RoutesAndParams extends Nullstack {
 
-  eventTriggered = false;
   paramHydrated = false;
 
   hydrate(context) {
