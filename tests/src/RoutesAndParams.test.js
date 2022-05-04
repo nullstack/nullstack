@@ -56,16 +56,28 @@ describe('RoutesAndParams /routes-and-params/a', () => {
     expect(element).toBeTruthy();
   });
 
-  test('a custom event is triggered when the url changes', async () => {
-    const element = await page.$('[data-event-triggered]');
-    expect(element).toBeTruthy();
-  });
-
   test('params are available when coming from external', async () => {
     await page.goto('http://localhost:6969/');
     await page.click('[href="/routes-and-params/a"]');
     await page.waitForSelector('[data-hydrated-param]');
     const element = await page.$('[data-hydrated-param]');
+    expect(element).toBeTruthy();
+  });
+
+});
+
+describe('RoutesAndParams event', () => {
+
+  beforeAll(async () => {
+    await page.goto('http://localhost:6969/');
+    await page.click('[href="/routes-and-params/a"]');
+    await page.waitForSelector('[data-hydrated]');
+    await page.click('[href="/routes-and-params/a?framework=nullstack"]');
+  });
+
+  test('a custom event is triggered when the url changes', async () => {
+    await page.waitForSelector('[data-event-triggered]');
+    const element = await page.$('[data-event-triggered]');
     expect(element).toBeTruthy();
   });
 
