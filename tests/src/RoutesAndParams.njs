@@ -48,13 +48,13 @@ class RoutesAndParams extends Nullstack {
     router.url = 'https://nullstack.app';
   }
 
-  render({ router, params, eventTriggered }) {
+  render({ router, params, eventTriggered, self }) {
     return (
       <div>
         <a href="https://nullstack.app"> Nullstack</a>
         <button data-absolute onclick={this.goToDocs}> Nullstack </button>
         <a href="/routes-and-params/no-hash#hash">hash</a>
-        <div data-event-triggered={eventTriggered} />
+        <div data-hydrated={self.hydrated} data-event-triggered={eventTriggered} />
         <div data-router={!!router} />
         <div route="/routes-and-params" data-route="/routes-and-params" />
         <InnerHTML route="/routes-and-params/inner-html" />

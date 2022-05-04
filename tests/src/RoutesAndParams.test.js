@@ -71,7 +71,7 @@ describe('RoutesAndParams event', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/');
     await page.click('[href="/routes-and-params/a"]');
-    await page.waitForSelector('[data-a]');
+    await page.waitForSelector('[data-hydrated]');
     await page.click('[href="/routes-and-params/a?framework=nullstack"]');
   });
 
