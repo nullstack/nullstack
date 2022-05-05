@@ -30,7 +30,6 @@ import PluginAttributes from './PluginAttributes';
 import PublicServerFunctions from './PublicServerFunctions.njs';
 import PureComponents from './PureComponents';
 import WebpackCustomPlugin from './WebpackCustomPlugin';
-import RemoveStart from './RemoveStart';
 import RenderableComponent from './RenderableComponent';
 import RoutesAndParams from './RoutesAndParams';
 import ServerFunctions from './ServerFunctions';
@@ -47,6 +46,7 @@ import WorkerVerbs from './WorkerVerbs';
 import MetatagState from './MetatagState';
 import TypeScriptExtension from './TypeScriptExtension';
 import JavaScriptExtension from './JavaScriptExtension';
+import HydrateElement from './HydrateElement';
 
 class Application extends Nullstack {
 
@@ -69,6 +69,7 @@ class Application extends Nullstack {
           <a href="/routes-and-params/a"> router with params </a>
           <a href="/undefined-nodes"> undefined nodes </a>
           <a href="/full-stack-lifecycle"> lifecycle </a>
+          <a href="/hydrate-element"> hydrate element </a>
         </div>
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
@@ -115,6 +116,7 @@ class Application extends Nullstack {
         <MetatagState route="/metatag-state" />
         <JavaScriptExtension route="/javascript-extension" />
         <TypeScriptExtension route="/typescript-extension" generic />
+        <HydrateElement route="/hydrate-element" />
         <ErrorPage route="*" />
       </main>
     )

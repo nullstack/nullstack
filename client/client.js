@@ -1,82 +1,85 @@
-import generateTree from '../shared/generateTree';
-import { loadPlugins } from '../shared/plugins';
-import context, { generateContext } from './context';
-import rerender from './rerender';
-import router from './router';
+import generateTree from '../shared/generateTree'
+import { loadPlugins } from '../shared/plugins'
+import context, { generateContext } from './context'
+import rerender from './rerender'
+import router from './router'
 
+const client = {}
 
-const client = {};
+client.initialized = false
+client.hydrated = false
+client.initializer = null
+client.instances = {}
+context.instances = client.instances
+client.initiationQueue = []
+client.renewalQueue = []
+client.hydrationQueue = []
+client.realHydrationQueue = []
+client.virtualDom = {}
+client.selector = null
+client.events = {}
+client.generateContext = generateContext
+client.renderQueue = null
 
-client.initialized = false;
-client.hydrated = false;
-client.initializer = null;
-
-client.instances = {};
-context.instances = client.instances;
-client.initiationQueue = [];
-client.renewalQueue = [];
-client.hydrationQueue = [];
-client.virtualDom = {};
-client.selector = null;
-client.events = {};
-client.generateContext = generateContext;
-
-client.renderQueue = null;
-
-client.update = async function () {
+client.update = async function update() {
   if (client.initialized) {
-    clearInterval(client.renderQueue);
+    clearInterval(client.renderQueue)
     client.renderQueue = setTimeout(async () => {
-      const scope = client;
-      scope.context = context;
-      scope.plugins = loadPlugins(scope);
-      client.initialized = false;
-      client.initiationQueue = [];
-      client.renewalQueue = [];
-      client.hydrationQueue = [];
-      client.nextVirtualDom = await generateTree(client.initializer(), scope);
-      rerender(client.selector);
-      client.virtualDom = client.nextVirtualDom;
-      client.nextVirtualDom = null;
-      client.processLifecycleQueues();
-    }, 16);
+      const scope = client
+      scope.context = context
+      scope.plugins = loadPlugins(scope)
+      client.initialized = false
+      client.renewalQueue = []
+      client.nextVirtualDom = await generateTree(client.initializer(), scope)
+      rerender(client.selector)
+      client.virtualDom = client.nextVirtualDom
+      client.nextVirtualDom = null
+      client.processLifecycleQueues()
+    }, 16)
   }
 }
 
-client.processLifecycleQueues = async function () {
+client.processLifecycleQueues = async function processLifecycleQueues() {
   if (!client.initialized) {
-    client.initialized = true;
-    client.hydrated = true;
+    client.initialized = true
+    client.hydrated = true
   }
-  const initiationQueue = client.initiationQueue;
-  const hydrationQueue = client.hydrationQueue;
-  for (const instance of initiationQueue) {
-    instance.initiate && await instance.initiate();
-    instance._self.initiated = true;
+  let shouldUpdate = false
+  while (client.initiationQueue.length) {
+    const instance = client.initiationQueue.shift()
+    instance.initiate && await instance.initiate()
+    instance._self.initiated = true
     instance.launch && instance.launch()
+    shouldUpdate = true
   }
-  if (initiationQueue.length) {
-    client.update();
+  shouldUpdate && client.update()
+  shouldUpdate = false
+  while (client.realHydrationQueue.length) {
+    shouldUpdate = true
+    const instance = client.realHydrationQueue.shift()
+    instance.hydrate && await instance.hydrate()
+    instance._self.hydrated = true
   }
-  for (const instance of hydrationQueue) {
-    instance.hydrate && await instance.hydrate();
-    instance._self.hydrated = true;
+  shouldUpdate && client.update()
+  shouldUpdate = false
+  while (client.hydrationQueue.length) {
+    shouldUpdate = true
+    const instance = client.hydrationQueue.shift()
+    client.realHydrationQueue.push(instance)
   }
-  if (hydrationQueue.length) {
-    client.update();
-  }
+  shouldUpdate && client.update()
   for (const key in client.instances) {
-    const instance = client.instances[key];
+    const instance = client.instances[key]
     if (!client.renewalQueue.includes(instance) && !instance._self.terminated) {
-      instance.terminate && await instance.terminate();
+      instance.terminate && await instance.terminate()
       if (instance._self.persistent) {
         instance._self.terminated = true
       } else {
-        delete client.instances[key];
+        delete client.instances[key]
       }
     }
   }
-  router._changed = false;
+  router._changed = false
 }
 
-export default client;
+export default client

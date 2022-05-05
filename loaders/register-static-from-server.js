@@ -21,7 +21,7 @@ module.exports = function (source) {
       klassName = path.node.id.name;
     },
     ClassMethod(path) {
-      if (path.node.static && path.node.async && path.node.key.name.split(/[A-Z]/)[0] !== 'start') {
+      if (path.node.static && path.node.async && !path.node.key.name.startsWith('_')) {
         methodNames.push(path.node.key.name);
       }
     }
