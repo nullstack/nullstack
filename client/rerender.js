@@ -86,7 +86,7 @@ export default function rerender(selector, current, next) {
       } else if (name.startsWith('on')) {
         const eventName = name.substring(2);
         const key = current._id + '.' + eventName;
-        if (current.attributes[name] !== current.attributes[name]) {
+        if (events[key] && !current.attributes[name]) {
           selector.removeEventListener(eventName, events[key].callback);
           delete events[key]
         }
