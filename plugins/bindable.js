@@ -44,7 +44,7 @@ function transform({ node, environment }) {
   } else if (node.type === 'input' && node.attributes.type === 'checkbox') {
     node.attributes.checked = target[node.attributes.bind];
   } else {
-    node.attributes.value = target[node.attributes.bind] || '';
+    node.attributes.value = target[node.attributes.bind] ?? '';
   }
   node.attributes.name = node.attributes.name || node.attributes.bind;
 

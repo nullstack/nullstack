@@ -2,6 +2,16 @@ import { isFalse, isText } from '../shared/nodes';
 import { anchorableElement } from './anchorableNode';
 import client from './client';
 import render from './render';
+import events from './events';
+
+function clearEvents(node) {
+  if (!node?._id) return
+  for (const key in events) {
+    if (key.startsWith(node._id)) {
+      delete events[key]
+    }
+  }
+}
 
 export default function rerender(selector, current, next) {
 
@@ -28,6 +38,7 @@ export default function rerender(selector, current, next) {
   }
 
   if ((isFalse(current) || isFalse(next)) && current != next) {
+    clearEvents(current)
     const nextSelector = render(next);
     return selector.replaceWith(nextSelector);
   }
@@ -37,11 +48,13 @@ export default function rerender(selector, current, next) {
   }
 
   if (current.type == 'head' || next.type == 'head') {
+    clearEvents(current)
     const nextSelector = render(next);
     return selector.replaceWith(nextSelector);
   }
 
   if (current.type !== next.type) {
+    clearEvents(current)
     const nextSelector = render(next);
     return selector.replaceWith(nextSelector);
   }
@@ -71,17 +84,24 @@ export default function rerender(selector, current, next) {
           selector.value = next.attributes[name];
         }
       } else if (name.startsWith('on')) {
-        const eventName = name.replace('on', '');
-        const key = '_event.' + eventName;
-        selector.removeEventListener(eventName, current[key]);
+        const eventName = name.substring(2);
+        const key = current._id + '.' + eventName;
+        if (current.attributes[name] !== current.attributes[name]) {
+          selector.removeEventListener(eventName, events[key].callback);
+          delete events[key]
+        }
         if (next.attributes[name]) {
-          next[key] = (event) => {
-            if (next.attributes.default !== true) {
-              event.preventDefault();
-            }
-            next.attributes[name]({ ...next.attributes, event });
-          };
-          selector.addEventListener(eventName, next[key]);
+          if (!events[key]) {
+            events[key] = {}
+            events[key].callback = (event) => {
+              if (events[key].subject.default !== true) {
+                event.preventDefault();
+              }
+              events[key].subject[name]({ ...events[key].subject, event });
+            };
+            selector.addEventListener(eventName, events[key].callback);
+          }
+          events[key].subject = next.attributes
         }
       } else {
         const type = typeof (next.attributes[name]);
@@ -117,6 +137,7 @@ export default function rerender(selector, current, next) {
         rerender(selector.childNodes[i], current.children[i], next.children[i]);
       }
       for (let i = current.children.length - 1; i >= next.children.length; i--) {
+        console.log("remove", current._id)
         selector.removeChild(selector.childNodes[i]);
       }
     } else {

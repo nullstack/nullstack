@@ -11,6 +11,8 @@ class TwoWayBindings extends Nullstack {
   object = { count: 1 };
   array = ['a', 'b', 'c'];
 
+  zero = 0
+
   parse({ event, onchange }) {
     const normalized = event.target.value.replace(',', '').padStart(3, '0');
     const whole = (parseInt(normalized.slice(0, -2)) || 0).toString();
@@ -32,6 +34,7 @@ class TwoWayBindings extends Nullstack {
   render({ params }) {
     return (
       <div>
+        <input bind={this.zero} />
         <div data-number={this.number} />
         {!this.boolean && <div data-boolean-type={typeof (this.boolean)} />}
         {this.number > 1 && <div data-number-type={typeof (this.number)} />}

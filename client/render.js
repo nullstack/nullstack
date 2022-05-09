@@ -1,5 +1,6 @@
 import { isFalse, isText } from '../shared/nodes';
 import { anchorableElement } from './anchorableNode';
+import events from './events';
 
 export default function render(node, options) {
 
@@ -30,15 +31,17 @@ export default function render(node, options) {
       anchorableElement(element);
     } else if (name.startsWith('on')) {
       if (node.attributes[name] !== undefined) {
-        const eventName = name.replace('on', '');
-        const key = '_event.' + eventName;
-        node[key] = (event) => {
-          if (node.attributes.default !== true) {
+        const eventName = name.substring(2);
+        const key = node._id + '.' + eventName;
+        events[key] = {}
+        events[key].subject = node.attributes
+        events[key].callback = (event) => {
+          if (events[key].subject.default !== true) {
             event.preventDefault();
           }
-          node.attributes[name]({ ...node.attributes, event });
+          events[key].subject[name]({ ...events[key].subject, event });
         };
-        element.addEventListener(eventName, node[key]);
+        element.addEventListener(eventName, events[key].callback);
       }
     } else {
       const type = typeof (node.attributes[name]);

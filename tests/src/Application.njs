@@ -47,6 +47,7 @@ import MetatagState from './MetatagState';
 import TypeScriptExtension from './TypeScriptExtension';
 import JavaScriptExtension from './JavaScriptExtension';
 import HydrateElement from './HydrateElement';
+import OptimizedEvents from './OptimizedEvents';
 
 class Application extends Nullstack {
 
@@ -117,6 +118,7 @@ class Application extends Nullstack {
         <JavaScriptExtension route="/javascript-extension" />
         <TypeScriptExtension route="/typescript-extension" generic />
         <HydrateElement route="/hydrate-element" />
+        <OptimizedEvents route="/optimized-events" />
         <ErrorPage route="*" />
       </main>
     )
