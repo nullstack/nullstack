@@ -1,6 +1,6 @@
 {
   "name": "nullstack",
-  "version": "0.15.6",
+  "version": "0.15.7",
   "description": "Full-stack Javascript Components for one-dev armies",
   "main": "nullstack.js",
   "author": "Mortaro",
@@ -12,7 +12,7 @@
   },
   "types": "./types/index.d.ts",
   "dependencies": {
-    "@swc/core": "^1.2.171",
+    "@swc/core": "1.2.179",
     "@babel/parser": "^7.2.2",
     "@babel/traverse": "^7.2.2",
     "body-parser": "^1.19.0",

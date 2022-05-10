@@ -4,6 +4,7 @@ module.exports = async function ssg({ output, cache, environment }) {
 
   const dir = process.cwd();
   const application = require(`${dir}/.${environment}/server`).default;
+  const projectName = application.project.name || 'The Nullstack application';
   const { resolve } = require('path')
   const { existsSync, mkdirSync, writeFileSync, copySync, removeSync } = require('fs-extra');
 
@@ -101,7 +102,7 @@ module.exports = async function ssg({ output, cache, environment }) {
   await createSitemap()
   console.log()
 
-  console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${application.project.name} is ready at ${folder}\n`);
+  console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${projectName} is ready at ${folder}\n`);
 
   if (cache) {
     console.log('Storing cache...');
