@@ -137,7 +137,6 @@ export default function rerender(selector, current, next) {
         rerender(selector.childNodes[i], current.children[i], next.children[i]);
       }
       for (let i = current.children.length - 1; i >= next.children.length; i--) {
-        console.log("remove", current._id)
         selector.removeChild(selector.childNodes[i]);
       }
     } else {
