@@ -4,7 +4,7 @@ module.exports = async function spa({ output, cache, environment }) {
 
   const dir = process.cwd();
   const application = require(`${dir}/.${environment}/server`).default;
-  const projectName = application.project.name || 'The app';
+  const projectName = application.project.name || 'The Nullstack application';
   const { existsSync, mkdirSync, writeFileSync, copySync, removeSync } = require('fs-extra');
   const path = `${dir}/${folder}`;
 
