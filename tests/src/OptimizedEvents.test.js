@@ -54,4 +54,24 @@ describe('OptimizedEvents', () => {
     expect(element).toBeTruthy();
   });
 
+  test('events are removed if attribute becomes undefined', async () => {
+    await page.click('[data-zero-only-increment]')
+    await page.waitForSelector('[data-count="1"]');
+    await page.click('[data-zero-only-increment]')
+    await page.waitForTimeout(1000)
+    await page.waitForSelector('[data-count="1"]');
+    const element = await page.$('[data-count="1"]');
+    expect(element).toBeTruthy();
+  });
+
+  test('events are removed in ternaries', async () => {
+    await page.click('[data-zero-nothing-increment]')
+    await page.waitForSelector('[data-count="1"]');
+    await page.click('[data-zero-nothing-increment]')
+    await page.waitForTimeout(1000)
+    await page.waitForSelector('[data-count="1"]');
+    const element = await page.$('[data-count="1"]');
+    expect(element).toBeTruthy();
+  });
+
 });

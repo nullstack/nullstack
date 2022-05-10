@@ -118,8 +118,7 @@ async function generateBranch(parent, node, depth, scope) {
       type: node.type,
       attributes: node.attributes || {},
       instance: node.instance,
-      children: [],
-      _id: depth.join('.')
+      children: []
     }
     if (node.children) {
       for (let i = 0; i < node.children.length; i++) {

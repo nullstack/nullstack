@@ -2,16 +2,7 @@ import { isFalse, isText } from '../shared/nodes';
 import { anchorableElement } from './anchorableNode';
 import client from './client';
 import render from './render';
-import events from './events';
-
-function clearEvents(node) {
-  if (!node?._id) return
-  for (const key in events) {
-    if (key.startsWith(node._id)) {
-      delete events[key]
-    }
-  }
-}
+import { eventCallbacks, eventSubjects } from './events'
 
 export default function rerender(selector, current, next) {
 
@@ -38,7 +29,6 @@ export default function rerender(selector, current, next) {
   }
 
   if ((isFalse(current) || isFalse(next)) && current != next) {
-    clearEvents(current)
     const nextSelector = render(next);
     return selector.replaceWith(nextSelector);
   }
@@ -48,13 +38,11 @@ export default function rerender(selector, current, next) {
   }
 
   if (current.type == 'head' || next.type == 'head') {
-    clearEvents(current)
     const nextSelector = render(next);
     return selector.replaceWith(nextSelector);
   }
 
   if (current.type !== next.type) {
-    clearEvents(current)
     const nextSelector = render(next);
     return selector.replaceWith(nextSelector);
   }
@@ -85,23 +73,22 @@ export default function rerender(selector, current, next) {
         }
       } else if (name.startsWith('on')) {
         const eventName = name.substring(2);
-        const key = current._id + '.' + eventName;
-        if (events[key] && !current.attributes[name]) {
-          selector.removeEventListener(eventName, events[key].callback);
-          delete events[key]
+        if (eventCallbacks.has(selector) && !next.attributes[name]) {
+          selector.removeEventListener(eventName, eventCallbacks.get(selector));
         }
         if (next.attributes[name]) {
-          if (!events[key]) {
-            events[key] = {}
-            events[key].callback = (event) => {
-              if (events[key].subject.default !== true) {
+          if (!eventCallbacks.has(selector)) {
+            const callback = (event) => {
+              const subject = eventSubjects.get(selector)
+              if (subject.default !== true) {
                 event.preventDefault();
               }
-              events[key].subject[name]({ ...events[key].subject, event });
+              subject[name]({ ...subject, event });
             };
-            selector.addEventListener(eventName, events[key].callback);
+            selector.addEventListener(eventName, callback);
+            eventCallbacks.set(selector, callback)
           }
-          events[key].subject = next.attributes
+          eventSubjects.set(selector, next.attributes)
         }
       } else {
         const type = typeof (next.attributes[name]);
