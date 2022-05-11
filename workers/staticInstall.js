@@ -3,8 +3,9 @@ function install(event) {
     '/',
     ...self.context.worker.preload.map(withAPI),
     '/manifest.webmanifest',
+    `/client.js?fingerprint=${self.context.environment.key}`,
     `/client.css?fingerprint=${self.context.environment.key}`,
-    `{{SCRIPTS}}`,
+    "{{BUNDLE}}",
     `/nullstack/${self.context.environment.key}/offline/index.html`
   ].flat();
   event.waitUntil(async function () {
