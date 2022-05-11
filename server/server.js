@@ -131,8 +131,14 @@ server.start = function () {
 
   app.get(`/:number.client.js`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
-    response.contentType('text/css');
+    response.contentType('text/javascript');
     response.send(generateFile(`${request.params.number}.client.js`, server));
+  });
+
+  app.get(`/:number.client.css`, (request, response) => {
+    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.contentType('text/css');
+    response.send(generateFile(`${request.params.number}.client.css`, server));
   });
 
   app.get(`/client.css`, (request, response) => {

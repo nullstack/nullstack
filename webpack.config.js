@@ -245,7 +245,8 @@ function client(env, argv) {
   }
   const plugins = [
     new MiniCssExtractPlugin({
-      filename: "client.css"
+      filename: "client.css",
+      chunkFilename: '[chunkhash].client.css'
     })
   ]
   return {
