@@ -16,4 +16,10 @@ describe('LazyComponent', () => {
     expect(element).toBeTruthy();
   });
 
+  test('styles can be lazy loaded', async () => {
+    await page.waitForSelector('[data-lazy]');
+    const color = await page.evaluate('getComputedStyle(document.querySelector("[data-lazy]")).color')
+    expect(color).toEqual('rgb(0, 0, 255)');
+  });
+
 });
