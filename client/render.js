@@ -34,15 +34,15 @@ export default function render(node, options) {
       if (node.attributes[name] !== undefined) {
         const eventName = name.substring(2);
         const callback = (event) => {
-          const subject = eventSubjects.get(element)
+          const subject = eventSubjects.get(node.element)
           if (subject.default !== true) {
             event.preventDefault();
           }
           subject[name]({ ...subject, event });
         };
-        element.addEventListener(eventName, callback);
-        eventCallbacks.set(element, callback)
-        eventSubjects.set(element, node.attributes)
+        node.element.addEventListener(eventName, callback);
+        eventCallbacks.set(node.element, callback)
+        eventSubjects.set(node.element, node.attributes)
       }
     } else {
       const type = typeof (node.attributes[name]);
