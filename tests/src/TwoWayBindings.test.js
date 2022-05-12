@@ -4,6 +4,11 @@ beforeAll(async () => {
 
 describe('TwoWayBindings', () => {
 
+  test('inputs can be bound to zero', async () => {
+    const element = await page.$('[value="0"]');
+    expect(element).toBeTruthy();
+  });
+
   test('bind adds a name attribute to the element', async () => {
     const element = await page.$('[name="number"]');
     expect(element).toBeTruthy();

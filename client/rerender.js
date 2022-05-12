@@ -2,6 +2,7 @@ import { isUndefined, isFalse, isText } from '../shared/nodes';
 import { anchorableElement } from './anchorableNode';
 import client from './client';
 import render from './render';
+import { eventCallbacks, eventSubjects } from './events'
 
 function updateAttributes(selector, current, next) {
   const attributeNames = Object.keys({ ...current.attributes, ...next.attributes });
@@ -10,7 +11,7 @@ function updateAttributes(selector, current, next) {
       if (next.attributes[name] !== current.attributes[name]) {
         selector.innerHTML = next.attributes[name];
       }
-      next.attributes['data-n'] === undefined && anchorableElement(selector);
+      anchorableElement(selector);
     } else if (name === 'checked') {
       if (next.attributes[name] !== selector.value) {
         selector.checked = next.attributes[name];
@@ -20,17 +21,23 @@ function updateAttributes(selector, current, next) {
         selector.value = next.attributes[name];
       }
     } else if (name.startsWith('on')) {
-      const eventName = name.replace('on', '');
-      const key = '_event.' + eventName;
-      selector.removeEventListener(eventName, current[key]);
+      const eventName = name.substring(2);
+      if (eventCallbacks.has(selector) && !next.attributes[name]) {
+        selector.removeEventListener(eventName, eventCallbacks.get(selector));
+      }
       if (next.attributes[name]) {
-        next[key] = (event) => {
-          if (next.attributes.default !== true) {
-            event.preventDefault();
-          }
-          next.attributes[name]({ ...next.attributes, event });
-        };
-        selector.addEventListener(eventName, next[key]);
+        if (!eventCallbacks.has(selector)) {
+          const callback = (event) => {
+            const subject = eventSubjects.get(selector)
+            if (subject.default !== true) {
+              event.preventDefault();
+            }
+            subject[name]({ ...subject, event });
+          };
+          selector.addEventListener(eventName, callback);
+          eventCallbacks.set(selector, callback)
+        }
+        eventSubjects.set(selector, next.attributes)
       }
     } else {
       const type = typeof (next.attributes[name]);

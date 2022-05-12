@@ -1,5 +1,6 @@
 import { isFalse, isText } from '../shared/nodes';
 import { anchorableElement } from './anchorableNode';
+import { eventCallbacks, eventSubjects } from './events'
 
 export default function render(node, options) {
 
@@ -31,15 +32,17 @@ export default function render(node, options) {
       node.attributes['data-n'] === undefined && anchorableElement(node.element);
     } else if (name.startsWith('on')) {
       if (node.attributes[name] !== undefined) {
-        const eventName = name.replace('on', '');
-        const key = '_event.' + eventName;
-        node[key] = (event) => {
-          if (node.attributes.default !== true) {
+        const eventName = name.substring(2);
+        const callback = (event) => {
+          const subject = eventSubjects.get(element)
+          if (subject.default !== true) {
             event.preventDefault();
           }
-          node.attributes[name]({ ...node.attributes, event });
+          subject[name]({ ...subject, event });
         };
-        node.element.addEventListener(eventName, node[key]);
+        element.addEventListener(eventName, callback);
+        eventCallbacks.set(element, callback)
+        eventSubjects.set(element, node.attributes)
       }
     } else {
       const type = typeof (node.attributes[name]);
