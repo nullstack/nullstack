@@ -2,6 +2,9 @@
 const CI = !!process.env.CI;
 
 const baseOptions = {
+  launch: {
+    headless: true
+  },
   server: {
     command: 'npm run start',
     port: 6969,

@@ -4,30 +4,31 @@ import { anchorableElement } from './anchorableNode';
 export default function render(node, options) {
 
   if (isFalse(node) || node.type === 'head') {
-    return document.createComment("");
+    node.element = document.createComment("");
+    return node.element
   }
 
   if (isText(node)) {
-    return document.createTextNode(node);
+    node.element = document.createTextNode(node.text);
+    return node.element
   }
 
   const svg = (options && options.svg) || node.type === 'svg';
 
-  let element;
   if (svg) {
-    element = document.createElementNS("http://www.w3.org/2000/svg", node.type);
+    node.element = document.createElementNS("http://www.w3.org/2000/svg", node.type);
   } else {
-    element = document.createElement(node.type);
+    node.element = document.createElement(node.type);
   }
 
   if (node.instance) {
-    node.instance._self.element = element;
+    node.instance._self.element = node.element;
   }
 
   for (let name in node.attributes) {
     if (name === 'html') {
-      element.innerHTML = node.attributes[name];
-      anchorableElement(element);
+      node.element.innerHTML = node.attributes[name];
+      node.attributes['data-n'] === undefined && anchorableElement(node.element);
     } else if (name.startsWith('on')) {
       if (node.attributes[name] !== undefined) {
         const eventName = name.replace('on', '');
@@ -38,15 +39,15 @@ export default function render(node, options) {
           }
           node.attributes[name]({ ...node.attributes, event });
         };
-        element.addEventListener(eventName, node[key]);
+        node.element.addEventListener(eventName, node[key]);
       }
     } else {
       const type = typeof (node.attributes[name]);
       if (type !== 'object' && type !== 'function') {
         if (name != 'value' && node.attributes[name] === true) {
-          element.setAttribute(name, '');
+          node.element.setAttribute(name, '');
         } else if (name == 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
-          element.setAttribute(name, node.attributes[name]);
+          node.element.setAttribute(name, node.attributes[name]);
         }
       }
     }
@@ -55,14 +56,14 @@ export default function render(node, options) {
   if (!node.attributes.html) {
     for (let i = 0; i < node.children.length; i++) {
       const child = render(node.children[i], { svg });
-      element.appendChild(child);
+      node.element.appendChild(child);
     }
 
     if (node.type == 'select') {
-      element.value = node.attributes.value;
+      node.element.value = node.attributes.value;
     }
   }
 
-  return element;
+  return node.element;
 
 }

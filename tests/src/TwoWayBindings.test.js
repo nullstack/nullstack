@@ -2,7 +2,7 @@ beforeAll(async () => {
   await page.goto('http://localhost:6969/two-way-bindings?page=1');
 });
 
-describe('ContextPage', () => {
+describe('TwoWayBindings', () => {
 
   test('bind adds a name attribute to the element', async () => {
     const element = await page.$('[name="number"]');

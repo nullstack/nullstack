@@ -17,5 +17,5 @@ export function isFunction(node) {
 }
 
 export function isText(node) {
-  return typeof (node.children) === 'undefined';
+  return node.type === 'text'
 }

@@ -1,26 +1,63 @@
-import { isFalse, isText } from '../shared/nodes';
+import { isUndefined, isFalse, isText } from '../shared/nodes';
 import { anchorableElement } from './anchorableNode';
 import client from './client';
 import render from './render';
 
-export default function rerender(selector, current, next) {
+function updateAttributes(selector, current, next) {
+  const attributeNames = Object.keys({ ...current.attributes, ...next.attributes });
+  for (const name of attributeNames) {
+    if (name === 'html') {
+      if (next.attributes[name] !== current.attributes[name]) {
+        selector.innerHTML = next.attributes[name];
+      }
+      next.attributes['data-n'] === undefined && anchorableElement(selector);
+    } else if (name === 'checked') {
+      if (next.attributes[name] !== selector.value) {
+        selector.checked = next.attributes[name];
+      }
+    } else if (name === 'value') {
+      if (next.attributes[name] !== selector.value) {
+        selector.value = next.attributes[name];
+      }
+    } else if (name.startsWith('on')) {
+      const eventName = name.replace('on', '');
+      const key = '_event.' + eventName;
+      selector.removeEventListener(eventName, current[key]);
+      if (next.attributes[name]) {
+        next[key] = (event) => {
+          if (next.attributes.default !== true) {
+            event.preventDefault();
+          }
+          next.attributes[name]({ ...next.attributes, event });
+        };
+        selector.addEventListener(eventName, next[key]);
+      }
+    } else {
+      const type = typeof (next.attributes[name]);
+      if (type !== 'object' && type !== 'function') {
+        if (current.attributes[name] !== undefined && next.attributes[name] === undefined) {
+          selector.removeAttribute(name);
+        } else if (current.attributes[name] !== next.attributes[name]) {
+          if (name != 'value' && next.attributes[name] === false || next.attributes[name] === null || next.attributes[name] === undefined) {
+            selector.removeAttribute(name);
+          } else if (name != 'value' && next.attributes[name] === true) {
+            selector.setAttribute(name, '');
+          } else {
+            selector.setAttribute(name, next.attributes[name]);
+          }
+        }
+      }
+    }
+  }
+}
 
-  current = current === undefined ? client.virtualDom : current;
-  next = next === undefined ? client.nextVirtualDom : next;
+function _rerender(current, next) {
+
+  const selector = current.element
+  next.element = current.element
 
   if (next.instance) {
     next.instance._self.element = selector;
-  }
-
-  if (!client.hydrated && selector) {
-    for (const element of selector.childNodes) {
-      if (element.tagName && element.tagName.toLowerCase() == 'textarea' && element.childNodes.length == 0) {
-        element.appendChild(document.createTextNode(''));
-      }
-      if (element.COMMENT_NODE === 8 && element.textContent === '#') {
-        selector.removeChild(element);
-      }
-    }
   }
 
   if (isFalse(current) && isFalse(next)) {
@@ -29,16 +66,60 @@ export default function rerender(selector, current, next) {
 
   if ((isFalse(current) || isFalse(next)) && current != next) {
     const nextSelector = render(next);
-    return selector.replaceWith(nextSelector);
+    selector.replaceWith(nextSelector);
+    if (current.type !== 'head' && next.type !== 'head') {
+      return
+    }
   }
 
-  if (current.type == 'head' && next.type == 'head') {
-    return;
-  }
-
-  if (current.type == 'head' || next.type == 'head') {
+  if (current.type == 'head' ^ next.type == 'head') {
     const nextSelector = render(next);
-    return selector.replaceWith(nextSelector);
+    selector.replaceWith(nextSelector);
+  }
+
+  if (current.type !== 'head' && next.type === 'head') {
+    const limit = next.children.length;
+    for (let i = limit - 1; i > -1; i--) {
+      const nextSelector = render(next.children[i]);
+      document.querySelector('head').appendChild(nextSelector)
+    }
+    return
+  }
+
+  if (current.type === 'head' && next.type !== 'head') {
+    const limit = current.children.length;
+    for (let i = limit - 1; i > -1; i--) {
+      document.querySelector(`[data-n="${current.children[i].attributes['data-n']}"]`).remove()
+    }
+    return
+  }
+
+  if (next.type === 'head') {
+    const limit = Math.max(current.children.length, next.children.length);
+    for (let i = limit - 1; i > -1; i--) {
+      if (isUndefined(current.children[i]) && !isFalse(next.children[i])) {
+        const nextSelector = render(next.children[i]);
+        document.querySelector('head').appendChild(nextSelector)
+      } else if (isUndefined(next.children[i]) && !isFalse(current.children[i])) {
+        current.children[i].element.remove()
+      } else if (!isFalse(current.children[i]) && !isFalse(next.children[i])) {
+        if (current.children[i].type === next.children[i].type) {
+          next.children[i].element = current.children[i].element
+          const element = document.querySelector(`[data-n="${next.children[i].attributes['data-n']}"]`)
+          updateAttributes(element, current.children[i], next.children[i])
+        } else {
+          document.querySelector(`[data-n="${current.children[i].attributes['data-n']}"]`).remove()
+          const nextSelector = render(next.children[i]);
+          document.querySelector('head').appendChild(nextSelector)
+        }
+      } else if (isFalse(current.children[i]) && !isFalse(next.children[i])) {
+        const nextSelector = render(next.children[i]);
+        document.querySelector('head').appendChild(nextSelector)
+      } else {
+        current.children[i].element.remove()
+      }
+    }
+    return
   }
 
   if (current.type !== next.type) {
@@ -48,65 +129,20 @@ export default function rerender(selector, current, next) {
 
   if (isText(current) && isText(next)) {
     if (current != next) {
-      selector.nodeValue = next;
+      selector.nodeValue = next.text;
     }
     return;
   }
 
   if (current.type === next.type) {
-
-    const attributeNames = Object.keys({ ...current.attributes, ...next.attributes });
-    for (const name of attributeNames) {
-      if (name === 'html') {
-        if (next.attributes[name] !== current.attributes[name]) {
-          selector.innerHTML = next.attributes[name];
-        }
-        anchorableElement(selector);
-      } else if (name === 'checked') {
-        if (next.attributes[name] !== selector.value) {
-          selector.checked = next.attributes[name];
-        }
-      } else if (name === 'value') {
-        if (next.attributes[name] !== selector.value) {
-          selector.value = next.attributes[name];
-        }
-      } else if (name.startsWith('on')) {
-        const eventName = name.replace('on', '');
-        const key = '_event.' + eventName;
-        selector.removeEventListener(eventName, current[key]);
-        if (next.attributes[name]) {
-          next[key] = (event) => {
-            if (next.attributes.default !== true) {
-              event.preventDefault();
-            }
-            next.attributes[name]({ ...next.attributes, event });
-          };
-          selector.addEventListener(eventName, next[key]);
-        }
-      } else {
-        const type = typeof (next.attributes[name]);
-        if (type !== 'object' && type !== 'function') {
-          if (current.attributes[name] !== undefined && next.attributes[name] === undefined) {
-            selector.removeAttribute(name);
-          } else if (current.attributes[name] !== next.attributes[name]) {
-            if (name != 'value' && next.attributes[name] === false || next.attributes[name] === null || next.attributes[name] === undefined) {
-              selector.removeAttribute(name);
-            } else if (name != 'value' && next.attributes[name] === true) {
-              selector.setAttribute(name, '');
-            } else {
-              selector.setAttribute(name, next.attributes[name]);
-            }
-          }
-        }
-      }
-    }
+    updateAttributes(selector, current, next)
 
     if (next.attributes.html) return;
 
     const limit = Math.max(current.children.length, next.children.length);
     if (next.children.length > current.children.length) {
       for (let i = 0; i < current.children.length; i++) {
-        rerender(selector.childNodes[i], current.children[i], next.children[i]);
+        _rerender(current.children[i], next.children[i]);
       }
       for (let i = current.children.length; i < next.children.length; i++) {
         const nextSelector = render(next.children[i]);
@@ -114,7 +150,7 @@ export default function rerender(selector, current, next) {
       }
     } else if (current.children.length > next.children.length) {
       for (let i = 0; i < next.children.length; i++) {
-        rerender(selector.childNodes[i], current.children[i], next.children[i]);
+        _rerender(current.children[i], next.children[i]);
       }
       for (let i = current.children.length - 1; i >= next.children.length; i--) {
         selector.removeChild(selector.childNodes[i]);
@@ -129,12 +165,12 @@ export default function rerender(selector, current, next) {
           throw new Error('Virtual DOM does not match the DOM.')
           return;
         }
-        rerender(selector.childNodes[i], current.children[i], next.children[i]);
+        _rerender(current.children[i], next.children[i]);
       }
     }
 
     if (next.type == 'textarea') {
-      selector.value = next.children.join("");
+      selector.value = next.children.reduce((t, c) => t + c.text, '');
     }
 
     if (next.type == 'select') {
@@ -143,4 +179,29 @@ export default function rerender(selector, current, next) {
 
   }
 
+}
+
+export default function rerender() {
+  _rerender(client.virtualDom, client.nextVirtualDom)
+}
+
+export function hydrate(selector, node) {
+  if (node?.attributes?.['data-n'] !== undefined) {
+    node.element = document.querySelector(`[data-n="${node.attributes['data-n']}"]`)
+    return
+  }
+  node.element = selector
+  for (const element of selector.childNodes) {
+    if (element.tagName && element.tagName.toLowerCase() == 'textarea' && element.childNodes.length == 0) {
+      element.appendChild(document.createTextNode(''));
+    }
+    if (element.COMMENT_NODE === 8 && element.textContent === '#') {
+      selector.removeChild(element);
+    }
+  }
+  if (!node.children) return
+  const limit = node.children.length;
+  for (let i = limit - 1; i > -1; i--) {
+    hydrate(selector.childNodes[i], node.children[i])
+  }
 }

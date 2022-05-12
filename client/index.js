@@ -14,7 +14,7 @@ import page from './page';
 import params, { updateParams } from './params';
 import project from './project';
 import render from './render';
-import rerender from './rerender';
+import rerender, { hydrate } from './rerender';
 import router from './router';
 import settings from './settings';
 import worker from './worker';
@@ -63,12 +63,13 @@ export default class Nullstack {
         client.selector = body
       } else {
         client.virtualDom = await generateTree(client.initializer(), scope);
+        hydrate(client.selector, client.virtualDom)
         context.environment = environment;
         scope.plugins = loadPlugins(scope);
         worker.online = navigator.onLine;
         typeof context.start === 'function' && await context.start(context);
         client.nextVirtualDom = await generateTree(client.initializer(), scope);
-        rerender(client.selector);
+        rerender();
         client.virtualDom = client.nextVirtualDom;
         client.nextVirtualDom = null;
       }

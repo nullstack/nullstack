@@ -18,7 +18,10 @@ async function generateBranch(parent, node, depth, scope) {
   }
 
   if (isFalse(node)) {
-    parent.children.push(false);
+    parent.children.push({
+      type: false,
+      attributes: {}
+    });
     return;
   }
 
@@ -124,12 +127,22 @@ async function generateBranch(parent, node, depth, scope) {
       for (let i = 0; i < node.children.length; i++) {
         await generateBranch(branch, node.children[i], [...depth, i], scope);
       }
+      if (node.type === 'head') {
+        for (let i = 0; i < branch.children.length; i++) {
+          if (branch.children[i].attributes) {
+            branch.children[i].attributes['data-n'] = [...depth, i].join('.')
+          }
+        }
+      }
     }
     parent.children.push(branch);
     return;
   }
 
-  parent.children.push(node);
+  parent.children.push({
+    type: 'text',
+    text: node,
+  });
 
 }
 

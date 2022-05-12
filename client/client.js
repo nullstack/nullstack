@@ -7,7 +7,6 @@ import router from './router'
 const client = {}
 
 client.initialized = false
-client.hydrated = false
 client.initializer = null
 client.instances = {}
 context.instances = client.instances
@@ -31,7 +30,7 @@ client.update = async function update() {
       client.initialized = false
       client.renewalQueue = []
       client.nextVirtualDom = await generateTree(client.initializer(), scope)
-      rerender(client.selector)
+      rerender()
       client.virtualDom = client.nextVirtualDom
       client.nextVirtualDom = null
       client.processLifecycleQueues()
@@ -42,7 +41,6 @@ client.update = async function update() {
 client.processLifecycleQueues = async function processLifecycleQueues() {
   if (!client.initialized) {
     client.initialized = true
-    client.hydrated = true
   }
   let shouldUpdate = false
   while (client.initiationQueue.length) {
