@@ -48,6 +48,7 @@ import TypeScriptExtension from './TypeScriptExtension';
 import JavaScriptExtension from './JavaScriptExtension';
 import HydrateElement from './HydrateElement';
 import OptimizedEvents from './OptimizedEvents';
+import DynamicHead from './DynamicHead'
 
 class Application extends Nullstack {
 
@@ -119,6 +120,7 @@ class Application extends Nullstack {
         <TypeScriptExtension route="/typescript-extension" generic />
         <HydrateElement route="/hydrate-element" />
         <OptimizedEvents route="/optimized-events" />
+        <DynamicHead route="/dynamic-head" />
         <ErrorPage route="*" />
       </main>
     )
