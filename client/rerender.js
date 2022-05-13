@@ -122,7 +122,7 @@ function _rerender(current, next) {
       } else if (isFalse(current.children[i]) && !isFalse(next.children[i])) {
         const nextSelector = render(next.children[i]);
         document.querySelector('head').appendChild(nextSelector)
-      } else {
+      } else if (current.children[i].type) {
         current.children[i].element.remove()
       }
     }

@@ -28,10 +28,15 @@ describe('DynamicHead', () => {
     expect(color).toEqual('rgb(0, 0, 255)');
   });
 
-  test('styles can be conditionaly rendered inside the head tag', async () => {
+  test('styles can be conditionaly prerendered inside the head tag', async () => {
+    const color = await page.evaluate('getComputedStyle(document.body.querySelector("[data-prerender-conditional]")).color')
+    expect(color).toEqual('rgb(0, 0, 255)');
+  });
+
+  test('styles can be conditionaly rerendered inside the head tag', async () => {
     await page.click('[data-increment]');
-    await page.waitForSelector('head [data-conditional]');
-    const color = await page.evaluate('getComputedStyle(document.body.querySelector("[data-conditional]")).color')
+    await page.waitForSelector('head [data-rerender-conditional]');
+    const color = await page.evaluate('getComputedStyle(document.body.querySelector("[data-rerender-conditional]")).color')
     expect(color).toEqual('rgb(0, 0, 255)');
   });
 
@@ -40,6 +45,22 @@ describe('DynamicHead', () => {
     await page.waitForSelector('head [data-conditional-head]');
     const color = await page.evaluate('getComputedStyle(document.body.querySelector("[data-conditional-head]")).color')
     expect(color).toEqual('rgb(0, 0, 255)');
+  });
+
+  test('heads can be replaced by ternaries', async () => {
+    await page.click('[data-increment]');
+    await page.waitForSelector('[data-ternary-span]');
+    const element = await page.$('[data-ternary-span]');
+    expect(element).toBeTruthy();
+  });
+
+  test('heads can be inserted by ternaries', async () => {
+    await page.click('[data-increment]');
+    await page.waitForSelector('[data-ternary-span]');
+    await page.click('[data-increment]');
+    await page.waitForSelector('[data-ternary-head]');
+    const element = await page.$('[data-ternary-head]');
+    expect(element).toBeTruthy();
   });
 
   test('the head tag accepts dynamic lists of increasing size', async () => {
@@ -51,7 +72,6 @@ describe('DynamicHead', () => {
     expect(elements.length).toEqual(3);
   });
 
-
   test('the head tag accepts dynamic lists of decreasing size', async () => {
     for (let i = 1; i < 3; i++) {
       await page.click('[data-increment]');
@@ -61,7 +81,6 @@ describe('DynamicHead', () => {
     await page.waitForSelector('[data-dynamic-length="2"]');
     await page.waitForTimeout(500)
     const elements = await page.$$('[data-dynamic-length]');
-    console.log(elements.length)
     expect(elements.length).toEqual(2);
   });
 });
