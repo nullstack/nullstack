@@ -2,6 +2,7 @@ import { NullstackClientContext } from './ClientContext'
 import { NullstackPlugin } from './Plugin'
 import { NullstackServerContext } from './ServerContext'
 
+export interface NullstackContext extends NullstackClientContext, NullstackServerContext {}
 export * from './ClientContext'
 export * from './Environment'
 export * from './Page'
@@ -15,12 +16,11 @@ export * from './Server'
 export * from './ServerContext'
 export * from './Settings'
 export * from './Worker'
+export { N } from './JSX'
 
-import N from './JSX'
-export { N }
-export interface NullstackContext extends NullstackClientContext, NullstackServerContext {}
+import { ComponentLifecycle } from './JSX'
 
-declare class NullstackMethods<Props = {}> {
+export default class Nullstack<Props = {}> implements ComponentLifecycle {
   constructor(props?: Props)
   /**
    * @param App A Nullstack app root component
@@ -30,9 +30,6 @@ declare class NullstackMethods<Props = {}> {
    * Use a plugin
    */
   static use?(Plugin: NullstackPlugin): void
-}
-
-export default class Nullstack<Props = {}> extends NullstackMethods<Props> implements N.ComponentLifecycle<Props> {
   prepare?(context: NullstackContext & Props): any
   initiate?(context: NullstackContext & Props): any
   launch?(context: NullstackContext & Props): any
