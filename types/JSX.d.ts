@@ -29,8 +29,6 @@
 //                 Guilherme Correia <https://github.com/GuiDevloper>
 // TypeScript Version: 2.8
 
-import { NullstackClientContext, NullstackServerContext } from ".";
-
 type NativeAnimationEvent = AnimationEvent;
 type NativeClipboardEvent = ClipboardEvent;
 type NativeCompositionEvent = CompositionEvent;
@@ -45,177 +43,60 @@ type NativeWheelEvent = WheelEvent;
 type Booleanish = boolean | 'true' | 'false';
 interface HTMLWebViewElement extends HTMLElement { }
 
-export default N;
-export as namespace N;
+export interface ComponentLifecycle {
+    /**
+     * @see https://nullstack.app/full-stack-lifecycle#prepare
+     */
+    prepare?(context?: object): any
 
-declare namespace N {
+    /**
+     * @see https://nullstack.app/full-stack-lifecycle#initiate
+     */
+    initiate?(context?: object): any
+
+    /**
+     * @see https://nullstack.app/full-stack-lifecycle#launch
+     */
+    launch?(context?: object): any
+
+    /**
+     * @see https://nullstack.app/full-stack-lifecycle#hydrate
+     */
+    hydrate?(context?: object): any
+
+    /**
+     * @see https://nullstack.app/full-stack-lifecycle#update
+     */
+    update?(context?: object): any
+
+    /**
+     * @see https://nullstack.app/full-stack-lifecycle#terminate
+     */
+    terminate?(context?: object): any
+}
+
+export namespace N {
     //
     // Nullstack Elements
     // ----------------------------------------------------------------------
-
-    type ElementType<P = any> =
-        {
-            [K in keyof JSX.IntrinsicElements]: P extends JSX.IntrinsicElements[K] ? K : never
-        }[keyof JSX.IntrinsicElements] |
-        ComponentType<P>;
-    type ComponentType<P = {}> = ComponentClass<P> | FunctionComponent<P>;
-
-    type JSXElementConstructor<P> =
-        | ((props: P) => NullstackElement<any, any> | null)
-        | (new (props: P) => Component<any>);
-
-    interface RefObject<T> {
-        readonly current: T | null;
-    }
-    // Bivariance hack for consistent unsoundness with RefObject
-    type RefCallback<T> = { bivarianceHack(instance: T | null): void }["bivarianceHack"];
-    type Ref<T> = RefCallback<T> | RefObject<T> | null;
-    type LegacyRef<T> = string | Ref<T>;
-
-    type ComponentState = any;
-
-    type Key = string | number;
 
     /**
      * @internal You shouldn't need to use this type since you never see these attributes
      * inside your component or have to validate them.
      */
     interface Attributes { }
-    interface ClassAttributes<T> extends Attributes {
-        key?: Key | null | undefined;
-    }
-
-    interface NullstackElement<P = any, T extends string | JSXElementConstructor<any> = string | JSXElementConstructor<any>> {
-        type: T;
-        props: P;
-        key: Key | null;
-    }
-
-    // string fallback for custom web-components
-    interface DOMElement<P extends HTMLAttributes<T> | SVGAttributes<T>, T extends Element> extends NullstackElement<P, string> {
-        ref: LegacyRef<T>;
-    }
-
-    // NullstackHTML for NullstackHTMLElement
-    interface NullstackHTMLElement<T extends HTMLElement> extends DetailedNullstackHTMLElement<AllHTMLAttributes<T>, T> { }
-
-    interface DetailedNullstackHTMLElement<P extends HTMLAttributes<T>, T extends HTMLElement> extends DOMElement<P, T> {
-        type: keyof NullstackHTML;
-    }
-
-    // NullstackSVG for NullstackSVGElement
-    interface NullstackSVGElement extends DOMElement<SVGAttributes<SVGElement>, SVGElement> {
-        type: keyof NullstackSVG;
-    }
+    interface ClassAttributes extends Attributes { }
 
     //
     // Factories
     // ----------------------------------------------------------------------
 
-    type Factory<P> = (props?: Attributes & P, ...children: NullstackNode[]) => NullstackElement<P>;
+    type DetailedHTMLFactory<P, T = any> = P;
 
-    type DOMFactory<P extends DOMAttributes<T>, T extends Element> =
-        (props?: ClassAttributes<T> & P | null, ...children: NullstackNode[]) => DOMElement<P, T>;
+    interface SVGFactory { }
 
-    interface HTMLFactory<T extends HTMLElement> extends DetailedHTMLFactory<AllHTMLAttributes<T>, T> {}
-
-    interface DetailedHTMLFactory<P extends HTMLAttributes<T>, T extends HTMLElement> extends DOMFactory<P, T> {
-        (props?: ClassAttributes<T> & P | null, ...children: NullstackNode[]): DetailedNullstackHTMLElement<P, T>;
-    }
-
-    interface SVGFactory extends DOMFactory<SVGAttributes<SVGElement>, SVGElement> {
-        (props?: ClassAttributes<SVGElement> & SVGAttributes<SVGElement> | null, ...children: NullstackNode[]): NullstackSVGElement;
-    }
-
-    type NullstackFragment = Iterable<NullstackNode>;
-    type NullstackNode = NullstackElement | string | number | NullstackFragment | boolean | null | undefined;
-
-    //
-    // Component API
-    // ----------------------------------------------------------------------
-
-    // Base component for plain JS classes
-    interface Component<P = {}> extends ComponentLifecycle<P> { }
-    class Component<P> {
-        constructor(props: P);
-
-        render(props: P): NullstackNode;
-    }
-
-    //
-    // Class Interfaces
-    // ----------------------------------------------------------------------
-
-    interface FunctionComponent<P = {}> {
-        (props: P, context?: any): NullstackElement<any, any> | null;
-        propTypes?: object | undefined;
-        contextTypes?: object | undefined;
-        defaultProps?: Partial<P> | undefined;
-        displayName?: string | undefined;
-    }
-
-    interface ComponentClass<P = {}> {
-        new (props: P, context?: any): Component<P>;
-        propTypes?: object | undefined;
-        contextType?: object | undefined;
-        contextTypes?: object | undefined;
-        childContextTypes?: object | undefined;
-        defaultProps?: Partial<P> | undefined;
-        displayName?: string | undefined;
-    }
-
-    /**
-     * We use an intersection type to infer multiple type parameters from
-     * a single argument, which is useful for many top-level API defs.
-     * See https://github.com/Microsoft/TypeScript/issues/7234 for more info.
-     */
-    type ClassType<P, T extends Component<P>, C extends ComponentClass<P>> =
-        C &
-        (new (props: P, context?: any) => T);
-
-    //
-    // Component Specs and Lifecycle
-    // ----------------------------------------------------------------------
-
-    type PropsContext<P> = NullstackClientContext & NullstackServerContext & P;
-    interface ComponentLifecycle<P = {}> {
-        /**
-         * @see https://nullstack.app/full-stack-lifecycle#prepare
-         */
-        prepare?(context?: object): any
-
-        /**
-         * @see https://nullstack.app/full-stack-lifecycle#initiate
-         */
-        initiate?(context?: object): any
-
-        /**
-         * @see https://nullstack.app/full-stack-lifecycle#launch
-         */
-        launch?(context?: object): any
-
-        /**
-         * @see https://nullstack.app/full-stack-lifecycle#hydrate
-         */
-        hydrate?(context?: object): any
-
-        /**
-         * @see https://nullstack.app/full-stack-lifecycle#update
-         */
-        update?(context?: object): any
-
-        /**
-         * @see https://nullstack.app/full-stack-lifecycle#terminate
-         */
-        terminate?(context?: object): any
-    }
-
-    type ComponentProps<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>> =
-        T extends JSXElementConstructor<infer P>
-            ? P
-            : T extends keyof JSX.IntrinsicElements
-                ? JSX.IntrinsicElements[T]
-                : {};
+    // type NullstackFragment = Iterable<NullstackNode>;
+    type NullstackNode = NullstackNode[] | string | number | boolean | null | undefined;
 
     //
     // Event System
@@ -380,12 +261,12 @@ declare namespace N {
     // Props / DOM Attributes
     // ----------------------------------------------------------------------
 
-    interface HTMLProps<T> extends AllHTMLAttributes<T>, ClassAttributes<T> {
+    interface HTMLProps<T> extends AllHTMLAttributes<T>, ClassAttributes {
     }
 
     type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = E;
 
-    interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes<T> {
+    interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes {
     }
 
     interface DOMAttributes<T> {
@@ -1860,36 +1741,14 @@ declare namespace N {
     }
 
     interface NullstackDOM extends NullstackHTML, NullstackSVG { }
-
-    //
-    // Nullstack.Children
-    // ----------------------------------------------------------------------
-
-    /**
-     * @deprecated - Use `typeof Nullstack.Children` instead.
-     */
-    // Sync with type of `const Children`.
-    interface NullstackChildren {
-        map<T, C>(children: C | ReadonlyArray<C>, fn: (child: C, index: number) => T):
-            C extends null | undefined ? C : Array<Exclude<T, boolean | null | undefined>>;
-        forEach<C>(children: C | ReadonlyArray<C>, fn: (child: C, index: number) => void): void;
-        count(children: any): number;
-        only<C>(children: C): C extends any[] ? never : C;
-        toArray(children: NullstackNode | NullstackNode[]): Array<Exclude<NullstackNode, boolean | null | undefined>>;
-    }
 }
 
 declare global {
     namespace JSX {
-        interface Element extends N.NullstackElement<any, any> { }
-        interface ElementClass extends N.Component<any> {
-            render(): N.NullstackNode;
-        }
-        // interface ElementAttributesProperty { [key: string]: any }
-        interface ElementChildrenAttribute { children: {}; }
+        type Element = N.NullstackNode;
 
         interface IntrinsicAttributes extends N.Attributes { }
-        interface IntrinsicClassAttributes<T> extends N.ClassAttributes<T> { }
+        interface IntrinsicClassAttributes extends N.ClassAttributes { }
 
         interface IntrinsicElements {
             // HTML
