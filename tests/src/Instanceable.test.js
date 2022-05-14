@@ -8,7 +8,7 @@ describe('Instanceable', () => {
     const selector = `[data-title="${title}"][data-hydrated]`;
     await page.waitForSelector(selector);
     const p = await page.$(selector);
-    const text = await page.evaluate(element => element.innerText, p);
+    const text = await page.evaluate(element => element.textContent, p);
 
     const expectedValue = new Array(2).fill(value).join(' ');
     expect(text).toBe(expectedValue);

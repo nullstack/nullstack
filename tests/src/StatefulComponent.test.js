@@ -50,7 +50,7 @@ describe('StatefulComponent', () => {
   test('empty strings generate nodes', async () => {
     await page.click('[data-fill]');
     await page.waitForSelector('[data-empty="not"]');
-    const text = await page.$eval('[data-empty="not"]', (e) => e.innerText);
+    const text = await page.$eval('[data-empty="not"]', (e) => e.textContent);
     expect(text).toMatch('not');
   });
 

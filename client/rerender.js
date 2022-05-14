@@ -134,8 +134,8 @@ function _rerender(current, next) {
   }
 
   if (isText(current) && isText(next)) {
-    if (current != next) {
-      selector.nodeValue = next.text;
+    if (current.text !== next.text) {
+      selector.textContent = next.text;
     }
     return;
   }

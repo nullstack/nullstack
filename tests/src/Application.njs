@@ -49,6 +49,7 @@ import JavaScriptExtension from './JavaScriptExtension';
 import HydrateElement from './HydrateElement';
 import OptimizedEvents from './OptimizedEvents';
 import DynamicHead from './DynamicHead'
+import TextObserver from './TextObserver';
 
 class Application extends Nullstack {
 
@@ -121,6 +122,7 @@ class Application extends Nullstack {
         <HydrateElement route="/hydrate-element" />
         <OptimizedEvents route="/optimized-events" />
         <DynamicHead route="/dynamic-head" />
+        <TextObserver route="/text-observer" />
         <ErrorPage route="*" />
       </main>
     )

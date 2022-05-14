@@ -8,7 +8,7 @@ describe('Application', () => {
 
   test('the static start function runs on startup', async () => {
     const h1 = await page.$('h1');
-    const text = await page.evaluate(element => element.innerText, h1);
+    const text = await page.evaluate(element => element.textContent, h1);
     expect(text).toMatch('Nullstack Tests');
   });
 

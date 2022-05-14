@@ -60,7 +60,7 @@ describe('ContextPage', () => {
   });
 
   test('the schema key generates a json schema', async () => {
-    const text = await page.$eval('head > script[type="application/ld+json"]', element => element.innerText);
+    const text = await page.$eval('head > script[type="application/ld+json"]', element => element.textContent);
     expect(text).toMatch('{"@type":"WebSite","@id":"#website","name":"Nullstack","url":"https://nullstack.app"}');
   });
 
@@ -78,14 +78,14 @@ describe('ContextPage', () => {
     await page.click('button');
     await page.waitForSelector('[data-event-triggered]');
     const element = await page.$('[data-event-triggered]');
-    expect(element).toBeTruthy();  
+    expect(element).toBeTruthy();
   });
 
   test('the page reacts to a server function status', async () => {
     await page.click('[status="401"]');
     await page.waitForSelector('[data-page-status="401"]');
     const element = await page.$('[data-page-status="401"]');
-    expect(element).toBeTruthy();  
+    expect(element).toBeTruthy();
   });
 
 });

@@ -15,7 +15,7 @@ describe('Falsy Nodes', () => {
   });
 
   test('Zero nodes should render a text node', async () => {
-    const truth = await page.$eval('[data-zero]', (e) => e.innerText === '0');
+    const truth = await page.$eval('[data-zero]', (e) => e.textContent === '0');
     expect(truth).toBeTruthy();
   });
 
