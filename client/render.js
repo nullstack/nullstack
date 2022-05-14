@@ -29,7 +29,7 @@ export default function render(node, options) {
   for (let name in node.attributes) {
     if (name === 'html') {
       node.element.innerHTML = node.attributes[name];
-      node.attributes['data-n'] === undefined && anchorableElement(node.element);
+      node.head || anchorableElement(node.element);
     } else if (name.startsWith('on')) {
       if (node.attributes[name] !== undefined) {
         const eventName = name.substring(2);

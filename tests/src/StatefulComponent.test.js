@@ -64,4 +64,16 @@ describe('StatefulComponent', () => {
     expect(hasConsoleError).toBeFalsy();
   });
 
+  test('textareas with multiple nodes become a single node', async () => {
+    const text = await page.$eval('textarea', (e) => e.value);
+    expect(text).toMatch(' 1 1 ');
+  });
+
+  test('textareas with multiple nodes can be updated', async () => {
+    await page.click('.increment-by-one');
+    await page.waitForSelector('[data-count="2"]');
+    const text = await page.$eval('textarea', (e) => e.value);
+    expect(text).toMatch(' 2 2 ');
+  });
+
 });

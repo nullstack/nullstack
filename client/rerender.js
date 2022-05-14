@@ -88,7 +88,7 @@ function _rerender(current, next) {
     const limit = next.children.length;
     for (let i = limit - 1; i > -1; i--) {
       const nextSelector = render(next.children[i]);
-      document.querySelector('head').appendChild(nextSelector)
+      document.head.appendChild(nextSelector)
     }
     return
   }
@@ -96,7 +96,7 @@ function _rerender(current, next) {
   if (current.type === 'head' && next.type !== 'head') {
     const limit = current.children.length;
     for (let i = limit - 1; i > -1; i--) {
-      document.querySelector(`[data-n="${current.children[i].attributes['data-n']}"]`).remove()
+      current.children[i].element.remove()
     }
     return
   }
@@ -106,22 +106,21 @@ function _rerender(current, next) {
     for (let i = limit - 1; i > -1; i--) {
       if (isUndefined(current.children[i]) && !isFalse(next.children[i])) {
         const nextSelector = render(next.children[i]);
-        document.querySelector('head').appendChild(nextSelector)
+        document.head.appendChild(nextSelector)
       } else if (isUndefined(next.children[i]) && !isFalse(current.children[i])) {
         current.children[i].element.remove()
       } else if (!isFalse(current.children[i]) && !isFalse(next.children[i])) {
         if (current.children[i].type === next.children[i].type) {
           next.children[i].element = current.children[i].element
-          const element = document.querySelector(`[data-n="${next.children[i].attributes['data-n']}"]`)
-          updateAttributes(element, current.children[i], next.children[i])
+          updateAttributes(current.children[i].element, current.children[i], next.children[i])
         } else {
-          document.querySelector(`[data-n="${current.children[i].attributes['data-n']}"]`).remove()
+          current.children[i].element.remove()
           const nextSelector = render(next.children[i]);
-          document.querySelector('head').appendChild(nextSelector)
+          document.head.appendChild(nextSelector)
         }
       } else if (isFalse(current.children[i]) && !isFalse(next.children[i])) {
         const nextSelector = render(next.children[i]);
-        document.querySelector('head').appendChild(nextSelector)
+        document.head.appendChild(nextSelector)
       } else if (current.children[i].type) {
         current.children[i].element.remove()
       }
@@ -177,7 +176,7 @@ function _rerender(current, next) {
     }
 
     if (next.type == 'textarea') {
-      selector.value = next.children.reduce((t, c) => t + c.text, '');
+      selector.value = next.children[0].text;
     }
 
     if (next.type == 'select') {

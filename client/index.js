@@ -52,7 +52,7 @@ export default class Nullstack {
       updateParams(router.url);
       client.currentInstance = null;
       client.initializer = () => element(Starter);
-      client.selector = document.querySelector('#application');
+      client.selector = document.getElementById('application');
       if (environment.mode === 'spa') {
         scope.plugins = loadPlugins(scope);
         worker.online = navigator.onLine;

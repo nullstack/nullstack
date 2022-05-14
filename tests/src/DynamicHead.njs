@@ -3,6 +3,7 @@ import Nullstack from 'nullstack';
 class DynamicHead extends Nullstack {
 
   count = 0
+  negativeCount = 0
 
   renderHead() {
     const innerComponent = `[data-inner-component] { color: blue }`
@@ -30,13 +31,13 @@ class DynamicHead extends Nullstack {
           </>
           <Head />
         </head>
-        {this.count % 2 === 0 &&
+        {this.count === 1 &&
           <head>
             <style html={conditionalHead} data-conditional-head />
           </head>
         }
         <head>
-          {Array(this.count + 1).fill(<style html={dynamicLength} data-dynamic-length={this.count} />)}
+          {Array(this.count + 1 - this.negativeCount).fill(<style html={dynamicLength} data-dynamic-length={this.count} data-negative-count={this.negativeCount === 1} />)}
         </head>
         {this.count % 2 === 0 ?
           <head>
@@ -44,7 +45,7 @@ class DynamicHead extends Nullstack {
           </head> : <span data-ternary-span> not head </span>
         }
         <button onclick={{ count: this.count + 1 }} data-increment> inc {this.count} </button>
-        <button onclick={{ count: this.count - 1 }} data-decrement> dec {this.count} </button>
+        <button onclick={{ negativeCount: this.negativeCount + 1 }} data-decrement> dec {this.count} </button>
         <span data-red-blue> data-red-blue </span>
         <span data-prerender-conditional> data-prerender-conditional </span>
         <span data-rerender-conditional> data-rerender-conditional </span>

@@ -78,9 +78,21 @@ describe('DynamicHead', () => {
       await page.waitForSelector(`[data-dynamic-length="${i}"]`);
     }
     await page.click('[data-decrement]');
-    await page.waitForSelector('[data-dynamic-length="2"]');
-    await page.waitForTimeout(500)
-    const elements = await page.$$('[data-dynamic-length]');
+    await page.waitForSelector('[data-negative-count]');
+    const elements = await page.$$('[data-negative-count]');
     expect(elements.length).toEqual(2);
+  });
+
+  test('dynamic head elements can update attributes', async () => {
+    for (let i = 1; i < 3; i++) {
+      await page.click('[data-increment]');
+      await page.waitForSelector(`[data-dynamic-length="${i}"]`);
+    }
+    await page.click('[data-decrement]');
+    await page.waitForSelector('[data-negative-count]');
+    await page.click('[data-decrement]');
+    await page.waitForSelector('[data-dynamic-length]:not([data-negative-count])');
+    const element = await page.$('[data-dynamic-length]:not([data-negative-count])');
+    expect(element).toBeTruthy();
   });
 });

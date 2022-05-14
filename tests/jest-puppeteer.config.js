@@ -1,7 +1,7 @@
-// get environment variable
-const CI = !!process.env.CI;
-
-const baseOptions = {
+const defaultOptions = {
+  launch: {
+    headless: true,
+  },
   server: {
     command: 'npm run start',
     port: 6969,
@@ -22,7 +22,12 @@ const ciPipelineOptions = {
       '--disable-gpu'
     ]
   },
-  ...baseOptions
+  server: {
+    command: 'npm run start',
+    port: 6969,
+    launchTimeout: 25000
+  },
+  browserContext: 'incognito'
 }
 
-module.exports = CI ? ciPipelineOptions : baseOptions;
+module.exports = process.env.CI ? ciPipelineOptions : defaultOptions;

@@ -49,6 +49,7 @@ class StatefulComponent extends Nullstack {
         </>
         <button onclick={{ visible: !this.visible }} data-toggle> Toggle </button>
         {this.visible && <button onclick={undefined} data-undefined-event> button </button>}
+        <textarea> {this.count} {this.count} </textarea>
       </form>
     )
   }

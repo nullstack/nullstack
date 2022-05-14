@@ -1,8 +1,8 @@
 import { anchorableElement } from './anchorableNode';
 
 export default function hydrate(selector, node) {
-  if (node?.attributes?.['data-n'] !== undefined) {
-    node.element = document.querySelector(`[data-n="${node.attributes['data-n']}"]`)
+  if (node.head) {
+    node.element = document.getElementById(node.attributes.id)
     return
   }
   if (node?.attributes?.html) {
