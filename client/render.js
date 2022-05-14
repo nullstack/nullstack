@@ -49,7 +49,7 @@ export default function render(node, options) {
       if (type !== 'object' && type !== 'function') {
         if (name != 'value' && node.attributes[name] === true) {
           node.element.setAttribute(name, '');
-        } else if (name == 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
+        } else if (name === 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
           node.element.setAttribute(name, node.attributes[name]);
         }
       }
@@ -62,7 +62,7 @@ export default function render(node, options) {
       node.element.appendChild(child);
     }
 
-    if (node.type == 'select') {
+    if (node.type === 'select') {
       node.element.value = node.attributes.value;
     }
   }

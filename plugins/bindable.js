@@ -10,10 +10,10 @@ function attachEvent(node) {
   }
   const originalEvent = node.attributes[eventName];
   node.attributes[eventName] = ({ event, value }) => {
-    if (valueName == 'checked') {
+    if (valueName === 'checked') {
       target[node.attributes.bind] = event.target[valueName];
     } else if (target[node.attributes.bind] === true || target[node.attributes.bind] === false) {
-      target[node.attributes.bind] = event ? (event.target[valueName] == 'true') : value;
+      target[node.attributes.bind] = event ? (event.target[valueName] === 'true') : value;
     } else if (typeof target[node.attributes.bind] === 'number') {
       target[node.attributes.bind] = parseFloat(event ? event.target[valueName] : value) || 0;
     } else {

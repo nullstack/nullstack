@@ -10,10 +10,9 @@ export default function hydrate(selector, node) {
   }
   node.element = selector
   for (const element of selector.childNodes) {
-    if (element.tagName && element.tagName.toLowerCase() == 'textarea' && element.childNodes.length == 0) {
+    if ((element.tagName === 'TEXTAREA' || element.tagName === 'textarea') && element.childNodes.length === 0) {
       element.appendChild(document.createTextNode(''));
-    }
-    if (element.COMMENT_NODE === 8 && element.textContent === '#') {
+    } else if (element.COMMENT_NODE === 8 && element.textContent === '#') {
       element.remove()
     }
   }

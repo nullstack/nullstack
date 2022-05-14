@@ -79,7 +79,7 @@ function _rerender(current, next) {
     }
   }
 
-  if (current.type == 'head' ^ next.type == 'head') {
+  if (current.type === 'head' ^ next.type === 'head') {
     const nextSelector = render(next);
     selector.replaceWith(nextSelector);
   }
@@ -175,11 +175,11 @@ function _rerender(current, next) {
       }
     }
 
-    if (next.type == 'textarea') {
+    if (next.type === 'textarea') {
       selector.value = next.children[0].text;
     }
 
-    if (next.type == 'select') {
+    if (next.type === 'select') {
       selector.value = next.attributes.value;
     }
 

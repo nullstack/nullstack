@@ -88,7 +88,7 @@ async function generateBranch(parent, node, depth, scope) {
       if (shouldHydrate) {
         shouldLaunch && instance.launch && instance.launch();
         scope.hydrationQueue.push(instance);
-      } else if (instance._self.initiated == true) {
+      } else if (instance._self.initiated === true) {
         instance.update && instance.update();
       }
     }

@@ -19,7 +19,7 @@ export default function render(node, scope) {
       if (type !== 'object' && type !== 'function') {
         if (name != 'value' && node.attributes[name] === true) {
           element += ` ${name}`;
-        } else if (name == 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
+        } else if (name === 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
           element += ` ${name}="${node.attributes[name]}"`;
         }
       }
