@@ -119,7 +119,7 @@ async function generateBranch(parent, node, depth, scope) {
   if (node.type) {
     const branch = {
       type: node.type,
-      attributes: node.attributes || {},
+      attributes: node.attributes,
       instance: node.instance,
       children: []
     }
