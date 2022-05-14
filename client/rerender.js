@@ -10,8 +10,8 @@ function updateAttributes(selector, current, next) {
     if (name === 'html') {
       if (next.attributes[name] !== current.attributes[name]) {
         selector.innerHTML = next.attributes[name];
+        anchorableElement(selector);
       }
-      anchorableElement(selector);
     } else if (name === 'checked') {
       if (next.attributes[name] !== selector.value) {
         selector.checked = next.attributes[name];
@@ -190,25 +190,4 @@ function _rerender(current, next) {
 
 export default function rerender() {
   _rerender(client.virtualDom, client.nextVirtualDom)
-}
-
-export function hydrate(selector, node) {
-  if (node?.attributes?.['data-n'] !== undefined) {
-    node.element = document.querySelector(`[data-n="${node.attributes['data-n']}"]`)
-    return
-  }
-  node.element = selector
-  for (const element of selector.childNodes) {
-    if (element.tagName && element.tagName.toLowerCase() == 'textarea' && element.childNodes.length == 0) {
-      element.appendChild(document.createTextNode(''));
-    }
-    if (element.COMMENT_NODE === 8 && element.textContent === '#') {
-      element.remove()
-    }
-  }
-  if (!node.children) return
-  const limit = node.children.length;
-  for (let i = limit - 1; i > -1; i--) {
-    hydrate(selector.childNodes[i], node.children[i])
-  }
 }
