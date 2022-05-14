@@ -26,7 +26,7 @@ async function generateBranch(parent, node, depth, scope) {
   }
 
   if (isClass(node)) {
-    const key = node.attributes.key ? node.attributes.key : generateKey(node, depth) + (node.attributes.route ? (scope.context.environment.mode === 'ssg' ? scope.context.router.path : scope.context.router.url) : '')
+    const key = generateKey(scope, node, depth)
     if (
       scope.context.environment.client &&
       scope.context.router._changed &&
@@ -34,7 +34,7 @@ async function generateBranch(parent, node, depth, scope) {
       node.attributes.route &&
       scope.context.environment.mode !== 'ssg'
     ) {
-      const routeDepth = depth.slice(0, -1).join('.');
+      const routeDepth = depth.slice(0, depth.lastIndexOf('-'))
       const newSegments = scope.context.router._newSegments[routeDepth];
       if (newSegments) {
         const oldSegments = scope.context.router._oldSegments[routeDepth];
@@ -101,7 +101,7 @@ async function generateBranch(parent, node, depth, scope) {
     }
     node.children = [].concat(children);
     for (let i = 0; i < node.children.length; i++) {
-      await generateBranch(parent, node.children[i], [...depth, i], scope);
+      await generateBranch(parent, node.children[i], depth + '-' + i, scope);
     }
     return;
   }
@@ -111,7 +111,7 @@ async function generateBranch(parent, node, depth, scope) {
     const children = node.type(context);
     node.children = [].concat(children);
     for (let i = 0; i < node.children.length; i++) {
-      await generateBranch(parent, node.children[i], [...depth, i], scope);
+      await generateBranch(parent, node.children[i], depth + '-' + i, scope);
     }
     return;
   }
@@ -125,12 +125,12 @@ async function generateBranch(parent, node, depth, scope) {
     }
     if (node.children) {
       for (let i = 0; i < node.children.length; i++) {
-        await generateBranch(branch, node.children[i], [...depth, i], scope);
+        await generateBranch(branch, node.children[i], depth + '-' + i, scope);
       }
       if (node.type === 'head') {
         for (let i = 0; i < branch.children.length; i++) {
           if (branch.children[i].attributes) {
-            branch.children[i].attributes['data-n'] = [...depth, i].join('.')
+            branch.children[i].attributes['data-n'] = depth + '-' + i
           }
         }
       }
@@ -148,6 +148,6 @@ async function generateBranch(parent, node, depth, scope) {
 
 export default async function generateTree(node, scope) {
   const tree = { type: 'div', attributes: { id: 'application' }, children: [] };
-  await generateBranch(tree, node, [0], scope);
+  await generateBranch(tree, node, '0', scope);
   return tree;
 }
