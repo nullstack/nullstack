@@ -29,7 +29,6 @@ export default function render(node, scope) {
   const selfClosing = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr', 'menuitem'].includes(node.type);
   if (selfClosing && node.children.length === 0) {
     element += '/>';
-
   } else {
     element += '>';
     if (node.attributes.html) {

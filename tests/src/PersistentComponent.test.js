@@ -51,6 +51,12 @@ describe('PersistentComponent terminated', () => {
     expect(element).toBeTruthy();
   });
 
+  test('terminated persistent components should not have an element self', async () => {
+    await page.waitForSelector('[data-a-terminated][data-persistent-self-element-removed]');
+    const element = await page.$('[data-a-terminated][data-persistent-self-element-removed]');
+    expect(element).toBeTruthy();
+  });
+
 });
 
 describe('PersistentComponent reinstantiated', () => {

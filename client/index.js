@@ -84,6 +84,7 @@ export default class Nullstack {
     initiated: false,
     hydrated: false,
     terminated: false,
+    element: null,
   }
 
   constructor() {

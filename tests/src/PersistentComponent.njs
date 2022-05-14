@@ -23,7 +23,8 @@ class PersistentComponent extends Nullstack {
     this.count++
   }
 
-  terminate() {
+  terminate(context) {
+    context.terminatedSelf = context.self
     this.count++
   }
 
@@ -31,7 +32,7 @@ class PersistentComponent extends Nullstack {
     return self
   }
 
-  render({ self, instances }) {
+  render({ self, instances, terminatedSelf }) {
     const aCount = instances['PersistentComponent/0-0-33/persistent-component/a']?.count
     const aTerminated = instances['PersistentComponent/0-0-33/persistent-component/a']?.self?.()?.terminated
     return (
@@ -43,6 +44,7 @@ class PersistentComponent extends Nullstack {
         data-persistent={self.persistent}
         data-prerendered={self.prerendered}
         data-a-terminated={aTerminated}
+        data-persistent-self-element-removed={terminatedSelf?.element === null}
       >
         <a href="/persistent-component/a"> a </a>
         <a href="/persistent-component/b"> b </a>

@@ -160,7 +160,7 @@ function _rerender(current, next) {
         _rerender(current.children[i], next.children[i]);
       }
       for (let i = current.children.length - 1; i >= next.children.length; i--) {
-        selector.removeChild(selector.childNodes[i]);
+        selector.childNodes[i].remove()
       }
     } else {
       for (let i = limit - 1; i > -1; i--) {
@@ -203,7 +203,7 @@ export function hydrate(selector, node) {
       element.appendChild(document.createTextNode(''));
     }
     if (element.COMMENT_NODE === 8 && element.textContent === '#') {
-      selector.removeChild(element);
+      element.remove()
     }
   }
   if (!node.children) return

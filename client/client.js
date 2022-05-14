@@ -72,6 +72,7 @@ client.processLifecycleQueues = async function processLifecycleQueues() {
       instance.terminate && await instance.terminate()
       if (instance._self.persistent) {
         instance._self.terminated = true
+        instance._self.element = null
       } else {
         delete client.instances[key]
       }
