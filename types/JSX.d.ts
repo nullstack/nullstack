@@ -28,7 +28,6 @@
 //                 Priyanshu Rav <https://github.com/priyanshurav>
 //                 Guilherme Correia <https://github.com/GuiDevloper>
 // TypeScript Version: 2.8
-// <reference path="CompGlobal.d.ts" />
 
 import { NullstackClientContext, NullstackServerContext } from ".";
 
@@ -46,10 +45,10 @@ type NativeWheelEvent = WheelEvent;
 type Booleanish = boolean | 'true' | 'false';
 interface HTMLWebViewElement extends HTMLElement { }
 
-export default Nullstack;
-export as namespace Nullstack;
+export default N;
+export as namespace N;
 
-declare namespace Nullstack {
+declare namespace N {
     //
     // Nullstack Elements
     // ----------------------------------------------------------------------
@@ -81,12 +80,9 @@ declare namespace Nullstack {
      * @internal You shouldn't need to use this type since you never see these attributes
      * inside your component or have to validate them.
      */
-    interface Attributes {
-        
-    }
+    interface Attributes { }
     interface ClassAttributes<T> extends Attributes {
         key?: Key | null | undefined;
-        route?: string;
     }
 
     interface NullstackElement<P = any, T extends string | JSXElementConstructor<any> = string | JSXElementConstructor<any>> {
@@ -186,31 +182,32 @@ declare namespace Nullstack {
         /**
          * @see https://nullstack.app/full-stack-lifecycle#prepare
          */
-        prepare?(context?: PropsContext<P>): any
+        prepare?(context?: object): any
+
         /**
          * @see https://nullstack.app/full-stack-lifecycle#initiate
          */
-        initiate?(context?: PropsContext<P>): any
+        initiate?(context?: object): any
 
         /**
          * @see https://nullstack.app/full-stack-lifecycle#launch
          */
-        launch?(context?: PropsContext<P>): any
+        launch?(context?: object): any
 
         /**
          * @see https://nullstack.app/full-stack-lifecycle#hydrate
          */
-        hydrate?(context?: PropsContext<P>): any
+        hydrate?(context?: object): any
 
         /**
          * @see https://nullstack.app/full-stack-lifecycle#update
          */
-        update?(context?: PropsContext<P>): any
+        update?(context?: object): any
 
         /**
          * @see https://nullstack.app/full-stack-lifecycle#terminate
          */
-        terminate?(context?: PropsContext<P>): any
+        terminate?(context?: object): any
     }
 
     type ComponentProps<T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>> =
@@ -1884,196 +1881,196 @@ declare namespace Nullstack {
 
 declare global {
     namespace JSX {
-        interface Element extends Nullstack.NullstackElement<any, any> { }
-        interface ElementClass extends Nullstack.Component<any> {
-            render(): Nullstack.NullstackNode;
+        interface Element extends N.NullstackElement<any, any> { }
+        interface ElementClass extends N.Component<any> {
+            render(): N.NullstackNode;
         }
         // interface ElementAttributesProperty { [key: string]: any }
         interface ElementChildrenAttribute { children: {}; }
 
-        interface IntrinsicAttributes extends Nullstack.Attributes { }
-        interface IntrinsicClassAttributes<T> extends Nullstack.ClassAttributes<T> { }
+        interface IntrinsicAttributes extends N.Attributes { }
+        interface IntrinsicClassAttributes<T> extends N.ClassAttributes<T> { }
 
         interface IntrinsicElements {
             // HTML
-            a: Nullstack.DetailedHTMLProps<Nullstack.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>;
-            abbr: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            address: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            area: Nullstack.DetailedHTMLProps<Nullstack.AreaHTMLAttributes<HTMLAreaElement>, HTMLAreaElement>;
-            article: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            aside: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            audio: Nullstack.DetailedHTMLProps<Nullstack.AudioHTMLAttributes<HTMLAudioElement>, HTMLAudioElement>;
-            b: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            base: Nullstack.DetailedHTMLProps<Nullstack.BaseHTMLAttributes<HTMLBaseElement>, HTMLBaseElement>;
-            bdi: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            bdo: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            big: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            blockquote: Nullstack.DetailedHTMLProps<Nullstack.BlockquoteHTMLAttributes<HTMLQuoteElement>, HTMLQuoteElement>;
-            body: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLBodyElement>, HTMLBodyElement>;
-            br: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLBRElement>, HTMLBRElement>;
-            button: Nullstack.DetailedHTMLProps<Nullstack.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
-            canvas: Nullstack.DetailedHTMLProps<Nullstack.CanvasHTMLAttributes<HTMLCanvasElement>, HTMLCanvasElement>;
-            caption: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            cite: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            code: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            col: Nullstack.DetailedHTMLProps<Nullstack.ColHTMLAttributes<HTMLTableColElement>, HTMLTableColElement>;
-            colgroup: Nullstack.DetailedHTMLProps<Nullstack.ColgroupHTMLAttributes<HTMLTableColElement>, HTMLTableColElement>;
-            data: Nullstack.DetailedHTMLProps<Nullstack.DataHTMLAttributes<HTMLDataElement>, HTMLDataElement>;
-            datalist: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLDataListElement>, HTMLDataListElement>;
-            dd: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            del: Nullstack.DetailedHTMLProps<Nullstack.DelHTMLAttributes<HTMLModElement>, HTMLModElement>;
-            details: Nullstack.DetailedHTMLProps<Nullstack.DetailsHTMLAttributes<HTMLDetailsElement>, HTMLDetailsElement>;
-            dfn: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            dialog: Nullstack.DetailedHTMLProps<Nullstack.DialogHTMLAttributes<HTMLDialogElement>, HTMLDialogElement>;
-            div: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
-            dl: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLDListElement>, HTMLDListElement>;
-            dt: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            em: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            embed: Nullstack.DetailedHTMLProps<Nullstack.EmbedHTMLAttributes<HTMLEmbedElement>, HTMLEmbedElement>;
-            fieldset: Nullstack.DetailedHTMLProps<Nullstack.FieldsetHTMLAttributes<HTMLFieldSetElement>, HTMLFieldSetElement>;
-            figcaption: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            figure: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            footer: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            form: Nullstack.DetailedHTMLProps<Nullstack.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>;
-            h1: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
-            h2: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
-            h3: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
-            h4: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
-            h5: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
-            h6: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
-            head: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLHeadElement>, HTMLHeadElement>;
-            header: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            hgroup: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            hr: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLHRElement>, HTMLHRElement>;
-            html: Nullstack.DetailedHTMLProps<Nullstack.HtmlHTMLAttributes<HTMLHtmlElement>, HTMLHtmlElement>;
-            i: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            iframe: Nullstack.DetailedHTMLProps<Nullstack.IframeHTMLAttributes<HTMLIFrameElement>, HTMLIFrameElement>;
-            img: Nullstack.DetailedHTMLProps<Nullstack.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>;
-            input: Nullstack.DetailedHTMLProps<Nullstack.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
-            ins: Nullstack.DetailedHTMLProps<Nullstack.InsHTMLAttributes<HTMLModElement>, HTMLModElement>;
-            kbd: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            keygen: Nullstack.DetailedHTMLProps<Nullstack.KeygenHTMLAttributes<HTMLElement>, HTMLElement>;
-            label: Nullstack.DetailedHTMLProps<Nullstack.LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>;
-            legend: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLLegendElement>, HTMLLegendElement>;
-            li: Nullstack.DetailedHTMLProps<Nullstack.LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>;
-            link: Nullstack.DetailedHTMLProps<Nullstack.LinkHTMLAttributes<HTMLLinkElement>, HTMLLinkElement>;
-            main: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            map: Nullstack.DetailedHTMLProps<Nullstack.MapHTMLAttributes<HTMLMapElement>, HTMLMapElement>;
-            mark: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            menu: Nullstack.DetailedHTMLProps<Nullstack.MenuHTMLAttributes<HTMLElement>, HTMLElement>;
-            menuitem: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            meta: Nullstack.DetailedHTMLProps<Nullstack.MetaHTMLAttributes<HTMLMetaElement>, HTMLMetaElement>;
-            meter: Nullstack.DetailedHTMLProps<Nullstack.MeterHTMLAttributes<HTMLMeterElement>, HTMLMeterElement>;
-            nav: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            noindex: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            noscript: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            object: Nullstack.DetailedHTMLProps<Nullstack.ObjectHTMLAttributes<HTMLObjectElement>, HTMLObjectElement>;
-            ol: Nullstack.DetailedHTMLProps<Nullstack.OlHTMLAttributes<HTMLOListElement>, HTMLOListElement>;
-            optgroup: Nullstack.DetailedHTMLProps<Nullstack.OptgroupHTMLAttributes<HTMLOptGroupElement>, HTMLOptGroupElement>;
-            option: Nullstack.DetailedHTMLProps<Nullstack.OptionHTMLAttributes<HTMLOptionElement>, HTMLOptionElement>;
-            output: Nullstack.DetailedHTMLProps<Nullstack.OutputHTMLAttributes<HTMLOutputElement>, HTMLOutputElement>;
-            p: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>;
-            param: Nullstack.DetailedHTMLProps<Nullstack.ParamHTMLAttributes<HTMLParamElement>, HTMLParamElement>;
-            picture: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            pre: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLPreElement>, HTMLPreElement>;
-            progress: Nullstack.DetailedHTMLProps<Nullstack.ProgressHTMLAttributes<HTMLProgressElement>, HTMLProgressElement>;
-            q: Nullstack.DetailedHTMLProps<Nullstack.QuoteHTMLAttributes<HTMLQuoteElement>, HTMLQuoteElement>;
-            rp: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            rt: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            ruby: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            s: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            samp: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            slot: Nullstack.DetailedHTMLProps<Nullstack.SlotHTMLAttributes<HTMLSlotElement>, HTMLSlotElement>;
-            script: Nullstack.DetailedHTMLProps<Nullstack.ScriptHTMLAttributes<HTMLScriptElement>, HTMLScriptElement>;
-            section: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            select: Nullstack.DetailedHTMLProps<Nullstack.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
-            small: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            source: Nullstack.DetailedHTMLProps<Nullstack.SourceHTMLAttributes<HTMLSourceElement>, HTMLSourceElement>;
-            span: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>;
-            strong: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            style: Nullstack.DetailedHTMLProps<Nullstack.StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>;
-            sub: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            summary: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            sup: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            table: Nullstack.DetailedHTMLProps<Nullstack.TableHTMLAttributes<HTMLTableElement>, HTMLTableElement>;
-            template: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLTemplateElement>, HTMLTemplateElement>;
-            tbody: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>;
-            td: Nullstack.DetailedHTMLProps<Nullstack.TdHTMLAttributes<HTMLTableDataCellElement>, HTMLTableDataCellElement>;
-            textarea: Nullstack.DetailedHTMLProps<Nullstack.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>;
-            tfoot: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>;
-            th: Nullstack.DetailedHTMLProps<Nullstack.ThHTMLAttributes<HTMLTableHeaderCellElement>, HTMLTableHeaderCellElement>;
-            thead: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>;
-            time: Nullstack.DetailedHTMLProps<Nullstack.TimeHTMLAttributes<HTMLTimeElement>, HTMLTimeElement>;
-            title: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLTitleElement>, HTMLTitleElement>;
-            tr: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLTableRowElement>, HTMLTableRowElement>;
-            track: Nullstack.DetailedHTMLProps<Nullstack.TrackHTMLAttributes<HTMLTrackElement>, HTMLTrackElement>;
-            u: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            ul: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLUListElement>, HTMLUListElement>;
-            "var": Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            video: Nullstack.DetailedHTMLProps<Nullstack.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>;
-            wbr: Nullstack.DetailedHTMLProps<Nullstack.HTMLAttributes<HTMLElement>, HTMLElement>;
-            webview: Nullstack.DetailedHTMLProps<Nullstack.WebViewHTMLAttributes<HTMLWebViewElement>, HTMLWebViewElement>;
+            a: N.DetailedHTMLProps<N.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>;
+            abbr: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            address: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            area: N.DetailedHTMLProps<N.AreaHTMLAttributes<HTMLAreaElement>, HTMLAreaElement>;
+            article: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            aside: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            audio: N.DetailedHTMLProps<N.AudioHTMLAttributes<HTMLAudioElement>, HTMLAudioElement>;
+            b: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            base: N.DetailedHTMLProps<N.BaseHTMLAttributes<HTMLBaseElement>, HTMLBaseElement>;
+            bdi: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            bdo: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            big: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            blockquote: N.DetailedHTMLProps<N.BlockquoteHTMLAttributes<HTMLQuoteElement>, HTMLQuoteElement>;
+            body: N.DetailedHTMLProps<N.HTMLAttributes<HTMLBodyElement>, HTMLBodyElement>;
+            br: N.DetailedHTMLProps<N.HTMLAttributes<HTMLBRElement>, HTMLBRElement>;
+            button: N.DetailedHTMLProps<N.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+            canvas: N.DetailedHTMLProps<N.CanvasHTMLAttributes<HTMLCanvasElement>, HTMLCanvasElement>;
+            caption: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            cite: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            code: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            col: N.DetailedHTMLProps<N.ColHTMLAttributes<HTMLTableColElement>, HTMLTableColElement>;
+            colgroup: N.DetailedHTMLProps<N.ColgroupHTMLAttributes<HTMLTableColElement>, HTMLTableColElement>;
+            data: N.DetailedHTMLProps<N.DataHTMLAttributes<HTMLDataElement>, HTMLDataElement>;
+            datalist: N.DetailedHTMLProps<N.HTMLAttributes<HTMLDataListElement>, HTMLDataListElement>;
+            dd: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            del: N.DetailedHTMLProps<N.DelHTMLAttributes<HTMLModElement>, HTMLModElement>;
+            details: N.DetailedHTMLProps<N.DetailsHTMLAttributes<HTMLDetailsElement>, HTMLDetailsElement>;
+            dfn: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            dialog: N.DetailedHTMLProps<N.DialogHTMLAttributes<HTMLDialogElement>, HTMLDialogElement>;
+            div: N.DetailedHTMLProps<N.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+            dl: N.DetailedHTMLProps<N.HTMLAttributes<HTMLDListElement>, HTMLDListElement>;
+            dt: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            em: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            embed: N.DetailedHTMLProps<N.EmbedHTMLAttributes<HTMLEmbedElement>, HTMLEmbedElement>;
+            fieldset: N.DetailedHTMLProps<N.FieldsetHTMLAttributes<HTMLFieldSetElement>, HTMLFieldSetElement>;
+            figcaption: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            figure: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            footer: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            form: N.DetailedHTMLProps<N.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>;
+            h1: N.DetailedHTMLProps<N.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
+            h2: N.DetailedHTMLProps<N.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
+            h3: N.DetailedHTMLProps<N.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
+            h4: N.DetailedHTMLProps<N.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
+            h5: N.DetailedHTMLProps<N.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
+            h6: N.DetailedHTMLProps<N.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
+            head: N.DetailedHTMLProps<N.HTMLAttributes<HTMLHeadElement>, HTMLHeadElement>;
+            header: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            hgroup: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            hr: N.DetailedHTMLProps<N.HTMLAttributes<HTMLHRElement>, HTMLHRElement>;
+            html: N.DetailedHTMLProps<N.HtmlHTMLAttributes<HTMLHtmlElement>, HTMLHtmlElement>;
+            i: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            iframe: N.DetailedHTMLProps<N.IframeHTMLAttributes<HTMLIFrameElement>, HTMLIFrameElement>;
+            img: N.DetailedHTMLProps<N.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>;
+            input: N.DetailedHTMLProps<N.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+            ins: N.DetailedHTMLProps<N.InsHTMLAttributes<HTMLModElement>, HTMLModElement>;
+            kbd: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            keygen: N.DetailedHTMLProps<N.KeygenHTMLAttributes<HTMLElement>, HTMLElement>;
+            label: N.DetailedHTMLProps<N.LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>;
+            legend: N.DetailedHTMLProps<N.HTMLAttributes<HTMLLegendElement>, HTMLLegendElement>;
+            li: N.DetailedHTMLProps<N.LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>;
+            link: N.DetailedHTMLProps<N.LinkHTMLAttributes<HTMLLinkElement>, HTMLLinkElement>;
+            main: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            map: N.DetailedHTMLProps<N.MapHTMLAttributes<HTMLMapElement>, HTMLMapElement>;
+            mark: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            menu: N.DetailedHTMLProps<N.MenuHTMLAttributes<HTMLElement>, HTMLElement>;
+            menuitem: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            meta: N.DetailedHTMLProps<N.MetaHTMLAttributes<HTMLMetaElement>, HTMLMetaElement>;
+            meter: N.DetailedHTMLProps<N.MeterHTMLAttributes<HTMLMeterElement>, HTMLMeterElement>;
+            nav: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            noindex: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            noscript: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            object: N.DetailedHTMLProps<N.ObjectHTMLAttributes<HTMLObjectElement>, HTMLObjectElement>;
+            ol: N.DetailedHTMLProps<N.OlHTMLAttributes<HTMLOListElement>, HTMLOListElement>;
+            optgroup: N.DetailedHTMLProps<N.OptgroupHTMLAttributes<HTMLOptGroupElement>, HTMLOptGroupElement>;
+            option: N.DetailedHTMLProps<N.OptionHTMLAttributes<HTMLOptionElement>, HTMLOptionElement>;
+            output: N.DetailedHTMLProps<N.OutputHTMLAttributes<HTMLOutputElement>, HTMLOutputElement>;
+            p: N.DetailedHTMLProps<N.HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>;
+            param: N.DetailedHTMLProps<N.ParamHTMLAttributes<HTMLParamElement>, HTMLParamElement>;
+            picture: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            pre: N.DetailedHTMLProps<N.HTMLAttributes<HTMLPreElement>, HTMLPreElement>;
+            progress: N.DetailedHTMLProps<N.ProgressHTMLAttributes<HTMLProgressElement>, HTMLProgressElement>;
+            q: N.DetailedHTMLProps<N.QuoteHTMLAttributes<HTMLQuoteElement>, HTMLQuoteElement>;
+            rp: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            rt: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            ruby: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            s: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            samp: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            slot: N.DetailedHTMLProps<N.SlotHTMLAttributes<HTMLSlotElement>, HTMLSlotElement>;
+            script: N.DetailedHTMLProps<N.ScriptHTMLAttributes<HTMLScriptElement>, HTMLScriptElement>;
+            section: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            select: N.DetailedHTMLProps<N.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
+            small: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            source: N.DetailedHTMLProps<N.SourceHTMLAttributes<HTMLSourceElement>, HTMLSourceElement>;
+            span: N.DetailedHTMLProps<N.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>;
+            strong: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            style: N.DetailedHTMLProps<N.StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>;
+            sub: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            summary: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            sup: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            table: N.DetailedHTMLProps<N.TableHTMLAttributes<HTMLTableElement>, HTMLTableElement>;
+            template: N.DetailedHTMLProps<N.HTMLAttributes<HTMLTemplateElement>, HTMLTemplateElement>;
+            tbody: N.DetailedHTMLProps<N.HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>;
+            td: N.DetailedHTMLProps<N.TdHTMLAttributes<HTMLTableDataCellElement>, HTMLTableDataCellElement>;
+            textarea: N.DetailedHTMLProps<N.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>;
+            tfoot: N.DetailedHTMLProps<N.HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>;
+            th: N.DetailedHTMLProps<N.ThHTMLAttributes<HTMLTableHeaderCellElement>, HTMLTableHeaderCellElement>;
+            thead: N.DetailedHTMLProps<N.HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>;
+            time: N.DetailedHTMLProps<N.TimeHTMLAttributes<HTMLTimeElement>, HTMLTimeElement>;
+            title: N.DetailedHTMLProps<N.HTMLAttributes<HTMLTitleElement>, HTMLTitleElement>;
+            tr: N.DetailedHTMLProps<N.HTMLAttributes<HTMLTableRowElement>, HTMLTableRowElement>;
+            track: N.DetailedHTMLProps<N.TrackHTMLAttributes<HTMLTrackElement>, HTMLTrackElement>;
+            u: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            ul: N.DetailedHTMLProps<N.HTMLAttributes<HTMLUListElement>, HTMLUListElement>;
+            "var": N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            video: N.DetailedHTMLProps<N.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>;
+            wbr: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            webview: N.DetailedHTMLProps<N.WebViewHTMLAttributes<HTMLWebViewElement>, HTMLWebViewElement>;
 
             // SVG
-            svg: Nullstack.SVGProps<SVGSVGElement>;
+            svg: N.SVGProps<SVGSVGElement>;
 
-            animate: Nullstack.SVGProps<SVGElement>; // TODO: It is SVGAnimateElement but is not in TypeScript's lib.dom.d.ts for now.
-            animateMotion: Nullstack.SVGProps<SVGElement>;
-            animateTransform: Nullstack.SVGProps<SVGElement>; // TODO: It is SVGAnimateTransformElement but is not in TypeScript's lib.dom.d.ts for now.
-            circle: Nullstack.SVGProps<SVGCircleElement>;
-            clipPath: Nullstack.SVGProps<SVGClipPathElement>;
-            defs: Nullstack.SVGProps<SVGDefsElement>;
-            desc: Nullstack.SVGProps<SVGDescElement>;
-            ellipse: Nullstack.SVGProps<SVGEllipseElement>;
-            feBlend: Nullstack.SVGProps<SVGFEBlendElement>;
-            feColorMatrix: Nullstack.SVGProps<SVGFEColorMatrixElement>;
-            feComponentTransfer: Nullstack.SVGProps<SVGFEComponentTransferElement>;
-            feComposite: Nullstack.SVGProps<SVGFECompositeElement>;
-            feConvolveMatrix: Nullstack.SVGProps<SVGFEConvolveMatrixElement>;
-            feDiffuseLighting: Nullstack.SVGProps<SVGFEDiffuseLightingElement>;
-            feDisplacementMap: Nullstack.SVGProps<SVGFEDisplacementMapElement>;
-            feDistantLight: Nullstack.SVGProps<SVGFEDistantLightElement>;
-            feDropShadow: Nullstack.SVGProps<SVGFEDropShadowElement>;
-            feFlood: Nullstack.SVGProps<SVGFEFloodElement>;
-            feFuncA: Nullstack.SVGProps<SVGFEFuncAElement>;
-            feFuncB: Nullstack.SVGProps<SVGFEFuncBElement>;
-            feFuncG: Nullstack.SVGProps<SVGFEFuncGElement>;
-            feFuncR: Nullstack.SVGProps<SVGFEFuncRElement>;
-            feGaussianBlur: Nullstack.SVGProps<SVGFEGaussianBlurElement>;
-            feImage: Nullstack.SVGProps<SVGFEImageElement>;
-            feMerge: Nullstack.SVGProps<SVGFEMergeElement>;
-            feMergeNode: Nullstack.SVGProps<SVGFEMergeNodeElement>;
-            feMorphology: Nullstack.SVGProps<SVGFEMorphologyElement>;
-            feOffset: Nullstack.SVGProps<SVGFEOffsetElement>;
-            fePointLight: Nullstack.SVGProps<SVGFEPointLightElement>;
-            feSpecularLighting: Nullstack.SVGProps<SVGFESpecularLightingElement>;
-            feSpotLight: Nullstack.SVGProps<SVGFESpotLightElement>;
-            feTile: Nullstack.SVGProps<SVGFETileElement>;
-            feTurbulence: Nullstack.SVGProps<SVGFETurbulenceElement>;
-            filter: Nullstack.SVGProps<SVGFilterElement>;
-            foreignObject: Nullstack.SVGProps<SVGForeignObjectElement>;
-            g: Nullstack.SVGProps<SVGGElement>;
-            image: Nullstack.SVGProps<SVGImageElement>;
-            line: Nullstack.SVGProps<SVGLineElement>;
-            linearGradient: Nullstack.SVGProps<SVGLinearGradientElement>;
-            marker: Nullstack.SVGProps<SVGMarkerElement>;
-            mask: Nullstack.SVGProps<SVGMaskElement>;
-            metadata: Nullstack.SVGProps<SVGMetadataElement>;
-            mpath: Nullstack.SVGProps<SVGElement>;
-            path: Nullstack.SVGProps<SVGPathElement>;
-            pattern: Nullstack.SVGProps<SVGPatternElement>;
-            polygon: Nullstack.SVGProps<SVGPolygonElement>;
-            polyline: Nullstack.SVGProps<SVGPolylineElement>;
-            radialGradient: Nullstack.SVGProps<SVGRadialGradientElement>;
-            rect: Nullstack.SVGProps<SVGRectElement>;
-            stop: Nullstack.SVGProps<SVGStopElement>;
-            switch: Nullstack.SVGProps<SVGSwitchElement>;
-            symbol: Nullstack.SVGProps<SVGSymbolElement>;
-            text: Nullstack.SVGProps<SVGTextElement>;
-            textPath: Nullstack.SVGProps<SVGTextPathElement>;
-            tspan: Nullstack.SVGProps<SVGTSpanElement>;
-            use: Nullstack.SVGProps<SVGUseElement>;
-            view: Nullstack.SVGProps<SVGViewElement>;
+            animate: N.SVGProps<SVGElement>; // TODO: It is SVGAnimateElement but is not in TypeScript's lib.dom.d.ts for now.
+            animateMotion: N.SVGProps<SVGElement>;
+            animateTransform: N.SVGProps<SVGElement>; // TODO: It is SVGAnimateTransformElement but is not in TypeScript's lib.dom.d.ts for now.
+            circle: N.SVGProps<SVGCircleElement>;
+            clipPath: N.SVGProps<SVGClipPathElement>;
+            defs: N.SVGProps<SVGDefsElement>;
+            desc: N.SVGProps<SVGDescElement>;
+            ellipse: N.SVGProps<SVGEllipseElement>;
+            feBlend: N.SVGProps<SVGFEBlendElement>;
+            feColorMatrix: N.SVGProps<SVGFEColorMatrixElement>;
+            feComponentTransfer: N.SVGProps<SVGFEComponentTransferElement>;
+            feComposite: N.SVGProps<SVGFECompositeElement>;
+            feConvolveMatrix: N.SVGProps<SVGFEConvolveMatrixElement>;
+            feDiffuseLighting: N.SVGProps<SVGFEDiffuseLightingElement>;
+            feDisplacementMap: N.SVGProps<SVGFEDisplacementMapElement>;
+            feDistantLight: N.SVGProps<SVGFEDistantLightElement>;
+            feDropShadow: N.SVGProps<SVGFEDropShadowElement>;
+            feFlood: N.SVGProps<SVGFEFloodElement>;
+            feFuncA: N.SVGProps<SVGFEFuncAElement>;
+            feFuncB: N.SVGProps<SVGFEFuncBElement>;
+            feFuncG: N.SVGProps<SVGFEFuncGElement>;
+            feFuncR: N.SVGProps<SVGFEFuncRElement>;
+            feGaussianBlur: N.SVGProps<SVGFEGaussianBlurElement>;
+            feImage: N.SVGProps<SVGFEImageElement>;
+            feMerge: N.SVGProps<SVGFEMergeElement>;
+            feMergeNode: N.SVGProps<SVGFEMergeNodeElement>;
+            feMorphology: N.SVGProps<SVGFEMorphologyElement>;
+            feOffset: N.SVGProps<SVGFEOffsetElement>;
+            fePointLight: N.SVGProps<SVGFEPointLightElement>;
+            feSpecularLighting: N.SVGProps<SVGFESpecularLightingElement>;
+            feSpotLight: N.SVGProps<SVGFESpotLightElement>;
+            feTile: N.SVGProps<SVGFETileElement>;
+            feTurbulence: N.SVGProps<SVGFETurbulenceElement>;
+            filter: N.SVGProps<SVGFilterElement>;
+            foreignObject: N.SVGProps<SVGForeignObjectElement>;
+            g: N.SVGProps<SVGGElement>;
+            image: N.SVGProps<SVGImageElement>;
+            line: N.SVGProps<SVGLineElement>;
+            linearGradient: N.SVGProps<SVGLinearGradientElement>;
+            marker: N.SVGProps<SVGMarkerElement>;
+            mask: N.SVGProps<SVGMaskElement>;
+            metadata: N.SVGProps<SVGMetadataElement>;
+            mpath: N.SVGProps<SVGElement>;
+            path: N.SVGProps<SVGPathElement>;
+            pattern: N.SVGProps<SVGPatternElement>;
+            polygon: N.SVGProps<SVGPolygonElement>;
+            polyline: N.SVGProps<SVGPolylineElement>;
+            radialGradient: N.SVGProps<SVGRadialGradientElement>;
+            rect: N.SVGProps<SVGRectElement>;
+            stop: N.SVGProps<SVGStopElement>;
+            switch: N.SVGProps<SVGSwitchElement>;
+            symbol: N.SVGProps<SVGSymbolElement>;
+            text: N.SVGProps<SVGTextElement>;
+            textPath: N.SVGProps<SVGTextPathElement>;
+            tspan: N.SVGProps<SVGTSpanElement>;
+            use: N.SVGProps<SVGUseElement>;
+            view: N.SVGProps<SVGViewElement>;
         }
     }
 }
