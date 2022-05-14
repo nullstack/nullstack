@@ -1,14 +1,34 @@
 import { isFalse } from "../shared/nodes";
 import { sanitizeHtml } from "../shared/sanitizeString";
 
-export default function render(node, scope) {
+function isSelfClosing(type) {
+  if (type === 'input') return true;
+  if (type === 'img') return true;
+  if (type === 'link') return true;
+  if (type === 'meta') return true;
+  if (type === 'br') return true;
+  if (type === 'hr') return true;
+  if (type === 'area') return true;
+  if (type === 'base') return true;
+  if (type === 'col') return true;
+  if (type === 'embed') return true;
+  if (type === 'param') return true;
+  if (type === 'source') return true;
+  if (type === 'track') return true;
+  if (type === 'wbr') return true;
+  if (type === 'menuitem') return true;
+  return false;
+}
+
+export default function render(node, scope, next) {
 
   if (isFalse(node)) {
     return "<!---->";
   }
 
   if (node.type === 'text') {
-    return (sanitizeHtml(node.text.toString()) || ' ') + "<!--#-->";
+    const text = node.text === '' ? ' ' : sanitizeHtml(node.text.toString())
+    return next && next.type === 'text' ? text + "<!--#-->" : text
   }
 
   let element = `<${node.type}`;
@@ -26,8 +46,7 @@ export default function render(node, scope) {
     }
   }
 
-  const selfClosing = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr', 'menuitem'].includes(node.type);
-  if (selfClosing && node.children.length === 0) {
+  if (isSelfClosing(node.type)) {
     element += '/>';
   } else {
     element += '>';
@@ -42,7 +61,7 @@ export default function render(node, scope) {
       element += node.children[0].text;
     } else {
       for (let i = 0; i < node.children.length; i++) {
-        const source = render(node.children[i], scope);
+        const source = render(node.children[i], scope, node.children[i + 1]);
         if (node.type === 'head') {
           scope.head += source;
         } else {
