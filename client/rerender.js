@@ -40,7 +40,7 @@ function updateAttributes(selector, current, next) {
         eventSubjects.set(selector, next.attributes)
       }
     } else {
-      const type = typeof (next.attributes[name]);
+      const type = typeof next.attributes[name];
       if (type !== 'object' && type !== 'function') {
         if (current.attributes[name] !== undefined && next.attributes[name] === undefined) {
           selector.removeAttribute(name);

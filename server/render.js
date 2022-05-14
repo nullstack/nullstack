@@ -35,7 +35,7 @@ export default function render(node, scope, next) {
 
   for (let name in node.attributes) {
     if (!name.startsWith('on') && name !== 'html') {
-      const type = typeof (node.attributes[name]);
+      const type = typeof node.attributes[name];
       if (type !== 'object' && type !== 'function') {
         if (name != 'value' && node.attributes[name] === true) {
           element += ` ${name}`;

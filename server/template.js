@@ -13,7 +13,7 @@ export default function ({ head, body, context, instances }) {
   const serializableContext = {};
   const blacklist = ['scope', 'router', 'page', 'environment', 'settings', 'worker', 'params', 'project', 'instances'];
   for (const [key, value] of Object.entries(context)) {
-    if (!blacklist.includes(key) && typeof (value) !== 'function') {
+    if (!blacklist.includes(key) && typeof value !== 'function') {
       serializableContext[key] = value;
     }
   }

@@ -65,7 +65,7 @@ class Nullstack {
   toJSON() {
     const serialized = {};
     for (const name of Object.getOwnPropertyNames(this)) {
-      if (typeof (this[name]) !== 'function' && !name.startsWith('_') && name !== 'attributes') {
+      if (typeof this[name] !== 'function' && !name.startsWith('_') && name !== 'attributes') {
         serialized[name] = this[name];
       }
     }

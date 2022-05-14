@@ -88,7 +88,7 @@ function createResponse(callback) {
   };
   res.getHeader = (x) => headers[x];
   res.redirect = function (_code, url) {
-    if (typeof (_code) !== 'number') {
+    if (typeof _code !== 'number') {
       code = 301;
       url = _code;
     } else {

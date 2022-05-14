@@ -45,7 +45,7 @@ export default function render(node, options) {
         eventSubjects.set(node.element, node.attributes)
       }
     } else {
-      const type = typeof (node.attributes[name]);
+      const type = typeof node.attributes[name];
       if (type !== 'object' && type !== 'function') {
         if (name != 'value' && node.attributes[name] === true) {
           node.element.setAttribute(name, '');

@@ -36,8 +36,8 @@ class TwoWayBindings extends Nullstack {
       <div>
         <input bind={this.zero} />
         <div data-number={this.number} />
-        {!this.boolean && <div data-boolean-type={typeof (this.boolean)} />}
-        {this.number > 1 && <div data-number-type={typeof (this.number)} />}
+        {!this.boolean && <div data-boolean-type={typeof this.boolean} />}
+        {this.number > 1 && <div data-number-type={typeof this.number} />}
         <input bind={this.number} oninput={this.updateCharacter} />
         <textarea bind={this.text} />
         <div data-character={this.character} />
