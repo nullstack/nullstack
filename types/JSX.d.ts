@@ -80,11 +80,22 @@ export namespace N {
     // Nullstack Elements
     // ----------------------------------------------------------------------
 
-    /**
-     * @internal You shouldn't need to use this type since you never see these attributes
-     * inside your component or have to validate them.
-     */
-    interface Attributes { }
+    interface Attributes {
+        html?: string | undefined;
+        source?: object | undefined;
+        bind?: any | undefined;
+        data?: object | undefined;
+        'data-'?: any;
+        [key: string]: any;
+    }
+
+    interface NullstackAttributes extends Attributes {
+        children?: NullstackNode;
+        route?: string | undefined;
+        persistent?: boolean | undefined;
+        key?: string;
+    }
+
     interface ClassAttributes extends Attributes { }
 
     //
@@ -95,8 +106,8 @@ export namespace N {
 
     interface SVGFactory { }
 
-    // type NullstackFragment = Iterable<NullstackNode>;
-    type NullstackNode = NullstackNode[] | string | number | boolean | null | undefined;
+    type NullstackFragment = NullstackNode[];
+    type NullstackNode = NullstackFragment | string | number | boolean | null | undefined;
 
     //
     // Event System
@@ -261,18 +272,13 @@ export namespace N {
     // Props / DOM Attributes
     // ----------------------------------------------------------------------
 
-    interface HTMLProps<T> extends AllHTMLAttributes<T>, ClassAttributes {
-    }
+    // interface HTMLProps<T> extends AllHTMLAttributes<T>, ClassAttributes { }
 
     type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = E;
 
-    interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes {
-    }
+    interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes { }
 
-    interface DOMAttributes<T> {
-        children?: NullstackNode | undefined;
-        html?: string | undefined;
-
+    interface DOMAttributes<T> extends Attributes {
         // Focus Events
         onfocus?: FocusEventHandler<T> | undefined;
         onblur?: FocusEventHandler<T> | undefined;
@@ -710,7 +716,7 @@ export namespace N {
         controls?: boolean | undefined;
         coords?: string | undefined;
         crossOrigin?: string | undefined;
-        data?: string | undefined;
+        // data?: string | undefined;
         dateTime?: string | undefined;
         default?: boolean | undefined;
         defer?: boolean | undefined;
@@ -821,6 +827,10 @@ export namespace N {
         target?: HTMLAttributeAnchorTarget | undefined;
         type?: string | undefined;
         referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
+
+        // Nullstack Router
+        params?: object | undefined;
+        path?: string | undefined;
     }
 
     interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> {}
@@ -1106,7 +1116,7 @@ export namespace N {
 
     interface ObjectHTMLAttributes<T> extends HTMLAttributes<T> {
         classID?: string | undefined;
-        data?: string | undefined;
+        // data?: string | undefined;
         form?: string | undefined;
         height?: number | string | undefined;
         name?: string | undefined;
@@ -1747,7 +1757,7 @@ declare global {
     namespace JSX {
         type Element = N.NullstackNode;
 
-        interface IntrinsicAttributes extends N.Attributes { }
+        interface IntrinsicAttributes extends N.NullstackAttributes { }
         interface IntrinsicClassAttributes extends N.ClassAttributes { }
 
         interface IntrinsicElements {
