@@ -157,7 +157,7 @@ async function generateBranch(parent, node, depth, scope) {
         for (let i = 0; i < branch.children.length; i++) {
           if (branch.children[i].attributes) {
             branch.children[i].head = true
-            branch.children[i].attributes.id = depth + '-' + i
+            branch.children[i].attributes.id ??= depth + '-' + i
           }
         }
       }

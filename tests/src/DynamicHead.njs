@@ -49,7 +49,7 @@ class DynamicHead extends Nullstack {
         <span data-inner-component> data-inner-component </span>
         {this.count % 2 === 0 ?
           <head>
-            <meta name="test" content="nullstack" data-ternary-head />
+            <meta name="test" content="nullstack" data-ternary-head id="ternary-head" />
           </head> : <span data-ternary-span> not head </span>
         }
       </div>

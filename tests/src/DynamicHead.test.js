@@ -63,6 +63,11 @@ describe('DynamicHead', () => {
     expect(element).toBeTruthy();
   });
 
+  test('head elements can have custom ids', async () => {
+    const element = await page.$('#ternary-head');
+    expect(element).toBeTruthy();
+  });
+
   test('the head tag accepts dynamic lists of increasing size', async () => {
     for (let i = 1; i < 3; i++) {
       await page.click('[data-increment]');
