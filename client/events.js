@@ -1,6 +1,14 @@
 export const eventCallbacks = new WeakMap()
 export const eventSubjects = new WeakMap()
 
+function executeEvent(callback, subject, event) {
+  if (typeof callback === 'object') {
+    Object.assign(subject.source, callback);
+  } else {
+    callback({ ...subject, event });
+  }
+}
+
 export function generateCallback(selector, name) {
   return function eventCallback(event) {
     const subject = eventSubjects.get(selector)
@@ -9,10 +17,10 @@ export function generateCallback(selector, name) {
     }
     if (Array.isArray(subject[name])) {
       for (const subcallback of subject[name]) {
-        subcallback({ ...subject, event });
+        executeEvent(subcallback, subject, event)
       }
     } else {
-      subject[name]({ ...subject, event });
+      executeEvent(subject[name], subject, event)
     }
   }
 };

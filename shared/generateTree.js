@@ -1,5 +1,3 @@
-import objectable from '../plugins/objectable'
-import datable from '../plugins/datable'
 import generateKey from '../shared/generateKey';
 import { isClass, isFalse, isFunction, isUndefined } from '../shared/nodes';
 import fragment from './fragment';

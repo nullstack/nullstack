@@ -3,10 +3,8 @@ import bindable from '../plugins/bindable';
 import datable from '../plugins/datable';
 import parameterizable from '../plugins/parameterizable';
 import anchorable from '../plugins/anchorable';
-import objectable from '../plugins/objectable';
 
 let plugins = [
-  objectable,
   parameterizable,
   anchorable,
   routable,
