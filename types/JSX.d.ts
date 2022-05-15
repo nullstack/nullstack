@@ -1569,6 +1569,10 @@ export namespace N {
         webpreferences?: string | undefined;
     }
 
+    type ElementTagHTMLAttributes = AllHTMLAttributes<'div'> & {
+        tag?: string
+    }
+
     //
     // Nullstack DOM
     // ----------------------------------------------------------------------
@@ -1690,6 +1694,7 @@ export namespace N {
         video: DetailedHTMLFactory<VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>;
         wbr: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
         webview: DetailedHTMLFactory<WebViewHTMLAttributes<HTMLWebViewElement>, HTMLWebViewElement>;
+        element: ElementTagHTMLAttributes;
     }
 
     interface NullstackSVG {
@@ -1940,6 +1945,7 @@ declare global {
             tspan: N.SVGProps<SVGTSpanElement>;
             use: N.SVGProps<SVGUseElement>;
             view: N.SVGProps<SVGViewElement>;
+            element: N.ElementTagHTMLAttributes;
         }
     }
 }
