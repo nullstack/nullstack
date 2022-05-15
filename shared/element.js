@@ -12,6 +12,9 @@ export default function element(type, props, ...children) {
     children = [children.join('')];
   }
   const attributes = { ...props, children };
+  if (type === 'style') {
+    attributes.html = children.join('');
+  }
   if (type === 'element') {
     type = attributes.tag || fragment;
     delete attributes.tag;
