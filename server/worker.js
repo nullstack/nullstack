@@ -72,7 +72,7 @@ export function generateServiceWorker() {
   if (original) {
     sources.push(original);
   }
-  files['service-worker.js'] = sources.join(`\n\n`).replace(`"{{BUNDLE}}"`, scripts.join(', \n'));;
+  files['service-worker.js'] = sources.join(`\n\n`).replace(`"{{BUNDLE}}",`, scripts.join(', \n'));
   return files['service-worker.js'];
 }
 
