@@ -1,20 +1,20 @@
 export type NullstackServer = {
 
-  get();
+  get(...args);
 
-  post();
+  post(...args);
 
-  put();
+  put(...args);
 
-  patch();
+  patch(...args);
 
-  delete();
+  delete(...args);
 
-  options();
+  options(...args);
 
-  head();
+  head(...args);
 
-  use();
+  use(...args);
 
   port: number;
 
