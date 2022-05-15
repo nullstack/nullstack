@@ -4,8 +4,9 @@ import integrities from './integrities';
 import { absolute, cdn, cdnOrAbsolute } from './links';
 import project from './project';
 import settings from './settings';
+import renderAttributes from './renderAttributes';
 
-export default function ({ head, body, context, instances }) {
+export default function ({ head, body, nextBody, context, instances }) {
   const timestamp = environment.development ? `&timestamp=${+new Date()}` : ''
   const { page, router, worker, params } = context;
   const canonical = absolute(page.canonical || router.url);
@@ -61,7 +62,7 @@ export default function ({ head, body, context, instances }) {
     ${head.split('<!--#-->').join('')}
     <script src="${cdn(`/client.js?fingerprint=${environment.key}${timestamp}`)}" integrity="${integrities['client.js'] || ''}" defer crossorigin="anonymous"></script>
   </head>
-  <body>
+  <body ${renderAttributes(nextBody)}>
     ${environment.mode === 'spa' ? '<div id="application"></div>' : body}
   </body>
 </html>`)

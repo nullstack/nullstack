@@ -1,6 +1,9 @@
+import objectable from '../plugins/objectable'
+import datable from '../plugins/datable'
 import generateKey from '../shared/generateKey';
 import { isClass, isFalse, isFunction, isUndefined } from '../shared/nodes';
-import { transformNodes } from './plugins';
+import fragment from './fragment';
+import { transformBody, transformNodes } from './plugins';
 
 async function generateBranch(parent, node, depth, scope) {
 
@@ -106,6 +109,31 @@ async function generateBranch(parent, node, depth, scope) {
     return;
   }
 
+  if (node.type === 'body') {
+    node.type = fragment
+    for (const attribute in node.attributes) {
+      if (attribute === 'children' || attribute.startsWith('_')) continue;
+      if (attribute === 'class' || attribute === 'style') {
+        if (!scope.nextBody[attribute]) {
+          scope.nextBody[attribute] = []
+        }
+        scope.nextBody[attribute].push(node.attributes[attribute])
+      } else if (attribute.startsWith('on')) {
+        if (scope.context.environment.server) continue
+        if (!scope.nextBody[attribute]) {
+          scope.nextBody[attribute] = []
+        }
+        if (Array.isArray(node.attributes[attribute])) {
+          scope.nextBody[attribute].push(...node.attributes[attribute])
+        } else {
+          scope.nextBody[attribute].push(node.attributes[attribute])
+        }
+      } else {
+        scope.nextBody[attribute] = node.attributes[attribute]
+      }
+    }
+  }
+
   if (isFunction(node)) {
     const context = node.type.name ? scope.generateContext(node.attributes) : node.attributes;
     const children = node.type(context);
@@ -150,5 +178,6 @@ async function generateBranch(parent, node, depth, scope) {
 export default async function generateTree(node, scope) {
   const tree = { type: 'div', attributes: { id: 'application' }, children: [] };
   await generateBranch(tree, node, '0', scope);
+  transformBody(scope.nextBody)
   return tree;
 }

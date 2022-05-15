@@ -1,6 +1,6 @@
 import { isFalse, isText } from '../shared/nodes';
 import { anchorableElement } from './anchorableNode';
-import { eventCallbacks, eventSubjects } from './events'
+import { eventCallbacks, eventSubjects, generateCallback } from './events'
 
 export default function render(node, options) {
 
@@ -33,13 +33,7 @@ export default function render(node, options) {
     } else if (name.startsWith('on')) {
       if (node.attributes[name] !== undefined) {
         const eventName = name.substring(2);
-        const callback = (event) => {
-          const subject = eventSubjects.get(node.element)
-          if (subject.default !== true) {
-            event.preventDefault();
-          }
-          subject[name]({ ...subject, event });
-        };
+        const callback = generateCallback(node.element, name)
         node.element.addEventListener(eventName, callback);
         eventCallbacks.set(node.element, callback)
         eventSubjects.set(node.element, node.attributes)

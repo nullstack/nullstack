@@ -19,6 +19,8 @@ client.selector = null
 client.events = {}
 client.generateContext = generateContext
 client.renderQueue = null
+client.currentBody = {}
+client.nextBody = {}
 
 client.update = async function update() {
   if (client.initialized) {
@@ -33,6 +35,8 @@ client.update = async function update() {
       rerender()
       client.virtualDom = client.nextVirtualDom
       client.nextVirtualDom = null
+      client.currentBody = client.nextBody
+      client.nextBody = {}
       client.processLifecycleQueues()
     }, 16)
   }

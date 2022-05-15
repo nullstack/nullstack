@@ -50,6 +50,8 @@ import HydrateElement from './HydrateElement';
 import OptimizedEvents from './OptimizedEvents';
 import DynamicHead from './DynamicHead'
 import TextObserver from './TextObserver';
+import BodyFragment from './BodyFragment';
+import ArrayAttributes from './ArrayAttributes';
 
 class Application extends Nullstack {
 
@@ -63,7 +65,7 @@ class Application extends Nullstack {
 
   render({ project, page, environment }) {
     return (
-      <main data-window={WindowDependency.key}>
+      <body data-window={WindowDependency.key}>
         <h1> {project.name} </h1>
         {page.status !== 200 && <div route="*" data-page-status={page.status}></div>}
         <div route="/">
@@ -123,8 +125,10 @@ class Application extends Nullstack {
         <OptimizedEvents route="/optimized-events" />
         <DynamicHead route="/dynamic-head" />
         <TextObserver route="/text-observer" />
+        <BodyFragment route="/body-fragment" />
+        <ArrayAttributes route="/array-attributes" />
         <ErrorPage route="*" />
-      </main>
+      </body>
     )
   }
 

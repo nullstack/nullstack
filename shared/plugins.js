@@ -15,13 +15,19 @@ let plugins = [
 ];
 
 export function transformNodes(scope, node, depth) {
-  for(const plugin of plugins) {
-    plugin.transform({...scope.context, node, depth});
+  for (const plugin of plugins) {
+    plugin.transform({ ...scope.context, node, depth });
+  }
+}
+
+export function transformBody(attributes) {
+  for (const plugin of plugins) {
+    plugin.transformBody && plugin.transformBody(attributes);
   }
 }
 
 export function loadPlugins(scope) {
-  for(const plugin of plugins) {
+  for (const plugin of plugins) {
     plugin.load && plugin.load(scope.context)
   }
   return plugins;
