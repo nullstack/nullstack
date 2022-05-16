@@ -19,6 +19,11 @@ describe('BodyFragment', () => {
     expect(element).toBeTruthy();
   });
 
+  test('when the body is nested styles are merged togheter', async () => {
+    const element = await page.$('body[style="background-color: black; color: white;"]');
+    expect(element).toBeTruthy();
+  });
+
   test('when the body is nested events are invoked sequentially', async () => {
     await page.waitForSelector('body[data-hydrated]')
     await page.click('body');

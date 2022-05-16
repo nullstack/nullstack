@@ -28,7 +28,7 @@ class ArrayAttributes extends Nullstack {
         <button onclick={{ styles: ['color: pink;', 'background-color: blue;'] }} data-pink-blue>pink-blue</button>
         <button onclick={{ styles: ['color: pink;', 'background-color: blue; border: 1px solid red;'] }} data-pink-blue-red>pink-blue-red</button>
         <button onclick={{ styles: ['color: green;', false && 'background-color: blue;', undefined && 'background-color: blue;', null && 'background-color: blue;', 0 && 'background-color: blue;'] }} data-green>green</button>
-        <button onclick={[this.increment, this.double, { objected: true }]}>{this.count}</button>
+        <button onclick={[this.increment, this.double, { objected: true }]} data-events>{this.count}</button>
       </div>
     )
   }
