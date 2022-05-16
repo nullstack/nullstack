@@ -117,7 +117,7 @@ class Application extends Nullstack {
         <UndefinedNodes route="/undefined-nodes" />
         <WebpackCustomPlugin route="/webpack-custom-plugin" />
         <ComponentTernary route="/component-ternary" />
-        <AnchorModifiers route="/anchor-modifiers" />
+        <AnchorModifiers route="/anchor-modifiers" key="anchorModifiers" />
         <MetatagState route="/metatag-state" />
         <JavaScriptExtension route="/javascript-extension" />
         <TypeScriptExtension route="/typescript-extension" generic />

@@ -1,3 +1,5 @@
+import router from './router'
+
 export const eventCallbacks = new WeakMap()
 export const eventSubjects = new WeakMap()
 
@@ -12,9 +14,15 @@ function executeEvent(callback, subject, event) {
 export function generateCallback(selector, name) {
   return function eventCallback(event) {
     const subject = eventSubjects.get(selector)
-    if (subject.default !== true) {
+    if (subject.href) {
+      if (!event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
+        event.preventDefault()
+        router.url = subject.href
+      }
+    } else if (subject.default !== true) {
       event.preventDefault();
     }
+    if (subject[name] === true) return
     if (Array.isArray(subject[name])) {
       for (const subcallback of subject[name]) {
         executeEvent(subcallback, subject, event)
