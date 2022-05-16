@@ -76,4 +76,11 @@ describe('StatefulComponent', () => {
     expect(text).toMatch(' 2 2 ');
   });
 
+  test('children of style become the tags html attribute', async () => {
+    await page.click('.increment-by-one');
+    await page.waitForSelector('[data-count="2"]');
+    const text = await page.$eval('button', (e) => getComputedStyle(e).backgroundColor);
+    expect(text).toMatch('rgba(0, 0, 0, 0.2)');
+  });
+
 });
