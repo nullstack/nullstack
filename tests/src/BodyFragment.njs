@@ -18,10 +18,10 @@ class BodyFragment extends Nullstack {
     this.hasDataKeys = Object.keys(data).length > 0
   }
 
-  render() {
+  render({ self }) {
     return (
-      <body data-chars="a" onclick={[this.increment, this.countDataKeys, { objected: true }]} data-count={this.count} class={["class-one", "class-two", false]} style="background-color: black;" data-keys={this.hasDataKeys}>
-        <body data-chars="b" data-numbers="0" data-count={this.count} onclick={this.reveal} class="class-one class-three" style="color: white;" data-objected={this.objected}>
+      <body data-chars="a" onclick={[this.increment, this.countDataKeys, { objected: true }]} data-count={this.count} class={["class-one", "class-two", false]} style="background-color: black;" data-keys={this.hasDataKeys} data-hydrated={self.hydrated}>
+        <body data-chars="b" data-numbers="0" data-count={this.count} onclick={this.reveal} class="class-three class-four" style="color: white;" data-objected={this.objected}>
           BodyFragment
         </body>
         {this.visible &&
@@ -29,6 +29,7 @@ class BodyFragment extends Nullstack {
             BodyFragment
           </body>
         }
+        <a href="/">home</a>
       </body>
     )
   }

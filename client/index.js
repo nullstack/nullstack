@@ -65,6 +65,7 @@ export default class Nullstack {
         client.selector = body
       } else {
         client.virtualDom = await generateTree(client.initializer(), scope);
+        client.currentBody = client.nextBody
         hydrate(client.selector, client.virtualDom)
         context.environment = environment;
         scope.plugins = loadPlugins(scope);
