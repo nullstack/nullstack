@@ -29,6 +29,8 @@
 //                 Guilherme Correia <https://github.com/GuiDevloper>
 // TypeScript Version: 2.8
 
+import { NullstackClientContext } from ".";
+
 type NativeAnimationEvent = AnimationEvent;
 type NativeClipboardEvent = ClipboardEvent;
 type NativeCompositionEvent = CompositionEvent;
@@ -255,7 +257,9 @@ export namespace N {
     // Event Handler Types
     // ----------------------------------------------------------------------
 
-    type EventHandler<E extends SyntheticEvent<any>> = { bivarianceHack(event: E): void }["bivarianceHack"];
+    type EventHandler<E extends SyntheticEvent<any>> = object | {
+        bivarianceHack(event: { event: E } & NullstackClientContext): void
+    }["bivarianceHack"];
 
     type NullstackEventHandler<T = Element> = EventHandler<SyntheticEvent<T>>;
     type DragEventHandler<T = Element> = EventHandler<DragEvent<T>>;
