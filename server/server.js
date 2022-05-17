@@ -130,37 +130,37 @@ server.start = function () {
   app.use(bodyParser.text({ limit: server.maximumPayloadSize }));
 
   app.get(`/:number.client.js`, (request, response) => {
-    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.setHeader('Cache-Control', environment.development ? 'no-cache' : 'max-age=31536000, immutable');
     response.contentType('text/javascript');
     response.send(generateFile(`${request.params.number}.client.js`, server));
   });
 
   app.get(`/:number.client.css`, (request, response) => {
-    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.setHeader('Cache-Control', environment.development ? 'no-cache' : 'max-age=31536000, immutable');
     response.contentType('text/css');
     response.send(generateFile(`${request.params.number}.client.css`, server));
   });
 
   app.get(`/client.css`, (request, response) => {
-    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.setHeader('Cache-Control', environment.development ? 'no-cache' : 'max-age=31536000, immutable');
     response.contentType('text/css');
     response.send(generateFile('client.css', server));
   });
 
   app.get(`/client.js`, (request, response) => {
-    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.setHeader('Cache-Control', environment.development ? 'no-cache' : 'max-age=31536000, immutable');
     response.contentType('text/javascript');
     response.send(generateFile('client.js', server));
   });
 
   app.get(`/manifest.webmanifest`, (request, response) => {
-    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.setHeader('Cache-Control', environment.development ? 'no-cache' : 'max-age=31536000, immutable');
     response.contentType('application/manifest+json');
     response.send(generateManifest(server));
   });
 
   app.get(`/service-worker.js`, (request, response) => {
-    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+    response.setHeader('Cache-Control', environment.development ? 'no-cache' : 'max-age=31536000, immutable');
     response.contentType('text/javascript');
     response.send(generateServiceWorker());
   });
