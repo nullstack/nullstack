@@ -31,19 +31,14 @@
 
 import { NullstackClientContext } from ".";
 
-type NativeAnimationEvent = AnimationEvent;
-type NativeClipboardEvent = ClipboardEvent;
-type NativeCompositionEvent = CompositionEvent;
 type NativeDragEvent = DragEvent;
 type NativeFocusEvent = FocusEvent;
 type NativeKeyboardEvent = KeyboardEvent;
 type NativeMouseEvent = MouseEvent;
 type NativePointerEvent = PointerEvent;
-type NativeTransitionEvent = TransitionEvent;
 type NativeUIEvent = UIEvent;
 type NativeWheelEvent = WheelEvent;
 type Booleanish = boolean | 'true' | 'false';
-interface HTMLWebViewElement extends HTMLElement { }
 
 export interface ComponentLifecycle {
     /**
@@ -127,8 +122,6 @@ export namespace N {
         preventDefault(): void;
         isDefaultPrevented(): boolean;
         stopPropagation(): void;
-        isPropagationStopped(): boolean;
-        persist(): void;
         timeStamp: number;
         type: string;
     }
@@ -141,14 +134,6 @@ export namespace N {
      * If you thought this should be `EventTarget & T`, see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11508#issuecomment-256045682
      */
     interface SyntheticEvent<T = Element, E = Event> extends BaseSyntheticEvent<E, EventTarget & T, EventTarget> {}
-
-    interface ClipboardEvent<T = Element> extends SyntheticEvent<T, NativeClipboardEvent> {
-        clipboardData: DataTransfer;
-    }
-
-    interface CompositionEvent<T = Element> extends SyntheticEvent<T, NativeCompositionEvent> {
-        data: string;
-    }
 
     interface DragEvent<T = Element> extends MouseEvent<T, NativeDragEvent> {
         dataTransfer: DataTransfer;
@@ -175,10 +160,6 @@ export namespace N {
     interface FormEvent<T = Element> extends SyntheticEvent<T> {
     }
 
-    interface InvalidEvent<T = Element> extends SyntheticEvent<T> {
-        target: EventTarget & T;
-    }
-
     interface ChangeEvent<T = Element> extends SyntheticEvent<T> {
         target: EventTarget & T;
     }
@@ -199,7 +180,6 @@ export namespace N {
         key: string;
         /** @deprecated */
         keyCode: number;
-        locale: string;
         location: number;
         metaKey: boolean;
         repeat: boolean;
@@ -241,18 +221,6 @@ export namespace N {
         deltaZ: number;
     }
 
-    interface AnimationEvent<T = Element> extends SyntheticEvent<T, NativeAnimationEvent> {
-        animationName: string;
-        elapsedTime: number;
-        pseudoElement: string;
-    }
-
-    interface TransitionEvent<T = Element> extends SyntheticEvent<T, NativeTransitionEvent> {
-        elapsedTime: number;
-        propertyName: string;
-        pseudoElement: string;
-    }
-
     //
     // Event Handler Types
     // ----------------------------------------------------------------------
@@ -275,8 +243,6 @@ export namespace N {
     //
     // Props / DOM Attributes
     // ----------------------------------------------------------------------
-
-    // interface HTMLProps<T> extends AllHTMLAttributes<T>, ClassAttributes { }
 
     type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = E;
 
@@ -310,7 +276,6 @@ export namespace N {
         oncanplaythrough?: NullstackEventHandler<T> | undefined;
         ondurationchange?: NullstackEventHandler<T> | undefined;
         onemptied?: NullstackEventHandler<T> | undefined;
-        // onencrypted?: NullstackEventHandler<T> | undefined;
         onended?: NullstackEventHandler<T> | undefined;
         onloadeddata?: NullstackEventHandler<T> | undefined;
         onloadedmetadata?: NullstackEventHandler<T> | undefined;
@@ -329,14 +294,12 @@ export namespace N {
         onwaiting?: NullstackEventHandler<T> | undefined;
 
         // MouseEvents
-        // onauxclick?: MouseEventHandler<T> | undefined;
         onclick?: MouseEventHandler<T> | undefined;
         oncontextmenu?: MouseEventHandler<T> | undefined;
         ondblclick?: MouseEventHandler<T> | undefined;
         ondrag?: DragEventHandler<T> | undefined;
         ondragend?: DragEventHandler<T> | undefined;
         ondragenter?: DragEventHandler<T> | undefined;
-        // ondragexit?: DragEventHandler<T> | undefined;
         ondragleave?: DragEventHandler<T> | undefined;
         ondragover?: DragEventHandler<T> | undefined;
         ondragstart?: DragEventHandler<T> | undefined;
@@ -650,35 +613,16 @@ export namespace N {
         title?: string | undefined;
         translate?: 'yes' | 'no' | undefined;
 
-        // Unknown
-        // radioGroup?: string | undefined; // <command>, <menuitem>
-
         // WAI-ARIA
         role?: AriaRole | undefined;
 
-        // RDFa Attributes
-        about?: string | undefined;
-        datatype?: string | undefined;
-        inlist?: any;
-        prefix?: string | undefined;
-        property?: string | undefined;
-        resource?: string | undefined;
-        typeof?: string | undefined;
-        vocab?: string | undefined;
-
         // Non-standard Attributes
-        autoCapitalize?: string | undefined;
-        // autoCorrect?: string | undefined;
-        // autoSave?: string | undefined;
-        // color?: string | undefined;
+        autocapitalize?: string | undefined;
         itemprop?: string | undefined;
         itemscope?: boolean | undefined;
         itemtype?: string | undefined;
         itemid?: string | undefined;
         itemref?: string | undefined;
-        // results?: number | undefined;
-        // security?: string | undefined;
-        // unselectable?: 'on' | 'off' | undefined;
 
         // Living Standard
         /**
@@ -696,91 +640,80 @@ export namespace N {
     interface AllHTMLAttributes<T> extends HTMLAttributes<T> {
         // Standard HTML Attributes
         accept?: string | undefined;
-        acceptCharset?: string | undefined;
+        'accept-charset'?: string | undefined;
         action?: string | undefined;
-        allowFullScreen?: boolean | undefined;
+        allowfullScreen?: boolean | undefined;
         allowTransparency?: boolean | undefined;
         alt?: string | undefined;
         as?: string | undefined;
         async?: boolean | undefined;
-        autoComplete?: string | undefined;
-        autoFocus?: boolean | undefined;
-        autoPlay?: boolean | undefined;
+        autocomplete?: string | undefined;
+        autofocus?: boolean | undefined;
+        autoplay?: boolean | undefined;
         capture?: boolean | 'user' | 'environment' | undefined;
-        cellPadding?: number | string | undefined;
-        cellSpacing?: number | string | undefined;
-        charSet?: string | undefined;
-        challenge?: string | undefined;
+        charset?: string | undefined;
         checked?: boolean | undefined;
         cite?: string | undefined;
-        classID?: string | undefined;
+        classid?: string | undefined;
         cols?: number | undefined;
-        colSpan?: number | undefined;
+        colspan?: number | undefined;
         content?: string | undefined;
         controls?: boolean | undefined;
         coords?: string | undefined;
-        crossOrigin?: string | undefined;
-        // data?: string | undefined;
-        dateTime?: string | undefined;
+        crossorigin?: string | undefined;
+        datetime?: string | undefined;
         default?: boolean | undefined;
         defer?: boolean | undefined;
         disabled?: boolean | undefined;
         download?: any;
-        encType?: string | undefined;
+        enctype?: string | undefined;
         form?: string | undefined;
-        formAction?: string | undefined;
-        formEncType?: string | undefined;
-        formMethod?: string | undefined;
-        formNoValidate?: boolean | undefined;
-        formTarget?: string | undefined;
-        frameBorder?: number | string | undefined;
+        formaction?: string | undefined;
+        formenctype?: string | undefined;
+        formmethod?: string | undefined;
+        formnovalidate?: boolean | undefined;
+        formtarget?: string | undefined;
         headers?: string | undefined;
         height?: number | string | undefined;
         high?: number | undefined;
         href?: string | undefined;
-        hrefLang?: string | undefined;
-        htmlFor?: string | undefined;
-        httpEquiv?: string | undefined;
+        hreflang?: string | undefined;
+        'http-equiv'?: string | undefined;
         integrity?: string | undefined;
-        keyParams?: string | undefined;
-        keyType?: string | undefined;
         kind?: string | undefined;
         label?: string | undefined;
         list?: string | undefined;
         loop?: boolean | undefined;
         low?: number | undefined;
         manifest?: string | undefined;
-        marginHeight?: number | undefined;
-        marginWidth?: number | undefined;
         max?: number | string | undefined;
-        maxLength?: number | undefined;
+        maxlength?: number | undefined;
         media?: string | undefined;
-        mediaGroup?: string | undefined;
+        mediagroup?: string | undefined;
         method?: string | undefined;
         min?: number | string | undefined;
-        minLength?: number | undefined;
+        minlength?: number | undefined;
         multiple?: boolean | undefined;
         muted?: boolean | undefined;
         name?: string | undefined;
         nonce?: string | undefined;
-        noValidate?: boolean | undefined;
+        novalidate?: boolean | undefined;
         open?: boolean | undefined;
         optimum?: number | undefined;
         pattern?: string | undefined;
         placeholder?: string | undefined;
-        playsInline?: boolean | undefined;
+        playsinline?: boolean | undefined;
         poster?: string | undefined;
         preload?: string | undefined;
-        readOnly?: boolean | undefined;
+        readonly?: boolean | undefined;
         rel?: string | undefined;
         required?: boolean | undefined;
         reversed?: boolean | undefined;
         rows?: number | undefined;
-        rowSpan?: number | undefined;
+        rowspan?: number | undefined;
         sandbox?: string | undefined;
         scope?: string | undefined;
         scoped?: boolean | undefined;
-        scrolling?: string | undefined;
         seamless?: boolean | undefined;
         selected?: boolean | undefined;
         shape?: string | undefined;
@@ -788,18 +721,17 @@ export namespace N {
         sizes?: string | undefined;
         span?: number | undefined;
         src?: string | undefined;
-        srcDoc?: string | undefined;
-        srcLang?: string | undefined;
-        srcSet?: string | undefined;
+        srcdoc?: string | undefined;
+        srclang?: string | undefined;
+        srcset?: string | undefined;
         start?: number | undefined;
         step?: number | string | undefined;
         summary?: string | undefined;
         target?: string | undefined;
         type?: string | undefined;
-        useMap?: string | undefined;
+        usemap?: string | undefined;
         value?: string | ReadonlyArray<string> | number | undefined;
         width?: number | string | undefined;
-        wmode?: string | undefined;
         wrap?: string | undefined;
     }
 
@@ -824,13 +756,13 @@ export namespace N {
     interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
         download?: any;
         href?: string | undefined;
-        hrefLang?: string | undefined;
+        hreflang?: string | undefined;
         media?: string | undefined;
         ping?: string | undefined;
         rel?: string | undefined;
         target?: HTMLAttributeAnchorTarget | undefined;
         type?: string | undefined;
-        referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
+        referrerpolicy?: HTMLAttributeReferrerPolicy | undefined;
 
         // Nullstack Router
         params?: object | undefined;
@@ -844,9 +776,9 @@ export namespace N {
         coords?: string | undefined;
         download?: any;
         href?: string | undefined;
-        hrefLang?: string | undefined;
+        hreflang?: string | undefined;
         media?: string | undefined;
-        referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
+        referrerpolicy?: HTMLAttributeReferrerPolicy | undefined;
         rel?: string | undefined;
         shape?: string | undefined;
         target?: string | undefined;
@@ -862,14 +794,14 @@ export namespace N {
     }
 
     interface ButtonHTMLAttributes<T> extends HTMLAttributes<T> {
-        autoFocus?: boolean | undefined;
+        autofocus?: boolean | undefined;
         disabled?: boolean | undefined;
         form?: string | undefined;
-        formAction?: string | undefined;
-        formEncType?: string | undefined;
-        formMethod?: string | undefined;
-        formNoValidate?: boolean | undefined;
-        formTarget?: string | undefined;
+        formaction?: string | undefined;
+        formenctype?: string | undefined;
+        formmethod?: string | undefined;
+        formnovalidate?: boolean | undefined;
+        formtarget?: string | undefined;
         name?: string | undefined;
         type?: 'submit' | 'reset' | 'button' | undefined;
         value?: string | ReadonlyArray<string> | number | undefined;
@@ -882,6 +814,7 @@ export namespace N {
 
     interface ColHTMLAttributes<T> extends HTMLAttributes<T> {
         span?: number | undefined;
+        /** @deprecated */
         width?: number | string | undefined;
     }
 
@@ -895,12 +828,11 @@ export namespace N {
 
     interface DetailsHTMLAttributes<T> extends HTMLAttributes<T> {
         open?: boolean | undefined;
-        onToggle?: NullstackEventHandler<T> | undefined;
     }
 
     interface DelHTMLAttributes<T> extends HTMLAttributes<T> {
         cite?: string | undefined;
-        dateTime?: string | undefined;
+        datetime?: string | undefined;
     }
 
     interface DialogHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -921,13 +853,13 @@ export namespace N {
     }
 
     interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
-        acceptCharset?: string | undefined;
+        'accept-charset'?: string | undefined;
         action?: string | undefined;
-        autoComplete?: string | undefined;
-        encType?: string | undefined;
+        autocomplete?: string | undefined;
+        enctype?: string | undefined;
         method?: string | undefined;
         name?: string | undefined;
-        noValidate?: boolean | undefined;
+        novalidate?: boolean | undefined;
         target?: string | undefined;
     }
 
@@ -937,7 +869,7 @@ export namespace N {
 
     interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
         allow?: string | undefined;
-        allowFullScreen?: boolean | undefined;
+        allowfullScreen?: boolean | undefined;
         allowTransparency?: boolean | undefined;
         /** @deprecated */
         frameBorder?: number | string | undefined;
@@ -948,33 +880,33 @@ export namespace N {
         /** @deprecated */
         marginWidth?: number | undefined;
         name?: string | undefined;
-        referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
+        referrerpolicy?: HTMLAttributeReferrerPolicy | undefined;
         sandbox?: string | undefined;
         /** @deprecated */
         scrolling?: string | undefined;
         seamless?: boolean | undefined;
         src?: string | undefined;
-        srcDoc?: string | undefined;
+        srcdoc?: string | undefined;
         width?: number | string | undefined;
     }
 
     interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
         alt?: string | undefined;
-        crossOrigin?: "anonymous" | "use-credentials" | "" | undefined;
+        crossorigin?: "anonymous" | "use-credentials" | "" | undefined;
         decoding?: "async" | "auto" | "sync" | undefined;
         height?: number | string | undefined;
         loading?: "eager" | "lazy" | undefined;
-        referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
+        referrerpolicy?: HTMLAttributeReferrerPolicy | undefined;
         sizes?: string | undefined;
         src?: string | undefined;
-        srcSet?: string | undefined;
-        useMap?: string | undefined;
+        srcset?: string | undefined;
+        usemap?: string | undefined;
         width?: number | string | undefined;
     }
 
     interface InsHTMLAttributes<T> extends HTMLAttributes<T> {
         cite?: string | undefined;
-        dateTime?: string | undefined;
+        datetime?: string | undefined;
     }
 
     type HTMLInputTypeAttribute =
@@ -982,6 +914,7 @@ export namespace N {
         | 'checkbox'
         | 'color'
         | 'date'
+        | 'datetime'
         | 'datetime-local'
         | 'email'
         | 'file'
@@ -1005,30 +938,31 @@ export namespace N {
     interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
         accept?: string | undefined;
         alt?: string | undefined;
-        autoComplete?: string | undefined;
-        autoFocus?: boolean | undefined;
-        capture?: boolean | 'user' | 'environment' | undefined; // https://www.w3.org/TR/html-media-capture/#the-capture-attribute
+        autocomplete?: string | undefined;
+        autofocus?: boolean | undefined;
+        /** @see https://www.w3.org/TR/html-media-capture/#the-capture-attribute */
+        capture?: boolean | 'user' | 'environment' | undefined;
         checked?: boolean | undefined;
-        crossOrigin?: string | undefined;
+        crossorigin?: string | undefined;
         disabled?: boolean | undefined;
-        enterKeyHint?: 'enter' | 'done' | 'go' | 'next' | 'previous' | 'search' | 'send' | undefined;
+        enterkeyhint?: 'enter' | 'done' | 'go' | 'next' | 'previous' | 'search' | 'send' | undefined;
         form?: string | undefined;
-        formAction?: string | undefined;
-        formEncType?: string | undefined;
-        formMethod?: string | undefined;
-        formNoValidate?: boolean | undefined;
-        formTarget?: string | undefined;
+        formaction?: string | undefined;
+        formenctype?: string | undefined;
+        formmethod?: string | undefined;
+        formnovalidate?: boolean | undefined;
+        formtarget?: string | undefined;
         height?: number | string | undefined;
         list?: string | undefined;
         max?: number | string | undefined;
-        maxLength?: number | undefined;
+        maxlength?: number | undefined;
         min?: number | string | undefined;
-        minLength?: number | undefined;
+        minlength?: number | undefined;
         multiple?: boolean | undefined;
         name?: string | undefined;
         pattern?: string | undefined;
         placeholder?: string | undefined;
-        readOnly?: boolean | undefined;
+        readonly?: boolean | undefined;
         required?: boolean | undefined;
         size?: number | undefined;
         src?: string | undefined;
@@ -1037,22 +971,21 @@ export namespace N {
         value?: string | ReadonlyArray<string> | number | undefined;
         width?: number | string | undefined;
 
-        onChange?: ChangeEventHandler<T> | undefined;
+        onchange?: ChangeEventHandler<T> | undefined;
     }
 
     interface KeygenHTMLAttributes<T> extends HTMLAttributes<T> {
-        autoFocus?: boolean | undefined;
+        autofocus?: boolean | undefined;
         challenge?: string | undefined;
         disabled?: boolean | undefined;
         form?: string | undefined;
-        keyType?: string | undefined;
-        keyParams?: string | undefined;
+        keytype?: string | undefined;
+        keyparams?: string | undefined;
         name?: string | undefined;
     }
 
     interface LabelHTMLAttributes<T> extends HTMLAttributes<T> {
         form?: string | undefined;
-        htmlFor?: string | undefined;
     }
 
     interface LiHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1061,18 +994,16 @@ export namespace N {
 
     interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
         as?: string | undefined;
-        crossOrigin?: string | undefined;
+        crossorigin?: string | undefined;
         href?: string | undefined;
-        hrefLang?: string | undefined;
+        hreflang?: string | undefined;
         integrity?: string | undefined;
         media?: string | undefined;
-        imageSrcSet?: string | undefined;
-        imageSizes?: string | undefined;
-        referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
+        referrerpolicy?: HTMLAttributeReferrerPolicy | undefined;
         rel?: string | undefined;
         sizes?: string | undefined;
         type?: string | undefined;
-        charSet?: string | undefined;
+        charset?: string | undefined;
     }
 
     interface MapHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1084,22 +1015,21 @@ export namespace N {
     }
 
     interface MediaHTMLAttributes<T> extends HTMLAttributes<T> {
-        autoPlay?: boolean | undefined;
+        autoplay?: boolean | undefined;
         controls?: boolean | undefined;
-        controlsList?: string | undefined;
-        crossOrigin?: string | undefined;
+        crossorigin?: string | undefined;
         loop?: boolean | undefined;
-        mediaGroup?: string | undefined;
+        mediagroup?: string | undefined;
         muted?: boolean | undefined;
-        playsInline?: boolean | undefined;
+        playsinline?: boolean | undefined;
         preload?: string | undefined;
         src?: string | undefined;
     }
 
     interface MetaHTMLAttributes<T> extends HTMLAttributes<T> {
-        charSet?: string | undefined;
+        charset?: string | undefined;
         content?: string | undefined;
-        httpEquiv?: string | undefined;
+        'http-equiv'?: string | undefined;
         name?: string | undefined;
         media?: string | undefined;
     }
@@ -1119,15 +1049,13 @@ export namespace N {
     }
 
     interface ObjectHTMLAttributes<T> extends HTMLAttributes<T> {
-        classID?: string | undefined;
-        // data?: string | undefined;
+        classid?: string | undefined;
         form?: string | undefined;
         height?: number | string | undefined;
         name?: string | undefined;
         type?: string | undefined;
-        useMap?: string | undefined;
+        usemap?: string | undefined;
         width?: number | string | undefined;
-        wmode?: string | undefined;
     }
 
     interface OlHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1150,7 +1078,6 @@ export namespace N {
 
     interface OutputHTMLAttributes<T> extends HTMLAttributes<T> {
         form?: string | undefined;
-        htmlFor?: string | undefined;
         name?: string | undefined;
     }
 
@@ -1171,20 +1098,20 @@ export namespace N {
     interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
         async?: boolean | undefined;
         /** @deprecated */
-        charSet?: string | undefined;
-        crossOrigin?: string | undefined;
+        charset?: string | undefined;
+        crossorigin?: string | undefined;
         defer?: boolean | undefined;
         integrity?: string | undefined;
-        noModule?: boolean | undefined;
+        nomodule?: boolean | undefined;
         nonce?: string | undefined;
-        referrerPolicy?: HTMLAttributeReferrerPolicy | undefined;
+        referrerpolicy?: HTMLAttributeReferrerPolicy | undefined;
         src?: string | undefined;
         type?: string | undefined;
     }
 
     interface SelectHTMLAttributes<T> extends HTMLAttributes<T> {
-        autoComplete?: string | undefined;
-        autoFocus?: boolean | undefined;
+        autocomplete?: string | undefined;
+        autofocus?: boolean | undefined;
         disabled?: boolean | undefined;
         form?: string | undefined;
         multiple?: boolean | undefined;
@@ -1192,7 +1119,7 @@ export namespace N {
         required?: boolean | undefined;
         size?: number | undefined;
         value?: string | ReadonlyArray<string> | number | undefined;
-        onChange?: ChangeEventHandler<T> | undefined;
+        onchange?: ChangeEventHandler<T> | undefined;
     }
 
     interface SourceHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1200,7 +1127,7 @@ export namespace N {
         media?: string | undefined;
         sizes?: string | undefined;
         src?: string | undefined;
-        srcSet?: string | undefined;
+        srcset?: string | undefined;
         type?: string | undefined;
         width?: number | string | undefined;
     }
@@ -1213,55 +1140,52 @@ export namespace N {
     }
 
     interface TableHTMLAttributes<T> extends HTMLAttributes<T> {
-        cellPadding?: number | string | undefined;
-        cellSpacing?: number | string | undefined;
         summary?: string | undefined;
         width?: number | string | undefined;
     }
 
     interface TextareaHTMLAttributes<T> extends HTMLAttributes<T> {
-        autoComplete?: string | undefined;
-        autoFocus?: boolean | undefined;
+        autocomplete?: string | undefined;
+        autofocus?: boolean | undefined;
         cols?: number | undefined;
-        dirName?: string | undefined;
+        dirname?: string | undefined;
         disabled?: boolean | undefined;
         form?: string | undefined;
-        maxLength?: number | undefined;
-        minLength?: number | undefined;
+        maxlength?: number | undefined;
+        minlength?: number | undefined;
         name?: string | undefined;
         placeholder?: string | undefined;
-        readOnly?: boolean | undefined;
+        readonly?: boolean | undefined;
         required?: boolean | undefined;
         rows?: number | undefined;
         value?: string | ReadonlyArray<string> | number | undefined;
         wrap?: string | undefined;
 
-        onChange?: ChangeEventHandler<T> | undefined;
+        onchange?: ChangeEventHandler<T> | undefined;
     }
 
     interface TdHTMLAttributes<T> extends HTMLAttributes<T> {
         align?: "left" | "center" | "right" | "justify" | "char" | undefined;
-        colSpan?: number | undefined;
+        colspan?: number | undefined;
         headers?: string | undefined;
-        rowSpan?: number | undefined;
+        rowspan?: number | undefined;
         scope?: string | undefined;
         abbr?: string | undefined;
         height?: number | string | undefined;
         width?: number | string | undefined;
-        valign?: "top" | "middle" | "bottom" | "baseline" | undefined;
     }
 
     interface ThHTMLAttributes<T> extends HTMLAttributes<T> {
         align?: "left" | "center" | "right" | "justify" | "char" | undefined;
-        colSpan?: number | undefined;
+        colspan?: number | undefined;
         headers?: string | undefined;
-        rowSpan?: number | undefined;
+        rowspan?: number | undefined;
         scope?: string | undefined;
         abbr?: string | undefined;
     }
 
     interface TimeHTMLAttributes<T> extends HTMLAttributes<T> {
-        dateTime?: string | undefined;
+        datetime?: string | undefined;
     }
 
     interface TrackHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1269,12 +1193,12 @@ export namespace N {
         kind?: string | undefined;
         label?: string | undefined;
         src?: string | undefined;
-        srcLang?: string | undefined;
+        srclang?: string | undefined;
     }
 
     interface VideoHTMLAttributes<T> extends MediaHTMLAttributes<T> {
         height?: number | string | undefined;
-        playsInline?: boolean | undefined;
+        playsinline?: boolean | undefined;
         poster?: string | undefined;
         width?: number | string | undefined;
         disablePictureInPicture?: boolean | undefined;
@@ -1304,463 +1228,36 @@ export namespace N {
 
         // Other HTML properties supported by SVG elements in browsers
         role?: AriaRole | undefined;
-        tabIndex?: number | undefined;
-        crossOrigin?: "anonymous" | "use-credentials" | "" | undefined;
+        tabindex?: number | undefined;
+        crossorigin?: "anonymous" | "use-credentials" | "" | undefined;
 
         // SVG Specific attributes
-        accentHeight?: number | string | undefined;
-        accumulate?: "none" | "sum" | undefined;
-        additive?: "replace" | "sum" | undefined;
-        alignmentBaseline?: "auto" | "baseline" | "before-edge" | "text-before-edge" | "middle" | "central" | "after-edge" |
-        "text-after-edge" | "ideographic" | "alphabetic" | "hanging" | "mathematical" | "inherit" | undefined;
-        allowReorder?: "no" | "yes" | undefined;
-        alphabetic?: number | string | undefined;
-        amplitude?: number | string | undefined;
-        arabicForm?: "initial" | "medial" | "terminal" | "isolated" | undefined;
-        ascent?: number | string | undefined;
-        attributeName?: string | undefined;
-        attributeType?: string | undefined;
-        autoReverse?: Booleanish | undefined;
-        azimuth?: number | string | undefined;
-        baseFrequency?: number | string | undefined;
-        baselineShift?: number | string | undefined;
-        baseProfile?: number | string | undefined;
-        bbox?: number | string | undefined;
-        begin?: number | string | undefined;
-        bias?: number | string | undefined;
-        by?: number | string | undefined;
-        calcMode?: number | string | undefined;
-        capHeight?: number | string | undefined;
-        clip?: number | string | undefined;
-        clipPath?: string | undefined;
-        clipPathUnits?: number | string | undefined;
-        clipRule?: number | string | undefined;
-        colorInterpolation?: number | string | undefined;
-        colorInterpolationFilters?: "auto" | "sRGB" | "linearRGB" | "inherit" | undefined;
-        colorProfile?: number | string | undefined;
-        colorRendering?: number | string | undefined;
         contentScriptType?: number | string | undefined;
         contentStyleType?: number | string | undefined;
         cursor?: number | string | undefined;
-        cx?: number | string | undefined;
-        cy?: number | string | undefined;
-        d?: string | undefined;
-        decelerate?: number | string | undefined;
-        descent?: number | string | undefined;
-        diffuseConstant?: number | string | undefined;
-        direction?: number | string | undefined;
         display?: number | string | undefined;
-        divisor?: number | string | undefined;
-        dominantBaseline?: number | string | undefined;
-        dur?: number | string | undefined;
-        dx?: number | string | undefined;
-        dy?: number | string | undefined;
-        edgeMode?: number | string | undefined;
-        elevation?: number | string | undefined;
-        enableBackground?: number | string | undefined;
-        end?: number | string | undefined;
-        exponent?: number | string | undefined;
-        externalResourcesRequired?: Booleanish | undefined;
         fill?: string | undefined;
-        fillOpacity?: number | string | undefined;
-        fillRule?: "nonzero" | "evenodd" | "inherit" | undefined;
         filter?: string | undefined;
-        filterRes?: number | string | undefined;
-        filterUnits?: number | string | undefined;
-        floodColor?: number | string | undefined;
-        floodOpacity?: number | string | undefined;
-        focusable?: Booleanish | "auto" | undefined;
-        fontFamily?: string | undefined;
-        fontSize?: number | string | undefined;
-        fontSizeAdjust?: number | string | undefined;
-        fontStretch?: number | string | undefined;
-        fontStyle?: number | string | undefined;
-        fontVariant?: number | string | undefined;
-        fontWeight?: number | string | undefined;
-        format?: number | string | undefined;
-        fr?: number | string | undefined;
-        from?: number | string | undefined;
-        fx?: number | string | undefined;
-        fy?: number | string | undefined;
-        g1?: number | string | undefined;
-        g2?: number | string | undefined;
-        glyphName?: number | string | undefined;
-        glyphOrientationHorizontal?: number | string | undefined;
-        glyphOrientationVertical?: number | string | undefined;
-        glyphRef?: number | string | undefined;
-        gradientTransform?: string | undefined;
-        gradientUnits?: string | undefined;
-        hanging?: number | string | undefined;
-        horizAdvX?: number | string | undefined;
-        horizOriginX?: number | string | undefined;
-        href?: string | undefined;
-        ideographic?: number | string | undefined;
-        imageRendering?: number | string | undefined;
-        in2?: number | string | undefined;
-        in?: string | undefined;
-        intercept?: number | string | undefined;
-        k1?: number | string | undefined;
-        k2?: number | string | undefined;
-        k3?: number | string | undefined;
-        k4?: number | string | undefined;
-        k?: number | string | undefined;
-        kernelMatrix?: number | string | undefined;
-        kernelUnitLength?: number | string | undefined;
-        kerning?: number | string | undefined;
-        keyPoints?: number | string | undefined;
-        keySplines?: number | string | undefined;
-        keyTimes?: number | string | undefined;
-        lengthAdjust?: number | string | undefined;
-        letterSpacing?: number | string | undefined;
-        lightingColor?: number | string | undefined;
-        limitingConeAngle?: number | string | undefined;
-        local?: number | string | undefined;
-        markerEnd?: string | undefined;
-        markerHeight?: number | string | undefined;
-        markerMid?: string | undefined;
-        markerStart?: string | undefined;
-        markerUnits?: number | string | undefined;
-        markerWidth?: number | string | undefined;
         mask?: string | undefined;
-        maskContentUnits?: number | string | undefined;
-        maskUnits?: number | string | undefined;
-        mathematical?: number | string | undefined;
-        mode?: number | string | undefined;
-        numOctaves?: number | string | undefined;
-        offset?: number | string | undefined;
         opacity?: number | string | undefined;
-        operator?: number | string | undefined;
-        order?: number | string | undefined;
-        orient?: number | string | undefined;
-        orientation?: number | string | undefined;
-        origin?: number | string | undefined;
-        overflow?: number | string | undefined;
-        overlinePosition?: number | string | undefined;
-        overlineThickness?: number | string | undefined;
-        paintOrder?: number | string | undefined;
-        panose1?: number | string | undefined;
-        path?: string | undefined;
-        pathLength?: number | string | undefined;
-        patternContentUnits?: string | undefined;
-        patternTransform?: number | string | undefined;
-        patternUnits?: string | undefined;
-        pointerEvents?: number | string | undefined;
-        points?: string | undefined;
-        pointsAtX?: number | string | undefined;
-        pointsAtY?: number | string | undefined;
-        pointsAtZ?: number | string | undefined;
-        preserveAlpha?: Booleanish | undefined;
         preserveAspectRatio?: string | undefined;
-        primitiveUnits?: number | string | undefined;
-        r?: number | string | undefined;
-        radius?: number | string | undefined;
-        refX?: number | string | undefined;
-        refY?: number | string | undefined;
-        renderingIntent?: number | string | undefined;
-        repeatCount?: number | string | undefined;
-        repeatDur?: number | string | undefined;
         requiredExtensions?: number | string | undefined;
-        requiredFeatures?: number | string | undefined;
-        restart?: number | string | undefined;
-        result?: string | undefined;
-        rotate?: number | string | undefined;
-        rx?: number | string | undefined;
-        ry?: number | string | undefined;
-        scale?: number | string | undefined;
-        seed?: number | string | undefined;
-        shapeRendering?: number | string | undefined;
-        slope?: number | string | undefined;
-        spacing?: number | string | undefined;
-        specularConstant?: number | string | undefined;
-        specularExponent?: number | string | undefined;
-        speed?: number | string | undefined;
-        spreadMethod?: string | undefined;
-        startOffset?: number | string | undefined;
-        stdDeviation?: number | string | undefined;
-        stemh?: number | string | undefined;
-        stemv?: number | string | undefined;
-        stitchTiles?: number | string | undefined;
-        stopColor?: string | undefined;
-        stopOpacity?: number | string | undefined;
-        strikethroughPosition?: number | string | undefined;
-        strikethroughThickness?: number | string | undefined;
-        string?: number | string | undefined;
         stroke?: string | undefined;
-        strokeDasharray?: string | number | undefined;
-        strokeDashoffset?: string | number | undefined;
-        strokeLinecap?: "butt" | "round" | "square" | "inherit" | undefined;
-        strokeLinejoin?: "miter" | "round" | "bevel" | "inherit" | undefined;
-        strokeMiterlimit?: number | string | undefined;
-        strokeOpacity?: number | string | undefined;
-        strokeWidth?: number | string | undefined;
-        surfaceScale?: number | string | undefined;
         systemLanguage?: number | string | undefined;
-        tableValues?: number | string | undefined;
-        targetX?: number | string | undefined;
-        targetY?: number | string | undefined;
-        textAnchor?: string | undefined;
-        textDecoration?: number | string | undefined;
-        textLength?: number | string | undefined;
-        textRendering?: number | string | undefined;
-        to?: number | string | undefined;
         transform?: string | undefined;
-        u1?: number | string | undefined;
-        u2?: number | string | undefined;
-        underlinePosition?: number | string | undefined;
-        underlineThickness?: number | string | undefined;
-        unicode?: number | string | undefined;
-        unicodeBidi?: number | string | undefined;
-        unicodeRange?: number | string | undefined;
-        unitsPerEm?: number | string | undefined;
-        vAlphabetic?: number | string | undefined;
-        values?: string | undefined;
-        vectorEffect?: number | string | undefined;
-        version?: string | undefined;
-        vertAdvY?: number | string | undefined;
-        vertOriginX?: number | string | undefined;
-        vertOriginY?: number | string | undefined;
-        vHanging?: number | string | undefined;
-        vIdeographic?: number | string | undefined;
         viewBox?: string | undefined;
-        viewTarget?: number | string | undefined;
         visibility?: number | string | undefined;
-        vMathematical?: number | string | undefined;
-        widths?: number | string | undefined;
-        wordSpacing?: number | string | undefined;
-        writingMode?: number | string | undefined;
-        x1?: number | string | undefined;
-        x2?: number | string | undefined;
         x?: number | string | undefined;
-        xChannelSelector?: string | undefined;
-        xHeight?: number | string | undefined;
-        xlinkActuate?: string | undefined;
-        xlinkArcrole?: string | undefined;
-        xlinkHref?: string | undefined;
-        xlinkRole?: string | undefined;
-        xlinkShow?: string | undefined;
-        xlinkTitle?: string | undefined;
-        xlinkType?: string | undefined;
-        xmlBase?: string | undefined;
-        xmlLang?: string | undefined;
         xmlns?: string | undefined;
-        xmlnsXlink?: string | undefined;
-        xmlSpace?: string | undefined;
-        y1?: number | string | undefined;
-        y2?: number | string | undefined;
         y?: number | string | undefined;
-        yChannelSelector?: string | undefined;
-        z?: number | string | undefined;
-        zoomAndPan?: string | undefined;
-    }
-
-    interface WebViewHTMLAttributes<T> extends HTMLAttributes<T> {
-        allowFullScreen?: boolean | undefined;
-        allowpopups?: boolean | undefined;
-        autoFocus?: boolean | undefined;
-        autosize?: boolean | undefined;
-        blinkfeatures?: string | undefined;
-        disableblinkfeatures?: string | undefined;
-        disableguestresize?: boolean | undefined;
-        disablewebsecurity?: boolean | undefined;
-        guestinstance?: string | undefined;
-        httpreferrer?: string | undefined;
-        nodeintegration?: boolean | undefined;
-        partition?: string | undefined;
-        plugins?: boolean | undefined;
-        preload?: string | undefined;
-        src?: string | undefined;
-        useragent?: string | undefined;
-        webpreferences?: string | undefined;
     }
 
     type ElementTagHTMLAttributes = AllHTMLAttributes<'div'> & {
         tag?: string
     }
-
-    //
-    // Nullstack DOM
-    // ----------------------------------------------------------------------
-
-    interface NullstackHTML {
-        a: DetailedHTMLFactory<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>;
-        abbr: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        address: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        area: DetailedHTMLFactory<AreaHTMLAttributes<HTMLAreaElement>, HTMLAreaElement>;
-        article: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        aside: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        audio: DetailedHTMLFactory<AudioHTMLAttributes<HTMLAudioElement>, HTMLAudioElement>;
-        b: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        base: DetailedHTMLFactory<BaseHTMLAttributes<HTMLBaseElement>, HTMLBaseElement>;
-        bdi: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        bdo: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        big: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        blockquote: DetailedHTMLFactory<BlockquoteHTMLAttributes<HTMLQuoteElement>, HTMLQuoteElement>;
-        body: DetailedHTMLFactory<HTMLAttributes<HTMLBodyElement>, HTMLBodyElement>;
-        br: DetailedHTMLFactory<HTMLAttributes<HTMLBRElement>, HTMLBRElement>;
-        button: DetailedHTMLFactory<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
-        canvas: DetailedHTMLFactory<CanvasHTMLAttributes<HTMLCanvasElement>, HTMLCanvasElement>;
-        caption: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        cite: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        code: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        col: DetailedHTMLFactory<ColHTMLAttributes<HTMLTableColElement>, HTMLTableColElement>;
-        colgroup: DetailedHTMLFactory<ColgroupHTMLAttributes<HTMLTableColElement>, HTMLTableColElement>;
-        data: DetailedHTMLFactory<DataHTMLAttributes<HTMLDataElement>, HTMLDataElement>;
-        datalist: DetailedHTMLFactory<HTMLAttributes<HTMLDataListElement>, HTMLDataListElement>;
-        dd: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        del: DetailedHTMLFactory<DelHTMLAttributes<HTMLModElement>, HTMLModElement>;
-        details: DetailedHTMLFactory<DetailsHTMLAttributes<HTMLDetailsElement>, HTMLDetailsElement>;
-        dfn: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        dialog: DetailedHTMLFactory<DialogHTMLAttributes<HTMLDialogElement>, HTMLDialogElement>;
-        div: DetailedHTMLFactory<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
-        dl: DetailedHTMLFactory<HTMLAttributes<HTMLDListElement>, HTMLDListElement>;
-        dt: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        em: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        embed: DetailedHTMLFactory<EmbedHTMLAttributes<HTMLEmbedElement>, HTMLEmbedElement>;
-        fieldset: DetailedHTMLFactory<FieldsetHTMLAttributes<HTMLFieldSetElement>, HTMLFieldSetElement>;
-        figcaption: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        figure: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        footer: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        form: DetailedHTMLFactory<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>;
-        h1: DetailedHTMLFactory<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
-        h2: DetailedHTMLFactory<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
-        h3: DetailedHTMLFactory<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
-        h4: DetailedHTMLFactory<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
-        h5: DetailedHTMLFactory<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
-        h6: DetailedHTMLFactory<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>;
-        head: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLHeadElement>;
-        header: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        hgroup: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        hr: DetailedHTMLFactory<HTMLAttributes<HTMLHRElement>, HTMLHRElement>;
-        html: DetailedHTMLFactory<HtmlHTMLAttributes<HTMLHtmlElement>, HTMLHtmlElement>;
-        i: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        iframe: DetailedHTMLFactory<IframeHTMLAttributes<HTMLIFrameElement>, HTMLIFrameElement>;
-        img: DetailedHTMLFactory<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>;
-        input: DetailedHTMLFactory<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
-        ins: DetailedHTMLFactory<InsHTMLAttributes<HTMLModElement>, HTMLModElement>;
-        kbd: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        keygen: DetailedHTMLFactory<KeygenHTMLAttributes<HTMLElement>, HTMLElement>;
-        label: DetailedHTMLFactory<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>;
-        legend: DetailedHTMLFactory<HTMLAttributes<HTMLLegendElement>, HTMLLegendElement>;
-        li: DetailedHTMLFactory<LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>;
-        link: DetailedHTMLFactory<LinkHTMLAttributes<HTMLLinkElement>, HTMLLinkElement>;
-        main: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        map: DetailedHTMLFactory<MapHTMLAttributes<HTMLMapElement>, HTMLMapElement>;
-        mark: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        menu: DetailedHTMLFactory<MenuHTMLAttributes<HTMLElement>, HTMLElement>;
-        menuitem: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        meta: DetailedHTMLFactory<MetaHTMLAttributes<HTMLMetaElement>, HTMLMetaElement>;
-        meter: DetailedHTMLFactory<MeterHTMLAttributes<HTMLMeterElement>, HTMLMeterElement>;
-        nav: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        noscript: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        object: DetailedHTMLFactory<ObjectHTMLAttributes<HTMLObjectElement>, HTMLObjectElement>;
-        ol: DetailedHTMLFactory<OlHTMLAttributes<HTMLOListElement>, HTMLOListElement>;
-        optgroup: DetailedHTMLFactory<OptgroupHTMLAttributes<HTMLOptGroupElement>, HTMLOptGroupElement>;
-        option: DetailedHTMLFactory<OptionHTMLAttributes<HTMLOptionElement>, HTMLOptionElement>;
-        output: DetailedHTMLFactory<OutputHTMLAttributes<HTMLOutputElement>, HTMLOutputElement>;
-        p: DetailedHTMLFactory<HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>;
-        param: DetailedHTMLFactory<ParamHTMLAttributes<HTMLParamElement>, HTMLParamElement>;
-        picture: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        pre: DetailedHTMLFactory<HTMLAttributes<HTMLPreElement>, HTMLPreElement>;
-        progress: DetailedHTMLFactory<ProgressHTMLAttributes<HTMLProgressElement>, HTMLProgressElement>;
-        q: DetailedHTMLFactory<QuoteHTMLAttributes<HTMLQuoteElement>, HTMLQuoteElement>;
-        rp: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        rt: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        ruby: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        s: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        samp: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        slot: DetailedHTMLFactory<SlotHTMLAttributes<HTMLSlotElement>, HTMLSlotElement>;
-        script: DetailedHTMLFactory<ScriptHTMLAttributes<HTMLScriptElement>, HTMLScriptElement>;
-        section: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        select: DetailedHTMLFactory<SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
-        small: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        source: DetailedHTMLFactory<SourceHTMLAttributes<HTMLSourceElement>, HTMLSourceElement>;
-        span: DetailedHTMLFactory<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>;
-        strong: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        style: DetailedHTMLFactory<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>;
-        sub: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        summary: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        sup: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        table: DetailedHTMLFactory<TableHTMLAttributes<HTMLTableElement>, HTMLTableElement>;
-        template: DetailedHTMLFactory<HTMLAttributes<HTMLTemplateElement>, HTMLTemplateElement>;
-        tbody: DetailedHTMLFactory<HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>;
-        td: DetailedHTMLFactory<TdHTMLAttributes<HTMLTableDataCellElement>, HTMLTableDataCellElement>;
-        textarea: DetailedHTMLFactory<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>;
-        tfoot: DetailedHTMLFactory<HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>;
-        th: DetailedHTMLFactory<ThHTMLAttributes<HTMLTableHeaderCellElement>, HTMLTableHeaderCellElement>;
-        thead: DetailedHTMLFactory<HTMLAttributes<HTMLTableSectionElement>, HTMLTableSectionElement>;
-        time: DetailedHTMLFactory<TimeHTMLAttributes<HTMLTimeElement>, HTMLTimeElement>;
-        title: DetailedHTMLFactory<HTMLAttributes<HTMLTitleElement>, HTMLTitleElement>;
-        tr: DetailedHTMLFactory<HTMLAttributes<HTMLTableRowElement>, HTMLTableRowElement>;
-        track: DetailedHTMLFactory<TrackHTMLAttributes<HTMLTrackElement>, HTMLTrackElement>;
-        u: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        ul: DetailedHTMLFactory<HTMLAttributes<HTMLUListElement>, HTMLUListElement>;
-        "var": DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        video: DetailedHTMLFactory<VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>;
-        wbr: DetailedHTMLFactory<HTMLAttributes<HTMLElement>, HTMLElement>;
-        webview: DetailedHTMLFactory<WebViewHTMLAttributes<HTMLWebViewElement>, HTMLWebViewElement>;
-        element: ElementTagHTMLAttributes;
-    }
-
-    interface NullstackSVG {
-        animate: SVGFactory;
-        circle: SVGFactory;
-        clipPath: SVGFactory;
-        defs: SVGFactory;
-        desc: SVGFactory;
-        ellipse: SVGFactory;
-        feBlend: SVGFactory;
-        feColorMatrix: SVGFactory;
-        feComponentTransfer: SVGFactory;
-        feComposite: SVGFactory;
-        feConvolveMatrix: SVGFactory;
-        feDiffuseLighting: SVGFactory;
-        feDisplacementMap: SVGFactory;
-        feDistantLight: SVGFactory;
-        feDropShadow: SVGFactory;
-        feFlood: SVGFactory;
-        feFuncA: SVGFactory;
-        feFuncB: SVGFactory;
-        feFuncG: SVGFactory;
-        feFuncR: SVGFactory;
-        feGaussianBlur: SVGFactory;
-        feImage: SVGFactory;
-        feMerge: SVGFactory;
-        feMergeNode: SVGFactory;
-        feMorphology: SVGFactory;
-        feOffset: SVGFactory;
-        fePointLight: SVGFactory;
-        feSpecularLighting: SVGFactory;
-        feSpotLight: SVGFactory;
-        feTile: SVGFactory;
-        feTurbulence: SVGFactory;
-        filter: SVGFactory;
-        foreignObject: SVGFactory;
-        g: SVGFactory;
-        image: SVGFactory;
-        line: SVGFactory;
-        linearGradient: SVGFactory;
-        marker: SVGFactory;
-        mask: SVGFactory;
-        metadata: SVGFactory;
-        path: SVGFactory;
-        pattern: SVGFactory;
-        polygon: SVGFactory;
-        polyline: SVGFactory;
-        radialGradient: SVGFactory;
-        rect: SVGFactory;
-        stop: SVGFactory;
-        svg: SVGFactory;
-        switch: SVGFactory;
-        symbol: SVGFactory;
-        text: SVGFactory;
-        textPath: SVGFactory;
-        tspan: SVGFactory;
-        use: SVGFactory;
-        view: SVGFactory;
-    }
-
-    interface NullstackDOM extends NullstackHTML, NullstackSVG { }
 }
+
+type ExoticElements = Record<string, N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>>
 
 declare global {
     namespace JSX {
@@ -1827,6 +1324,7 @@ declare global {
             input: N.DetailedHTMLProps<N.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
             ins: N.DetailedHTMLProps<N.InsHTMLAttributes<HTMLModElement>, HTMLModElement>;
             kbd: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
+            /** @deprecated */
             keygen: N.DetailedHTMLProps<N.KeygenHTMLAttributes<HTMLElement>, HTMLElement>;
             label: N.DetailedHTMLProps<N.LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>;
             legend: N.DetailedHTMLProps<N.HTMLAttributes<HTMLLegendElement>, HTMLLegendElement>;
@@ -1887,7 +1385,6 @@ declare global {
             "var": N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
             video: N.DetailedHTMLProps<N.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>;
             wbr: N.DetailedHTMLProps<N.HTMLAttributes<HTMLElement>, HTMLElement>;
-            webview: N.DetailedHTMLProps<N.WebViewHTMLAttributes<HTMLWebViewElement>, HTMLWebViewElement>;
 
             // SVG
             svg: N.SVGProps<SVGSVGElement>;
