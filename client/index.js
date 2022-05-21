@@ -59,7 +59,6 @@ export default class Nullstack {
         typeof context.start === 'function' && await context.start(context);
         context.environment = environment;
         client.virtualDom = await generateTree(client.initializer(), scope);
-        hydrate(client.selector, client.virtualDom);
         const body = render(client.virtualDom);
         client.selector.replaceWith(body);
         client.selector = body
