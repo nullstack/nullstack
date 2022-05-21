@@ -49,32 +49,32 @@ export interface ComponentLifecycle {
     /**
      * @see https://nullstack.app/full-stack-lifecycle#prepare
      */
-    prepare?(context?: object): any
+    prepare?(context?: Record<string, any>): any
 
     /**
      * @see https://nullstack.app/full-stack-lifecycle#initiate
      */
-    initiate?(context?: object): any
+    initiate?(context?: Record<string, any>): any
 
     /**
      * @see https://nullstack.app/full-stack-lifecycle#launch
      */
-    launch?(context?: object): any
+    launch?(context?: Record<string, any>): any
 
     /**
      * @see https://nullstack.app/full-stack-lifecycle#hydrate
      */
-    hydrate?(context?: object): any
+    hydrate?(context?: Record<string, any>): any
 
     /**
      * @see https://nullstack.app/full-stack-lifecycle#update
      */
-    update?(context?: object): any
+    update?(context?: Record<string, any>): any
 
     /**
      * @see https://nullstack.app/full-stack-lifecycle#terminate
      */
-    terminate?(context?: object): any
+    terminate?(context?: Record<string, any>): any
 }
 
 export namespace N {

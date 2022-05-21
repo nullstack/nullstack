@@ -45,9 +45,7 @@ export type NullstackServerContext = {
    * @scope server
    * @see https://nullstack.app/server-request-and-response
    */
-  request?: {
-    [key: string]: any
-  };
+  request?: Record<string, any>;
 
   /**
    * Original `response` object from [Express](https://expressjs.com/)
@@ -55,9 +53,7 @@ export type NullstackServerContext = {
    * @scope server
    * @see https://nullstack.app/server-request-and-response
    */
-  response?: {
-    [key: string]: any
-  };
+  response?: Record<string, any>;
 
   /**
    * You can assign any key with any type of public information.
