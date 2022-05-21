@@ -660,7 +660,7 @@ export namespace N {
         content?: string | undefined;
         controls?: boolean | undefined;
         coords?: string | undefined;
-        crossorigin?: string | undefined;
+        crossorigin?: "anonymous" | "use-credentials" | "" | undefined;
         datetime?: string | undefined;
         default?: boolean | undefined;
         defer?: boolean | undefined;
@@ -943,7 +943,6 @@ export namespace N {
         /** @see https://www.w3.org/TR/html-media-capture/#the-capture-attribute */
         capture?: boolean | 'user' | 'environment' | undefined;
         checked?: boolean | undefined;
-        crossorigin?: string | undefined;
         disabled?: boolean | undefined;
         enterkeyhint?: 'enter' | 'done' | 'go' | 'next' | 'previous' | 'search' | 'send' | undefined;
         form?: string | undefined;
@@ -994,7 +993,7 @@ export namespace N {
 
     interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
         as?: string | undefined;
-        crossorigin?: string | undefined;
+        crossorigin?: true | "anonymous" | "use-credentials" | "" | undefined;
         href?: string | undefined;
         hreflang?: string | undefined;
         integrity?: string | undefined;
@@ -1017,7 +1016,7 @@ export namespace N {
     interface MediaHTMLAttributes<T> extends HTMLAttributes<T> {
         autoplay?: boolean | undefined;
         controls?: boolean | undefined;
-        crossorigin?: string | undefined;
+        crossorigin?: true | "anonymous" | "use-credentials" | "" | undefined;
         loop?: boolean | undefined;
         mediagroup?: string | undefined;
         muted?: boolean | undefined;
@@ -1073,7 +1072,7 @@ export namespace N {
         disabled?: boolean | undefined;
         label?: string | undefined;
         selected?: boolean | undefined;
-        value?: string | ReadonlyArray<string> | number | undefined;
+        value?: string | ReadonlyArray<string> | number | boolean | undefined;
     }
 
     interface OutputHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1099,7 +1098,7 @@ export namespace N {
         async?: boolean | undefined;
         /** @deprecated */
         charset?: string | undefined;
-        crossorigin?: string | undefined;
+        crossorigin?: true | "anonymous" | "use-credentials" | "" | undefined;
         defer?: boolean | undefined;
         integrity?: string | undefined;
         nomodule?: boolean | undefined;
@@ -1229,7 +1228,7 @@ export namespace N {
         // Other HTML properties supported by SVG elements in browsers
         role?: AriaRole | undefined;
         tabindex?: number | undefined;
-        crossorigin?: "anonymous" | "use-credentials" | "" | undefined;
+        crossorigin?: true | "anonymous" | "use-credentials" | "" | undefined;
 
         // SVG Specific attributes
         contentScriptType?: number | string | undefined;
