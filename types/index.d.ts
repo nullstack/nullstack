@@ -21,53 +21,54 @@ export * from "./Settings";
 export * from "./Worker";
 export * from "./JSX";
 
-export interface INullstack {
-  /**
-   * @see https://nullstack.app/full-stack-lifecycle#prepare
-   */
-  prepare?(context?: Record<string, any>): void;
+export default class Nullstack<TProps = {}> {
+  constructor(props?: TProps);
 
-  /**
-   * @see https://nullstack.app/full-stack-lifecycle#initiate
-   */
-  initiate?(context?: Record<string, any>): void;
-
-  /**
-   * @see https://nullstack.app/full-stack-lifecycle#launch
-   */
-  launch?(context?: Record<string, any>): void;
-
-  /**
-   * @see https://nullstack.app/full-stack-lifecycle#hydrate
-   */
-  hydrate?(context?: Record<string, any>): void;
-
-  /**
-   * @see https://nullstack.app/full-stack-lifecycle#update
-   */
-  update?(context?: Record<string, any>): void;
-
-  /**
-   * @see https://nullstack.app/full-stack-lifecycle#terminate
-   */
-  terminate?(context?: Record<string, any>): void;
-}
-
-export default class Nullstack<Props = {}> implements INullstack {
-  constructor(props?: Props);
   /**
    * @param App A Nullstack app root component
    */
   static start?(App: any): NullstackContext;
+  
   /**
    * Use a plugin
    */
   static use?(Plugin: NullstackPlugin): void;
-  prepare?(context: NullstackContext & Props): void;
-  initiate?(context: NullstackContext & Props): void;
-  launch?(context: NullstackContext & Props): void;
-  hydrate?(context: NullstackClientContext & Props): void;
-  update?(context: NullstackContext & Props): void;
-  terminate?(context: NullstackContext & Props): void;
-  render?(context: NullstackContext & Props): void;
+  
+  /**
+   * Could run on the server or client.
+   * @see https://nullstack.app/full-stack-lifecycle#prepare
+   */
+  prepare?(context: NullstackContext & TProps): void;
+  
+  /**
+   * Could run on the server or client.
+   * @see https://nullstack.app/full-stack-lifecycle#initiate
+   */
+  initiate?(context: NullstackContext & TProps): void;
+  
+  /**
+   * Could run on the server or client.
+   * @see https://nullstack.app/full-stack-lifecycle#launch
+   */
+  launch?(context: NullstackContext & TProps): void;
+  
+  /**
+   * Runs on the client.
+   * @see https://nullstack.app/full-stack-lifecycle#hydrate
+   */
+  hydrate?(context: NullstackClientContext & TProps): void;
+  
+  /**
+   * Runs on the client.
+   * @see https://nullstack.app/full-stack-lifecycle#update
+   */
+  update?(context: NullstackContext & TProps): void;
+  
+  /**
+   * Runs on the client.
+   * @see https://nullstack.app/full-stack-lifecycle#terminate
+   */
+  terminate?(context: NullstackContext & TProps): void;
+
+  render?(context: NullstackContext & TProps): void;
 }
