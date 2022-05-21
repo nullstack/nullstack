@@ -5,6 +5,7 @@ import { NullstackServerContext } from "./ServerContext";
 export interface NullstackContext
   extends NullstackClientContext,
     NullstackServerContext {}
+
 export * from "./ClientContext";
 export * from "./Environment";
 export * from "./Page";
@@ -18,6 +19,7 @@ export * from "./Server";
 export * from "./ServerContext";
 export * from "./Settings";
 export * from "./Worker";
+export * from "./JSX";
 
 export interface INullstack {
   /**
