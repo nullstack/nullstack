@@ -8,6 +8,12 @@ import generateTruthyString from '../shared/generateTruthyString';
 const head = document.head
 const body = document.body
 
+function getElement(node) {
+  if (node.element) return node.element
+  node.element = document.getElementById(node.attributes.id)
+  return node.element
+}
+
 function updateAttributes(selector, currentAttributes, nextAttributes) {
   const attributeNames = Object.keys({ ...currentAttributes, ...nextAttributes });
   for (const name of attributeNames) {
@@ -81,7 +87,7 @@ function _rerender(current, next) {
     return;
   }
 
-  if ((isFalse(current) || isFalse(next)) && current != next) {
+  if ((isFalse(current) || isFalse(next)) && current.type != next.type) {
     const nextSelector = render(next);
     selector.replaceWith(nextSelector);
     if (current.type !== 'head' && next.type !== 'head') {
@@ -91,7 +97,7 @@ function _rerender(current, next) {
 
   if (current.type === 'head' ^ next.type === 'head') {
     const nextSelector = render(next);
-    selector.replaceWith(nextSelector);
+    getElement(current).replaceWith(nextSelector);
   }
 
   if (current.type !== 'head' && next.type === 'head') {
@@ -106,7 +112,7 @@ function _rerender(current, next) {
   if (current.type === 'head' && next.type !== 'head') {
     const limit = current.children.length;
     for (let i = limit - 1; i > -1; i--) {
-      current.children[i].element.remove()
+      getElement(current.children[i]).remove()
     }
     return
   }
@@ -118,13 +124,13 @@ function _rerender(current, next) {
         const nextSelector = render(next.children[i]);
         head.appendChild(nextSelector)
       } else if (isUndefined(next.children[i]) && !isFalse(current.children[i])) {
-        current.children[i].element.remove()
+        getElement(current.children[i]).remove()
       } else if (!isFalse(current.children[i]) && !isFalse(next.children[i])) {
         if (current.children[i].type === next.children[i].type) {
-          next.children[i].element = current.children[i].element
-          updateAttributes(current.children[i].element, current.children[i].attributes, next.children[i].attributes)
+          next.children[i].element = getElement(current.children[i])
+          updateAttributes(next.children[i].element, current.children[i].attributes, next.children[i].attributes)
         } else {
-          current.children[i].element.remove()
+          getElement(current.children[i]).remove()
           const nextSelector = render(next.children[i]);
           head.appendChild(nextSelector)
         }
@@ -132,7 +138,7 @@ function _rerender(current, next) {
         const nextSelector = render(next.children[i]);
         head.appendChild(nextSelector)
       } else if (current.children[i].type) {
-        current.children[i].element.remove()
+        getElement(current.children[i]).remove()
       }
     }
     return
