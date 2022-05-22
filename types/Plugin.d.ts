@@ -1,8 +1,14 @@
 import { NullstackClientContext } from "./ClientContext";
-import type { NullstackNode } from "./JSX";
+import { AllHTMLAttributes, NullstackAttributes } from "./JSX";
+
+type NullstackPluginNode = {
+  type: string | boolean;
+  attributes: AllHTMLAttributes<HTMLElement> & NullstackAttributes;
+  children: NullstackClientContext['children'];
+};
 
 interface NullstackNodeContext extends NullstackClientContext {
-  node: NullstackNode;
+  node: NullstackPluginNode;
 }
 
 export type NullstackPlugin = {

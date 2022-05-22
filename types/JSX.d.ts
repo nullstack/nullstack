@@ -1307,7 +1307,7 @@ declare global {
     interface IntrinsicAttributes extends NullstackAttributes {}
     interface IntrinsicClassAttributes extends ClassAttributes {}
 
-    interface IntrinsicElements {
+    interface AllElements {
       // HTML
       a: DetailedHTMLProps<
         AnchorHTMLAttributes<HTMLAnchorElement>,
@@ -1663,5 +1663,7 @@ declare global {
       view: SVGProps<SVGViewElement>;
       element: ElementTagHTMLAttributes;
     }
+
+    interface IntrinsicElements extends ExoticElements, AllElements {}
   }
 }
