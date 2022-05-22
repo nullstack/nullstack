@@ -14,14 +14,14 @@ class ObjectId {
 
 class ErrorOnChildNode extends Nullstack {
 
-  testValue = 'initial Value';
+  value = 'initial Value';
 
   records = [
     { _id: new ObjectId('a') },
   ]
 
   testClick() {
-    this.testValue = 'Changed Value';
+    this.value = 'Changed Value';
   }
 
   renderSerializationError() {
@@ -61,13 +61,13 @@ class ErrorOnChildNode extends Nullstack {
   render({ params }) {
     return (
       <>
-        <h1> Table Error </h1>
+        <h2> Table Error </h2>
         {params.serialization && <SerializationError />}
         {params.dom && <DOMError />}
-        <div id="text">
-          {this.testValue}
+        <div data-value={this.value}>
+          {this.value}
         </div>
-        <button id="buttonTest" onclick={this.testClick}> Change Value </button>
+        <button data-dom-error onclick={this.testClick}> Change Value </button>
       </>
     );
   }

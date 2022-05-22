@@ -15,6 +15,7 @@ function getElement(node) {
 }
 
 function updateAttributes(selector, currentAttributes, nextAttributes) {
+  if (!selector) return
   const attributeNames = Object.keys({ ...currentAttributes, ...nextAttributes });
   for (const name of attributeNames) {
     if (name === 'html') {
@@ -88,8 +89,8 @@ function _rerender(current, next) {
   }
 
   if ((isFalse(current) || isFalse(next)) && current.type != next.type) {
-    const nextSelector = render(next);
-    selector.replaceWith(nextSelector);
+    current.element = render(next);
+    selector.replaceWith(current.element);
     if (current.type !== 'head' && next.type !== 'head') {
       return
     }
@@ -112,7 +113,7 @@ function _rerender(current, next) {
   if (current.type === 'head' && next.type !== 'head') {
     const limit = current.children.length;
     for (let i = limit - 1; i > -1; i--) {
-      getElement(current.children[i]).remove()
+      getElement(current.children[i])?.remove?.()
     }
     return
   }
@@ -124,13 +125,13 @@ function _rerender(current, next) {
         const nextSelector = render(next.children[i]);
         head.appendChild(nextSelector)
       } else if (isUndefined(next.children[i]) && !isFalse(current.children[i])) {
-        getElement(current.children[i]).remove()
+        getElement(current.children[i])?.remove?.()
       } else if (!isFalse(current.children[i]) && !isFalse(next.children[i])) {
         if (current.children[i].type === next.children[i].type) {
           next.children[i].element = getElement(current.children[i])
           updateAttributes(next.children[i].element, current.children[i].attributes, next.children[i].attributes)
         } else {
-          getElement(current.children[i]).remove()
+          getElement(current.children[i])?.remove?.()
           const nextSelector = render(next.children[i]);
           head.appendChild(nextSelector)
         }
@@ -138,7 +139,7 @@ function _rerender(current, next) {
         const nextSelector = render(next.children[i]);
         head.appendChild(nextSelector)
       } else if (current.children[i].type) {
-        getElement(current.children[i]).remove()
+        getElement(current.children[i])?.remove?.()
       }
     }
     return
@@ -160,7 +161,6 @@ function _rerender(current, next) {
     updateAttributes(selector, current.attributes, next.attributes)
 
     if (next.attributes.html) return;
-
     const limit = Math.max(current.children.length, next.children.length);
     if (next.children.length > current.children.length) {
       for (let i = 0; i < current.children.length; i++) {
@@ -179,14 +179,6 @@ function _rerender(current, next) {
       }
     } else {
       for (let i = limit - 1; i > -1; i--) {
-        if (typeof selector.childNodes[i] === 'undefined') {
-          console.error(
-            `${current.type.toUpperCase()} expected tag ${current.children[i].type.toUpperCase()} to be child at index ${i} but instead found undefined. This error usually happens because of an invalid HTML hierarchy or changes in comparisons after serialization.`,
-            selector
-          )
-          throw new Error('Virtual DOM does not match the DOM.')
-          return;
-        }
         _rerender(current.children[i], next.children[i]);
       }
     }

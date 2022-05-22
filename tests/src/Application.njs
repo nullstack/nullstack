@@ -75,6 +75,8 @@ class Application extends Nullstack {
           <a href="/undefined-nodes"> undefined nodes </a>
           <a href="/full-stack-lifecycle"> lifecycle </a>
           <a href="/hydrate-element"> hydrate element </a>
+          <a href="/error-on-child-node?dom=true"> error-on-child-node?dom=true </a>
+          <a href="/error-on-child-node?serialization=true"> error-on-child-node?serialization=true </a>
         </div>
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />

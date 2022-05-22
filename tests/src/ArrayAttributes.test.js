@@ -1,5 +1,6 @@
 beforeAll(async () => {
   await page.goto('http://localhost:6969/array-attributes');
+  await page.waitForSelector('[data-hydrated]')
 });
 
 describe('ArrayAttributes jsx', () => {
