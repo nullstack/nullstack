@@ -1,5 +1,6 @@
 export function isUndefined(node) {
   if (node === undefined) return true
+  if (node === null) return false
   return node.hasOwnProperty('type') && node.type === undefined
 }
 
