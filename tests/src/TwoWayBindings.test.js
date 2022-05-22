@@ -89,6 +89,11 @@ describe('TwoWayBindings', () => {
     expect(element).toBeTruthy();
   });
 
-  // test extra params bringHappiness
+  test('developers can create custom bindable components', async () => {
+    await page.type('[data-currency]', '696969696969');
+    await page.waitForSelector('[data-brings-happiness]')
+    const element = await page.$('[data-brings-happiness]');
+    expect(element).toBeTruthy();
+  });
 
 });

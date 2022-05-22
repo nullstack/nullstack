@@ -14,6 +14,18 @@ function executeEvent(callback, subject, event) {
 export function generateCallback(selector, name) {
   return function eventCallback(event) {
     const subject = eventSubjects.get(selector)
+    if (subject?.bind !== undefined) {
+      const valueName = (subject.type === 'checkbox' || subject.type === 'radio') ? 'checked' : 'value'
+      if (valueName === 'checked') {
+        subject.source[subject.bind] = event.target[valueName];
+      } else if (subject.source[subject.bind] === true || subject.source[subject.bind] === false) {
+        subject.source[subject.bind] = event.target[valueName] === 'true';
+      } else if (typeof subject.source[subject.bind] === 'number') {
+        subject.source[subject.bind] = +event.target[valueName] || 0;
+      } else {
+        subject.source[subject.bind] = event.target[valueName];
+      }
+    }
     if (subject.href) {
       if (!event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
         event.preventDefault()

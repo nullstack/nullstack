@@ -13,27 +13,34 @@ class TwoWayBindings extends Nullstack {
 
   zero = 0
 
-  parse({ event, onchange }) {
+  bringsHappiness = false
+
+  parse({ event, source, name, callback }) {
     const normalized = event.target.value.replace(',', '').padStart(3, '0');
     const whole = (parseInt(normalized.slice(0, -2)) || 0).toString();
     const decimal = normalized.slice(normalized.length - 2);
     const value = parseFloat(whole + '.' + decimal);
-    const bringsHappyness = value >= 1000000;
-    onchange({ value, bringsHappyness });
+    const bringsHappiness = value >= 1000000;
+    source[name] = value
+    callback({ bringsHappiness })
   }
 
-  renderCurrencyInput({ value, name }) {
-    const formatted = value.toFixed(2).replace('.', ',');
-    return <input name={name} value={formatted} oninput={this.parse} />
+  renderCurrencyInput({ source, name, onchange }) {
+    const formatted = source[name].toFixed(2).replace('.', ',');
+    return <input data-currency name={name} source={source} value={formatted} oninput={this.parse} callback={onchange} />
   }
 
   updateCharacter({ value }) {
     this.character = this.array[value];
   }
 
+  setHappiness({ bringsHappiness }) {
+    this.bringsHappiness = bringsHappiness
+  }
+
   render({ params }) {
     return (
-      <div>
+      <div data-brings-happiness={this.bringsHappiness}>
         <input bind={this.zero} />
         <div data-number={this.number} />
         {!this.boolean && <div data-boolean-type={typeof this.boolean} />}
@@ -55,7 +62,7 @@ class TwoWayBindings extends Nullstack {
           <input bind={this.array[index]} />
         ))}
         <input bind={params.page} />
-        <CurrencyInput bind={this.currency} />
+        <CurrencyInput bind={this.currency} onchange={this.setHappiness} />
       </div>
     )
   }
