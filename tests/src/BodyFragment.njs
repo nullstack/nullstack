@@ -26,7 +26,7 @@ class BodyFragment extends Nullstack {
         </body>
         {this.visible &&
           <body data-visible data-has-visible={this.hasDataVisible}>
-            BodyFragment
+            BodyFragment2
           </body>
         }
         <a href="/">home</a>

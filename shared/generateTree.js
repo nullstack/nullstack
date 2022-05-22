@@ -3,7 +3,7 @@ import { isClass, isFalse, isFunction, isUndefined } from '../shared/nodes';
 import fragment from './fragment';
 import { transformBody, transformNodes } from './plugins';
 
-async function generateBranch(parent, node, depth, scope) {
+async function generateBranch(siblings, node, depth, scope) {
 
   transformNodes(scope, node, depth);
 
@@ -15,11 +15,10 @@ async function generateBranch(parent, node, depth, scope) {
       message += 'This error usually happens because of a missing import statement or a typo on a component tag';
     }
     throw new Error(message)
-    return;
   }
 
   if (isFalse(node)) {
-    parent.children.push({
+    siblings.push({
       type: false,
       attributes: {}
     });
@@ -102,7 +101,7 @@ async function generateBranch(parent, node, depth, scope) {
     }
     node.children = [].concat(children);
     for (let i = 0; i < node.children.length; i++) {
-      await generateBranch(parent, node.children[i], depth + '-' + i, scope);
+      await generateBranch(siblings, node.children[i], depth + '-' + i, scope);
     }
     return;
   }
@@ -137,45 +136,48 @@ async function generateBranch(parent, node, depth, scope) {
     const children = node.type(context);
     node.children = [].concat(children);
     for (let i = 0; i < node.children.length; i++) {
-      await generateBranch(parent, node.children[i], depth + '-' + i, scope);
+      await generateBranch(siblings, node.children[i], depth + '-' + i, scope);
     }
     return;
   }
 
   if (node.type) {
-    const branch = {
-      type: node.type,
-      attributes: node.attributes,
-      instance: node.instance,
-      children: []
-    }
-    if (node.children) {
+    if (node.type === 'head') {
+      siblings.push({
+        type: false,
+        attributes: {}
+      });
       for (let i = 0; i < node.children.length; i++) {
-        await generateBranch(branch, node.children[i], depth + '-' + i, scope);
+        const id = depth + '-' + i
+        await generateBranch(scope.nextHead, node.children[i], id, scope);
+        scope.nextHead[scope.nextHead.length - 1].attributes.id ??= id
       }
-      if (node.type === 'head') {
-        for (let i = 0; i < branch.children.length; i++) {
-          if (branch.children[i].attributes) {
-            branch.children[i].head = true
-            branch.children[i].attributes.id ??= depth + '-' + i
-          }
-        }
+    } else if (node.children) {
+      const branch = {
+        type: node.type,
+        attributes: node.attributes,
+        children: [],
+        instance: node.instance
       }
+      for (let i = 0; i < node.children.length; i++) {
+        await generateBranch(branch.children, node.children[i], depth + '-' + i, scope);
+      }
+      siblings.push(branch);
     }
-    parent.children.push(branch);
     return;
   }
 
-  parent.children.push({
+  siblings.push({
     type: 'text',
     text: node,
+    instance: node.instance,
   });
 
 }
 
 export default async function generateTree(node, scope) {
   const tree = { type: 'div', attributes: { id: 'application' }, children: [] };
-  await generateBranch(tree, node, '0', scope);
+  await generateBranch(tree.children, node, '0', scope);
   transformBody(scope.nextBody)
   return tree;
 }

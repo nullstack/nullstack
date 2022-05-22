@@ -8,21 +8,6 @@ import generateTruthyString from '../shared/generateTruthyString';
 const head = document.head
 const body = document.body
 
-function getHeadElement(node) {
-  if (node.element) {
-    return node.element
-  }
-  node.element = document.getElementById(node.attributes.id)
-  return node.element
-}
-
-function removeHeadElement(node) {
-  const element = getHeadElement(node)
-  if (element) {
-    element.remove()
-  }
-}
-
 function updateAttributes(selector, currentAttributes, nextAttributes) {
   const attributeNames = Object.keys({ ...currentAttributes, ...nextAttributes });
   for (const name of attributeNames) {
@@ -83,6 +68,35 @@ function updateAttributes(selector, currentAttributes, nextAttributes) {
   }
 }
 
+function updateHeadChild(current, next) {
+  if (isUndefined(current) && !isUndefined(next)) {
+    const nextSelector = render(next);
+    head.append(nextSelector)
+    return
+  }
+  if (!isUndefined(current) && isUndefined(next)) {
+    current.element.remove()
+    return
+  }
+  next.element = current.element
+  if (isFalse(current) && isFalse(next)) {
+    return
+  }
+  if (current.type !== next.type) {
+    const nextSelector = render(next);
+    current.element.replaceWith(nextSelector)
+    return
+  }
+  updateAttributes(current.element, current.attributes, next.attributes)
+}
+
+function updateHeadChildren(currentChildren, nextChildren) {
+  const limit = Math.max(currentChildren.length, nextChildren.length);
+  for (let i = 0; i < limit; i++) {
+    updateHeadChild(currentChildren[i], nextChildren[i])
+  }
+}
+
 function _rerender(current, next) {
 
   const selector = current.element
@@ -94,57 +108,6 @@ function _rerender(current, next) {
 
   if (isFalse(current) && isFalse(next)) {
     return;
-  }
-
-  if ((current.type === 'head' ^ next.type === 'head') && !isFalse(current) && !isFalse(next)) {
-    const nextSelector = render(next);
-    current.element.replaceWith(nextSelector);
-  }
-
-  if (current.type !== 'head' && next.type === 'head') {
-    const limit = next.children.length;
-    for (let i = limit - 1; i > -1; i--) {
-      const nextSelector = render(next.children[i]);
-      head.appendChild(nextSelector)
-    }
-    return
-  } else if (current.type === 'head' && next.type === 'head') {
-    const limit = Math.max(current.children.length, next.children.length);
-    for (let i = 0; i < limit; i++) {
-      if (isUndefined(current.children[i]) && !isFalse(next.children[i])) {
-        const nextSelector = render(next.children[i]);
-        head.appendChild(nextSelector)
-      } else if (isUndefined(next.children[i]) && !isFalse(current.children[i])) {
-        removeHeadElement(current.children[i])
-      } else if (!isFalse(current.children[i]) && !isFalse(next.children[i])) {
-        if (current.children[i].type === next.children[i].type) {
-          const selector = getHeadElement(current.children[i])
-          if (selector) {
-            next.children[i].element = selector
-            updateAttributes(selector, current.children[i].attributes, next.children[i].attributes)
-          } else {
-            const nextSelector = render(next.children[i]);
-            head.appendChild(nextSelector)
-          }
-        } else {
-          removeHeadElement(current.children[i])
-          const nextSelector = render(next.children[i]);
-          head.appendChild(nextSelector)
-        }
-      } else if (isFalse(current.children[i]) && !isFalse(next.children[i])) {
-        const nextSelector = render(next.children[i]);
-        head.appendChild(nextSelector)
-      } else if (current.children[i].type) {
-        removeHeadElement(current.children[i])
-      }
-    }
-    return
-  } else if (current.type === 'head' && next.type !== 'head') {
-    const limit = current.children.length;
-    for (let i = limit - 1; i > -1; i--) {
-      removeHeadElement(current.children[i])
-    }
-    return
   }
 
   if (current.type !== next.type) {
@@ -186,6 +149,7 @@ function _rerender(current, next) {
       }
     }
 
+    // todo: optimize
     if (next.type === 'textarea') {
       selector.value = next.children[0].text;
     }
@@ -201,4 +165,11 @@ function _rerender(current, next) {
 export default function rerender() {
   _rerender(client.virtualDom, client.nextVirtualDom)
   updateAttributes(body, client.currentBody, client.nextBody)
+  updateHeadChildren(client.currentHead, client.nextHead)
+  client.virtualDom = client.nextVirtualDom
+  client.nextVirtualDom = null
+  client.currentBody = client.nextBody
+  client.nextBody = {}
+  client.currentHead = client.nextHead
+  client.nextHead = []
 }

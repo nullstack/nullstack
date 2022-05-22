@@ -64,16 +64,17 @@ export default class Nullstack {
         client.selector = body
       } else {
         client.virtualDom = await generateTree(client.initializer(), scope);
-        client.currentBody = client.nextBody
         hydrate(client.selector, client.virtualDom)
+        client.currentBody = client.nextBody
+        client.currentHead = client.nextHead
+        client.nextBody = {}
+        client.nextHead = []
         context.environment = environment;
         scope.plugins = loadPlugins(scope);
         worker.online = navigator.onLine;
         typeof context.start === 'function' && await context.start(context);
         client.nextVirtualDom = await generateTree(client.initializer(), scope);
         rerender();
-        client.virtualDom = client.nextVirtualDom;
-        client.nextVirtualDom = null;
       }
       client.processLifecycleQueues();
       delete state.context;

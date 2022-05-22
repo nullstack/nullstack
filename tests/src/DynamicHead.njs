@@ -43,7 +43,7 @@ class DynamicHead extends Nullstack {
           {Array(this.count + 1 - this.negativeCount).fill(<style html={dynamicLength} data-dynamic-length={this.count} data-negative-count={this.negativeCount === 1} />)}
         </head>
         <button onclick={{ count: this.count + 1 }} data-increment> inc {this.count} </button>
-        <button onclick={{ negativeCount: this.negativeCount + 1 }} data-decrement> dec {this.count} </button>
+        <button onclick={{ negativeCount: this.negativeCount + 1 }} data-decrement> dec {this.negativeCount} </button>
         <span data-red-blue> data-red-blue </span>
         <span data-prerender-conditional> data-prerender-conditional </span>
         <span data-rerender-conditional> data-rerender-conditional </span>

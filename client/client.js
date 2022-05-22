@@ -21,6 +21,8 @@ client.generateContext = generateContext
 client.renderQueue = null
 client.currentBody = {}
 client.nextBody = {}
+client.currentHead = []
+client.nextHead = []
 
 client.update = async function update() {
   if (client.initialized) {
@@ -33,10 +35,6 @@ client.update = async function update() {
       client.renewalQueue = []
       client.nextVirtualDom = await generateTree(client.initializer(), scope)
       rerender()
-      client.virtualDom = client.nextVirtualDom
-      client.nextVirtualDom = null
-      client.currentBody = client.nextBody
-      client.nextBody = {}
       client.processLifecycleQueues()
     }, 16)
   }

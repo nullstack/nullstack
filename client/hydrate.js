@@ -1,10 +1,10 @@
+import { isFalse } from '../shared/nodes';
 import { anchorableElement } from './anchorableNode';
+import client from './client';
 
-export default function hydrate(selector, node) {
-  if (node.head) {
-    node.element = document.getElementById(node.attributes.id)
-    return
-  }
+let pool = []
+
+function hydrateBody(selector, node) {
   if (node?.attributes?.html) {
     anchorableElement(selector);
   }
@@ -13,7 +13,7 @@ export default function hydrate(selector, node) {
     if ((element.tagName === 'TEXTAREA' || element.tagName === 'textarea') && element.childNodes.length === 0) {
       element.appendChild(document.createTextNode(''));
     } else if (element.COMMENT_NODE === 8 && element.textContent === '#') {
-      element.remove()
+      pool.push(element.remove())
     }
   }
   if (!node.children) return
@@ -26,6 +26,23 @@ export default function hydrate(selector, node) {
       )
       throw new Error('Virtual DOM does not match the DOM.')
     }
-    hydrate(selector.childNodes[i], node.children[i])
+    hydrateBody(selector.childNodes[i], node.children[i])
   }
+}
+
+function hydrateHead() {
+  for (const node of client.nextHead) {
+    if (isFalse(node)) {
+      node.element = pool.pop() || document.createComment("")
+      document.head.append(node.element)
+    } else {
+      node.element = document.getElementById(node.attributes.id)
+    }
+  }
+  pool = null
+}
+
+export default function hydrate(selector, node) {
+  hydrateBody(selector, node)
+  hydrateHead()
 }

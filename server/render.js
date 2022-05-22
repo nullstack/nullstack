@@ -21,46 +21,55 @@ function isSelfClosing(type) {
   return false;
 }
 
-export default function render(node, scope, next) {
-
+function renderBody(node, scope, next) {
   if (isFalse(node)) {
     return "<!---->";
   }
-
   if (node.type === 'text') {
     const text = node.text === '' ? ' ' : sanitizeHtml(node.text.toString())
     return next && next.type === 'text' ? text + "<!--#-->" : text
   }
-
   let element = `<${node.type}`;
-
   element += renderAttributes(node.attributes)
-
   if (isSelfClosing(node.type)) {
     element += '/>';
   } else {
     element += '>';
     if (node.attributes.html) {
       const source = node.attributes.html;
-      if (node.type === 'head') {
-        scope.head += source;
-      } else {
-        element += source;
-      }
+      element += source;
     } else if (node.type === 'textarea') {
       element += node.children[0].text;
     } else {
       for (let i = 0; i < node.children.length; i++) {
-        const source = render(node.children[i], scope, node.children[i + 1]);
-        if (node.type === 'head') {
-          scope.head += source;
-        } else {
-          element += source;
-        }
+        element += renderBody(node.children[i], scope, node.children[i + 1]);
       }
     }
     element += `</${node.type}>`;
   }
+  return element;
+}
 
-  return node.type === 'head' ? '<!---->' : element;
+function renderHead(scope) {
+  const limit = scope.nextHead.length
+  for (let i = 0; i < limit; i++) {
+    const node = scope.nextHead[i]
+    if (isFalse(node)) {
+      continue;
+    }
+    scope.head += `<${node.type}`;
+    scope.head += renderAttributes(node.attributes)
+    if (isSelfClosing(node.type)) {
+      scope.head += '/>';
+    } else {
+      scope.head += '>';
+      scope.head += node.attributes.html
+      scope.head += `</${node.type}>`
+    }
+  }
+}
+
+export default function render(node, scope, next) {
+  renderHead(scope)
+  return renderBody(node, scope, next)
 }
