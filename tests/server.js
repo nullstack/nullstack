@@ -7,7 +7,7 @@ import ContextWorker from './src/ContextWorker';
 import vueable from './src/plugins/vueable';
 import ServerRequestAndResponse from './src/ServerRequestAndResponse';
 
-Nullstack.use([vueable], vueable);
+Nullstack.use(vueable);
 
 const context = Nullstack.start(Application);
 

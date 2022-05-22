@@ -3,7 +3,7 @@ import element from '../shared/element';
 import fragment from '../shared/fragment';
 import generateTree from '../shared/generateTree';
 import getProxyableMethods from '../shared/getProxyableMethods';
-import { loadPlugins, usePlugins } from '../shared/plugins';
+import { loadPlugins, useClientPlugins } from '../shared/plugins';
 import client from './client';
 import context, { generateContext } from './context';
 import environment from './environment';
@@ -41,7 +41,7 @@ export default class Nullstack {
   static element = element;
   static invoke = invoke;
   static fragment = fragment;
-  static use = usePlugins('client');
+  static use = useClientPlugins;
 
   static start(Starter) {
     setTimeout(async () => {

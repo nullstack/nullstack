@@ -3,7 +3,7 @@ import { normalize } from 'path';
 import element from '../shared/element';
 import fragment from '../shared/fragment';
 import getProxyableMethods from '../shared/getProxyableMethods';
-import { usePlugins } from '../shared/plugins';
+import { useServerPlugins } from '../shared/plugins';
 import context from './context';
 import environment from './environment';
 import generator from './generator';
@@ -33,7 +33,7 @@ class Nullstack {
   static element = element;
   static invoke = invoke;
   static fragment = fragment;
-  static use = usePlugins('server');
+  static use = useServerPlugins;
 
   static start(Starter) {
     if (this.name.indexOf('Nullstack') > -1) {

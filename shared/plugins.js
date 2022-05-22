@@ -4,7 +4,7 @@ import datable from '../plugins/datable';
 import parameterizable from '../plugins/parameterizable';
 import anchorable from '../plugins/anchorable';
 
-let plugins = [
+const plugins = [
   parameterizable,
   anchorable,
   routable,
@@ -31,10 +31,10 @@ export function loadPlugins(scope) {
   return plugins;
 }
 
-export function usePlugins(environment) {
-  return async (...userPlugins) => {
-    plugins = [
-      ...new Set([...userPlugins.flat(), ...plugins])
-    ].filter((plugin) => plugin[environment])
-  }
+export function useClientPlugins(plugin) {
+  if (plugin.client) plugins.push(plugin)
+}
+
+export function useServerPlugins(plugin) {
+  if (plugin.server) plugins.push(plugin)
 }
