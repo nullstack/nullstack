@@ -23,6 +23,8 @@ client.currentBody = {}
 client.nextBody = {}
 client.currentHead = []
 client.nextHead = []
+client.head = document.head
+client.body = document.body
 
 client.update = async function update() {
   if (client.initialized) {

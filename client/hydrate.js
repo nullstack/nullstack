@@ -34,7 +34,7 @@ function hydrateHead() {
   for (const node of client.nextHead) {
     if (isFalse(node)) {
       node.element = pool.pop() || document.createComment("")
-      document.head.append(node.element)
+      client.head.append(node.element)
     } else {
       node.element = document.getElementById(node.attributes.id)
     }

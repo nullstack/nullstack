@@ -1,9 +1,9 @@
-beforeAll(async () => {
-  await page.goto('http://localhost:6969/array-attributes');
-  await page.waitForSelector('[data-hydrated]')
-});
-
 describe('ArrayAttributes jsx', () => {
+
+  beforeEach(async () => {
+    await page.goto('http://localhost:6969/array-attributes');
+    await page.waitForSelector('[data-hydrated]')
+  });
 
   test('classes can be simple strings', async () => {
     await page.click('[data-d]');

@@ -5,9 +5,6 @@ import render from './render';
 import { generateCallback, eventCallbacks, eventSubjects } from './events'
 import generateTruthyString from '../shared/generateTruthyString';
 
-const head = document.head
-const body = document.body
-
 function updateAttributes(selector, currentAttributes, nextAttributes) {
   const attributeNames = Object.keys({ ...currentAttributes, ...nextAttributes });
   for (const name of attributeNames) {
@@ -16,13 +13,9 @@ function updateAttributes(selector, currentAttributes, nextAttributes) {
         selector.innerHTML = nextAttributes[name];
         anchorableElement(selector);
       }
-    } else if (name === 'checked') {
-      if (nextAttributes[name] !== selector.value) {
-        selector.checked = nextAttributes[name];
-      }
-    } else if (name === 'value') {
-      if (nextAttributes[name] !== selector.value) {
-        selector.value = nextAttributes[name];
+    } else if (name === 'checked' || name === 'value') {
+      if (nextAttributes[name] !== currentAttributes[name] && nextAttributes[name] !== selector[name]) {
+        selector[name] = nextAttributes[name];
       }
     } else if (name.startsWith('on')) {
       const eventName = name.substring(2);
@@ -71,7 +64,7 @@ function updateAttributes(selector, currentAttributes, nextAttributes) {
 function updateHeadChild(current, next) {
   if (isUndefined(current) && !isUndefined(next)) {
     const nextSelector = render(next);
-    head.append(nextSelector)
+    client.head.append(nextSelector)
     return
   }
   if (!isUndefined(current) && isUndefined(next)) {
@@ -123,10 +116,7 @@ function _rerender(current, next) {
     return;
   }
 
-  if (current.type === next.type) {
-    updateAttributes(selector, current.attributes, next.attributes)
-
-    if (next.attributes.html) return;
+  if (!next.attributes.html) {
     const limit = Math.max(current.children.length, next.children.length);
     if (next.children.length > current.children.length) {
       for (let i = 0; i < current.children.length; i++) {
@@ -148,23 +138,15 @@ function _rerender(current, next) {
         _rerender(current.children[i], next.children[i]);
       }
     }
-
-    // todo: optimize
-    if (next.type === 'textarea') {
-      selector.value = next.children[0].text;
-    }
-
-    if (next.type === 'select') {
-      selector.value = next.attributes.value;
-    }
-
   }
+
+  updateAttributes(selector, current.attributes, next.attributes)
 
 }
 
 export default function rerender() {
   _rerender(client.virtualDom, client.nextVirtualDom)
-  updateAttributes(body, client.currentBody, client.nextBody)
+  updateAttributes(client.body, client.currentBody, client.nextBody)
   updateHeadChildren(client.currentHead, client.nextHead)
   client.virtualDom = client.nextVirtualDom
   client.nextVirtualDom = null

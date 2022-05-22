@@ -1,8 +1,8 @@
-beforeAll(async () => {
-  await page.goto('http://localhost:6969/two-way-bindings?page=1');
-});
-
 describe('TwoWayBindings', () => {
+
+  beforeEach(async () => {
+    await page.goto('http://localhost:6969/two-way-bindings?page=1');
+  });
 
   test('inputs can be bound to zero', async () => {
     const element = await page.$('[value="0"]');
@@ -27,6 +27,27 @@ describe('TwoWayBindings', () => {
   test('textareas can be bound', async () => {
     const value = await page.$eval('[name="text"]', (element) => element.value);
     expect(value).toMatch('aaaa');
+  });
+
+  test('textareas value reflects variable changes', async () => {
+    await page.click('[data-textarea]')
+    await page.waitForSelector('textarea[data-text="bbbb"]')
+    const value = await page.$eval('[name="text"]', (element) => element.value);
+    expect(value).toMatch('bbbb');
+  });
+
+  test('checkboxes value reflects variable changes', async () => {
+    await page.click('[data-checkbox]')
+    await page.waitForSelector('input[type=checkbox]:not(:checked)')
+    const element = await page.$('input[type=checkbox]:not(:checked)')
+    expect(element).toBeTruthy();
+  });
+
+  test('select value reflects variable changes', async () => {
+    await page.click('[data-select]')
+    await page.waitForSelector('[data-character="b"]')
+    const value = await page.$eval('select', (element) => element.value);
+    expect(value).toMatch('b');
   });
 
   test('selects can be bound', async () => {
@@ -78,12 +99,14 @@ describe('TwoWayBindings', () => {
   });
 
   test('bind keeps the primitive type of the variable', async () => {
+    await page.type('[name="number"]', '2');
     await page.waitForSelector('[data-number-type="number"]');
     const element = await page.$('[data-number-type="number"]');
     expect(element).toBeTruthy();
   });
 
   test('bound inputs can have custom events that triger after the value is set', async () => {
+    await page.type('[name="number"]', '2');
     await page.waitForSelector('[data-character="b"]');
     const element = await page.$('[data-character="b"]');
     expect(element).toBeTruthy();
