@@ -8,14 +8,22 @@ import generateTruthyString from '../shared/generateTruthyString';
 const head = document.head
 const body = document.body
 
-function getElement(node) {
-  if (node.element) return node.element
+function getHeadElement(node) {
+  if (node.element) {
+    return node.element
+  }
   node.element = document.getElementById(node.attributes.id)
   return node.element
 }
 
+function removeHeadElement(node) {
+  const element = getHeadElement(node)
+  if (element) {
+    element.remove()
+  }
+}
+
 function updateAttributes(selector, currentAttributes, nextAttributes) {
-  if (!selector) return
   const attributeNames = Object.keys({ ...currentAttributes, ...nextAttributes });
   for (const name of attributeNames) {
     if (name === 'html') {
@@ -88,17 +96,9 @@ function _rerender(current, next) {
     return;
   }
 
-  if ((isFalse(current) || isFalse(next)) && current.type != next.type) {
-    current.element = render(next);
-    selector.replaceWith(current.element);
-    if (current.type !== 'head' && next.type !== 'head') {
-      return
-    }
-  }
-
-  if (current.type === 'head' ^ next.type === 'head') {
+  if ((current.type === 'head' ^ next.type === 'head') && !isFalse(current) && !isFalse(next)) {
     const nextSelector = render(next);
-    getElement(current).replaceWith(nextSelector);
+    current.element.replaceWith(nextSelector);
   }
 
   if (current.type !== 'head' && next.type === 'head') {
@@ -108,30 +108,26 @@ function _rerender(current, next) {
       head.appendChild(nextSelector)
     }
     return
-  }
-
-  if (current.type === 'head' && next.type !== 'head') {
-    const limit = current.children.length;
-    for (let i = limit - 1; i > -1; i--) {
-      getElement(current.children[i])?.remove?.()
-    }
-    return
-  }
-
-  if (next.type === 'head') {
+  } else if (current.type === 'head' && next.type === 'head') {
     const limit = Math.max(current.children.length, next.children.length);
-    for (let i = limit - 1; i > -1; i--) {
+    for (let i = 0; i < limit; i++) {
       if (isUndefined(current.children[i]) && !isFalse(next.children[i])) {
         const nextSelector = render(next.children[i]);
         head.appendChild(nextSelector)
       } else if (isUndefined(next.children[i]) && !isFalse(current.children[i])) {
-        getElement(current.children[i])?.remove?.()
+        removeHeadElement(current.children[i])
       } else if (!isFalse(current.children[i]) && !isFalse(next.children[i])) {
         if (current.children[i].type === next.children[i].type) {
-          next.children[i].element = getElement(current.children[i])
-          updateAttributes(next.children[i].element, current.children[i].attributes, next.children[i].attributes)
+          const selector = getHeadElement(current.children[i])
+          if (selector) {
+            next.children[i].element = selector
+            updateAttributes(selector, current.children[i].attributes, next.children[i].attributes)
+          } else {
+            const nextSelector = render(next.children[i]);
+            head.appendChild(nextSelector)
+          }
         } else {
-          getElement(current.children[i])?.remove?.()
+          removeHeadElement(current.children[i])
           const nextSelector = render(next.children[i]);
           head.appendChild(nextSelector)
         }
@@ -139,15 +135,22 @@ function _rerender(current, next) {
         const nextSelector = render(next.children[i]);
         head.appendChild(nextSelector)
       } else if (current.children[i].type) {
-        getElement(current.children[i])?.remove?.()
+        removeHeadElement(current.children[i])
       }
+    }
+    return
+  } else if (current.type === 'head' && next.type !== 'head') {
+    const limit = current.children.length;
+    for (let i = limit - 1; i > -1; i--) {
+      removeHeadElement(current.children[i])
     }
     return
   }
 
   if (current.type !== next.type) {
     const nextSelector = render(next);
-    return selector.replaceWith(nextSelector);
+    selector.replaceWith(nextSelector);
+    return
   }
 
   if (isText(current) && isText(next)) {

@@ -100,4 +100,36 @@ describe('DynamicHead', () => {
     const element = await page.$('[data-dynamic-length]:not([data-negative-count])');
     expect(element).toBeTruthy();
   });
+
+  test('heads can be replaced in ternaries by heads with a highter children length', async () => {
+    await page.click('[data-increment]');
+    await page.waitForSelector('[data-b2]');
+    await page.waitForSelector('[data-b1]');
+    const a1 = await page.$('[data-a1]');
+    const b1 = await page.$('[data-b1]');
+    const b2 = await page.$('[data-b2]');
+    expect(!a1 && b1 && b2).toBeTruthy();
+  });
+
+  test('heads can be replaced in ternaries by heads with a highter children length', async () => {
+    await page.click('[data-increment]');
+    await page.waitForSelector('[data-b2]');
+    await page.waitForSelector('[data-b1]');
+    await page.click('[data-increment]');
+    await page.waitForSelector('[data-a1]');
+    const a1 = await page.$('[data-a1]');
+    const b1 = await page.$('[data-b1]');
+    const b2 = await page.$('[data-b2]');
+    expect(a1 && !b1 && !b2).toBeTruthy();
+  });
+
+  test('head children can be ternaries', async () => {
+    await page.click('[data-increment]');
+    await page.waitForSelector('meta[data-ternary-head-children]');
+    await page.click('[data-increment]');
+    await page.waitForSelector('style[data-ternary-head-children]');
+    const element = await page.$('style[data-ternary-head-children]');
+    expect(element).toBeTruthy();
+  });
+
 });

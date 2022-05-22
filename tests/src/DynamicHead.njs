@@ -37,6 +37,9 @@ class DynamicHead extends Nullstack {
           </head>
         }
         <head>
+          {this.count % 2 === 0 ? <style html="" data-ternary-head-children /> : <meta name="test" content="nullstack" data-ternary-head-children />}
+        </head>
+        <head>
           {Array(this.count + 1 - this.negativeCount).fill(<style html={dynamicLength} data-dynamic-length={this.count} data-negative-count={this.negativeCount === 1} />)}
         </head>
         <button onclick={{ count: this.count + 1 }} data-increment> inc {this.count} </button>
@@ -51,6 +54,15 @@ class DynamicHead extends Nullstack {
           <head>
             <meta name="test" content="nullstack" data-ternary-head id="ternary-head" />
           </head> : <span data-ternary-span> not head </span>
+        }
+        {this.count % 2 === 0
+          ? <head>
+            <meta name="test" content="nullstack" data-a1 />
+          </head>
+          : <head>
+            <meta name="test" content="nullstack" data-b1 />
+            <meta name="test" content="nullstack" data-b2 />
+          </head>
         }
       </div>
     )
