@@ -1,6 +1,7 @@
 import client from './client';
 import { generateObjectProxy } from './objectProxyHandler';
 import state from './state';
+import generateProps from '../shared/generateProps'
 
 const context = {};
 
@@ -16,7 +17,8 @@ const contextProxyHandler = {
   },
   get(target, name) {
     if (name === '_isProxy') return true;
-    return target[name] === undefined ? context[name] : target[name];
+    if (target[name] !== undefined) return target[name];
+    return name === 'props' ? generateProps(context, target) : context[name]
   }
 }
 

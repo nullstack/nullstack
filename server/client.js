@@ -1,14 +1,16 @@
+import generateProps from '../shared/generateProps'
+
 export function generateContext(context) {
   const contextProxyHandler = {
     set(target, name, value) {
-      context[name] = value;
-      return Reflect.set(...arguments);
+      return context[name] = value;
     },
     get(target, name) {
-      return target[name] === undefined ? context[name] : target[name];
+      if (target[name] !== undefined) return target[name];
+      return name === 'props' ? generateProps(context, target) : context[name]
     }
-  }  
-  return function(temporary) {
-    return new Proxy({...context, ...temporary}, contextProxyHandler);
+  }
+  return function (temporary) {
+    return new Proxy({ ...context, ...temporary }, contextProxyHandler);
   }
 }

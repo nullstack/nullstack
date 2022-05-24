@@ -52,6 +52,7 @@ import DynamicHead from './DynamicHead'
 import TextObserver from './TextObserver';
 import BodyFragment from './BodyFragment';
 import ArrayAttributes from './ArrayAttributes';
+import ContextProps from './ContextProps';
 
 class Application extends Nullstack {
 
@@ -129,6 +130,7 @@ class Application extends Nullstack {
         <TextObserver route="/text-observer" />
         <BodyFragment route="/body-fragment" />
         <ArrayAttributes route="/array-attributes" />
+        <ContextProps route="/context-props" string="string" number={1} boolean />
         <ErrorPage route="*" />
       </body>
     )
