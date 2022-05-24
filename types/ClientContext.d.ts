@@ -102,7 +102,7 @@ export type NullstackClientContext = {
    *
    * @see https://nullstack.app/renderable-components#components-with-children
    */
-  children?: any;
+  children?: Readonly<Array<any>>;
 
   /**
    * Custom context prop.
