@@ -28,8 +28,9 @@ class Router {
   }
 
   async _update(target, push) {
-    this.previous = this.url;
     const { url, path, hash, urlWithHash } = extractLocation(target);
+    if (url === this._url && this._hash === hash) return
+    this.previous = this.url;
     clearTimeout(redirectTimer);
     redirectTimer = setTimeout(async () => {
       page.status = 200;
@@ -64,16 +65,11 @@ class Router {
 
   async _redirect(target) {
     if (/^(\w+:|\/\/)([^.]+.)/.test(target)) {
-      return (window.location.href = target);
+      return window.location.href = target;
     }
     const absoluteUrl = new URL(target, document.baseURI);
-    const { url, hash, urlWithHash } = extractLocation(absoluteUrl.pathname + absoluteUrl.search + absoluteUrl.hash);
-    if (url !== this._url || this._hash !== hash) {
-      await this._update(urlWithHash, true);
-    }
-    if (!hash) {
-      window.scroll(0, 0);
-    }
+    await this._update(absoluteUrl.pathname + absoluteUrl.search + absoluteUrl.hash, true);
+    window.scroll(0, 0)
   }
 
   get url() {

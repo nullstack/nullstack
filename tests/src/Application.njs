@@ -52,6 +52,7 @@ import DynamicHead from './DynamicHead'
 import TextObserver from './TextObserver';
 import BodyFragment from './BodyFragment';
 import ArrayAttributes from './ArrayAttributes';
+import RouteScroll from './RouteScroll';
 
 class Application extends Nullstack {
 
@@ -77,6 +78,7 @@ class Application extends Nullstack {
           <a href="/hydrate-element"> hydrate element </a>
           <a href="/error-on-child-node?dom=true"> error-on-child-node?dom=true </a>
           <a href="/error-on-child-node?serialization=true"> error-on-child-node?serialization=true </a>
+          <a href="/route-scroll/class?changed=1#bottom">#bottom</a>
         </div>
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
@@ -129,6 +131,7 @@ class Application extends Nullstack {
         <TextObserver route="/text-observer" />
         <BodyFragment route="/body-fragment" />
         <ArrayAttributes route="/array-attributes" />
+        <RouteScroll route="/route-scroll/*" key="routeScroll" />
         <ErrorPage route="*" />
       </body>
     )

@@ -47,12 +47,20 @@ client.processLifecycleQueues = async function processLifecycleQueues() {
     client.initialized = true
   }
   let shouldUpdate = false
+  let shouldScroll = router._hash
   while (client.initiationQueue.length) {
     const instance = client.initiationQueue.shift()
     instance.initiate && await instance.initiate()
     instance._self.initiated = true
     instance.launch && instance.launch()
     shouldUpdate = true
+    if (instance._attributes.route && shouldScroll) {
+      const element = document.getElementById(router._hash)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' })
+      }
+      shouldScroll = false
+    }
   }
   shouldUpdate && client.update()
   shouldUpdate = false
