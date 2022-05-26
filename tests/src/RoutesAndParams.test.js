@@ -2,7 +2,6 @@ beforeAll(async () => {
   await page.on('dialog', async dialog => {
     await dialog.dismiss();
   })
-  // page.on('console', (msg) => console.log('[LOG]', msg.text()))
 });
 
 describe('RoutesAndParams /routes-and-params', () => {
