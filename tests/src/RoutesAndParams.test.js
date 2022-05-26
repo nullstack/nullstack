@@ -268,7 +268,7 @@ describe('RoutesAndParams /routes-and-params/inner-html', () => {
 
 });
 
-describe('RoutesAndParams /routes-and-params/hrefs', () => {
+describe('RoutesAndParams /routes-and-params/hrefs spa', () => {
 
   beforeEach(async () => {
     await page.goto('http://localhost:6969/routes-and-params/hrefs');
