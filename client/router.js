@@ -63,10 +63,11 @@ class Router {
   }
 
   async _redirect(target) {
-    if (target.startsWith('http')) {
+    if (/^(\w+:|\/\/)([^.]+.)/.test(target)) {
       return (window.location.href = target);
     }
-    const { url, hash, urlWithHash } = extractLocation(target);
+    const absoluteUrl = new URL(target, document.baseURI);
+    const { url, hash, urlWithHash } = extractLocation(absoluteUrl.pathname + absoluteUrl.search + absoluteUrl.hash);
     if (url !== this._url || this._hash !== hash) {
       await this._update(urlWithHash, true);
     }
