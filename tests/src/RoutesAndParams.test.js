@@ -370,7 +370,7 @@ describe('RoutesAndParams /routes-and-params/hrefs spa', () => {
 });
 
 
-describe('ssr RoutesAndParams /routes-and-params/hrefs', () => {
+describe('RoutesAndParams /routes-and-params/hrefs ssr', () => {
 
   test('ssr parent', async () => {
     await Promise.all([
