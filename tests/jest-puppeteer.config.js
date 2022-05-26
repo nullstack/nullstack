@@ -1,6 +1,6 @@
 const defaultOptions = {
   launch: {
-    headless: true,
+    headless: false,
   },
   server: {
     command: 'npm run start',
