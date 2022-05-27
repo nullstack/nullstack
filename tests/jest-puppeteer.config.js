@@ -1,6 +1,6 @@
 const defaultOptions = {
   launch: {
-    headless: false,
+    headless: true,
   },
   server: {
     command: 'npm run start',
@@ -13,7 +13,7 @@ const defaultOptions = {
 const ciPipelineOptions = {
   launch: {
     executablePath: '/usr/bin/google-chrome-stable',
-    headless: false,
+    headless: true,
     args: [
       '--ignore-certificate-errors',
       '--no-sandbox',

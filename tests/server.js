@@ -22,7 +22,7 @@ context.server.use('/api', (request, response, next) => {
 
 for (const method of methods) {
   context.server[method.toLowerCase()]('/api', (request, response) => {
-    response.status(request.status).send(request.method);
+    response.status(request.status).json({ method: request.method });
   });
 }
 
