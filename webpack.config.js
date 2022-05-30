@@ -273,6 +273,10 @@ function client(env, argv) {
     module: {
       rules: [
         {
+          test: /client.js$/,
+          loader: getLoader('inject-hmr.js'),
+        },
+        {
           test: /nullstack.js$/,
           loader: getLoader('string-replace.js'),
           options: {

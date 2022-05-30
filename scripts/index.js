@@ -11,7 +11,6 @@ const { existsSync } = require('fs');
 const customConfig = path.resolve(process.cwd(), './webpack.config.js');
 const config = existsSync(customConfig) ? require(customConfig) : require('../webpack.config');
 const dotenv = require('dotenv')
-const express = require('express')
 
 const buildModes = ['ssg', 'spa', 'ssr']
 
@@ -65,7 +64,7 @@ function logTrace(stats, showCompiling) {
 
 async function findFreePort() {
   return new Promise((resolve) => {
-    const server = app.listen(0, () => {
+    const server = require('express')().listen(0, () => {
       const port = server.address().port;
       server.close()
       resolve(port)
