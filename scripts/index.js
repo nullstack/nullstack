@@ -11,6 +11,7 @@ const { existsSync } = require('fs');
 const customConfig = path.resolve(process.cwd(), './webpack.config.js');
 const config = existsSync(customConfig) ? require(customConfig) : require('../webpack.config');
 const dotenv = require('dotenv')
+const fetch = require('node-fetch')
 
 const buildModes = ['ssg', 'spa', 'ssr']
 
@@ -82,6 +83,7 @@ async function start({ input, port, env, output, mode = 'ssr' }) {
     path += `.${process.env.NULLSTACK_ENVIRONMENT_NAME}`
   }
   dotenv.config({ path })
+  process.env['NULLSTACK_ENVIRONMENT_MODE'] = 'spa'
   process.env['NULLSTACK_SERVER_PORT'] = port || process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'];
   let proxyTarget
   if (process.env['NULLSTACK_SECONDARY_SERVER_PORT']) {
@@ -112,12 +114,37 @@ async function start({ input, port, env, output, mode = 'ssr' }) {
         hot: true,
         open: false,
         proxy: {
-          context: () => true,
-          target: proxyTarget
+          '/nullstack': proxyTarget
         },
         client: {
+          overlay: false,
           logging: 'error',
           progress: true,
+        },
+        setupMiddlewares: (middlewares, devServer) => {
+          if (!devServer) {
+            throw new Error('webpack-dev-server is not defined');
+          }
+
+          middlewares.unshift(async (req, res, next) => {
+            if (req.originalUrl.split('?')[0].indexOf('.') > -1) {
+              return next();
+            }
+            try {
+              const url = proxyTarget + req.originalUrl
+              console.log({ url })
+              const response = await fetch(proxyTarget + req.originalUrl)
+              const text = await response.text()
+              if (text.indexOf('<meta name="generator" content="Created with Nullstack - https://nullstack.app" />') > -1) {
+                cachedText = text
+              }
+              res.send(text)
+            } catch (e) {
+              res.send(cachedText)
+            }
+          })
+
+          return middlewares;
         },
         port: process.env['NULLSTACK_SERVER_PORT']
       };
