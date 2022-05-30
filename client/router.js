@@ -88,6 +88,12 @@ class Router {
     this._redirect(target + window.location.search);
   }
 
+  get base() {
+    if (this._base) return this._base
+    this._base = window.location.origin
+    return this._base
+  }
+
 }
 
 const router = new Router();

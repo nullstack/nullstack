@@ -74,7 +74,7 @@ describe('ContextWorker', () => {
 describe('ContextWorker', () => {
 
   beforeAll(async () => {
-    await page.goto('http://localhost:6969/context-worker');
+    await page.goto('http://localhost:6969/context-worker', { waitUntil: "networkidle0" });
   });
 
   test('fetching is set to true when the worker is fetching', async () => {
@@ -90,7 +90,7 @@ describe('ContextWorker', () => {
 describe('ContextWorker', () => {
 
   beforeAll(async () => {
-    await page.goto('http://localhost:6969/context-worker');
+    await page.goto('http://localhost:6969/context-worker', { waitUntil: "networkidle0" });
   });
 
   test('fetching is set to the arguments of the server function when the worker is fetching', async () => {

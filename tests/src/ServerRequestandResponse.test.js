@@ -5,13 +5,13 @@ beforeAll(async () => {
 describe('ServerRequestAndResponse', () => {
 
   test('the port key makes server run in the defined port', async () => {
-    const response = await page.goto('http://localhost:6969');
+    const response = await page.goto('http://localhost:6969', { waitUntil: "networkidle0" });
     const status = response.status();
     expect([200, 304]).toContain(status);
   });
 
   test('server accepts use of middlewares', async () => {
-    const response = await page.goto('http://localhost:6969/api');
+    const response = await page.goto('http://localhost:6969/api', { waitUntil: "networkidle0" });
     const status = response.status();
     expect([200, 304]).toContain(status);
   });

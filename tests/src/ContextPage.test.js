@@ -56,7 +56,7 @@ describe('ContextPage', () => {
 
   test('the canonical tag is generated if the canonical key is omitted', async () => {
     const text = await page.$eval('head > link[rel="canonical"]', element => element.href);
-    expect(text).toMatch('http://localhost:6969/context-page');
+    expect(text).toMatch('https://localhost:6969/context-page');
   });
 
   test('the schema key generates a json schema', async () => {

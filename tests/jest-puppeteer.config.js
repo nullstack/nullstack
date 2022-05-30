@@ -3,7 +3,7 @@ const defaultOptions = {
     headless: true,
   },
   server: {
-    command: 'npm run start',
+    command: 'npm run build && node .production/server.js',
     port: 6969,
     launchTimeout: 25000
   },
@@ -23,7 +23,7 @@ const ciPipelineOptions = {
     ]
   },
   server: {
-    command: 'npm run start',
+    command: 'npm run build && node .production/server.js',
     port: 6969,
     launchTimeout: 25000
   },

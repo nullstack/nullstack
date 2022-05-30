@@ -27,9 +27,9 @@ if (environment.production) {
   if (!process.env['NULLSTACK_SERVER_PORT']) {
     process.env['NULLSTACK_SERVER_PORT'] = process.env['PORT']
   }
-  server.port = process.env['NULLSTACK_SERVER_PORT']
+  server.port = process.env['NULLSTACK_SERVER_PORT'] || 3000
 } else {
-  server.port = process.env['NULLSTACK_SECONDARY_SERVER_PORT']
+  server.port = process.env['NULLSTACK_SECONDARY_SERVER_PORT'] || 3000
 }
 
 let contextStarted = false

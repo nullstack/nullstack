@@ -105,16 +105,20 @@ async function start({ input, port, env, output, mode = 'ssr' }) {
   setLogLevel('error')
   serverCompiler.watch({}, (error, stats) => {
     logTrace(stats, true)
-    if (!stats.hasErrors() && mode !== 'ssr') {
-      require(`../builders/${mode}`)({ output, environment });
-    };
+    // if (!stats.hasErrors() && mode !== 'ssr') {
+    //   require(`../builders/${mode}`)({ output, environment });
+    // };
     if (!clientStarted) {
       clientStarted = true
       const devServerOptions = {
         hot: true,
         open: false,
         proxy: {
-          '/nullstack': proxyTarget
+          '/nullstack': proxyTarget,
+          // '/sitemap.xml': proxyTarget,
+          // '/robots.txt': proxyTarget,
+          // '/manifest.webmanifest': proxyTarget,
+          // '/service-worker.js': proxyTarget,
         },
         client: {
           overlay: false,
@@ -126,19 +130,20 @@ async function start({ input, port, env, output, mode = 'ssr' }) {
             throw new Error('webpack-dev-server is not defined');
           }
 
+          let cachedText
+
           middlewares.unshift(async (req, res, next) => {
             if (req.originalUrl.split('?')[0].indexOf('.') > -1) {
               return next();
             }
             try {
               const url = proxyTarget + req.originalUrl
-              console.log({ url })
               const response = await fetch(proxyTarget + req.originalUrl)
               const text = await response.text()
-              if (text.indexOf('<meta name="generator" content="Created with Nullstack - https://nullstack.app" />') > -1) {
+              if (text.indexOf('<meta name="generator" content="Created with Nullstack - https://nullstack.app" />') > -1 && [200, 304].includes(response.status)) {
                 cachedText = text
               }
-              res.send(text)
+              res.status(response.status).send(text)
             } catch (e) {
               res.send(cachedText)
             }
