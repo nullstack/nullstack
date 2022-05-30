@@ -12,3 +12,15 @@ context.start = function () {
 }
 
 export default context;
+
+if (module.hot) {
+  module.hot.accept('./src/Application', () => {
+    console.log(client.skipHotReplacement)
+    if (client.skipHotReplacement) {
+      location.reload()
+    } else {
+      Nullstack.start(Application);
+      windowEvent('environment');
+    }
+  })
+}

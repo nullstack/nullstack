@@ -10,12 +10,25 @@ const path = require('path');
 const { existsSync } = require('fs');
 const customConfig = path.resolve(process.cwd(), './webpack.config.js');
 const config = existsSync(customConfig) ? require(customConfig) : require('../webpack.config');
+const dotenv = require('dotenv')
+const express = require('express')
 
 const buildModes = ['ssg', 'spa', 'ssr']
 
+function getConfig(options) {
+  return config.map((env) => env(null, options))
+}
+
 function getCompiler(options) {
-  const configs = config.map((env) => env(null, options))
-  return webpack(configs)
+  return webpack(getConfig(options))
+}
+
+function getServerCompiler(options) {
+  return webpack(getConfig(options)[0])
+}
+
+function getClientCompiler(options) {
+  return webpack(getConfig(options)[1])
 }
 
 function logCompiling(showCompiling) {
@@ -50,22 +63,71 @@ function logTrace(stats, showCompiling) {
   lastTrace = '';
 }
 
-function start({ input, port, env, output, mode = 'ssr' }) {
+async function findFreePort() {
+  return new Promise((resolve) => {
+    const server = app.listen(0, () => {
+      const port = server.address().port;
+      server.close()
+      resolve(port)
+    });
+  })
+}
+
+async function start({ input, port, env, output, mode = 'ssr' }) {
   const environment = 'development';
-  const compiler = getCompiler({ environment, input });
-  if (port) {
-    process.env['NULLSTACK_SERVER_PORT'] = port;
-  }
+  const serverCompiler = getServerCompiler({ environment, input });
+  let clientStarted = false
+  let path = '.env'
   if (env) {
     process.env['NULLSTACK_ENVIRONMENT_NAME'] = env;
+    path += `.${process.env.NULLSTACK_ENVIRONMENT_NAME}`
+  }
+  dotenv.config({ path })
+  process.env['NULLSTACK_SERVER_PORT'] = port || process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'];
+  let proxyTarget
+  if (process.env['NULLSTACK_SECONDARY_SERVER_PORT']) {
+    proxyTarget = `http://[::1]:${process.env['NULLSTACK_SECONDARY_SERVER_PORT']}`
+  } if (!process.env['NULLSTACK_WORKER_API']) {
+    process.env['NULLSTACK_SECONDARY_SERVER_PORT'] = await findFreePort()
+    process.env['NULLSTACK_WORKER_API'] = `http://localhost:${process.env['NULLSTACK_SECONDARY_SERVER_PORT']}`
+    proxyTarget = process.env['NULLSTACK_WORKER_API'].replace('//localhost:', '//[::1]:')
+  } else {
+    if (!process.env['NULLSTACK_SECONDARY_SERVER_PORT']) {
+      process.env['NULLSTACK_SECONDARY_SERVER_PORT'] = new URL(process.env['NULLSTACK_WORKER_API']).port
+    }
+    proxyTarget = `http://[::1]:${process.env['NULLSTACK_SECONDARY_SERVER_PORT']}`
   }
   console.log(` 🚀️ Starting your application in ${environment} mode...`);
   console.log();
-  compiler.watch({}, (error, stats) => {
+  const WebpackDevServer = require('webpack-dev-server');
+  const { setLogLevel } = require('webpack/hot/log')
+  setLogLevel('error')
+  serverCompiler.watch({}, (error, stats) => {
     logTrace(stats, true)
     if (!stats.hasErrors() && mode !== 'ssr') {
       require(`../builders/${mode}`)({ output, environment });
     };
+    if (!clientStarted) {
+      clientStarted = true
+      const devServerOptions = {
+        hot: true,
+        open: false,
+        proxy: {
+          context: () => true,
+          target: proxyTarget
+        },
+        client: {
+          logging: 'error',
+          progress: true,
+        },
+        port: process.env['NULLSTACK_SERVER_PORT']
+      };
+      const clientCompiler = getClientCompiler({ environment, input });
+      const server = new WebpackDevServer(devServerOptions, clientCompiler);
+      server.startCallback(() => {
+        console.log('\x1b[36m%s\x1b[0m', ` ✅️ Your application is ready at http://localhost:${process.env['NULLSTACK_SERVER_PORT']}\n`);
+      });
+    }
   });
 }
 

@@ -15,7 +15,7 @@ describe('ContextWorker', () => {
   });
 
   test('has a cdn key', async () => {
-    const element = await page.$('[data-cdn="http://127.0.0.1:6969"]');
+    const element = await page.$('[data-cdn="http://localhost:6969"]');
     expect(element).toBeTruthy();
   });
 

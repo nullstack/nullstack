@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const crypto = require("crypto");
 const { readdirSync } = require('fs');
+const { HotModuleReplacementPlugin } = require('webpack')
 
 const buildKey = crypto.randomBytes(20).toString('hex');
 
@@ -115,15 +116,16 @@ function server(env, argv) {
   const folder = isDev ? '.development' : '.production';
   const devtool = isDev ? 'inline-cheap-module-source-map' : false;
   const minimize = !isDev;
-  const plugins = isDev ? ([
-    new NodemonPlugin({
+  const plugins = []
+  if (isDev) {
+    plugins.push(new NodemonPlugin({
       ext: '*',
       watch: [".env", ".env.*", './.development/*.*'],
       script: './.development/server.js',
       nodeArgs: ['--enable-source-maps'],
       quiet: true
-    })
-  ]) : [];
+    }))
+  }
   return {
     mode: argv.environment,
     entry: './server.js',
@@ -234,22 +236,19 @@ function client(env, argv) {
   const folder = isDev ? '.development' : '.production';
   const devtool = isDev ? 'inline-cheap-module-source-map' : false;
   const minimize = !isDev;
-  let liveReload = {};
-  if (!isDev) {
-    liveReload = {
-      test: /liveReload.js$/,
-      use: [
-        { loader: getLoader('ignore-import.js') }
-      ]
-    }
-  }
   const plugins = [
     new MiniCssExtractPlugin({
       filename: "client.css",
       chunkFilename: '[chunkhash].client.css'
     })
   ]
+  if (isDev) {
+    plugins.push(new HotModuleReplacementPlugin())
+  }
   return {
+    infrastructureLogging: {
+      level: 'none',
+    },
     mode: argv.environment,
     entry: './client.js',
     output: {
@@ -307,7 +306,6 @@ function client(env, argv) {
             { loader: require.resolve('sass-loader') }
           ],
         },
-        liveReload,
         nullstackTypescript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,

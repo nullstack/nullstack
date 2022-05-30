@@ -107,12 +107,12 @@ describe('ContextProject', () => {
 
   test('css bundle can use a cdn', async () => {
     const text = await page.$eval('[rel="stylesheet"]', (element) => element.href);
-    expect(text).toMatch(/127\.0\.0\.1:6969/);
+    expect(text).toMatch('localhost:6969');
   });
 
   test('javacript bundle can use a cdn', async () => {
     const text = await page.$eval('script[integrity]', (element) => element.src);
-    expect(text).toMatch(/127\.0\.0\.1:6969/);
+    expect(text).toMatch('localhost:6969');
   });
 
   test('css bundle has an empty integrity in dev mode', async () => {

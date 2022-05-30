@@ -41,7 +41,7 @@ describe('ContextPage', () => {
 
   test('the image key updates the open graph image with a cdn url', async () => {
     const text = await page.$eval('head > meta[property="og:image"]', element => element.content);
-    expect(text).toMatch('http://127.0.0.1:6969/image.jpg');
+    expect(text).toMatch('http://localhost:6969/image.jpg');
   });
 
   test('the description key updates the open graph description', async () => {

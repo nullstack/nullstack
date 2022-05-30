@@ -6,6 +6,7 @@ module.exports = function removeStaticFromClient(source) {
   const id = this.resourcePath.replace(this.rootContext, '')
   const hash = crypto.createHash('md5').update(id).digest("hex");
   let hashPosition;
+  let klassName;
   const injections = {};
   const positions = [];
   const ast = parse(source, {
@@ -13,6 +14,9 @@ module.exports = function removeStaticFromClient(source) {
     plugins: ['classProperties', 'jsx']
   });
   traverse(ast, {
+    ClassDeclaration(path) {
+      klassName = path.node.id.name;
+    },
     ClassBody(path) {
       const start = path.node.body[0].start;
       hashPosition = start;
@@ -50,5 +54,9 @@ module.exports = function removeStaticFromClient(source) {
       outputs.push(`static hash = '${hash}';\n\n  `);
     }
   }
-  return outputs.reverse().join('');
+  let newSource = outputs.reverse().join('')
+  if (klassName) {
+    newSource += `\nif (module.hot) { Nullstack.updateInstancesPrototypes(${klassName}.hash, ${klassName}) }`;
+  }
+  return newSource
 }

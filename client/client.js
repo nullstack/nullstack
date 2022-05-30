@@ -35,9 +35,14 @@ client.update = async function update() {
       scope.plugins = loadPlugins(scope)
       client.initialized = false
       client.renewalQueue = []
-      client.nextVirtualDom = await generateTree(client.initializer(), scope)
-      rerender()
-      client.processLifecycleQueues()
+      try {
+        client.nextVirtualDom = await generateTree(client.initializer(), scope)
+        rerender()
+        client.processLifecycleQueues()
+      } catch (e) {
+        client.skipHotReplacement = true
+        console.error(e)
+      }
     }, 16)
   }
 }

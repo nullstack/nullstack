@@ -2,14 +2,12 @@ import state from './state'
 import element from '../shared/element';
 import fragment from '../shared/fragment';
 import generateTree from '../shared/generateTree';
-import getProxyableMethods from '../shared/getProxyableMethods';
 import { loadPlugins, useClientPlugins } from '../shared/plugins';
 import client from './client';
 import context, { generateContext } from './context';
 import environment from './environment';
-import instanceProxyHandler from './instanceProxyHandler';
+import instanceProxyHandler, { instanceProxies } from './instanceProxyHandler';
 import invoke from './invoke';
-import './liveReload';
 import page from './page';
 import params, { updateParams } from './params';
 import project from './project';
@@ -19,6 +17,7 @@ import hydrate from './hydrate';
 import router from './router';
 import settings from './settings';
 import worker from './worker';
+import klassMap from './klassMap';
 
 context.page = page;
 context.router = router;
@@ -42,12 +41,19 @@ export default class Nullstack {
   static invoke = invoke;
   static fragment = fragment;
   static use = useClientPlugins;
+  static klassMap = {}
+  static context = generateContext({})
 
   static start(Starter) {
     setTimeout(async () => {
       window.addEventListener('popstate', () => {
         router._popState();
       });
+      if (client.initializer) {
+        client.initializer = () => element(Starter);
+        client.update()
+        return this.context
+      }
       client.routes = {};
       updateParams(router.url);
       client.currentInstance = null;
@@ -79,7 +85,7 @@ export default class Nullstack {
       client.processLifecycleQueues();
       delete state.context;
     }, 0)
-    return generateContext({});
+    return this.context;
   }
 
   _self = {
@@ -91,11 +97,8 @@ export default class Nullstack {
   }
 
   constructor() {
-    const methods = getProxyableMethods(this);
     const proxy = new Proxy(this, instanceProxyHandler);
-    for (const method of methods) {
-      this[method] = this[method].bind(proxy);
-    }
+    instanceProxies.set(this, proxy)
     return proxy;
   }
 
@@ -103,4 +106,17 @@ export default class Nullstack {
     return false;
   }
 
+}
+
+if (module.hot) {
+  Nullstack.updateInstancesPrototypes = function updateInstancesPrototypes(hash, klass) {
+    for (const key in context.instances) {
+      const instance = context.instances[key]
+      if (instance.constructor.hash === hash) {
+        Object.setPrototypeOf(instance, klass.prototype);
+      }
+    }
+    klassMap[hash] = klass
+  }
+  module.hot.decline()
 }
