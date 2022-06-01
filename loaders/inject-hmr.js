@@ -19,7 +19,7 @@ module.exports = function (source) {
   traverse(ast, {
     ImportDeclaration(path) {
       if (path.node.specifiers[0].local.name === klassName) {
-        klassPath = path.node.source.value
+        klassPath = path.node.source.extra.rawValue
       }
     }
   });
@@ -27,12 +27,7 @@ module.exports = function (source) {
   return source + `
     if (module.hot) {
       module.hot.accept('${klassPath}', () => {
-        if (client.skipHotReplacement) {
-          location.reload()
-        } else {
-          Nullstack.start(${klassName});
-          windowEvent('environment');
-        }
+        Nullstack.hotReload(${klassName})
       })
     }
   `

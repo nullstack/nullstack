@@ -22,6 +22,8 @@ if (!global.fetch) {
 }
 
 const server = express();
+const router = new express.Router()
+server.nullstackRouter = router
 
 if (environment.production) {
   if (!process.env['NULLSTACK_SERVER_PORT']) {
@@ -35,7 +37,7 @@ if (environment.production) {
 let contextStarted = false
 let serverStarted = false
 
-server.use(async (request, response, next) => {
+router.use(async (request, response, next) => {
   if (!contextStarted) {
     typeof context.start === 'function' && await context.start();
     contextStarted = true;
@@ -121,11 +123,11 @@ server.start = function () {
   if (serverStarted) return;
   serverStarted = true;
 
-  server.use(cors(server.cors));
+  router.use(cors(server.cors));
 
-  server.use(express.static(path.join(__dirname, '..', 'public')));
+  router.use(express.static(path.join(__dirname, '..', 'public')));
 
-  server.use(bodyParser.text({ limit: server.maximumPayloadSize }));
+  router.use(bodyParser.text({ limit: server.maximumPayloadSize }));
 
   server.get(`/:number.client.js`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
@@ -151,23 +153,23 @@ server.start = function () {
     response.send(generateFile('client.js', server));
   });
 
-  server.get(`/manifest.webmanifest`, (request, response) => {
+  router.get(`/manifest.webmanifest`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
     response.contentType('application/manifest+json');
     response.send(generateManifest(server));
   });
 
-  server.get(`/service-worker.js`, (request, response) => {
+  router.get(`/service-worker.js`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
     response.contentType('text/javascript');
     response.send(generateServiceWorker());
   });
 
-  server.get('/robots.txt', (request, response) => {
+  router.get('/robots.txt', (request, response) => {
     response.send(generateRobots());
   });
 
-  server.all(`/${prefix}/:hash/:methodName.json`, async (request, response) => {
+  router.all(`/${prefix}/:hash/:methodName.json`, async (request, response) => {
     const payload = request.method === 'GET' ? request.query.payload : request.body;
     const args = deserialize(payload);
     const { hash, methodName } = request.params;
@@ -196,7 +198,7 @@ server.start = function () {
     }
   });
 
-  server.get('*', async (request, response, next) => {
+  router.get('*', async (request, response, next) => {
     if (request.originalUrl.split('?')[0].indexOf('.') > -1) {
       return next();
     }
@@ -208,7 +210,15 @@ server.start = function () {
     }
   });
 
+  server.use(router)
+
   if (!server.less) {
+    if (environment.development) {
+      server.get('/nullstac/ping', (request, response) => {
+        response.send({ pong: true })
+      })
+    }
+
     if (!server.port) {
       console.log('\x1b[31mServer port is not defined!\x1b[0m');
       process.exit();

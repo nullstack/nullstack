@@ -11,7 +11,6 @@ const { existsSync } = require('fs');
 const customConfig = path.resolve(process.cwd(), './webpack.config.js');
 const config = existsSync(customConfig) ? require(customConfig) : require('../webpack.config');
 const dotenv = require('dotenv')
-const fetch = require('node-fetch')
 
 const buildModes = ['ssg', 'spa', 'ssr']
 
@@ -73,16 +72,16 @@ async function findFreePort() {
   })
 }
 
-async function start({ input, port, env, output, mode = 'ssr' }) {
+async function start({ input, port, env }) {
   const environment = 'development';
   const serverCompiler = getServerCompiler({ environment, input });
   let clientStarted = false
-  let path = '.env'
+  let envPath = '.env'
   if (env) {
     process.env['NULLSTACK_ENVIRONMENT_NAME'] = env;
-    path += `.${process.env.NULLSTACK_ENVIRONMENT_NAME}`
+    envPath += `.${process.env.NULLSTACK_ENVIRONMENT_NAME}`
   }
-  dotenv.config({ path })
+  dotenv.config({ path: envPath })
   process.env['NULLSTACK_ENVIRONMENT_MODE'] = 'spa'
   process.env['NULLSTACK_SERVER_PORT'] = port || process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'];
   let proxyTarget
@@ -102,52 +101,34 @@ async function start({ input, port, env, output, mode = 'ssr' }) {
   console.log();
   const WebpackDevServer = require('webpack-dev-server');
   const { setLogLevel } = require('webpack/hot/log')
-  setLogLevel('error')
+  setLogLevel('none')
   serverCompiler.watch({}, (error, stats) => {
     logTrace(stats, true)
-    // if (!stats.hasErrors() && mode !== 'ssr') {
-    //   require(`../builders/${mode}`)({ output, environment });
-    // };
     if (!clientStarted) {
       clientStarted = true
+      // indexCache = ''
+      // console.log(serverRouter)
       const devServerOptions = {
         hot: true,
         open: false,
-        proxy: {
-          '/nullstack': proxyTarget,
-          // '/sitemap.xml': proxyTarget,
-          // '/robots.txt': proxyTarget,
-          // '/manifest.webmanifest': proxyTarget,
-          // '/service-worker.js': proxyTarget,
+        devMiddleware: {
+          index: false
         },
         client: {
-          overlay: false,
-          logging: 'error',
-          progress: true,
+          overlay: true,
+          logging: 'none',
+          progress: false,
         },
         setupMiddlewares: (middlewares, devServer) => {
           if (!devServer) {
             throw new Error('webpack-dev-server is not defined');
           }
 
-          let cachedText
-
-          middlewares.unshift(async (req, res, next) => {
-            if (req.originalUrl.split('?')[0].indexOf('.') > -1) {
-              return next();
-            }
-            try {
-              const url = proxyTarget + req.originalUrl
-              const response = await fetch(proxyTarget + req.originalUrl)
-              const text = await response.text()
-              if (text.indexOf('<meta name="generator" content="Created with Nullstack - https://nullstack.app" />') > -1 && [200, 304].includes(response.status)) {
-                cachedText = text
-              }
-              res.status(response.status).send(text)
-            } catch (e) {
-              res.send(cachedText)
-            }
-          })
+          middlewares.unshift((req, res, next) => {
+            const serverBundle = require(path.resolve(process.cwd(), '.development/server.js'))
+            const serverRouter = serverBundle.default.server.nullstackRouter
+            serverRouter(req, res, next)
+          });
 
           return middlewares;
         },
@@ -180,7 +161,6 @@ program
   .command('start')
   .alias('s')
   .description('Start application in development environment')
-  .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles').choices(buildModes))
   .option('-p, --port <port>', 'Port number to run the server')
   .option('-i, --input <input>', 'Path to project that will be started')
   .option('-o, --output <output>', 'Path to build output folder')

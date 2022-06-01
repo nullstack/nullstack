@@ -36,8 +36,10 @@ export async function prerender(request, response) {
   scope.plugins = loadPlugins(scope);
 
   try {
-    const tree = await generateTree(generator.starter(), scope);
-    scope.body = render(tree, scope);
+    if (environment.production) {
+      const tree = await generateTree(generator.starter(), scope);
+      scope.body = render(tree, scope);
+    }
     if (!online) {
       context.page.status = 200;
     }

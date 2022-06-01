@@ -41,6 +41,11 @@ export default function invoke(name, hash) {
     try {
       const response = await fetch(url, options);
       page.status = response.status;
+      if (module.hot && page.status === 500) {
+        setInterval(() => {
+          fetch(window.location.href).then((r) => r.status !== 500 && window.location.reload())
+        }, 100)
+      }
       const text = await response.text();
       payload = deserialize(text).result;
       worker.responsive = true;

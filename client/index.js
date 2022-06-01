@@ -18,6 +18,7 @@ import router from './router';
 import settings from './settings';
 import worker from './worker';
 import klassMap from './klassMap';
+import windowEvent from './windowEvent'
 
 context.page = page;
 context.router = router;
@@ -109,6 +110,12 @@ export default class Nullstack {
 }
 
 if (module.hot) {
+  const client = new WebSocket('ws://localhost:3000/ws');
+  client.onmessage = function (e) {
+    if (e.data.indexOf('still-ok') > -1) {
+      window.location.reload()
+    }
+  };
   Nullstack.updateInstancesPrototypes = function updateInstancesPrototypes(hash, klass) {
     for (const key in context.instances) {
       const instance = context.instances[key]
@@ -117,6 +124,16 @@ if (module.hot) {
       }
     }
     klassMap[hash] = klass
+  }
+  Nullstack.hotReload = function hotReload(klass) {
+    if (client.skipHotReplacement) {
+      setInterval(() => {
+        fetch(window.location.href).then((r) => r.status !== 500 && window.location.reload())
+      }, 100)
+    } else {
+      Nullstack.start(klass);
+      windowEvent('environment');
+    }
   }
   module.hot.decline()
 }
