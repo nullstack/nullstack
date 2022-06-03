@@ -25,7 +25,7 @@ const server = express();
 const router = new express.Router()
 server.nullstackRouter = router
 
-server.port = process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
+server.port ??= process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
 
 let contextStarted = false
 let serverStarted = false

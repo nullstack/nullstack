@@ -2,9 +2,6 @@
 const { program } = require('commander');
 const { version } = require('../package.json');
 
-let lastTrace = '';
-let compilingIndex = 1;
-
 const webpack = require('webpack');
 const path = require('path');
 const { existsSync } = require('fs');
@@ -30,38 +27,13 @@ function getClientCompiler(options) {
   return webpack(getConfig(options)[1])
 }
 
-function logCompiling(showCompiling) {
-  if (!showCompiling) return;
-  console.log(" ⚙️  Compiling changes...");
-}
-
-function logTrace(stats, showCompiling) {
+function logTrace(stats) {
   if (stats.hasErrors()) {
-    const response = stats.toJson('errors-only', { colors: true })
-    const error = response.errors[0] || response.children[0].errors[0];
-    const { moduleName: file, message } = error
-    const [loader, ...trace] = message.split('\n');
-    if (loader.indexOf('/nullstack/loaders') === -1) trace.unshift(loader)
-    const currentTrace = trace.join(' ');
-    if (lastTrace === currentTrace) return;
-    lastTrace = currentTrace;
-    logCompiling(showCompiling);
-    console.log(` 💥️ There is an error preventing compilation in \x1b[31m${file}\x1b[0m`);
-    for (const line of trace) {
-      console.log('\x1b[31m%s\x1b[0m', '    ' + line.trim());
-    }
-    console.log();
-    compilingIndex = 0;
-    return
+    console.log(`\n 💥️ There is an error preventing compilation`);
+  } else {
+    console.log('\x1b[36m%s\x1b[0m', `\n ✅️ Your application is ready at http://localhost:${process.env['NULLSTACK_SERVER_PORT']}\n`);
   }
-  compilingIndex++;
-  if (compilingIndex % 2 === 0) {
-    logCompiling(showCompiling);
-    compilingIndex = 0;
-  }
-  lastTrace = '';
 }
-
 
 async function start({ input, port, env }) {
   const environment = 'development';
@@ -72,9 +44,9 @@ async function start({ input, port, env }) {
     envPath += `.${process.env.NULLSTACK_ENVIRONMENT_NAME}`
   }
   dotenv.config({ path: envPath })
+  port ??= process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
   process.env['NULLSTACK_ENVIRONMENT_MODE'] = 'spa'
   console.log(` 🚀️ Starting your application in ${environment} mode...`);
-  console.log();
   const WebpackDevServer = require('webpack-dev-server');
   const { setLogLevel } = require('webpack/hot/log')
   setLogLevel('none')
@@ -100,22 +72,28 @@ async function start({ input, port, env }) {
             throw new Error('webpack-dev-server is not defined');
           }
           middlewares.unshift((req, res, next) => {
+            if (req.originalUrl.indexOf('.hot-update.') === -1) {
+              if (req.originalUrl.startsWith('/nullstack/')) {
+                console.log(`  ⚙️ [${req.method}] ${req.originalUrl}`)
+              } else {
+                console.log(`  🕸️ [${req.method}] ${req.originalUrl}`)
+              }
+            }
             const serverBundle = require(bundlePath)
             const server = serverBundle.default.server
             const serverRouter = serverBundle.default.server.nullstackRouter
             server.less = true
+            server.port = port
             server.start()
             serverRouter(req, res, next)
           });
           return middlewares;
         },
-        port: process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || port
+        port
       };
       const clientCompiler = getClientCompiler({ environment, input });
       const server = new WebpackDevServer(devServerOptions, clientCompiler);
-      server.startCallback(() => {
-        console.log('\x1b[36m%s\x1b[0m', ` ✅️ Your application is ready at http://localhost:${process.env['NULLSTACK_SERVER_PORT']}\n`);
-      });
+      server.start();
     }
   });
 }
