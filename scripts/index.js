@@ -62,15 +62,6 @@ function logTrace(stats, showCompiling) {
   lastTrace = '';
 }
 
-async function findFreePort() {
-  return new Promise((resolve) => {
-    const server = require('express')().listen(0, () => {
-      const port = server.address().port;
-      server.close()
-      resolve(port)
-    });
-  })
-}
 
 async function start({ input, port, env }) {
   const environment = 'development';
@@ -78,25 +69,10 @@ async function start({ input, port, env }) {
   let clientStarted = false
   let envPath = '.env'
   if (env) {
-    process.env['NULLSTACK_ENVIRONMENT_NAME'] = env;
     envPath += `.${process.env.NULLSTACK_ENVIRONMENT_NAME}`
   }
   dotenv.config({ path: envPath })
   process.env['NULLSTACK_ENVIRONMENT_MODE'] = 'spa'
-  process.env['NULLSTACK_SERVER_PORT'] = port || process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'];
-  let proxyTarget
-  if (process.env['NULLSTACK_SECONDARY_SERVER_PORT']) {
-    proxyTarget = `http://[::1]:${process.env['NULLSTACK_SECONDARY_SERVER_PORT']}`
-  } if (!process.env['NULLSTACK_WORKER_API']) {
-    process.env['NULLSTACK_SECONDARY_SERVER_PORT'] = await findFreePort()
-    process.env['NULLSTACK_WORKER_API'] = `http://localhost:${process.env['NULLSTACK_SECONDARY_SERVER_PORT']}`
-    proxyTarget = process.env['NULLSTACK_WORKER_API'].replace('//localhost:', '//[::1]:')
-  } else {
-    if (!process.env['NULLSTACK_SECONDARY_SERVER_PORT']) {
-      process.env['NULLSTACK_SECONDARY_SERVER_PORT'] = new URL(process.env['NULLSTACK_WORKER_API']).port
-    }
-    proxyTarget = `http://[::1]:${process.env['NULLSTACK_SECONDARY_SERVER_PORT']}`
-  }
   console.log(` 🚀️ Starting your application in ${environment} mode...`);
   console.log();
   const WebpackDevServer = require('webpack-dev-server');
@@ -104,10 +80,10 @@ async function start({ input, port, env }) {
   setLogLevel('none')
   serverCompiler.watch({}, (error, stats) => {
     logTrace(stats, true)
+    const bundlePath = path.resolve(process.cwd(), '.development/server.js')
+    delete require.cache[require.resolve(bundlePath)]
     if (!clientStarted) {
       clientStarted = true
-      // indexCache = ''
-      // console.log(serverRouter)
       const devServerOptions = {
         hot: true,
         open: false,
@@ -123,16 +99,17 @@ async function start({ input, port, env }) {
           if (!devServer) {
             throw new Error('webpack-dev-server is not defined');
           }
-
           middlewares.unshift((req, res, next) => {
-            const serverBundle = require(path.resolve(process.cwd(), '.development/server.js'))
+            const serverBundle = require(bundlePath)
+            const server = serverBundle.default.server
             const serverRouter = serverBundle.default.server.nullstackRouter
+            server.less = true
+            server.start()
             serverRouter(req, res, next)
           });
-
           return middlewares;
         },
-        port: process.env['NULLSTACK_SERVER_PORT']
+        port: process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || port
       };
       const clientCompiler = getClientCompiler({ environment, input });
       const server = new WebpackDevServer(devServerOptions, clientCompiler);

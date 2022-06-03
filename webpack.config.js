@@ -1,5 +1,4 @@
 const path = require('path');
-const NodemonPlugin = require('nodemon-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const crypto = require("crypto");
@@ -117,15 +116,6 @@ function server(env, argv) {
   const devtool = isDev ? 'inline-cheap-module-source-map' : false;
   const minimize = !isDev;
   const plugins = []
-  if (isDev) {
-    plugins.push(new NodemonPlugin({
-      ext: '*',
-      watch: [".env", ".env.*", './.development/*.*'],
-      script: './.development/server.js',
-      nodeArgs: ['--enable-source-maps'],
-      quiet: true
-    }))
-  }
   return {
     mode: argv.environment,
     entry: './server.js',

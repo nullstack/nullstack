@@ -25,14 +25,7 @@ const server = express();
 const router = new express.Router()
 server.nullstackRouter = router
 
-if (environment.production) {
-  if (!process.env['NULLSTACK_SERVER_PORT']) {
-    process.env['NULLSTACK_SERVER_PORT'] = process.env['PORT']
-  }
-  server.port = process.env['NULLSTACK_SERVER_PORT'] || 3000
-} else {
-  server.port = process.env['NULLSTACK_SECONDARY_SERVER_PORT'] || 3000
-}
+server.port = process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
 
 let contextStarted = false
 let serverStarted = false
@@ -213,12 +206,6 @@ server.start = function () {
   server.use(router)
 
   if (!server.less) {
-    if (environment.development) {
-      server.get('/nullstac/ping', (request, response) => {
-        response.send({ pong: true })
-      })
-    }
-
     if (!server.port) {
       console.log('\x1b[31mServer port is not defined!\x1b[0m');
       process.exit();

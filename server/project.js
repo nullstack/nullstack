@@ -1,5 +1,6 @@
 import environment from './environment';
 import worker from './worker';
+import server from './server';
 
 const project = {};
 
@@ -19,7 +20,7 @@ project.disallow = [];
 project.icons = JSON.parse(`{{NULLSTACK_PROJECT_ICONS}}`);
 
 export function generateBase() {
-  const port = project.domain === 'localhost' ? `:${process.env['NULLSTACK_SERVER_PORT']}` : '';
+  const port = project.domain === 'localhost' ? `:${server.port}` : '';
   return `${worker.protocol}://${project.domain}${port}`;
 }
 
