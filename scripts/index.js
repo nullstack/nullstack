@@ -27,14 +27,6 @@ function getClientCompiler(options) {
   return webpack(getConfig(options)[1])
 }
 
-function logTrace(stats) {
-  if (stats.hasErrors()) {
-    console.log(`\n 💥️ There is an error preventing compilation`);
-  } else {
-    console.log('\x1b[36m%s\x1b[0m', `\n ✅️ Your application is ready at http://localhost:${process.env['NULLSTACK_SERVER_PORT']}\n`);
-  }
-}
-
 async function start({ input, port, env }) {
   const environment = 'development';
   const serverCompiler = getServerCompiler({ environment, input });
@@ -51,7 +43,11 @@ async function start({ input, port, env }) {
   const { setLogLevel } = require('webpack/hot/log')
   setLogLevel('none')
   serverCompiler.watch({}, (error, stats) => {
-    logTrace(stats, true)
+    if (stats.hasErrors()) {
+      console.log(`\n 💥️ There is an error preventing compilation`);
+    } else {
+      console.log('\x1b[36m%s\x1b[0m', `\n ✅️ Your application is ready at http://localhost:${process.env['NULLSTACK_SERVER_PORT']}\n`);
+    }
     const bundlePath = path.resolve(process.cwd(), '.development/server.js')
     delete require.cache[require.resolve(bundlePath)]
     if (!clientStarted) {
@@ -106,7 +102,10 @@ function build({ input, output, cache, env, mode = 'ssr' }) {
   }
   console.log(` 🚀️ Building your application in ${mode} mode...`);
   compiler.run((error, stats) => {
-    logTrace(stats, false);
+    if (stats.hasErrors()) {
+      console.log(stats.toString({ colors: true }))
+      process.exit(1);
+    }
     if (stats.hasErrors()) process.exit(1);
     require(`../builders/${mode}`)({ output, cache, environment });
   });
