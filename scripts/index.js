@@ -46,7 +46,7 @@ async function start({ input, port, env }) {
     if (stats.hasErrors()) {
       console.log(`\n 💥️ There is an error preventing compilation`);
     } else {
-      console.log('\x1b[36m%s\x1b[0m', `\n ✅️ Your application is ready at http://localhost:${process.env['NULLSTACK_SERVER_PORT']}\n`);
+      console.log('\x1b[36m%s\x1b[0m', `\n ✅️ Your application is ready at http://localhost:${port}\n`);
     }
     const bundlePath = path.resolve(process.cwd(), '.development/server.js')
     delete require.cache[require.resolve(bundlePath)]
