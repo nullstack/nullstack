@@ -1,7 +1,7 @@
 import generateKey from '../shared/generateKey';
 import { isClass, isFalse, isFunction, isUndefined } from '../shared/nodes';
 import fragment from './fragment';
-import { transformBody, transformNodes } from './plugins';
+import { transformNodes } from './plugins';
 
 async function generateBranch(siblings, node, depth, scope) {
 
@@ -176,6 +176,5 @@ async function generateBranch(siblings, node, depth, scope) {
 export default async function generateTree(node, scope) {
   const tree = { type: 'div', attributes: { id: 'application' }, children: [] };
   await generateBranch(tree.children, node, '0', scope);
-  transformBody(scope.nextBody)
   return tree;
 }
