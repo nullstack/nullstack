@@ -1,6 +1,7 @@
 import { isFalse, isText } from '../shared/nodes';
 import { anchorableElement } from './anchorableNode';
 import { eventCallbacks, eventSubjects, generateCallback } from './events'
+import ref from './ref'
 
 export default function render(node, options) {
 
@@ -22,9 +23,7 @@ export default function render(node, options) {
     node.element = document.createElement(node.type);
   }
 
-  if (node.instance) {
-    node.instance._self.element = node.element;
-  }
+  ref(node, node.element)
 
   for (let name in node.attributes) {
     if (name === 'html') {

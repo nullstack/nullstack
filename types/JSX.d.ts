@@ -48,6 +48,7 @@ export interface Attributes {
   html?: string | undefined;
   source?: object | undefined;
   bind?: any | undefined;
+  ref?: any | undefined;
   data?: object | undefined;
   "data-"?: any;
   [key: string]: any;
@@ -60,7 +61,7 @@ export interface NullstackAttributes extends Attributes {
   key?: string;
 }
 
-export interface ClassAttributes extends Attributes {}
+export interface ClassAttributes extends Attributes { }
 
 //
 // Factories
@@ -68,7 +69,7 @@ export interface ClassAttributes extends Attributes {}
 
 type DetailedHTMLFactory<P, T = any> = P;
 
-export interface SVGFactory {}
+export interface SVGFactory { }
 
 export type NullstackFragment = NullstackNode[];
 export type NullstackNode =
@@ -107,7 +108,7 @@ export interface BaseSyntheticEvent<E = object, C = any, T = any> {
  * If you thought this should be `EventTarget & T`, see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11508#issuecomment-256045682
  */
 export interface SyntheticEvent<T = Element, E = Event>
-  extends BaseSyntheticEvent<E, EventTarget & T, EventTarget> {}
+  extends BaseSyntheticEvent<E, EventTarget & T, EventTarget> { }
 
 export interface DragEvent<T = Element> extends MouseEvent<T, NativeDragEvent> {
   dataTransfer: DataTransfer;
@@ -133,7 +134,7 @@ export interface FocusEvent<Target = Element, RelatedTarget = Element>
   target: EventTarget & Target;
 }
 
-export interface FormEvent<T = Element> extends SyntheticEvent<T> {}
+export interface FormEvent<T = Element> extends SyntheticEvent<T> { }
 
 export interface ChangeEvent<T = Element> extends SyntheticEvent<T> {
   target: EventTarget & T;
@@ -207,8 +208,8 @@ export interface WheelEvent<T = Element>
 type EventHandler<E extends SyntheticEvent<any>> =
   | object
   | {
-      bivarianceHack(event: { event: E } & NullstackClientContext): void;
-    }["bivarianceHack"];
+    bivarianceHack(event: { event: E } & NullstackClientContext): void;
+  }["bivarianceHack"];
 
 type NullstackEventHandler<T = Element> = EventHandler<SyntheticEvent<T>>;
 type DragEventHandler<T = Element> = EventHandler<DragEvent<T>>;
@@ -227,7 +228,7 @@ type WheelEventHandler<T = Element> = EventHandler<WheelEvent<T>>;
 
 type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = E;
 
-export interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes {}
+export interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes { }
 
 export interface DOMAttributes<T> extends Attributes {
   // Focus Events
@@ -354,15 +355,15 @@ export interface AriaAttributes {
   "aria-controls"?: string | undefined;
   /** Indicates the element that represents the current item within a container or set of related elements. */
   "aria-current"?:
-    | boolean
-    | "false"
-    | "true"
-    | "page"
-    | "step"
-    | "location"
-    | "date"
-    | "time"
-    | undefined;
+  | boolean
+  | "false"
+  | "true"
+  | "page"
+  | "step"
+  | "location"
+  | "date"
+  | "time"
+  | undefined;
   /**
    * Identifies the element (or elements) that describes the object.
    * @see aria-labelledby
@@ -383,13 +384,13 @@ export interface AriaAttributes {
    * @deprecated in ARIA 1.1
    */
   "aria-dropeffect"?:
-    | "none"
-    | "copy"
-    | "execute"
-    | "link"
-    | "move"
-    | "popup"
-    | undefined;
+  | "none"
+  | "copy"
+  | "execute"
+  | "link"
+  | "move"
+  | "popup"
+  | undefined;
   /**
    * Identifies the element that provides an error message for the object.
    * @see aria-invalid @see aria-describedby.
@@ -409,15 +410,15 @@ export interface AriaAttributes {
   "aria-grabbed"?: Booleanish | undefined;
   /** Indicates the availability and type of interactive popup element, such as menu or dialog, that can be triggered by an element. */
   "aria-haspopup"?:
-    | boolean
-    | "false"
-    | "true"
-    | "menu"
-    | "listbox"
-    | "tree"
-    | "grid"
-    | "dialog"
-    | undefined;
+  | boolean
+  | "false"
+  | "true"
+  | "menu"
+  | "listbox"
+  | "tree"
+  | "grid"
+  | "dialog"
+  | undefined;
   /**
    * Indicates whether the element is exposed to an accessibility API.
    * @see aria-disabled.
@@ -428,12 +429,12 @@ export interface AriaAttributes {
    * @see aria-errormessage.
    */
   "aria-invalid"?:
-    | boolean
-    | "false"
-    | "true"
-    | "grammar"
-    | "spelling"
-    | undefined;
+  | boolean
+  | "false"
+  | "true"
+  | "grammar"
+  | "spelling"
+  | undefined;
   /** Indicates keyboard shortcuts that an author has implemented to activate or give focus to an element. */
   "aria-keyshortcuts"?: string | undefined;
   /**
@@ -489,17 +490,17 @@ export interface AriaAttributes {
    * @see aria-atomic.
    */
   "aria-relevant"?:
-    | "additions"
-    | "additions removals"
-    | "additions text"
-    | "all"
-    | "removals"
-    | "removals additions"
-    | "removals text"
-    | "text"
-    | "text additions"
-    | "text removals"
-    | undefined;
+  | "additions"
+  | "additions removals"
+  | "additions text"
+  | "all"
+  | "removals"
+  | "removals additions"
+  | "removals text"
+  | "text"
+  | "text additions"
+  | "text removals"
+  | undefined;
   /** Indicates that user input is required on the element before a form may be submitted. */
   "aria-required"?: Booleanish | undefined;
   /** Defines a human-readable, author-localized description for the role of an element. */
@@ -653,15 +654,15 @@ export interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
    * @see https://html.spec.whatwg.org/multipage/interactiohtml#input-modalities:-the-inputmode-attribute
    */
   inputmode?:
-    | "none"
-    | "text"
-    | "tel"
-    | "url"
-    | "email"
-    | "numeric"
-    | "decimal"
-    | "search"
-    | undefined;
+  | "none"
+  | "text"
+  | "tel"
+  | "url"
+  | "email"
+  | "numeric"
+  | "decimal"
+  | "search"
+  | undefined;
   /**
    * Specify that a standard HTML element should behave like a defined custom built-in element
    * @see https://html.spec.whatwg.org/multipage/custom-elements.html#attr-is
@@ -801,7 +802,7 @@ export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
   path?: string | undefined;
 }
 
-export interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> {}
+export interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> { }
 
 export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
   alt?: string | undefined;
@@ -977,14 +978,14 @@ export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
   checked?: boolean | undefined;
   disabled?: boolean | undefined;
   enterkeyhint?:
-    | "enter"
-    | "done"
-    | "go"
-    | "next"
-    | "previous"
-    | "search"
-    | "send"
-    | undefined;
+  | "enter"
+  | "done"
+  | "go"
+  | "next"
+  | "previous"
+  | "search"
+  | "send"
+  | undefined;
   form?: string | undefined;
   formaction?: string | undefined;
   formenctype?: string | undefined;
@@ -1304,8 +1305,8 @@ declare global {
   namespace JSX {
     type Element = NullstackNode;
 
-    interface IntrinsicAttributes extends NullstackAttributes {}
-    interface IntrinsicClassAttributes extends ClassAttributes {}
+    interface IntrinsicAttributes extends NullstackAttributes { }
+    interface IntrinsicClassAttributes extends ClassAttributes { }
 
     interface AllElements {
       // HTML
@@ -1664,6 +1665,6 @@ declare global {
       element: ElementTagHTMLAttributes;
     }
 
-    interface IntrinsicElements extends ExoticElements, AllElements {}
+    interface IntrinsicElements extends ExoticElements, AllElements { }
   }
 }

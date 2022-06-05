@@ -33,7 +33,7 @@ describe('Instanceable', () => {
     expect(p).toBeTruthy();
   });
 
-  test('self key ignores the route suffix if a key is declared', async () => {
+  test('instance key ignores the route suffix if a key is declared', async () => {
     await page.waitForSelector('[data-key="instanceable"]');
     const element = await page.$('[data-key="instanceable"]');
     expect(element).toBeTruthy();

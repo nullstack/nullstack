@@ -95,10 +95,6 @@ function _rerender(current, next) {
   const selector = current.element
   next.element = current.element
 
-  if (next.instance) {
-    next.instance._self.element = selector;
-  }
-
   if (isFalse(current) && isFalse(next)) {
     return;
   }

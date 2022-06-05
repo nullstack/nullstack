@@ -15,9 +15,9 @@ class ArrayAttributes extends Nullstack {
     this.count += this.count
   }
 
-  render({ self }) {
+  render() {
     return (
-      <div data-count={this.count} data-objected={this.objected} data-hydrated={self.hydrated}>
+      <div data-count={this.count} data-objected={this.objected} data-hydrated={this.hydrated}>
         <span class={this.classes}> {JSON.stringify(this.classes)} </span>
         <span style={this.styles}> {JSON.stringify(this.styles)} </span>
         <button onclick={{ classes: 'd' }} data-d>d</button>

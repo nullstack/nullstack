@@ -16,14 +16,16 @@ export function generateCallback(selector, name) {
     const subject = eventSubjects.get(selector)
     if (subject?.bind !== undefined) {
       const valueName = (subject.type === 'checkbox' || subject.type === 'radio') ? 'checked' : 'value'
+      const object = subject.bind.object
+      const property = subject.bind.property
       if (valueName === 'checked') {
-        subject.source[subject.bind] = event.target[valueName];
-      } else if (subject.source[subject.bind] === true || subject.source[subject.bind] === false) {
-        subject.source[subject.bind] = event.target[valueName] === 'true';
-      } else if (typeof subject.source[subject.bind] === 'number') {
-        subject.source[subject.bind] = +event.target[valueName] || 0;
+        object[property] = event.target[valueName];
+      } else if (object[property] === true || object[property] === false) {
+        object[property] = event.target[valueName] === 'true';
+      } else if (typeof object[property] === 'number') {
+        object[property] = +event.target[valueName] || 0;
       } else {
-        subject.source[subject.bind] = event.target[valueName];
+        object[property] = event.target[valueName];
       }
     }
     if (subject.href) {

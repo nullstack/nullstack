@@ -10,8 +10,8 @@ class AnchorModifiers extends Nullstack {
   objected = false
   updated = false
 
-  hydrate({ self }) {
-    self.element.querySelector('a').addEventListener('click', () => {
+  hydrate() {
+    this._element.querySelector('a').addEventListener('click', () => {
       this.clickedHTML = true
     })
   }
@@ -28,9 +28,9 @@ class AnchorModifiers extends Nullstack {
     this.count++
   }
 
-  render({ self }) {
+  render() {
     return (
-      <div data-clicked-jsx={this.clickedJSX} data-clicked-html={this.clickedHTML} data-count={this.count} data-objected={this.objected} data-updated={this.updated} data-hydrated={self.hydrated}>
+      <div ref={this._element} data-clicked-jsx={this.clickedJSX} data-clicked-html={this.clickedHTML} data-count={this.count} data-objected={this.objected} data-updated={this.updated} data-hydrated={this.hydrated}>
         <div html={this.html} />
         <button onclick={this.markAsUpdated}> update </button>
         <a href="/anchor-modifiers?source=jsx" onclick={this.clickJSX}>

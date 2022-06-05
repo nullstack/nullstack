@@ -46,28 +46,28 @@ async function generateBranch(siblings, node, depth, scope) {
       }
     }
     const instance = scope.instances[key] || new node.type(scope);
-    instance._self.persistent = !!node.attributes.persistent
-    instance._self.key = key;
+    instance.persistent = !!node.attributes.persistent
+    instance.key = key;
     instance._attributes = node.attributes;
     instance._scope = scope;
     let memory;
     if (scope.memory) {
       memory = scope.memory[key];
       if (memory) {
-        instance._self.prerendered = true;
-        instance._self.initiated = true;
+        instance.prerendered = true;
+        instance.initiated = true;
         Object.assign(instance, memory);
         delete scope.memory[key];
       }
     }
     let shouldHydrate = false;
-    const shouldLaunch = instance._self.initiated && (
-      !instance._self.prerendered ||
-      (instance._self.persistent && instance._self.terminated)
+    const shouldLaunch = instance.initiated && (
+      !instance.prerendered ||
+      (instance.persistent && instance.terminated)
     )
-    if (instance._self.terminated) {
+    if (instance.terminated) {
       shouldHydrate = true;
-      instance._self.terminated = false;
+      instance.terminated = false;
     }
     const shouldPrepare = scope.instances[key] === undefined;
     scope.instances[key] = instance;
@@ -76,7 +76,7 @@ async function generateBranch(siblings, node, depth, scope) {
         instance.prepare && instance.prepare();
         if (scope.context.environment.server) {
           instance.initiate && await instance.initiate();
-          instance._self.initiated = true;
+          instance.initiated = true;
           instance.launch && instance.launch();
         } else {
           scope.initiationQueue.push(instance);
@@ -88,7 +88,7 @@ async function generateBranch(siblings, node, depth, scope) {
       if (shouldHydrate) {
         shouldLaunch && instance.launch && instance.launch();
         scope.hydrationQueue.push(instance);
-      } else if (instance._self.initiated === true) {
+      } else if (instance.initiated === true) {
         instance.update && instance.update();
       }
     }
@@ -156,8 +156,7 @@ async function generateBranch(siblings, node, depth, scope) {
       const branch = {
         type: node.type,
         attributes: node.attributes,
-        children: [],
-        instance: node.instance
+        children: []
       }
       for (let i = 0; i < node.children.length; i++) {
         await generateBranch(branch.children, node.children[i], depth + '-' + i, scope);
@@ -169,8 +168,7 @@ async function generateBranch(siblings, node, depth, scope) {
 
   siblings.push({
     type: 'text',
-    text: node,
-    instance: node.instance,
+    text: node
   });
 
 }

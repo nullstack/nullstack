@@ -3,7 +3,6 @@ import { NullstackPage } from "./Page";
 import { NullstackParams } from "./Params";
 import { NullstackProject } from "./Project";
 import { NullstackRouter } from "./Router";
-import { NullstackSelf } from "./Self";
 import { NullstackSettings } from "./Settings";
 import { NullstackWorker } from "./Worker";
 
@@ -32,14 +31,6 @@ export type NullstackClientContext = {
    * @see https://nullstack.app/service-worker
    */
   worker?: NullstackWorker;
-
-  /**
-   * It gives you information about the instance lifecycle and it's unique key.
-   *
-   * @see https://nullstack.app/instance-self
-   * @see https://nullstack.app/instance-self#instance-key
-   */
-  self?: NullstackSelf;
 
   /**
    * It gives you information about the element dataset.

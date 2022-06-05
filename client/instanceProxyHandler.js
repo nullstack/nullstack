@@ -11,7 +11,7 @@ const instanceProxyHandler = {
     if (!target[name]?.name?.startsWith('_') && !name.startsWith('_') && typeof target[name] === 'function' && name !== 'constructor') {
       const { [name]: named } = {
         [name]: (args) => {
-          const context = generateContext({ ...target._attributes, ...args, self: target._self });
+          const context = generateContext({ ...target._attributes, ...args });
           const proxy = instanceProxies.get(target)
           return target[name].call(proxy, context);
         }

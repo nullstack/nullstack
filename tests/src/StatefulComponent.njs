@@ -21,11 +21,11 @@ class StatefulComponent extends Nullstack {
     this.count++;
   }
 
-  render({ self }) {
+  render() {
     return (
-      <form>
-        {self.hydrated &&
-          <div data-tag={self.element.tagName.toLowerCase()} />
+      <form ref={this._element}>
+        {this.hydrated &&
+          <div data-tag={this._element.tagName.toLowerCase()} />
         }
         <button class="increment-by-one" onclick={this.incrementByOne}>
           +1

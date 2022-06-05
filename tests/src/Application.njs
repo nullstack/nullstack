@@ -46,7 +46,7 @@ import WorkerVerbs from './WorkerVerbs';
 import MetatagState from './MetatagState';
 import TypeScriptExtension from './TypeScriptExtension';
 import JavaScriptExtension from './JavaScriptExtension';
-import HydrateElement from './HydrateElement';
+import Refs from './Refs';
 import OptimizedEvents from './OptimizedEvents';
 import DynamicHead from './DynamicHead'
 import TextObserver from './TextObserver';
@@ -75,7 +75,7 @@ class Application extends Nullstack {
           <a href="/routes-and-params/a"> router with params </a>
           <a href="/undefined-nodes"> undefined nodes </a>
           <a href="/full-stack-lifecycle"> lifecycle </a>
-          <a href="/hydrate-element"> hydrate element </a>
+          <a href="/refs"> refs </a>
           <a href="/error-on-child-node?dom=true"> error-on-child-node?dom=true </a>
           <a href="/error-on-child-node?serialization=true"> error-on-child-node?serialization=true </a>
           <a href="/route-scroll/class?changed=1#bottom">#bottom</a>
@@ -125,7 +125,7 @@ class Application extends Nullstack {
         <MetatagState route="/metatag-state" />
         <JavaScriptExtension route="/javascript-extension" />
         <TypeScriptExtension route="/typescript-extension" generic />
-        <HydrateElement route="/hydrate-element" />
+        <Refs route="/refs" />
         <OptimizedEvents route="/optimized-events" />
         <DynamicHead route="/dynamic-head" />
         <TextObserver route="/text-observer" />
