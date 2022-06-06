@@ -76,7 +76,7 @@ describe('TwoWayBindings', () => {
   });
 
   test('custom inputs can be bound', async () => {
-    const value = await page.$eval('[name="currency"]', (element) => element.value);
+    const value = await page.$eval('[data-currency]', (element) => element.value);
     expect(value).toMatch('100,00');
   });
 
@@ -117,6 +117,26 @@ describe('TwoWayBindings', () => {
     await page.waitForSelector('[data-brings-happiness]')
     const element = await page.$('[data-brings-happiness]');
     expect(element).toBeTruthy();
+  });
+
+  test('bind should accept composed computed properties', async () => {
+    const value = await page.$eval('[name="composedComputed"]', (element) => element.value);
+    expect(value).toMatch('byKeyNameValue');
+  });
+
+  test('bind should accept logical computed properties', async () => {
+    const value = await page.$eval('[name="logicalComputed"]', (element) => element.value);
+    expect(value).toMatch('byKeyNameValue');
+  });
+
+  test('bind should accept literal computed properties', async () => {
+    const value = await page.$eval('[name="literalComputed"]', (element) => element.value);
+    expect(value).toMatch('byKeyNameValue');
+  });
+
+  test('bind can be bubbled down', async () => {
+    const value = await page.$eval('[name="bubble"]', (element) => element.value);
+    expect(value).toMatch('byKeyNameValue');
   });
 
 });

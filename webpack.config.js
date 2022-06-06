@@ -204,6 +204,10 @@ function server(env, argv) {
           loader: getLoader('register-inner-components.js'),
         },
         {
+          test: /\.(njs|nts|jsx|tsx)$/,
+          loader: getLoader('transform-node-ref.js'),
+        },
+        {
           issuer: /worker.js/,
           resourceQuery: /raw/,
           type: 'asset/source',
@@ -308,6 +312,10 @@ function client(env, argv) {
         {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('register-inner-components.js'),
+        },
+        {
+          test: /\.(njs|nts|jsx|tsx)$/,
+          loader: getLoader('transform-node-ref.js'),
         },
       ]
     },

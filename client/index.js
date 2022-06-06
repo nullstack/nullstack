@@ -89,13 +89,11 @@ export default class Nullstack {
     return this.context;
   }
 
-  _self = {
-    prerendered: false,
-    initiated: false,
-    hydrated: false,
-    terminated: false,
-    element: null,
-  }
+  prerendered = false
+  initiated = false
+  hydrated = false
+  terminated = false
+  key = null
 
   constructor() {
     const proxy = new Proxy(this, instanceProxyHandler);

@@ -4,13 +4,14 @@ function match(node) {
 
 function transform({ node, environment }) {
   if (!match(node)) return;
-  const target = node.attributes.source;
+  const object = node.attributes.bind.object;
+  const property = node.attributes.bind.property;
   if (node.type === 'textarea') {
-    node.children = [target[node.attributes.bind]];
+    node.children = [object[property]];
   } else if (node.type === 'input' && node.attributes.type === 'checkbox') {
-    node.attributes.checked = target[node.attributes.bind];
+    node.attributes.checked = object[property];
   } else {
-    node.attributes.value = target[node.attributes.bind] ?? '';
+    node.attributes.value = object[property] ?? '';
   }
   node.attributes.name = node.attributes.name || node.attributes.bind;
   if (environment.client) {

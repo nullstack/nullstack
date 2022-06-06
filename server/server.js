@@ -22,15 +22,13 @@ if (!global.fetch) {
 }
 
 const server = express();
-const router = new express.Router()
-server.nullstackRouter = router
 
 server.port ??= process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
 
 let contextStarted = false
 let serverStarted = false
 
-router.use(async (request, response, next) => {
+server.use(async (request, response, next) => {
   if (!contextStarted) {
     typeof context.start === 'function' && await context.start();
     contextStarted = true;
@@ -116,53 +114,57 @@ server.start = function () {
   if (serverStarted) return;
   serverStarted = true;
 
-  router.use(cors(server.cors));
+  server.use(cors(server.cors));
 
-  router.use(express.static(path.join(__dirname, '..', 'public')));
+  server.use(express.static(path.join(__dirname, '..', 'public')));
 
-  router.use(bodyParser.text({ limit: server.maximumPayloadSize }));
+  server.use(bodyParser.text({ limit: server.maximumPayloadSize }));
 
-  server.get(`/:number.client.js`, (request, response) => {
-    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
-    response.contentType('text/javascript');
-    response.send(generateFile(`${request.params.number}.client.js`, server));
-  });
+  if (environment.production) {
 
-  server.get(`/:number.client.css`, (request, response) => {
-    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
-    response.contentType('text/css');
-    response.send(generateFile(`${request.params.number}.client.css`, server));
-  });
+    server.get(`/:number.client.js`, (request, response) => {
+      response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+      response.contentType('text/javascript');
+      response.send(generateFile(`${request.params.number}.client.js`, server));
+    });
 
-  server.get(`/client.css`, (request, response) => {
-    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
-    response.contentType('text/css');
-    response.send(generateFile('client.css', server));
-  });
+    server.get(`/:number.client.css`, (request, response) => {
+      response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+      response.contentType('text/css');
+      response.send(generateFile(`${request.params.number}.client.css`, server));
+    });
 
-  server.get(`/client.js`, (request, response) => {
-    response.setHeader('Cache-Control', 'max-age=31536000, immutable');
-    response.contentType('text/javascript');
-    response.send(generateFile('client.js', server));
-  });
+    server.get(`/client.css`, (request, response) => {
+      response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+      response.contentType('text/css');
+      response.send(generateFile('client.css', server));
+    });
 
-  router.get(`/manifest.webmanifest`, (request, response) => {
+    server.get(`/client.js`, (request, response) => {
+      response.setHeader('Cache-Control', 'max-age=31536000, immutable');
+      response.contentType('text/javascript');
+      response.send(generateFile('client.js', server));
+    });
+
+  }
+
+  server.get(`/manifest.webmanifest`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
     response.contentType('application/manifest+json');
     response.send(generateManifest(server));
   });
 
-  router.get(`/service-worker.js`, (request, response) => {
+  server.get(`/service-worker.js`, (request, response) => {
     response.setHeader('Cache-Control', 'max-age=31536000, immutable');
     response.contentType('text/javascript');
     response.send(generateServiceWorker());
   });
 
-  router.get('/robots.txt', (request, response) => {
+  server.get('/robots.txt', (request, response) => {
     response.send(generateRobots());
   });
 
-  router.all(`/${prefix}/:hash/:methodName.json`, async (request, response) => {
+  server.all(`/${prefix}/:hash/:methodName.json`, async (request, response) => {
     const payload = request.method === 'GET' ? request.query.payload : request.body;
     const args = deserialize(payload);
     const { hash, methodName } = request.params;
@@ -191,7 +193,7 @@ server.start = function () {
     }
   });
 
-  router.get('*', async (request, response, next) => {
+  server.get('*', async (request, response, next) => {
     if (request.originalUrl.split('?')[0].indexOf('.') > -1) {
       return next();
     }
@@ -202,8 +204,6 @@ server.start = function () {
       response.status(status).send(html);
     }
   });
-
-  server.use(router)
 
   if (!server.less) {
     if (!server.port) {
