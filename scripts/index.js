@@ -77,11 +77,10 @@ async function start({ input, port, env }) {
             }
             const serverBundle = require(bundlePath)
             const server = serverBundle.default.server
-            const serverRouter = serverBundle.default.server.nullstackRouter
             server.less = true
             server.port = port
             server.start()
-            serverRouter(req, res, next)
+            server(req, res, next)
           });
           return middlewares;
         },

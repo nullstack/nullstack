@@ -56,4 +56,9 @@ describe('ServerRequestAndResponse', () => {
     expect(element).toBeFalsy();
   });
 
+  test('server middlewares run context start', async () => {
+    const element = await page.$('[data-start-value]');
+    expect(element).toBeFalsy();
+  });
+
 });

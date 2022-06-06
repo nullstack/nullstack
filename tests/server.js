@@ -13,6 +13,10 @@ const context = Nullstack.start(Application);
 
 const methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT'];
 
+context.server.get('/custom-api-before-start', (request, response) => {
+  response.json({ startValue: context.startValue })
+})
+
 context.server.use('/api', (request, response, next) => {
   request.status = 200;
   if (!response.headersSent) {
