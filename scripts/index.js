@@ -27,7 +27,7 @@ function getClientCompiler(options) {
   return webpack(getConfig(options)[1])
 }
 
-async function start({ input, port, env }) {
+async function start({ input, port, env, mode = 'ssr', hot }) {
   const environment = 'development';
   const serverCompiler = getServerCompiler({ environment, input });
   let clientStarted = false
@@ -37,7 +37,7 @@ async function start({ input, port, env }) {
   }
   dotenv.config({ path: envPath })
   port ??= process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
-  process.env['NULLSTACK_ENVIRONMENT_MODE'] = 'spa'
+  process.env['NULLSTACK_ENVIRONMENT_MODE'] = mode
   console.log(` 🚀️ Starting your application in ${environment} mode...`);
   const WebpackDevServer = require('webpack-dev-server');
   const { setLogLevel } = require('webpack/hot/log')
@@ -53,7 +53,7 @@ async function start({ input, port, env }) {
     if (!clientStarted) {
       clientStarted = true
       const devServerOptions = {
-        hot: true,
+        hot: !!hot,
         open: false,
         devMiddleware: {
           index: false
@@ -114,10 +114,12 @@ program
   .command('start')
   .alias('s')
   .description('Start application in development environment')
+  .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles').choices(['ssr', 'spa']))
   .option('-p, --port <port>', 'Port number to run the server')
   .option('-i, --input <input>', 'Path to project that will be started')
   .option('-o, --output <output>', 'Path to build output folder')
   .option('-e, --env <name>', 'Name of the environment file that should be loaded')
+  .option('--hot', 'Enable hot module replacement')
   .helpOption('-h, --help', 'Learn more about this command')
   .action(start)
 
@@ -125,7 +127,7 @@ program
   .command('build')
   .alias('b')
   .description('Build application for production environment')
-  .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles').choices(buildModes))
+  .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles').choices(['ssr', 'spa', 'ssg']))
   .option('-i, --input <input>', 'Path to project that will be built')
   .option('-o, --output <output>', 'Path to build output folder')
   .option('-c, --cache', 'Cache build results in .production folder')

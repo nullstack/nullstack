@@ -36,7 +36,7 @@ export async function prerender(request, response) {
   scope.plugins = loadPlugins(scope);
 
   try {
-    if (environment.production) {
+    if (environment.production || environment.mode !== 'spa') {
       const tree = await generateTree(generator.starter(), scope);
       scope.body = render(tree, scope);
     }
