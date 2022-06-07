@@ -9,8 +9,6 @@ const customConfig = path.resolve(process.cwd(), './webpack.config.js');
 const config = existsSync(customConfig) ? require(customConfig) : require('../webpack.config');
 const dotenv = require('dotenv')
 
-const buildModes = ['ssg', 'spa', 'ssr']
-
 function getConfig(options) {
   return config.map((env) => env(null, options))
 }
@@ -36,7 +34,9 @@ async function start({ input, port, env, mode = 'ssr', hot }) {
     envPath += `.${process.env.NULLSTACK_ENVIRONMENT_NAME}`
   }
   dotenv.config({ path: envPath })
-  port ??= process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
+  if (!port) {
+    port = process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
+  }
   process.env['NULLSTACK_ENVIRONMENT_MODE'] = mode
   console.log(` 🚀️ Starting your application in ${environment} mode...`);
   const WebpackDevServer = require('webpack-dev-server');
