@@ -79,4 +79,18 @@ describe('ArrayAttributes jsx', () => {
     expect(element).toBeTruthy();
   });
 
+  test('elements rendered after hydration can receive array classes', async () => {
+    await page.click('[data-events]');
+    await page.waitForSelector('[class="dynamic-a dynamic-b"]')
+    const element = await page.$('[class="dynamic-a dynamic-b"]')
+    expect(element).toBeTruthy();
+  });
+
+  test('elements rendered after hydration can receive array styles', async () => {
+    await page.click('[data-events]');
+    await page.waitForSelector('[class="dynamic-a dynamic-b"][style="color: pink; background-color: blue;"]')
+    const element = await page.$('[class="dynamic-a dynamic-b"][style="color: pink; background-color: blue;"]')
+    expect(element).toBeTruthy();
+  });
+
 });

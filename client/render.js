@@ -2,6 +2,7 @@ import { isFalse, isText } from '../shared/nodes';
 import { anchorableElement } from './anchorableNode';
 import { eventCallbacks, eventSubjects, generateCallback } from './events'
 import ref from './ref'
+import generateTruthyString from '../shared/generateTruthyString';
 
 export default function render(node, options) {
 
@@ -38,12 +39,18 @@ export default function render(node, options) {
         eventSubjects.set(node.element, node.attributes)
       }
     } else {
-      const type = typeof node.attributes[name];
+      let nodeValue;
+      if ((name === 'class' || name === 'style') && Array.isArray(node.attributes[name])) {
+        nodeValue = generateTruthyString(node.attributes[name])
+      } else {
+        nodeValue = node.attributes[name]
+      }
+      const type = typeof nodeValue;
       if (type !== 'object' && type !== 'function') {
-        if (name != 'value' && node.attributes[name] === true) {
+        if (name != 'value' && nodeValue === true) {
           node.element.setAttribute(name, '');
-        } else if (name === 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
-          node.element.setAttribute(name, node.attributes[name]);
+        } else if (name === 'value' || (nodeValue !== false && nodeValue !== null && nodeValue !== undefined)) {
+          node.element.setAttribute(name, nodeValue);
         }
       }
     }
