@@ -3,8 +3,8 @@ describe('ErrorPage 500', () => {
   let response;
 
   beforeAll(async () => {
-    response = await page.goto('http://localhost:6969/error-page?status=500');
-  });  
+    response = await page.goto('http://localhost:6969/error-page?status=500', { waitUntil: "networkidle0" });
+  });
 
   test('pages with error have a 500 status', async () => {
     const status = response.status();
@@ -22,7 +22,7 @@ describe('ErrorPage 500', () => {
 describe('ErrorPage 404', () => {
 
   test('pages with status 404 have a 404 status', async () => {
-    const response = await page.goto('http://localhost:6969/error-page');
+    const response = await page.goto('http://localhost:6969/error-page', { waitUntil: "networkidle0" });
     const status = response.status();
     expect(status).toBe(404);
   });
@@ -38,9 +38,9 @@ describe('ErrorPage 404', () => {
 describe('ErrorPage offline', () => {
 
   test('the offline template should always have a 200 status', async () => {
-    await page.goto('http://localhost:6969');
+    await page.goto('http://localhost:6969', { waitUntil: "networkidle0" });
     const link = await page.$eval('a', (element) => element.href);
-    const response = await page.goto(link);
+    const response = await page.goto(link, { waitUntil: "networkidle0" });
     const status = response.status();
     expect([200, 304]).toContain(status);
   });

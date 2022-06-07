@@ -11,7 +11,7 @@ describe('RoutesAndParams /routes-and-params', () => {
   });
 
   test('router has a base key', async () => {
-    const element = await page.$('[data-base="http://localhost:6969"]');
+    const element = await page.$('[data-base="https://localhost:6969"]');
     expect(element).toBeTruthy();
   });
 

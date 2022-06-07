@@ -43,13 +43,11 @@ class Nullstack {
     }
   }
 
-  _self = {
-    prerendered: true,
-    initiated: false,
-    hydrated: false,
-    terminated: false,
-    element: null,
-  }
+  prerendered = true
+  initiated = false
+  hydrated = false
+  terminated = false
+  key = null
 
   constructor(scope) {
     this._request = () => scope.request;
@@ -65,6 +63,11 @@ class Nullstack {
   toJSON() {
     const serialized = {};
     for (const name of Object.getOwnPropertyNames(this)) {
+      if (name === 'prerendered') continue
+      if (name === 'initiated') continue
+      if (name === 'hydrated') continue
+      if (name === 'terminated') continue
+      if (name === 'key') continue
       if (typeof this[name] !== 'function' && !name.startsWith('_') && name !== 'attributes') {
         serialized[name] = this[name];
       }

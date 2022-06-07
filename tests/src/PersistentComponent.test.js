@@ -10,7 +10,7 @@ describe('PersistentComponent instantiated', () => {
     expect(element).toBeTruthy();
   });
 
-  test('persistent components self should have a key persistent', async () => {
+  test('persistent components instance should have a property called persistent', async () => {
     await page.waitForSelector('[data-persistent]');
     const element = await page.$('[data-persistent]');
     expect(element).toBeTruthy();
@@ -45,15 +45,9 @@ describe('PersistentComponent terminated', () => {
     expect(element).toBeTruthy();
   });
 
-  test('persistent instanes self should have a terminated key when off dom', async () => {
+  test('persistent instanes instance terminated should be true when off dom', async () => {
     await page.waitForSelector('[data-a-terminated]');
     const element = await page.$('[data-a-terminated]');
-    expect(element).toBeTruthy();
-  });
-
-  test('terminated persistent components should not have an element self', async () => {
-    await page.waitForSelector('[data-a-terminated][data-persistent-self-element-removed]');
-    const element = await page.$('[data-a-terminated][data-persistent-self-element-removed]');
     expect(element).toBeTruthy();
   });
 
@@ -100,13 +94,13 @@ describe('PersistentComponent reinstantiated', () => {
     expect(element).toBeTruthy();
   });
 
-  test('persistent components self should have a key persistent when reinstantiated', async () => {
+  test('persistent components instance should have a property called persistent when reinstantiated', async () => {
     await page.waitForSelector('[data-persistent]');
     const element = await page.$('[data-persistent]');
     expect(element).toBeTruthy();
   });
 
-  test('persistent components self should have a key prerendered when prerendered then reinstantiated', async () => {
+  test('persistent components instance should have a property called prerendered when prerendered then reinstantiated', async () => {
     await page.waitForSelector('[data-prerendered]');
     const element = await page.$('[data-prerendered]');
     expect(element).toBeTruthy();

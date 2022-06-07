@@ -1,6 +1,6 @@
 import environment from './environment';
-import server from './server';
 import worker from './worker';
+import server from './server';
 
 const project = {};
 

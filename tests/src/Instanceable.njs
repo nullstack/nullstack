@@ -39,22 +39,21 @@ class Instanceable extends Nullstack {
     instanceable.serverLoaded = true;
   }
 
-  renderTitle({ title, self }) {
+  renderTitle({ title }) {
     return (
       title[0] !== '_isProxy' &&
-      <p data-title={title[0]} data-hydrated={self.hydrated}>
+      <p data-title={title[0]} data-hydrated={this.hydrated}>
         {this.title[title[0]]}
       </p>
     )
   }
 
-  render({ instances, self }) {
+  render({ instances }) {
     const { application } = instances;
     const mainHasKey = (
       application &&
       typeof application.changeInstanceable === 'function'
     );
-
     return (
       <div>
         {application &&
@@ -71,7 +70,7 @@ class Instanceable extends Nullstack {
           }
         </div>
         <p data-application-key={mainHasKey}></p>
-        <div data-key={self.key} />
+        <div data-key={this.key} />
       </div>
     )
   }

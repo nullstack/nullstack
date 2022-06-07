@@ -35,9 +35,14 @@ client.update = async function update() {
       scope.plugins = loadPlugins(scope)
       client.initialized = false
       client.renewalQueue = []
-      client.nextVirtualDom = await generateTree(client.initializer(), scope)
-      rerender()
-      client.processLifecycleQueues()
+      try {
+        client.nextVirtualDom = await generateTree(client.initializer(), scope)
+        rerender()
+        client.processLifecycleQueues()
+      } catch (e) {
+        client.skipHotReplacement = true
+        console.error(e)
+      }
     }, 16)
   }
 }
@@ -51,7 +56,7 @@ client.processLifecycleQueues = async function processLifecycleQueues() {
   while (client.initiationQueue.length) {
     const instance = client.initiationQueue.shift()
     instance.initiate && await instance.initiate()
-    instance._self.initiated = true
+    instance.initiated = true
     instance.launch && instance.launch()
     shouldUpdate = true
     if (instance._attributes.route && shouldScroll) {
@@ -68,7 +73,7 @@ client.processLifecycleQueues = async function processLifecycleQueues() {
     shouldUpdate = true
     const instance = client.realHydrationQueue.shift()
     instance.hydrate && await instance.hydrate()
-    instance._self.hydrated = true
+    instance.hydrated = true
   }
   shouldUpdate && client.update()
   shouldUpdate = false
@@ -80,11 +85,10 @@ client.processLifecycleQueues = async function processLifecycleQueues() {
   shouldUpdate && client.update()
   for (const key in client.instances) {
     const instance = client.instances[key]
-    if (!client.renewalQueue.includes(instance) && !instance._self.terminated) {
+    if (!client.renewalQueue.includes(instance) && !instance.terminated) {
       instance.terminate && await instance.terminate()
-      if (instance._self.persistent) {
-        instance._self.terminated = true
-        instance._self.element = null
+      if (instance.persistent) {
+        instance.terminated = true
       } else {
         delete client.instances[key]
       }

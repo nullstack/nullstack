@@ -50,14 +50,6 @@ describe('BodyFragment', () => {
     expect(element).toBeTruthy();
   });
 
-  test('body has access to plugins that have export a transformBody', async () => {
-    await page.waitForSelector('body[data-hydrated]')
-    await page.click('body');
-    await page.waitForSelector('[data-keys]');
-    const element = await page.$('[data-keys]');
-    expect(element).toBeTruthy();
-  });
-
   test('the body removes events when the fragment leaves the tree', async () => {
     await page.waitForSelector('body[data-hydrated]')
     await page.click('[href="/"]');

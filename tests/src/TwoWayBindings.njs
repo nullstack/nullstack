@@ -11,23 +11,32 @@ class TwoWayBindings extends Nullstack {
   object = { count: 1 };
   array = ['a', 'b', 'c'];
 
+  byKeyName = 'byKeyNameValue'
+  keyName = 'byKeyName'
+
   zero = 0
 
   bringsHappiness = false
 
-  parse({ event, source, name, callback }) {
+  parse({ event, source: bind, callback }) {
     const normalized = event.target.value.replace(',', '').padStart(3, '0');
     const whole = (parseInt(normalized.slice(0, -2)) || 0).toString();
     const decimal = normalized.slice(normalized.length - 2);
     const value = parseFloat(whole + '.' + decimal);
     const bringsHappiness = value >= 1000000;
-    source[name] = value
+    bind.object[bind.property] = value
     callback({ bringsHappiness })
   }
 
-  renderCurrencyInput({ source, name, onchange }) {
-    const formatted = source[name].toFixed(2).replace('.', ',');
-    return <input data-currency name={name} source={source} value={formatted} oninput={this.parse} callback={onchange} />
+  renderCurrencyInput({ bind, onchange }) {
+    const formatted = bind.object[bind.property].toFixed(2).replace('.', ',');
+    return <input data-currency source={bind} value={formatted} oninput={this.parse} callback={onchange} />
+  }
+
+  renderBubble({ bind }) {
+    return (
+      <input name="bubble" bind={bind} />
+    )
   }
 
   updateCharacter({ value }) {
@@ -41,15 +50,15 @@ class TwoWayBindings extends Nullstack {
   render({ params }) {
     return (
       <div data-brings-happiness={this.bringsHappiness}>
-        <input bind={this.zero} />
+        <input bind={this.zero} name="zero" />
         <div data-number={this.number} />
         {!this.boolean && <div data-boolean-type={typeof this.boolean} />}
         {this.number > 1 && <div data-number-type={typeof this.number} />}
-        <input bind={this.number} oninput={this.updateCharacter} />
-        <textarea bind={this.text} data-text={this.text} />
+        <input bind={this.number} name="number" oninput={this.updateCharacter} />
+        <textarea bind={this.text} name="text" data-text={this.text} />
         <button onclick={{ text: 'bbbb' }} data-textarea>textarea b</button>
         <div data-character={this.character} />
-        <select bind={this.character}>
+        <select bind={this.character} name="character">
           {this.array.map((character) => <option>{character}</option>)}
         </select>
         <button onclick={{ character: 'b' }} data-select>select b</button>
@@ -57,14 +66,18 @@ class TwoWayBindings extends Nullstack {
           <option value={true}>true</option>
           <option value={false}>false</option>
         </select>
-        <input bind={this.boolean} type="checkbox" />
+        <input bind={this.boolean} name="boolean" type="checkbox" />
         <button onclick={{ boolean: false }} data-checkbox>boolean false</button>
-        <input bind={this.object.count} />
-        <input bind={this.undeclared} data-undeclared />
+        <input bind={this.object.count} name="count" />
+        <input bind={this.undeclared} name="undeclared" data-undeclared />
+        <input bind={this[this.keyName]} name="composedComputed" />
+        <input bind={this[['by', 'Key', 'Name'].join('')]} name="logicalComputed" />
+        <input bind={this['byKeyName']} name="literalComputed" />
         {this.array.map((value, index) => (
-          <input bind={this.array[index]} />
+          <input bind={this.array[index]} name={index.toString()} />
         ))}
-        <input bind={params.page} />
+        <input bind={params.page} name="page" />
+        <Bubble bind={this.byKeyName} />
         <CurrencyInput bind={this.currency} onchange={this.setHappiness} />
       </div>
     )

@@ -13,8 +13,8 @@ class LazyComponentLoader extends Nullstack {
     LazyComponent = (await import('./LazyComponent')).default
   }
 
-  render({ self }) {
-    if (!self.hydrated) return false
+  render() {
+    if (!this.hydrated) return false
     return <LazyComponent />
   }
 

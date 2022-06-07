@@ -83,4 +83,16 @@ describe('StatefulComponent', () => {
     expect(text).toMatch('rgba(0, 0, 0, 0.2)');
   });
 
+  test('attributes can prerender a zero', async () => {
+    await page.waitForSelector('[data-zero="0"]');
+    const element = await page.$('[data-zero="0"]');
+    expect(element).toBeTruthy();
+  });
+
+  test('attributes can rererender a zero', async () => {
+    await page.waitForSelector('[data-hydrated-zero="0"]');
+    const element = await page.$('[data-hydrated-zero="0"]');
+    expect(element).toBeTruthy();
+  });
+
 });
