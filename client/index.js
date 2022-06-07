@@ -108,8 +108,8 @@ export default class Nullstack {
 }
 
 if (module.hot) {
-  const client = new WebSocket('ws' + window.location.origin.slice(4) + '/ws');
-  client.onmessage = function (e) {
+  const socket = new WebSocket('ws' + window.location.origin.slice(4) + '/ws');
+  socket.onmessage = function (e) {
     if (e.data.indexOf('still-ok') > -1) {
       window.location.reload()
     }
