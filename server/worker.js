@@ -46,7 +46,7 @@ export function generateServiceWorker() {
     original = readFileSync(file, 'utf-8');
   }
   const bundleFolder = path.join(__dirname, '../', environment.production ? '.production' : '.development')
-  const scripts = readdirSync(bundleFolder).filter((filename) => filename.includes('client.js')).map((filename) => `/${filename}?fingerprint=${environment.key}`)
+  const scripts = readdirSync(bundleFolder).filter((filename) => filename.includes('.client.')).map((filename) => `'/${filename}'`)
   sources.push(`self.context = ${JSON.stringify(context, null, 2)};`);
   sources.push(load);
   if (environment.mode === 'ssg') {
@@ -72,7 +72,7 @@ export function generateServiceWorker() {
   if (original) {
     sources.push(original);
   }
-  files['service-worker.js'] = sources.join(`\n\n`).replace(`{{SCRIPTS}}`, scripts.join(', \n'));;
+  files['service-worker.js'] = sources.join(`\n\n`).replace(`"{{BUNDLE}}",`, scripts.join(', \n'));
   return files['service-worker.js'];
 }
 

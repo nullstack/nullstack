@@ -1,4 +1,5 @@
 import Nullstack from 'nullstack';
+import './LazyComponent.css';
 
 class LazyComponent extends Nullstack {
 

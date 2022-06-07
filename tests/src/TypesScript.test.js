@@ -24,8 +24,8 @@ describe('UnderscoredAttributes', () => {
   });
 
   test('bind should work on nts files', async () => {
-    await page.waitForSelector('[bind="count"]');
-    const element = await page.$('[bind="count"]');
+    await page.waitForSelector('input');
+    const element = await page.$('input');
     expect(element).toBeTruthy();
   });
 

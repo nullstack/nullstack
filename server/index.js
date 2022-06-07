@@ -3,7 +3,7 @@ import { normalize } from 'path';
 import element from '../shared/element';
 import fragment from '../shared/fragment';
 import getProxyableMethods from '../shared/getProxyableMethods';
-import { usePlugins } from '../shared/plugins';
+import { useServerPlugins } from '../shared/plugins';
 import context from './context';
 import environment from './environment';
 import generator from './generator';
@@ -33,7 +33,7 @@ class Nullstack {
   static element = element;
   static invoke = invoke;
   static fragment = fragment;
-  static use = usePlugins('server');
+  static use = useServerPlugins;
 
   static start(Starter) {
     if (this.name.indexOf('Nullstack') > -1) {
@@ -43,12 +43,11 @@ class Nullstack {
     }
   }
 
-  _self = {
-    prerendered: true,
-    initiated: false,
-    hydrated: false,
-    terminated: false,
-  }
+  prerendered = true
+  initiated = false
+  hydrated = false
+  terminated = false
+  key = null
 
   constructor(scope) {
     this._request = () => scope.request;
@@ -64,7 +63,12 @@ class Nullstack {
   toJSON() {
     const serialized = {};
     for (const name of Object.getOwnPropertyNames(this)) {
-      if (typeof (this[name]) !== 'function' && !name.startsWith('_') && name !== 'attributes') {
+      if (name === 'prerendered') continue
+      if (name === 'initiated') continue
+      if (name === 'hydrated') continue
+      if (name === 'terminated') continue
+      if (name === 'key') continue
+      if (typeof this[name] !== 'function' && !name.startsWith('_') && name !== 'attributes') {
         serialized[name] = this[name];
       }
     }

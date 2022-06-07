@@ -17,4 +17,12 @@ export type NullstackEnvironment = {
    */
   key: string;
 
+  /**
+   * Event raised when a module is hot replaced.
+   *
+   * @scope client
+   * @see https://nullstack.app/context-environment
+   */
+  event: string;
+
 };

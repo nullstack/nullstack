@@ -14,7 +14,6 @@ class ChildComponent extends ParentComponent {
   async hydrate() {
     this.hydratedParentThis = await this.getParentThis();
     this.hydratedChildThis = await this.getChildThis();
-    console.log(this.constructor.name, this.hydratedParentThis, this.hydratedParentThis == this.constructor.name)
     this.bunda = 'true'
   }
 

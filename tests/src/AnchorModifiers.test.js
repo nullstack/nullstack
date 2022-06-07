@@ -1,8 +1,9 @@
-beforeAll(async () => {
-  await page.goto('http://localhost:6969/anchor-modifiers');
-});
-
 describe('AnchorModifiers jsx', () => {
+
+  beforeEach(async () => {
+    await page.goto('http://localhost:6969/anchor-modifiers');
+    await page.waitForSelector('[data-hydrated]');
+  });
 
   test('Clicking html link with shift opens in new window', async () => {
     await page.keyboard.down('Shift');
@@ -69,6 +70,30 @@ describe('AnchorModifiers jsx', () => {
     await page.keyboard.up('Shift');
     await page.waitForSelector('[data-clicked-jsx]');
     const element = await page.$('[data-clicked-jsx]');
+    expect(element).toBeTruthy();
+  });
+
+  test('anchors can have events', async () => {
+    await page.click('button');
+    await page.click('[href="/anchor-modifiers?source=incremented"]');
+    await page.waitForSelector('[data-updated] [data-count="1"]');
+    const element = await page.$('[data-updated] [data-count="1"]');
+    expect(element).toBeTruthy();
+  });
+
+  test('anchors can have object events', async () => {
+    await page.click('button');
+    await page.click('[href="/anchor-modifiers?source=object"]');
+    await page.waitForSelector('[data-updated] [data-objected]');
+    const element = await page.$('[data-updated] [data-objected]');
+    expect(element).toBeTruthy();
+  });
+
+  test('anchors can have array events', async () => {
+    await page.click('button');
+    await page.click('[href="/anchor-modifiers?source=array"]');
+    await page.waitForSelector('[data-updated] [data-count="1"][data-objected]');
+    const element = await page.$('[data-updated] [data-count="1"][data-objected]');
     expect(element).toBeTruthy();
   });
 

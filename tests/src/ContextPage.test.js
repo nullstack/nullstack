@@ -41,7 +41,7 @@ describe('ContextPage', () => {
 
   test('the image key updates the open graph image with a cdn url', async () => {
     const text = await page.$eval('head > meta[property="og:image"]', element => element.content);
-    expect(text).toMatch('http://127.0.0.1:6969/image.jpg');
+    expect(text).toMatch('http://localhost:6969/image.jpg');
   });
 
   test('the description key updates the open graph description', async () => {
@@ -56,11 +56,11 @@ describe('ContextPage', () => {
 
   test('the canonical tag is generated if the canonical key is omitted', async () => {
     const text = await page.$eval('head > link[rel="canonical"]', element => element.href);
-    expect(text).toMatch('http://localhost:6969/context-page');
+    expect(text).toMatch('https://localhost:6969/context-page');
   });
 
   test('the schema key generates a json schema', async () => {
-    const text = await page.$eval('head > script[type="application/ld+json"]', element => element.innerText);
+    const text = await page.$eval('head > script[type="application/ld+json"]', element => element.textContent);
     expect(text).toMatch('{"@type":"WebSite","@id":"#website","name":"Nullstack","url":"https://nullstack.app"}');
   });
 
@@ -78,14 +78,14 @@ describe('ContextPage', () => {
     await page.click('button');
     await page.waitForSelector('[data-event-triggered]');
     const element = await page.$('[data-event-triggered]');
-    expect(element).toBeTruthy();  
+    expect(element).toBeTruthy();
   });
 
   test('the page reacts to a server function status', async () => {
     await page.click('[status="401"]');
     await page.waitForSelector('[data-page-status="401"]');
     const element = await page.$('[data-page-status="401"]');
-    expect(element).toBeTruthy();  
+    expect(element).toBeTruthy();
   });
 
 });

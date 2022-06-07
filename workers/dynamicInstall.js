@@ -3,8 +3,9 @@ function install(event) {
     '/',
     ...self.context.worker.preload,
     '/manifest.webmanifest',
+    `/client.js?fingerprint=${self.context.environment.key}`,
     `/client.css?fingerprint=${self.context.environment.key}`,
-    `{{SCRIPTS}}`
+    "{{BUNDLE}}",
   ];
   event.waitUntil(async function () {
     const cache = await caches.open(self.context.environment.key);

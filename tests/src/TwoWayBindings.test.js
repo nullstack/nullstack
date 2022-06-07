@@ -1,8 +1,13 @@
-beforeAll(async () => {
-  await page.goto('http://localhost:6969/two-way-bindings?page=1');
-});
+describe('TwoWayBindings', () => {
 
-describe('ContextPage', () => {
+  beforeEach(async () => {
+    await page.goto('http://localhost:6969/two-way-bindings?page=1');
+  });
+
+  test('inputs can be bound to zero', async () => {
+    const element = await page.$('[value="0"]');
+    expect(element).toBeTruthy();
+  });
 
   test('bind adds a name attribute to the element', async () => {
     const element = await page.$('[name="number"]');
@@ -22,6 +27,27 @@ describe('ContextPage', () => {
   test('textareas can be bound', async () => {
     const value = await page.$eval('[name="text"]', (element) => element.value);
     expect(value).toMatch('aaaa');
+  });
+
+  test('textareas value reflects variable changes', async () => {
+    await page.click('[data-textarea]')
+    await page.waitForSelector('textarea[data-text="bbbb"]')
+    const value = await page.$eval('[name="text"]', (element) => element.value);
+    expect(value).toMatch('bbbb');
+  });
+
+  test('checkboxes value reflects variable changes', async () => {
+    await page.click('[data-checkbox]')
+    await page.waitForSelector('input[type=checkbox]:not(:checked)')
+    const element = await page.$('input[type=checkbox]:not(:checked)')
+    expect(element).toBeTruthy();
+  });
+
+  test('select value reflects variable changes', async () => {
+    await page.click('[data-select]')
+    await page.waitForSelector('[data-character="b"]')
+    const value = await page.$eval('select', (element) => element.value);
+    expect(value).toMatch('b');
   });
 
   test('selects can be bound', async () => {
@@ -50,7 +76,7 @@ describe('ContextPage', () => {
   });
 
   test('custom inputs can be bound', async () => {
-    const value = await page.$eval('[name="currency"]', (element) => element.value);
+    const value = await page.$eval('[data-currency]', (element) => element.value);
     expect(value).toMatch('100,00');
   });
 
@@ -73,17 +99,44 @@ describe('ContextPage', () => {
   });
 
   test('bind keeps the primitive type of the variable', async () => {
+    await page.type('[name="number"]', '2');
     await page.waitForSelector('[data-number-type="number"]');
     const element = await page.$('[data-number-type="number"]');
     expect(element).toBeTruthy();
   });
 
   test('bound inputs can have custom events that triger after the value is set', async () => {
+    await page.type('[name="number"]', '2');
     await page.waitForSelector('[data-character="b"]');
     const element = await page.$('[data-character="b"]');
     expect(element).toBeTruthy();
   });
 
-  // test extra params bringHappiness
+  test('developers can create custom bindable components', async () => {
+    await page.type('[data-currency]', '696969696969');
+    await page.waitForSelector('[data-brings-happiness]')
+    const element = await page.$('[data-brings-happiness]');
+    expect(element).toBeTruthy();
+  });
+
+  test('bind should accept composed computed properties', async () => {
+    const value = await page.$eval('[name="composedComputed"]', (element) => element.value);
+    expect(value).toMatch('byKeyNameValue');
+  });
+
+  test('bind should accept logical computed properties', async () => {
+    const value = await page.$eval('[name="logicalComputed"]', (element) => element.value);
+    expect(value).toMatch('byKeyNameValue');
+  });
+
+  test('bind should accept literal computed properties', async () => {
+    const value = await page.$eval('[name="literalComputed"]', (element) => element.value);
+    expect(value).toMatch('byKeyNameValue');
+  });
+
+  test('bind can be bubbled down', async () => {
+    const value = await page.$eval('[name="bubble"]', (element) => element.value);
+    expect(value).toMatch('byKeyNameValue');
+  });
 
 });

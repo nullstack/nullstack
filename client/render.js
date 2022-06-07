@@ -1,52 +1,49 @@
 import { isFalse, isText } from '../shared/nodes';
 import { anchorableElement } from './anchorableNode';
+import { eventCallbacks, eventSubjects, generateCallback } from './events'
+import ref from './ref'
 
 export default function render(node, options) {
 
   if (isFalse(node) || node.type === 'head') {
-    return document.createComment("");
+    node.element = document.createComment("");
+    return node.element
   }
 
   if (isText(node)) {
-    return document.createTextNode(node);
+    node.element = document.createTextNode(node.text);
+    return node.element
   }
 
   const svg = (options && options.svg) || node.type === 'svg';
 
-  let element;
   if (svg) {
-    element = document.createElementNS("http://www.w3.org/2000/svg", node.type);
+    node.element = document.createElementNS("http://www.w3.org/2000/svg", node.type);
   } else {
-    element = document.createElement(node.type);
+    node.element = document.createElement(node.type);
   }
 
-  if (node.instance) {
-    node.instance._self.element = element;
-  }
+  ref(node, node.element)
 
   for (let name in node.attributes) {
     if (name === 'html') {
-      element.innerHTML = node.attributes[name];
-      anchorableElement(element);
+      node.element.innerHTML = node.attributes[name];
+      node.head || anchorableElement(node.element);
     } else if (name.startsWith('on')) {
       if (node.attributes[name] !== undefined) {
-        const eventName = name.replace('on', '');
-        const key = '_event.' + eventName;
-        node[key] = (event) => {
-          if (node.attributes.default !== true) {
-            event.preventDefault();
-          }
-          node.attributes[name]({ ...node.attributes, event });
-        };
-        element.addEventListener(eventName, node[key]);
+        const eventName = name.substring(2);
+        const callback = generateCallback(node.element, name)
+        node.element.addEventListener(eventName, callback);
+        eventCallbacks.set(node.element, callback)
+        eventSubjects.set(node.element, node.attributes)
       }
     } else {
-      const type = typeof (node.attributes[name]);
+      const type = typeof node.attributes[name];
       if (type !== 'object' && type !== 'function') {
         if (name != 'value' && node.attributes[name] === true) {
-          element.setAttribute(name, '');
-        } else if (name == 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
-          element.setAttribute(name, node.attributes[name]);
+          node.element.setAttribute(name, '');
+        } else if (name === 'value' || (node.attributes[name] !== false && node.attributes[name] !== null && node.attributes[name] !== undefined)) {
+          node.element.setAttribute(name, node.attributes[name]);
         }
       }
     }
@@ -55,14 +52,14 @@ export default function render(node, options) {
   if (!node.attributes.html) {
     for (let i = 0; i < node.children.length; i++) {
       const child = render(node.children[i], { svg });
-      element.appendChild(child);
+      node.element.appendChild(child);
     }
 
-    if (node.type == 'select') {
-      element.value = node.attributes.value;
+    if (node.type === 'select') {
+      node.element.value = node.attributes.value;
     }
   }
 
-  return element;
+  return node.element;
 
 }

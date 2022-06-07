@@ -22,12 +22,12 @@ describe('ContextEnvironment', () => {
   });
 
   test('has a development key', async () => {
-    const element = await page.$('[data-development="true"]');
+    const element = await page.$('[data-development="false"]');
     expect(element).toBeTruthy();
   });
 
   test('has a production key', async () => {
-    const element = await page.$('[data-production="false"]');
+    const element = await page.$('[data-production="true"]');
     expect(element).toBeTruthy();
   });
 
@@ -42,7 +42,7 @@ describe('ContextEnvironment', () => {
   });
 
   test('has a key with the environment name', async () => {
-    const element = await page.$('[data-name="test"]');
+    const element = await page.$('[data-name=""]');
     expect(element).toBeTruthy();
   });
 
