@@ -10,7 +10,7 @@ module.exports = function (source) {
   let klassPath
   traverse(ast, {
     MemberExpression(path) {
-      if (path.node.property.name === 'start' && path.node.object?.name === 'Nullstack') {
+      if (path.node.property.name === 'start' && path.node.object && path.node.object.name === 'Nullstack') {
         klassName = path.parent.arguments[0].name
       }
     }
