@@ -111,6 +111,11 @@ describe('TwoWayBindings', () => {
     const element = await page.$('[data-character="b"]');
     expect(element).toBeTruthy();
   });
+  
+  test('bind should accept external component', async () => {
+    const value = await page.$eval('[name="composedComputed"]', (element) => element.value);
+    expect(value).toMatch('byKeyNameValue');
+  });
 
   test('developers can create custom bindable components', async () => {
     await page.type('[data-currency]', '696969696969');
@@ -137,6 +142,11 @@ describe('TwoWayBindings', () => {
   test('bind can be bubbled down', async () => {
     const value = await page.$eval('[name="bubble"]', (element) => element.value);
     expect(value).toMatch('byKeyNameValue');
+  });
+
+  test('bind should work in exteranl components', async () => {
+    const value = await page.$eval('[name="externalComponent"]', (element) => element.value);
+    expect(value).toMatch('externalValue');
   });
 
 });
