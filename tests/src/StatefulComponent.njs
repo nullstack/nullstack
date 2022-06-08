@@ -24,6 +24,19 @@ class StatefulComponent extends Nullstack {
   render() {
     return (
       <form ref={this._element} data-zero={0} data-hydrated-zero={this.hydrated ? 0 : 1}>
+        <style>
+          {`
+            style { 
+              display: none !important;
+            }
+            button { 
+              background-color: rgba(0,0,0, ${this.count * 0.1});
+              color: red;
+              border: 0;
+              padding: 10px;
+            }
+          `}
+        </style>
         {this.hydrated &&
           <div data-tag={this._element.tagName.toLowerCase()} />
         }
@@ -50,19 +63,6 @@ class StatefulComponent extends Nullstack {
         <button onclick={{ visible: !this.visible }} data-toggle> Toggle </button>
         {this.visible && <button onclick={undefined} data-undefined-event> button </button>}
         <textarea> {this.count} {this.count} </textarea>
-        <style>
-          {`
-            style { 
-              display: none !important;
-            }
-            button { 
-              background-color: rgba(0,0,0, ${this.count * 0.1});
-              color: red;
-              border: 0;
-              padding: 10px;
-            }
-          `}
-        </style>
       </form>
     )
   }
