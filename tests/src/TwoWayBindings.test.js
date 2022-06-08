@@ -139,4 +139,16 @@ describe('TwoWayBindings', () => {
     expect(value).toMatch('byKeyNameValue');
   });
 
+  test('bind should prerender in external components', async () => {
+    const value = await page.$eval('[name="externalComponent"]', (element) => element.value);
+    expect(value).toMatch('external');
+  });
+  
+  test('bind should rerender in external components', async () => {
+    await page.type('[data-value]', 'new');
+    await page.waitForSelector('[data-value="external"]')
+    const value = await page.$eval('[name="externalComponent"]', (element) => element.value);
+    expect(value).toMatch('newexternal');
+  });
+
 });

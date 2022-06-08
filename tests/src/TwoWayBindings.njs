@@ -1,4 +1,5 @@
 import Nullstack from 'nullstack';
+import TwoWayBindingsExternalComponent from './TwoWayBindingsExternalComponent';
 
 class TwoWayBindings extends Nullstack {
 
@@ -17,6 +18,8 @@ class TwoWayBindings extends Nullstack {
   zero = 0
 
   bringsHappiness = false
+
+  external = 'external'
 
   parse({ event, source: bind, callback }) {
     const normalized = event.target.value.replace(',', '').padStart(3, '0');
@@ -79,6 +82,7 @@ class TwoWayBindings extends Nullstack {
         <input bind={params.page} name="page" />
         <Bubble bind={this.byKeyName} />
         <CurrencyInput bind={this.currency} onchange={this.setHappiness} />
+        <TwoWayBindingsExternalComponent bind={this.external} />
       </div>
     )
   }
