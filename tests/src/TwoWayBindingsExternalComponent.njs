@@ -5,7 +5,7 @@ class TwoWayBindingsExternalComponent extends Nullstack {
   render({ bind }) {
     return (
       <div>
-        <input bind={bind} name="externalComponent" />
+        <input data-value={bind.object[bind.property]} bind={bind} name="externalComponent" />
       </div>
     )
   }
