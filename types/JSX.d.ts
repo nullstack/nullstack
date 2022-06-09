@@ -48,6 +48,7 @@ export interface Attributes {
   html?: string | undefined;
   source?: object | undefined;
   bind?: any | undefined;
+  debounce?: number | undefined;
   ref?: any | undefined;
   data?: object | undefined;
   "data-"?: any;

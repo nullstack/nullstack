@@ -21,6 +21,10 @@ class TwoWayBindings extends Nullstack {
 
   external = 'external'
 
+  debouncedBind = '69'
+  debouncedObject = '69'
+  debouncedEvent = '69'
+
   parse({ event, source: bind, callback }) {
     const normalized = event.target.value.replace(',', '').padStart(3, '0');
     const whole = (parseInt(normalized.slice(0, -2)) || 0).toString();
@@ -48,6 +52,12 @@ class TwoWayBindings extends Nullstack {
 
   setHappiness({ bringsHappiness }) {
     this.bringsHappiness = bringsHappiness
+  }
+
+  debouncedEventHandler({ event }) {
+    if (event.type === 'click') {
+      this.debouncedEvent = '6969'
+    }
   }
 
   render({ params }) {
@@ -83,6 +93,9 @@ class TwoWayBindings extends Nullstack {
         <Bubble bind={this.byKeyName} />
         <CurrencyInput bind={this.currency} onchange={this.setHappiness} />
         <TwoWayBindingsExternalComponent bind={this.external} />
+        <input bind={this.debouncedBind} debounce={2000} data-debounced-bind={this.debouncedBind} />
+        <button onclick={{ debouncedObject: '6969' }} debounce={2000} data-debounced-object={this.debouncedObject}> debounce object </button>
+        <button onclick={this.debouncedEventHandler} debounce={2000} data-debounced-event={this.debouncedEvent}> debounce event </button>
       </div>
     )
   }
