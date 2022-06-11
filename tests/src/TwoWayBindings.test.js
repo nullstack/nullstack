@@ -187,4 +187,22 @@ describe('TwoWayBindings', () => {
     expect(originalValue && updatedValue).toBeTruthy();
   });
 
+  test('debounce attribute should not be present in dom during prerender', async () => {
+    const element = await page.$('[data-debounced-event]:not([debounce])');
+    expect(element).toBeTruthy();
+  });
+
+  test('debounce attribute should not be present in dom during render', async () => {
+    await page.waitForSelector('[data-debounced-hydrated]')
+    const element = await page.$('[data-debounced-hydrated]:not([debounce])');
+    expect(element).toBeTruthy();
+  });
+
+  test('debounce attribute should not be present in dom during rerender', async () => {
+    await page.click('[data-debounced-rerender]:not([debounce])');
+    await page.waitForSelector('[data-debounced-rerender="2000"]:not([debounce])')
+    const element = await page.$('[data-debounced-rerender="2000"]:not([debounce])');
+    expect(element).toBeTruthy();
+  });
+
 });

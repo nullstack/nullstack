@@ -24,6 +24,7 @@ class TwoWayBindings extends Nullstack {
   debouncedBind = '69'
   debouncedObject = '69'
   debouncedEvent = '69'
+  debounceTime = 1000
 
   parse({ event, source: bind, callback }) {
     const normalized = event.target.value.replace(',', '').padStart(3, '0');
@@ -96,6 +97,8 @@ class TwoWayBindings extends Nullstack {
         <input bind={this.debouncedBind} debounce={2000} data-debounced-bind={this.debouncedBind} />
         <button onclick={{ debouncedObject: '6969' }} debounce={2000} data-debounced-object={this.debouncedObject}> debounce object </button>
         <button onclick={this.debouncedEventHandler} debounce={2000} data-debounced-event={this.debouncedEvent}> debounce event </button>
+        {this.hydrated && <input bind={this.debouncedBind} debounce={2000} data-debounced-hydrated />}
+        <button onclick={{ debounceTime: 2000 }} debounce={this.debounceTime} data-debounced-rerender={this.debounceTime}>rebounce</button>
       </div>
     )
   }
