@@ -11,8 +11,8 @@ const underscoredObject = {
 }
 
 function _underscored(value) {
-    this.e = value
-  }
+  this.e = value
+}
 
 class UnderscoredAttributes extends Nullstack {
 
@@ -21,6 +21,11 @@ class UnderscoredAttributes extends Nullstack {
   c = 0
   d = 0
   e = 0
+  f = 0
+
+  prepare() {
+    this._g = 1
+  }
 
   _underscoredMethod(value) {
     this.a = value
@@ -32,6 +37,10 @@ class UnderscoredAttributes extends Nullstack {
 
   notUnderscored = _underscored
 
+  _underscoredEvent() {
+    this.f = 1
+  }
+
   hydrate() {
     this._underscoredMethod(1)
     this._underscoredAttributeFunction(1)
@@ -42,10 +51,14 @@ class UnderscoredAttributes extends Nullstack {
     this.notUnderscored(1)
   }
 
+  setEventListener({ element }) {
+    element.addEventListener('click', this._underscoredEvent)
+  }
+
   render() {
     return (
-      <div data-a={this.a} data-b={this.b} data-c={this.c} data-d={this.d} data-e={this.e}>
-        <span>UnderscoredAttributes</span>
+      <div data-a={this.a} data-b={this.b} data-c={this.c} data-d={this.d} data-e={this.e} data-f={this.f} data-g={this._g}>
+        <button ref={this.setEventListener} data-hydrated={this.hydrated}>UnderscoredAttributes</button>
       </div>
     )
   }

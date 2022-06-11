@@ -68,9 +68,10 @@ class Nullstack {
       if (name === 'hydrated') continue
       if (name === 'terminated') continue
       if (name === 'key') continue
-      if (typeof this[name] !== 'function' && !name.startsWith('_') && name !== 'attributes') {
-        serialized[name] = this[name];
-      }
+      if (name === '_attributes') continue
+      if (name === '_scope') continue
+      if (typeof this[name] === 'function') continue
+      serialized[name] = this[name];
     }
     return serialized;
   }

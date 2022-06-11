@@ -36,4 +36,17 @@ describe('UnderscoredAttributes', () => {
     expect(element).toBeTruthy();
   });
 
+  test('this is bound to the instance on underscored functions even on events', async () => {
+    await page.waitForSelector('[data-hydrated]')
+    await page.click('[data-hydrated]')
+    await page.waitForSelector('[data-f="1"]')
+    const element = await page.$('[data-f="1"]');
+    expect(element).toBeTruthy();
+  });
+
+  test('underscored variables are serialized for hydration', async () => {
+    const element = await page.$('[data-g="1"]');
+    expect(element).toBeTruthy();
+  });
+
 });

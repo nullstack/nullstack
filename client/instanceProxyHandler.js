@@ -8,11 +8,14 @@ const instanceProxyHandler = {
   get(target, name) {
     if (name === '_isProxy') return true;
     if (target.constructor[name]?.name === '_invoke') return target.constructor[name].bind(target.constructor)
-    if (!target[name]?.name?.startsWith?.('_') && !name.startsWith('_') && typeof target[name] === 'function' && name !== 'constructor') {
+    if (typeof target[name] === 'function' && name !== 'constructor') {
+      const proxy = instanceProxies.get(target)
+      if (target[name]?.name?.startsWith?.('_') || name.startsWith('_')) {
+        return target[name].bind(proxy)
+      }
       const { [name]: named } = {
         [name]: (args) => {
           const context = generateContext({ ...target._attributes, ...args });
-          const proxy = instanceProxies.get(target)
           return target[name].call(proxy, context);
         }
       }
