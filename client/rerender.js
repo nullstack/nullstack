@@ -8,6 +8,7 @@ import generateTruthyString from '../shared/generateTruthyString';
 function updateAttributes(selector, currentAttributes, nextAttributes) {
   const attributeNames = Object.keys({ ...currentAttributes, ...nextAttributes });
   for (const name of attributeNames) {
+    if (name === 'debounce') continue
     if (name === 'html') {
       if (nextAttributes[name] !== currentAttributes[name]) {
         selector.innerHTML = nextAttributes[name];

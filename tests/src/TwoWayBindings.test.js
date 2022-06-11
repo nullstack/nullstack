@@ -143,12 +143,66 @@ describe('TwoWayBindings', () => {
     const value = await page.$eval('[name="externalComponent"]', (element) => element.value);
     expect(value).toMatch('external');
   });
-  
+
   test('bind should rerender in external components', async () => {
     await page.type('[data-value]', 'new');
     await page.waitForSelector('[data-value="external"]')
     const value = await page.$eval('[name="externalComponent"]', (element) => element.value);
     expect(value).toMatch('newexternal');
+  });
+
+  test('bind can be debounced', async () => {
+    await page.type('[data-debounced-bind]', '69');
+    await page.waitForTimeout(1000)
+    const originalValue = await page.$('[data-debounced-bind="69"]');
+    await page.waitForTimeout(1500)
+    const updatedValue = await page.$('[data-debounced-bind="6969"]');
+    expect(originalValue && updatedValue).toBeTruthy();
+  });
+
+  test('object events can be debounced', async () => {
+    await page.click('[data-debounced-object]');
+    await page.waitForTimeout(1000)
+    const originalValue = await page.$('[data-debounced-object="69"]');
+    await page.waitForTimeout(1500)
+    const updatedValue = await page.$('[data-debounced-object="6969"]');
+    expect(originalValue && updatedValue).toBeTruthy();
+  });
+
+  test('events can be debounced', async () => {
+    await page.click('[data-debounced-event]');
+    await page.waitForTimeout(1000)
+    const originalValue = await page.$('[data-debounced-event="69"]');
+    await page.waitForTimeout(1500)
+    const updatedValue = await page.$('[data-debounced-event="6969"]');
+    expect(originalValue && updatedValue).toBeTruthy();
+  });
+
+  test('debounced events keep the reference to the original event', async () => {
+    await page.click('[data-debounced-event]');
+    await page.waitForTimeout(1000)
+    const originalValue = await page.$('[data-debounced-event="69"]');
+    await page.waitForTimeout(1500)
+    const updatedValue = await page.$('[data-debounced-event="6969"]');
+    expect(originalValue && updatedValue).toBeTruthy();
+  });
+
+  test('debounce attribute should not be present in dom during prerender', async () => {
+    const element = await page.$('[data-debounced-event]:not([debounce])');
+    expect(element).toBeTruthy();
+  });
+
+  test('debounce attribute should not be present in dom during render', async () => {
+    await page.waitForSelector('[data-debounced-hydrated]')
+    const element = await page.$('[data-debounced-hydrated]:not([debounce])');
+    expect(element).toBeTruthy();
+  });
+
+  test('debounce attribute should not be present in dom during rerender', async () => {
+    await page.click('[data-debounced-rerender]:not([debounce])');
+    await page.waitForSelector('[data-debounced-rerender="2000"]:not([debounce])')
+    const element = await page.$('[data-debounced-rerender="2000"]:not([debounce])');
+    expect(element).toBeTruthy();
   });
 
 });

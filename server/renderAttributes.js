@@ -3,6 +3,7 @@ import generateTruthyString from "../shared/generateTruthyString";
 export default function renderAttributes(attributes) {
   let element = ''
   for (let name in attributes) {
+    if (name === 'debounce') continue
     if (!name.startsWith('on') && name !== 'html') {
       let attribute = attributes[name];
       if ((name === 'class' || name === 'style') && Array.isArray(attributes[name])) {

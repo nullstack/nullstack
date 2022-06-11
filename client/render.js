@@ -27,6 +27,7 @@ export default function render(node, options) {
   ref(node, node.element)
 
   for (let name in node.attributes) {
+    if (name === 'debounce') continue
     if (name === 'html') {
       node.element.innerHTML = node.attributes[name];
       node.head || anchorableElement(node.element);
