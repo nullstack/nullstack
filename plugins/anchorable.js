@@ -1,3 +1,5 @@
+import noop from '../shared/noop'
+
 function match(node) {
   return (
     node &&
@@ -10,7 +12,7 @@ function match(node) {
 
 function transform({ node }) {
   if (!match(node)) return
-  node.attributes.onclick ??= true
+  node.attributes.onclick ??= noop
 }
 
 export default { transform, client: true }

@@ -205,4 +205,10 @@ describe('TwoWayBindings', () => {
     expect(element).toBeTruthy();
   });
 
+  test('custom bindable components receive a no op function if no onchange is passed to them', async () => {
+    await page.waitForSelector('[data-onchange="noop"]')
+    const element = await page.$('[data-onchange="noop"]');
+    expect(element).toBeTruthy();
+  });
+
 });

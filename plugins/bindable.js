@@ -1,3 +1,5 @@
+import noop from '../shared/noop'
+
 function match(node) {
   return node?.attributes?.bind !== undefined
 }
@@ -16,11 +18,11 @@ function transform({ node, environment }) {
   node.attributes.name = node.attributes.name || node.attributes.bind;
   if (environment.client) {
     if (node.attributes.type === 'checkbox' || node.attributes.type === 'radio') {
-      node.attributes.onclick ??= true;
+      node.attributes.onclick ??= noop;
     } else if (node.type !== 'input' && node.type !== 'textarea') {
-      node.attributes.onchange ??= true;
+      node.attributes.onchange ??= noop;
     } else {
-      node.attributes.oninput ??= true;
+      node.attributes.oninput ??= noop;
     }
   }
 }

@@ -11,23 +11,25 @@ module.exports = function (source) {
   traverse(ast, {
     ClassMethod(path) {
       if (path.node.key.name.startsWith('render')) {
-        traverse(path.node, {
-          JSXIdentifier(subpath) {
-            if (/^[A-Z]/.test(subpath.node.name)) {
-              if (!path.scope.hasBinding(subpath.node.name)) {
-                const start = path.node.body.body[0].start;
-                if (!positions.includes(start)) {
-                  positions.push(start);
-                }
-                if (!injections[start]) {
-                  injections[start] = [];
-                }
-                if (!injections[start].includes(subpath.node.name)) {
-                  injections[start].push(subpath.node.name);
-                }
+        function identify(subpath) {
+          if (/^[A-Z]/.test(subpath.node.name)) {
+            if (!path.scope.hasBinding(subpath.node.name)) {
+              const start = path.node.body.body[0].start;
+              if (!positions.includes(start)) {
+                positions.push(start);
+              }
+              if (!injections[start]) {
+                injections[start] = [];
+              }
+              if (!injections[start].includes(subpath.node.name)) {
+                injections[start].push(subpath.node.name);
               }
             }
-          },
+          }
+        }
+        traverse(path.node, {
+          JSXIdentifier: identify,
+          Identifier: identify,
         }, path.scope, path);
       }
     }

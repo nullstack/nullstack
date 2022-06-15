@@ -1,5 +1,6 @@
 import router from './router'
 import { camelize } from '../shared/string';
+import noop from '../shared/noop'
 
 export const eventCallbacks = new WeakMap()
 export const eventSubjects = new WeakMap()
@@ -58,7 +59,7 @@ export function generateCallback(selector, name) {
           object[property] = event.target[valueName];
         }
       }
-      if (subject[name] === true) return
+      if (subject[name] === noop) return
       if (Array.isArray(subject[name])) {
         for (const subcallback of subject[name]) {
           executeEvent(subcallback, subject, event, data)
