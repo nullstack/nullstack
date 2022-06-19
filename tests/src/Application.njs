@@ -62,9 +62,10 @@ class Application extends Nullstack {
 
   prepare(context) {
     context.string = 'nullstack';
+    context.refInstanceCount = 0
   }
 
-  render({ project, page, environment }) {
+  render({ project, page, environment, refInstanceCount }) {
     return (
       <body data-window={WindowDependency.key}>
         <h1> {project.name} </h1>
@@ -125,7 +126,7 @@ class Application extends Nullstack {
         <MetatagState route="/metatag-state" />
         <JavaScriptExtension route="/javascript-extension" />
         <TypeScriptExtension route="/typescript-extension" generic />
-        <Refs route="/refs" />
+        <Refs route="/refs" key={'refs' + refInstanceCount} />
         <OptimizedEvents route="/optimized-events" />
         <DynamicHead route="/dynamic-head" />
         <TextObserver route="/text-observer" />

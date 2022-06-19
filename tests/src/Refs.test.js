@@ -1,6 +1,6 @@
 describe('Refs', () => {
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     await page.goto('http://localhost:6969/');
     await page.click('[href="/refs"]')
   });
@@ -36,8 +36,8 @@ describe('Refs', () => {
   });
 
   test('refs functions only run after the element is appended do DOM', async () => {
-    await page.waitForSelector('[data-dom]');
-    const element = await page.$('[data-dom]');
+    await page.waitForSelector('[data-dom="0"]');
+    const element = await page.$('[data-dom="0"]');
     expect(element).toBeTruthy();
   });
 
@@ -47,5 +47,20 @@ describe('Refs', () => {
     expect(element).toBeTruthy();
   });
 
+  test('refs functions run when the ref object changes', async () => {
+    await page.waitForSelector('[data-dom="0"]');
+    await page.click("button")
+    await page.waitForSelector('[data-dom="1"]');
+    const element = await page.$('[data-dom="1"]');
+    expect(element).toBeTruthy();
+  });
+
+  test('refs are reassigned when the ref object changes ', async () => {
+    await page.waitForSelector('[data-dom="0"]');
+    await page.click("button")
+    await page.waitForSelector('[data-id="hydrate-element"][data-instance="1"]');
+    const element = await page.$('[data-id="hydrate-element"][data-instance="1"]');
+    expect(element).toBeTruthy();
+  });
 
 });
