@@ -1,5 +1,15 @@
 import Nullstack from 'nullstack';
 
+class ShouldNotProxy {
+
+  something = false
+
+  setSomething(value) {
+    this.something = value
+  }
+
+}
+
 class NestedProxy extends Nullstack {
 
   array = [
@@ -19,7 +29,14 @@ class NestedProxy extends Nullstack {
     }
   }
 
-  render({ array, object }) {
+  hydrate(context) {
+    this.shouldNotProxy = new ShouldNotProxy()
+    this.shouldNotProxy.setSomething(true)
+    context.shouldNotProxy = new ShouldNotProxy()
+    context.shouldNotProxy.setSomething(true)
+  }
+
+  render({ array, object, shouldNotProxy }) {
     if (!this.hydrated) return false
     return (
       <div
@@ -28,12 +45,14 @@ class NestedProxy extends Nullstack {
         data-array-zero-object={!!this.array[0].object._isProxy}
         data-object={!!this.object._isProxy}
         data-object-array={!!this.object.array._isProxy}
+        data-should-not-proxy={!this.shouldNotProxy._isProxy}
 
         data-context-array={!!array._isProxy}
         data-context-array-zero={!!array[0]._isProxy}
         data-context-array-zero-object={!!array[0].object._isProxy}
         data-context-object={!!object._isProxy}
         data-context-object-array={!!object.array._isProxy}
+        data-context-should-not-proxy={!shouldNotProxy._isProxy}
       />
     )
   }

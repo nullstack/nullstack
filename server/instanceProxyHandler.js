@@ -1,7 +1,7 @@
 const instanceProxyHandler = {
   get(target, name) {
     if (typeof target[name] === 'function' && name !== 'constructor') {
-      if (target[name]?.name?.startsWith?.('_') || name?.startsWith?.('_')) {
+      if (name.startsWith('_')) {
         return target[name].bind(target)
       }
       return (args) => {

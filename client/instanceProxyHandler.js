@@ -10,7 +10,7 @@ const instanceProxyHandler = {
     if (target.constructor[name]?.name === '_invoke') return target.constructor[name].bind(target.constructor)
     if (typeof target[name] === 'function' && name !== 'constructor') {
       const proxy = instanceProxies.get(target)
-      if (target[name]?.name?.startsWith?.('_') || name.startsWith('_')) {
+      if (name.startsWith('_')) {
         return target[name].bind(proxy)
       }
       const { [name]: named } = {
@@ -24,7 +24,7 @@ const instanceProxyHandler = {
     return Reflect.get(...arguments);
   },
   set(target, name, value) {
-    if (!value?.name?.startsWith?.('_') && !name.startsWith('_')) {
+    if (!name.startsWith('_')) {
       target[name] = generateObjectProxy(name, value);
       client.update();
     } else {

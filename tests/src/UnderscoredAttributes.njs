@@ -10,8 +10,8 @@ const underscoredObject = {
   }
 }
 
-function _underscored(value) {
-  this.e = value
+function _underscored({ string, value }) {
+  this.e = string === 'nullstack' && value
 }
 
 class UnderscoredAttributes extends Nullstack {
@@ -48,7 +48,7 @@ class UnderscoredAttributes extends Nullstack {
     this._underscoredAfterConstructor(1)
     this._underscoredObject = underscoredObject
     this._underscoredObject.withoutUnderscore(1)
-    this.notUnderscored(1)
+    this.notUnderscored({ value: 1 })
   }
 
   setEventListener({ element }) {
