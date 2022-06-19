@@ -1,7 +1,7 @@
 import { isFalse, isText } from '../shared/nodes';
 import { anchorableElement } from './anchorableNode';
 import { eventCallbacks, eventSubjects, generateCallback } from './events'
-import ref from './ref'
+import { ref } from './ref'
 import generateTruthyString from '../shared/generateTruthyString';
 
 export default function render(node, options) {
@@ -24,7 +24,7 @@ export default function render(node, options) {
     node.element = document.createElement(node.type);
   }
 
-  ref(node, node.element)
+  ref(node.attributes, node.element)
 
   for (let name in node.attributes) {
     if (name === 'debounce') continue

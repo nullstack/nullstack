@@ -1,4 +1,4 @@
-import ref from './ref';
+import { ref } from './ref';
 import { isFalse } from '../shared/nodes';
 import { anchorableElement } from './anchorableNode';
 import client from './client';
@@ -10,7 +10,7 @@ function hydrateBody(selector, node) {
     anchorableElement(selector);
   }
   node.element = selector
-  ref(node, selector)
+  ref(node.attributes, selector)
   for (const element of selector.childNodes) {
     if ((element.tagName === 'TEXTAREA' || element.tagName === 'textarea') && element.childNodes.length === 0) {
       element.appendChild(document.createTextNode(''));

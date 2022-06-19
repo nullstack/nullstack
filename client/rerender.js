@@ -4,12 +4,15 @@ import client from './client';
 import render from './render';
 import { generateCallback, eventCallbacks, eventSubjects } from './events'
 import generateTruthyString from '../shared/generateTruthyString';
+import { reref } from './ref';
 
 function updateAttributes(selector, currentAttributes, nextAttributes) {
   const attributeNames = Object.keys({ ...currentAttributes, ...nextAttributes });
   for (const name of attributeNames) {
     if (name === 'debounce') continue
-    if (name === 'html') {
+    if (name === 'ref') {
+      reref(nextAttributes, selector)
+    } else if (name === 'html') {
       if (nextAttributes[name] !== currentAttributes[name]) {
         selector.innerHTML = nextAttributes[name];
         anchorableElement(selector);
