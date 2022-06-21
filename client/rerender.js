@@ -10,7 +10,7 @@ function updateAttributes(selector, currentAttributes, nextAttributes) {
   const attributeNames = Object.keys({ ...currentAttributes, ...nextAttributes });
   for (const name of attributeNames) {
     if (name === 'debounce') continue
-    if (name === 'ref') {
+    if (name === 'ref' && nextAttributes === undefined) {
       reref(nextAttributes, selector)
     } else if (name === 'html') {
       if (nextAttributes[name] !== currentAttributes[name]) {
