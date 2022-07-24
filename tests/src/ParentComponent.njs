@@ -1,8 +1,8 @@
 import Nullstack from 'nullstack';
 
 class ParentComponent extends Nullstack {
-  
-  static async getParentThis() {
+
+  static async getParentThis(context) {
     return this.name;
   }
 

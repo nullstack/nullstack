@@ -16,6 +16,7 @@ import registry from './registry';
 import generateRobots from './robots';
 import template from './template';
 import { generateServiceWorker } from './worker';
+import reqres from './reqres'
 
 if (!global.fetch) {
   global.fetch = fetch;
@@ -197,6 +198,8 @@ server.start = function () {
     if (request.originalUrl.split('?')[0].indexOf('.') > -1) {
       return next();
     }
+    reqres.request = request
+    reqres.response = response
     const scope = await prerender(request, response);
     if (!response.headersSent) {
       const status = scope.context.page.status;

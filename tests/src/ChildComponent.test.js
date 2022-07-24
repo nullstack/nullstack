@@ -19,7 +19,7 @@ describe('ChildComponent', () => {
     expect(element).toBeTruthy();
   });
 
-  test('inherited server functions are bound to the class ssr' , async () => {
+  test('inherited server functions are bound to the class ssr', async () => {
     const element = await page.$('[data-parent-this]');
     expect(element).toBeTruthy();
   });
@@ -30,9 +30,33 @@ describe('ChildComponent', () => {
     expect(element).toBeTruthy();
   });
 
-  test('inherited server functions are bound to the class spa' , async () => {
+  test('inherited server functions are bound to the class spa', async () => {
     await page.waitForSelector('[data-hydrated-parent-this]');
     const element = await page.$('[data-hydrated-parent-this]');
+    expect(element).toBeTruthy();
+  });
+
+  test('static inherited server functions are bound to the original class spa', async () => {
+    await page.waitForSelector('[data-static-hydrated-parent-this]');
+    const element = await page.$('[data-static-hydrated-parent-this]');
+    expect(element).toBeTruthy();
+  });
+
+  test('static inherited server functions are bound to the original class ssr', async () => {
+    await page.waitForSelector('[data-static-parent-this]');
+    const element = await page.$('[data-static-parent-this]');
+    expect(element).toBeTruthy();
+  });
+
+  test('static server functions are bound to the class in spa', async () => {
+    await page.waitForSelector('[data-static-hydrated-child-this]');
+    const element = await page.$('[data-static-hydrated-child-this]');
+    expect(element).toBeTruthy();
+  });
+
+  test('static server functions are bound to the class in srs', async () => {
+    await page.waitForSelector('[data-static-child-this]');
+    const element = await page.$('[data-static-child-this]');
     expect(element).toBeTruthy();
   });
 

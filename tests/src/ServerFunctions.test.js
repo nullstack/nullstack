@@ -66,4 +66,16 @@ describe('ServerFunctions', () => {
     expect(element).toBeTruthy();
   });
 
+  test('static server functions receive the context on spa', async () => {
+    await page.waitForSelector('[data-hydrated-original-url]');
+    const element = await page.$('[data-hydrated-original-url]');
+    expect(element).toBeTruthy();
+  });
+
+  test('static server functions receive the context on ssr', async () => {
+    await page.waitForSelector('[data-original-url]');
+    const element = await page.$('[data-original-url]');
+    expect(element).toBeTruthy();
+  });
+
 });
