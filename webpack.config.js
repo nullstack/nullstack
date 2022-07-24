@@ -117,6 +117,7 @@ function server(env, argv) {
   const minimize = !isDev;
   const plugins = []
   return {
+    name: 'server',
     mode: argv.environment,
     entry: './server.js',
     output: {
@@ -240,6 +241,8 @@ function client(env, argv) {
     plugins.push(new HotModuleReplacementPlugin())
   }
   return {
+    name: 'client',
+    dependencies: ['server'],
     infrastructureLogging: {
       level: 'none',
     },
