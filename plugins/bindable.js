@@ -6,7 +6,7 @@ function match(node) {
 
 function transform({ node, environment }) {
   if (!match(node)) return;
-  const object = node.attributes.bind.object;
+  const object = node.attributes.bind.object ?? {};
   const property = node.attributes.bind.property;
   if (node.type === 'textarea') {
     node.children = [object[property]];
