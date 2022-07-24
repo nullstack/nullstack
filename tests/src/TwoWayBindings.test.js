@@ -211,4 +211,9 @@ describe('TwoWayBindings', () => {
     expect(element).toBeTruthy();
   });
 
+  test('binding to nested undefined sets the value to an empty string', async () => {
+    const value = await page.$eval('[data-undeclared-nested]', (element) => element.value);
+    expect(value).toMatch('');
+  });
+
 });
