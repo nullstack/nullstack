@@ -52,10 +52,14 @@ function getPort(port) {
 }
 
 async function start({ input, port, env, mode = 'spa', hot }) {
+  const environment = 'development'
+  console.log(` 🚀️ Starting your application in ${environment} mode...`);
   loadEnv(env)
-  const { setLogLevel } = require('webpack/hot/log')
   const WebpackDevServer = require('webpack-dev-server');
-  setLogLevel('none')
+  const { setLogLevel: setClientLogLevel } = require('webpack/hot/log')
+  setClientLogLevel('none')
+  // const { setLogLevel: setServerLogLevel } = require('webpack-dev-server/client/utils/log')
+  // setServerLogLevel('none')
   process.env['NULLSTACK_ENVIRONMENT_MODE'] = mode
   process.env['NULLSTACK_SERVER_PORT'] = getPort(port)
   const ports = await getFreePorts()
@@ -65,7 +69,8 @@ async function start({ input, port, env, mode = 'spa', hot }) {
     hot: !!hot,
     open: false,
     devMiddleware: {
-      index: false
+      index: false,
+      stats: 'none'
     },
     client: {
       overlay: { errors: true, warnings: false },
@@ -76,17 +81,34 @@ async function start({ input, port, env, mode = 'spa', hot }) {
       context: () => true,
       target: `http://localhost:${process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT']}`
     },
+    setupMiddlewares: (middlewares, devServer) => {
+      if (!devServer) {
+        throw new Error('webpack-dev-server is not defined');
+      }
+      middlewares.unshift((req, res, next) => {
+        if (req.originalUrl.indexOf('.hot-update.') === -1) {
+          if (req.originalUrl.startsWith('/nullstack/')) {
+            console.log(`  ⚙️ [${req.method}] ${req.originalUrl}`)
+          } else {
+            console.log(`  🕸️ [${req.method}] ${req.originalUrl}`)
+          }
+        }
+        next()
+      });
+      return middlewares;
+    },
     webSocketServer: require.resolve('./socket'),
     port: process.env['NULLSTACK_SERVER_PORT']
   };
-  const environment = 'development'
   const clientCompiler = getCompiler({ environment, input });
   const server = new WebpackDevServer(devServerOptions, clientCompiler);
   const serverCompiler = getServerCompiler({ environment, input });
   let once = false
   serverCompiler.watch({}, (error, stats) => {
     if (!once) {
-      server.start();
+      server.startCallback(() => {
+        console.log('\x1b[36m%s\x1b[0m', ` ✅️ Your application is ready at http://localhost:${process.env['NULLSTACK_SERVER_PORT']}\n`);
+      });
       once = true
     }
     if (stats.hasErrors()) {

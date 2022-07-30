@@ -7,6 +7,12 @@ const NodemonPlugin = require('nodemon-webpack-plugin');
 
 const buildKey = crypto.randomBytes(20).toString('hex');
 
+customConsole = new Proxy({}, {
+  get() {
+    return () => { }
+  }
+})
+
 function getLoader(loader) {
   const loaders = path.resolve('./node_modules/nullstack/loaders');
   return path.join(loaders, loader);
@@ -118,6 +124,9 @@ function server(env, argv) {
   const plugins = []
   return {
     mode: argv.environment,
+    infrastructureLogging: {
+      console: customConsole,
+    },
     entry: './server.js',
     output: {
       path: path.join(dir, folder),
@@ -234,7 +243,7 @@ function client(env, argv) {
     new MiniCssExtractPlugin({
       filename: "client.css",
       chunkFilename: '[chunkhash].client.css'
-    })
+    }),
   ]
   if (isDev) {
     plugins.push(new NodemonPlugin({
@@ -247,7 +256,7 @@ function client(env, argv) {
   }
   return {
     infrastructureLogging: {
-      level: 'none',
+      console: customConsole,
     },
     mode: argv.environment,
     entry: './client.js',
