@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const crypto = require("crypto");
 const { readdirSync } = require('fs');
-const { HotModuleReplacementPlugin } = require('webpack')
+const NodemonPlugin = require('nodemon-webpack-plugin');
 
 const buildKey = crypto.randomBytes(20).toString('hex');
 
@@ -117,7 +117,6 @@ function server(env, argv) {
   const minimize = !isDev;
   const plugins = []
   return {
-    name: 'server',
     mode: argv.environment,
     entry: './server.js',
     output: {
@@ -238,11 +237,15 @@ function client(env, argv) {
     })
   ]
   if (isDev) {
-    plugins.push(new HotModuleReplacementPlugin())
+    plugins.push(new NodemonPlugin({
+      ext: '*',
+      watch: [".env", ".env.*", './.development/*.*'],
+      script: './.development/server.js',
+      nodeArgs: ['--enable-source-maps'],
+      quiet: true
+    }))
   }
   return {
-    name: 'client',
-    dependencies: ['server'],
     infrastructureLogging: {
       level: 'none',
     },

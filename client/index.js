@@ -109,9 +109,18 @@ export default class Nullstack {
 
 if (module.hot) {
   const socket = new WebSocket('ws' + window.location.origin.slice(4) + '/ws');
-  socket.onmessage = function (e) {
-    if (e.data.indexOf('still-ok') > -1) {
-      window.location.reload()
+  window.lastHash
+  socket.onmessage = async function (e) {
+    const data = JSON.parse(e.data)
+    if (data.type === 'NULLSTACK_SERVER_STARTED') {
+      window.needsReload && window.location.reload()
+    } else if (data.type === 'hash') {
+      const newHash = data.data.slice(20)
+      if (newHash === window.lastHash) {
+        window.needsReload = true
+      } else {
+        window.lastHash = newHash
+      }
     }
   };
   Nullstack.updateInstancesPrototypes = function updateInstancesPrototypes(hash, klass) {

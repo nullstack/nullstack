@@ -21,74 +21,76 @@ function getServerCompiler(options) {
   return webpack(getConfig(options)[0])
 }
 
-function getClientCompiler(options) {
-  return webpack(getConfig(options)[1])
-}
-
-async function start({ input, port, env, mode = 'ssr', hot }) {
-  const environment = 'development';
-  const serverCompiler = getServerCompiler({ environment, input });
-  let clientStarted = false
+function loadEnv(env) {
   let envPath = '.env'
   if (env) {
     envPath += `.${process.env.NULLSTACK_ENVIRONMENT_NAME}`
   }
   dotenv.config({ path: envPath })
-  if (!port) {
-    port = process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
-  }
-  process.env['NULLSTACK_ENVIRONMENT_MODE'] = mode
-  console.log(` 🚀️ Starting your application in ${environment} mode...`);
-  const WebpackDevServer = require('webpack-dev-server');
+}
+
+function getFreePorts() {
+  return new Promise((resolve, reject) => {
+    const app1 = require('express')();
+    const app2 = require('express')();
+    const server1 = app1.listen(0, () => {
+      const server2 = app2.listen(0, () => {
+        const ports = [
+          server1.address().port,
+          server2.address().port
+        ]
+        server1.close()
+        server2.close()
+        resolve(ports)
+      });
+    });
+  })
+}
+
+function getPort(port) {
+  return port || process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
+}
+
+async function start({ input, port, env, mode = 'spa', hot }) {
+  loadEnv(env)
   const { setLogLevel } = require('webpack/hot/log')
+  const WebpackDevServer = require('webpack-dev-server');
   setLogLevel('none')
+  process.env['NULLSTACK_ENVIRONMENT_MODE'] = mode
+  process.env['NULLSTACK_SERVER_PORT'] = getPort(port)
+  const ports = await getFreePorts()
+  process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT'] = ports[0]
+  process.env['NULSTACK_SERVER_SOCKET_PORT_YOU_SHOULD_NOT_CARE_ABOUT'] = ports[1]
+  const devServerOptions = {
+    hot: !!hot,
+    open: false,
+    devMiddleware: {
+      index: false
+    },
+    client: {
+      overlay: { errors: true, warnings: false },
+      logging: 'none',
+      progress: false,
+    },
+    proxy: {
+      context: () => true,
+      target: `http://localhost:${process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT']}`
+    },
+    webSocketServer: require.resolve('./socket'),
+    port: process.env['NULLSTACK_SERVER_PORT']
+  };
+  const environment = 'development'
+  const clientCompiler = getCompiler({ environment, input });
+  const server = new WebpackDevServer(devServerOptions, clientCompiler);
+  const serverCompiler = getServerCompiler({ environment, input });
+  let once = false
   serverCompiler.watch({}, (error, stats) => {
-    if (stats.hasErrors()) {
-      console.log(`\n 💥️ There is an error preventing compilation`);
-    } else {
-      console.log('\x1b[36m%s\x1b[0m', `\n ✅️ Your application is ready at http://localhost:${port}\n`);
-    }
-    const bundlePath = path.resolve(process.cwd(), '.development/server.js')
-    delete require.cache[require.resolve(bundlePath)]
-    if (!clientStarted) {
-      clientStarted = true
-      const devServerOptions = {
-        hot: !!hot,
-        open: false,
-        devMiddleware: {
-          index: false
-        },
-        client: {
-          overlay: true,
-          logging: 'none',
-          progress: false,
-        },
-        setupMiddlewares: (middlewares, devServer) => {
-          if (!devServer) {
-            throw new Error('webpack-dev-server is not defined');
-          }
-          middlewares.unshift((req, res, next) => {
-            if (req.originalUrl.indexOf('.hot-update.') === -1) {
-              if (req.originalUrl.startsWith('/nullstack/')) {
-                console.log(`  ⚙️ [${req.method}] ${req.originalUrl}`)
-              } else {
-                console.log(`  🕸️ [${req.method}] ${req.originalUrl}`)
-              }
-            }
-            const serverBundle = require(bundlePath)
-            const server = serverBundle.default.server
-            server.less = true
-            server.port = port
-            server.start()
-            server(req, res, next)
-          });
-          return middlewares;
-        },
-        port
-      };
-      const clientCompiler = getClientCompiler({ environment, input });
-      const server = new WebpackDevServer(devServerOptions, clientCompiler);
+    if (!once) {
       server.start();
+      once = true
+    }
+    if (stats.hasErrors()) {
+      console.log(stats.toString({ colors: true }))
     }
   });
 }

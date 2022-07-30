@@ -11,12 +11,12 @@ import { generateFile } from './files';
 import generateManifest from './manifest';
 import { prerender } from './prerender';
 import printError from './printError';
-import project from './project';
 import registry from './registry';
 import generateRobots from './robots';
 import template from './template';
 import { generateServiceWorker } from './worker';
 import reqres from './reqres'
+import WebSocket from 'ws';
 
 if (!global.fetch) {
   global.fetch = fetch;
@@ -24,7 +24,7 @@ if (!global.fetch) {
 
 const server = express();
 
-server.port ??= process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
+server.port = process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT'] || process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
 
 let contextStarted = false
 let serverStarted = false
@@ -215,9 +215,11 @@ server.start = function () {
     }
 
     server.listen(server.port, () => {
-      if (environment.production) {
-        const name = project.name ? project.name : 'Nullstack'
-        console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${name} is ready at http://127.0.0.1:${server.port}\n`);
+      if (environment.development) {
+        const socket = new WebSocket(`ws://localhost:${process.env['NULLSTACK_SERVER_PORT']}/ws`);
+        socket.onopen = async function (e) {
+          socket.send('{"type":"NULLSTACK_SERVER_STARTED"}')
+        }
       }
     });
   }
