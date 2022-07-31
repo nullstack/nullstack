@@ -56,17 +56,16 @@ async function start({ input, port, env, mode = 'spa', hot }) {
   console.log(` 🚀️ Starting your application in ${environment} mode...`);
   loadEnv(env)
   const WebpackDevServer = require('webpack-dev-server');
-  const { setLogLevel: setClientLogLevel } = require('webpack/hot/log')
-  setClientLogLevel('none')
-  // const { setLogLevel: setServerLogLevel } = require('webpack-dev-server/client/utils/log')
-  // setServerLogLevel('none')
+  const { setLogLevel } = require('webpack/hot/log')
+  setLogLevel('none')
   process.env['NULLSTACK_ENVIRONMENT_MODE'] = mode
   process.env['NULLSTACK_SERVER_PORT'] = getPort(port)
   const ports = await getFreePorts()
   process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT'] = ports[0]
   process.env['NULSTACK_SERVER_SOCKET_PORT_YOU_SHOULD_NOT_CARE_ABOUT'] = ports[1]
+  process.env['NULLSTACK_ENVIRONMENT_HOT'] = (!!hot).toString()
   const devServerOptions = {
-    hot: !!hot,
+    hot: 'only',
     open: false,
     devMiddleware: {
       index: false,
