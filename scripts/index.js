@@ -75,10 +75,13 @@ async function start({ input, port, env, mode = 'spa', hot }) {
       overlay: { errors: true, warnings: false },
       logging: 'none',
       progress: false,
+      reconnect: true
     },
     proxy: {
       context: () => true,
-      target: `http://localhost:${process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT']}`
+      target: `http://localhost:${process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT']}`,
+      proxyTimeout: 10 * 60 * 1000,
+      timeout: 10 * 60 * 1000,
     },
     setupMiddlewares: (middlewares, devServer) => {
       if (!devServer) {

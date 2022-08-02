@@ -35,6 +35,7 @@ module.exports = function (source) {
   }
   output += `\nNullstack.registry["${hash}"] = ${klassName};`
   output += `\nNullstack.registry["${legacyHash}"] = ${klassName};`
+  output += `\n${klassName}.hash = "${hash}";`
   output += `\n${klassName}.bindStaticFunctions(${klassName});`
   return output;
 }
