@@ -8,13 +8,14 @@ import context from './context';
 import environment from './environment';
 import generator from './generator';
 import instanceProxyHandler from './instanceProxyHandler';
-import invoke from './invoke';
 import project from './project';
 import registry from './registry';
 import secrets from './secrets';
 import server from './server';
 import settings from './settings';
 import worker from './worker';
+import reqres from './reqres'
+import { generateContext } from './context';
 
 globalThis.window = {}
 
@@ -31,9 +32,39 @@ class Nullstack {
 
   static registry = registry;
   static element = element;
-  static invoke = invoke;
   static fragment = fragment;
   static use = useServerPlugins;
+
+  static bindStaticFunctions(klass) {
+    let parent = klass
+    while (parent.name !== 'Nullstack') {
+      const props = Object.getOwnPropertyNames(parent)
+      for (const prop of props) {
+        const underscored = prop.startsWith('_')
+        if (typeof klass[prop] === 'function') {
+          if (!underscored && !registry[`${parent.hash}.${prop}`]) {
+            return
+          }
+          const propName = `__NULLSTACK_${prop}`
+          if (!klass[propName]) {
+            klass[propName] = klass[prop]
+          }
+          function _invoke(...args) {
+            if (underscored) {
+              return klass[propName].call(klass, ...args);
+            }
+            const params = args[0] || {}
+            const { request, response } = reqres
+            const context = generateContext({ request, response, ...params });
+            return klass[propName].call(klass, context);
+          }
+          klass[prop] = _invoke
+          klass.prototype[prop] = _invoke
+        }
+      }
+      parent = Object.getPrototypeOf(parent)
+    }
+  }
 
   static start(Starter) {
     if (this.name.indexOf('Nullstack') > -1) {
@@ -49,9 +80,7 @@ class Nullstack {
   terminated = false
   key = null
 
-  constructor(scope) {
-    this._request = () => scope.request;
-    this._response = () => scope.response;
+  constructor() {
     const methods = getProxyableMethods(this);
     const proxy = new Proxy(this, instanceProxyHandler);
     for (const method of methods) {

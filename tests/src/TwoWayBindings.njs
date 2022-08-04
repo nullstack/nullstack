@@ -84,6 +84,7 @@ class TwoWayBindings extends Nullstack {
         <button onclick={{ boolean: false }} data-checkbox>boolean false</button>
         <input bind={this.object.count} name="count" />
         <input bind={this.undeclared} name="undeclared" data-undeclared />
+        <input bind={this.undeclared?.nested} name="undeclared-nested" data-undeclared-nested />
         <input bind={this[this.keyName]} name="composedComputed" />
         <input bind={this[['by', 'Key', 'Name'].join('')]} name="logicalComputed" />
         <input bind={this['byKeyName']} name="literalComputed" />

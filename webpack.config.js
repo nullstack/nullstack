@@ -3,9 +3,15 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const crypto = require("crypto");
 const { readdirSync } = require('fs');
-const { HotModuleReplacementPlugin } = require('webpack')
+const NodemonPlugin = require('nodemon-webpack-plugin');
 
 const buildKey = crypto.randomBytes(20).toString('hex');
+
+customConsole = new Proxy({}, {
+  get() {
+    return () => { }
+  }
+})
 
 function getLoader(loader) {
   const loaders = path.resolve('./node_modules/nullstack/loaders');
@@ -118,6 +124,9 @@ function server(env, argv) {
   const plugins = []
   return {
     mode: argv.environment,
+    infrastructureLogging: {
+      console: customConsole,
+    },
     entry: './server.js',
     output: {
       path: path.join(dir, folder),
@@ -234,14 +243,20 @@ function client(env, argv) {
     new MiniCssExtractPlugin({
       filename: "client.css",
       chunkFilename: '[chunkhash].client.css'
-    })
+    }),
   ]
   if (isDev) {
-    plugins.push(new HotModuleReplacementPlugin())
+    plugins.push(new NodemonPlugin({
+      ext: '*',
+      watch: [".env", ".env.*", './.development/*.*'],
+      script: './.development/server.js',
+      nodeArgs: ['--enable-source-maps'],
+      quiet: true
+    }))
   }
   return {
     infrastructureLogging: {
-      level: 'none',
+      console: customConsole,
     },
     mode: argv.environment,
     entry: './client.js',
