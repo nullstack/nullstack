@@ -105,13 +105,12 @@ async function start({ input, port, env, mode = 'spa', hot }) {
   };
   const clientCompiler = getCompiler({ environment, input });
   const server = new WebpackDevServer(devServerOptions, clientCompiler);
-  let once = false
-  if (!once) {
+  const portChecker = require('express')().listen(process.env['NULLSTACK_SERVER_PORT'], () => {
+    portChecker.close()
     server.startCallback(() => {
       console.log('\x1b[36m%s\x1b[0m', ` ✅️ Your application is ready at http://${process.env['NULLSTACK_PROJECT_DOMAIN']}:${process.env['NULLSTACK_SERVER_PORT']}\n`);
     });
-    once = true
-  }
+  })
 }
 
 function build({ input, output, cache, env, mode = 'ssr' }) {
