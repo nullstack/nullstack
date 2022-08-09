@@ -108,7 +108,7 @@ export default class Nullstack {
 }
 
 if (module.hot) {
-  const socket = new WebSocket('ws' + window.location.origin.slice(4) + '/ws');
+  const socket = new WebSocket('ws' + router.base.slice(4) + '/ws');
   window.lastHash
   socket.onmessage = async function (e) {
     const data = JSON.parse(e.data)

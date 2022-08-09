@@ -35,6 +35,13 @@ describe('Refs', () => {
     expect(element).toBeTruthy();
   });
 
+  test('refs functions receive attributes as argument', async () => {
+    await page.waitForSelector('[data-ref-received-props]');
+    const element = await page.$('[data-ref-received-props]');
+    expect(element).toBeTruthy();
+  });
+
+
   test('refs functions only run after the element is appended do DOM', async () => {
     await page.waitForSelector('[data-dom="0"]');
     const element = await page.$('[data-dom="0"]');

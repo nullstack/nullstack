@@ -17,6 +17,7 @@ import template from './template';
 import { generateServiceWorker } from './worker';
 import reqres from './reqres'
 import WebSocket from 'ws';
+import { writeFileSync } from 'fs'
 
 if (!global.fetch) {
   global.fetch = fetch;
@@ -204,7 +205,12 @@ server.start = function () {
     if (!response.headersSent) {
       const status = scope.context.page.status;
       const html = template(scope);
+      reqres.request = null
+      reqres.response = null
       response.status(status).send(html);
+    } else {
+      reqres.request = null
+      reqres.response = null
     }
   });
 
@@ -214,12 +220,17 @@ server.start = function () {
       process.exit();
     }
 
-    server.listen(server.port, () => {
+    server.listen(server.port, async () => {
       if (environment.development) {
+        const content = await server.prerender('/');
+        const target = process.cwd() + `/.development/index.html`
+        writeFileSync(target, content)
         const socket = new WebSocket(`ws://localhost:${process.env['NULLSTACK_SERVER_PORT']}/ws`);
         socket.onopen = async function (e) {
           socket.send('{"type":"NULLSTACK_SERVER_STARTED"}')
         }
+      } else {
+        console.log('\x1b[36m%s\x1b[0m', ` ✅️ Your application is ready at http://${process.env['NULLSTACK_PROJECT_DOMAIN']}:${process.env['NULLSTACK_SERVER_PORT']}\n`);
       }
     });
   }

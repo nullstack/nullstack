@@ -17,10 +17,6 @@ function getCompiler(options) {
   return webpack(getConfig(options))
 }
 
-function getServerCompiler(options) {
-  return webpack(getConfig(options)[0])
-}
-
 function loadEnv(env) {
   let envPath = '.env'
   if (env) {
@@ -64,22 +60,27 @@ async function start({ input, port, env, mode = 'spa', hot }) {
   process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT'] = ports[0]
   process.env['NULSTACK_SERVER_SOCKET_PORT_YOU_SHOULD_NOT_CARE_ABOUT'] = ports[1]
   process.env['NULLSTACK_ENVIRONMENT_HOT'] = (!!hot).toString()
+  process.env['NULLSTACK_PROJECT_DOMAIN'] ??= 'localhost'
+  process.env['NULLSTACK_WORKER_PROTOCOL'] ??= 'http'
   const devServerOptions = {
     hot: 'only',
     open: false,
+    host: process.env['NULLSTACK_PROJECT_DOMAIN'],
     devMiddleware: {
       index: false,
-      stats: 'none'
+      stats: 'none',
+      writeToDisk: true,
     },
     client: {
       overlay: { errors: true, warnings: false },
       logging: 'none',
       progress: false,
-      reconnect: true
+      reconnect: true,
+      webSocketURL: `${process.env['NULLSTACK_WORKER_PROTOCOL'].replace('http', 'ws')}://${process.env['NULLSTACK_PROJECT_DOMAIN']}:${process.env['NULLSTACK_SERVER_PORT']}/ws`
     },
     proxy: {
       context: () => true,
-      target: `http://localhost:${process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT']}`,
+      target: `${process.env['NULLSTACK_WORKER_PROTOCOL']}://${process.env['NULLSTACK_PROJECT_DOMAIN']}:${process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT']}`,
       proxyTimeout: 10 * 60 * 1000,
       timeout: 10 * 60 * 1000,
     },
@@ -104,19 +105,12 @@ async function start({ input, port, env, mode = 'spa', hot }) {
   };
   const clientCompiler = getCompiler({ environment, input });
   const server = new WebpackDevServer(devServerOptions, clientCompiler);
-  const serverCompiler = getServerCompiler({ environment, input });
-  let once = false
-  serverCompiler.watch({}, (error, stats) => {
-    if (!once) {
-      server.startCallback(() => {
-        console.log('\x1b[36m%s\x1b[0m', ` ✅️ Your application is ready at http://localhost:${process.env['NULLSTACK_SERVER_PORT']}\n`);
-      });
-      once = true
-    }
-    if (stats.hasErrors()) {
-      console.log(stats.toString({ colors: true }))
-    }
-  });
+  const portChecker = require('express')().listen(process.env['NULLSTACK_SERVER_PORT'], () => {
+    portChecker.close()
+    server.startCallback(() => {
+      console.log('\x1b[36m%s\x1b[0m', ` ✅️ Your application is ready at http://${process.env['NULLSTACK_PROJECT_DOMAIN']}:${process.env['NULLSTACK_SERVER_PORT']}\n`);
+    });
+  })
 }
 
 function build({ input, output, cache, env, mode = 'ssr' }) {
@@ -143,7 +137,6 @@ program
   .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles').choices(['ssr', 'spa']))
   .option('-p, --port <port>', 'Port number to run the server')
   .option('-i, --input <input>', 'Path to project that will be started')
-  .option('-o, --output <output>', 'Path to build output folder')
   .option('-e, --env <name>', 'Name of the environment file that should be loaded')
   .option('--hot', 'Enable hot module replacement')
   .helpOption('-h, --help', 'Learn more about this command')

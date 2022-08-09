@@ -1,10 +1,12 @@
-beforeAll(async () => {
-  await page.goto('http://localhost:6969/server-functions');
-});
-
 describe('ServerFunctions', () => {
 
+  beforeEach(async () => {
+    await page.goto('http://localhost:6969/server-functions');
+  });
+
+
   test('instance can use returned values', async () => {
+    await page.waitForSelector('[data-hydrated]')
     await page.click('.set-count-to-one');
     await page.waitForSelector('[data-count="1"]');
     const element = await page.$('[data-count="1"]');
@@ -12,6 +14,7 @@ describe('ServerFunctions', () => {
   });
 
   test('server functions accept an object as argument', async () => {
+    await page.waitForSelector('[data-hydrated]')
     await page.click('.set-count-to-two');
     await page.waitForSelector('[data-count="2"]');
     const element = await page.$('[data-count="2"]');
@@ -19,6 +22,7 @@ describe('ServerFunctions', () => {
   });
 
   test('server functions serialize and deserialize dates', async () => {
+    await page.waitForSelector('[data-hydrated]')
     await page.click('.set-date');
     await page.waitForSelector('[data-year="1992"]');
     const element = await page.$('[data-year="1992"]');

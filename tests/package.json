@@ -15,7 +15,7 @@
   "scripts": {
     "start": "npx nullstack start --input=./tests --port=6969 --env=test --mode=spa --hot",
     "build": "npx nullstack build --input=./tests --env=test",
-    "test": "npm run build && jest",
+    "test": "npm run build && jest --runInBand",
     "script": "node src/scripts/run.js"
   }
 }
