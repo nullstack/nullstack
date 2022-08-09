@@ -8,7 +8,10 @@ environment.mode = process.env.NULLSTACK_ENVIRONMENT_MODE || 'ssr';
 environment.key = "{{NULLSTACK_ENVIRONMENT_KEY}}"
 
 environment.name = process.env.NULLSTACK_ENVIRONMENT_NAME || '';
-environment.hot = process.env.NULLSTACK_ENVIRONMENT_HOT === 'true'
+
+if (environment.development) {
+  environment.hot = process.env.NULLSTACK_ENVIRONMENT_HOT === 'true'
+}
 
 Object.freeze(environment);
 

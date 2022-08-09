@@ -90,7 +90,7 @@ class Router {
 
   get base() {
     if (this._base) return this._base
-    this._base = window.location.origin
+    this._base = new URL(document.querySelector('[rel="canonical"]').href).origin
     return this._base
   }
 

@@ -84,7 +84,7 @@ class ServerFunctions extends Nullstack {
 
   render() {
     return (
-      <div>
+      <div data-hydrated={this.hydrated}>
         <button class="set-count-to-one" onclick={this.setCountToOne}>1</button>
         <button class="set-count-to-two" onclick={this.setCountToTwo}>2</button>
         <button class="set-date" onclick={this.setDate}>1992</button>

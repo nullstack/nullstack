@@ -4,6 +4,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const crypto = require("crypto");
 const { readdirSync } = require('fs');
 const NodemonPlugin = require('nodemon-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 
 const buildKey = crypto.randomBytes(20).toString('hex');
 
@@ -122,6 +123,15 @@ function server(env, argv) {
   const devtool = isDev ? 'inline-cheap-module-source-map' : false;
   const minimize = !isDev;
   const plugins = []
+  if (isDev) {
+    plugins.push(new NodemonPlugin({
+      ext: '*',
+      watch: [".env", ".env.*", './.development/server.js'],
+      script: './.development/server.js',
+      nodeArgs: ['--enable-source-maps'],
+      quiet: true
+    }))
+  }
   return {
     mode: argv.environment,
     infrastructureLogging: {
@@ -246,12 +256,10 @@ function client(env, argv) {
     }),
   ]
   if (isDev) {
-    plugins.push(new NodemonPlugin({
-      ext: '*',
-      watch: [".env", ".env.*", './.development/*.*'],
-      script: './.development/server.js',
-      nodeArgs: ['--enable-source-maps'],
-      quiet: true
+    plugins.push(new CopyPlugin({
+      patterns: [
+        { from: "public", to: "../.development" },
+      ]
     }))
   }
   return {
