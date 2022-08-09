@@ -5,7 +5,7 @@ function setup(attributes, element) {
   const property = attributes.ref.property
   if (typeof object[property] === 'function') {
     setTimeout(() => {
-      object[property]({ element })
+      object[property]({ ...attributes, element })
     }, 0)
   } else {
     object[property] = element
