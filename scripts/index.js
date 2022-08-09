@@ -60,8 +60,8 @@ async function start({ input, port, env, mode = 'spa', hot }) {
   process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT'] = ports[0]
   process.env['NULSTACK_SERVER_SOCKET_PORT_YOU_SHOULD_NOT_CARE_ABOUT'] = ports[1]
   process.env['NULLSTACK_ENVIRONMENT_HOT'] = (!!hot).toString()
-  process.env['NULLSTACK_PROJECT_DOMAIN'] ??= 'localhost'
-  process.env['NULLSTACK_WORKER_PROTOCOL'] ??= 'http'
+  if (!process.env['NULLSTACK_PROJECT_DOMAIN']) process.env['NULLSTACK_PROJECT_DOMAIN'] = 'localhost'
+  if (!process.env['NULLSTACK_WORKER_PROTOCOL']) process.env['NULLSTACK_WORKER_PROTOCOL'] = 'http'
   const devServerOptions = {
     hot: 'only',
     open: false,
