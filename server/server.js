@@ -94,7 +94,7 @@ function createResponse(callback) {
     code = number;
     return res;
   };
-  res.end = res.send = res.write = function (data) {
+  res.end = res.send = res.write = function (data = '') {
     if (callback) callback(code, data, headers);
   };
   return res;
