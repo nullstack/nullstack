@@ -8,6 +8,7 @@ const { existsSync } = require('fs');
 const customConfig = path.resolve(process.cwd(), './webpack.config.js');
 const config = existsSync(customConfig) ? require(customConfig) : require('../webpack.config');
 const dotenv = require('dotenv')
+const fetch = require('node-fetch')
 
 function getConfig(options) {
   return config.map((env) => env(null, options))
@@ -62,6 +63,7 @@ async function start({ input, port, env, mode = 'spa', hot }) {
   process.env['NULLSTACK_ENVIRONMENT_HOT'] = (!!hot).toString()
   if (!process.env['NULLSTACK_PROJECT_DOMAIN']) process.env['NULLSTACK_PROJECT_DOMAIN'] = 'localhost'
   if (!process.env['NULLSTACK_WORKER_PROTOCOL']) process.env['NULLSTACK_WORKER_PROTOCOL'] = 'http'
+  const target = `${process.env['NULLSTACK_WORKER_PROTOCOL']}://${process.env['NULLSTACK_PROJECT_DOMAIN']}:${process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT']}`
   const devServerOptions = {
     hot: 'only',
     open: false,
@@ -80,7 +82,7 @@ async function start({ input, port, env, mode = 'spa', hot }) {
     },
     proxy: {
       context: () => true,
-      target: `${process.env['NULLSTACK_WORKER_PROTOCOL']}://${process.env['NULLSTACK_PROJECT_DOMAIN']}:${process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT']}`,
+      target,
       proxyTimeout: 10 * 60 * 1000,
       timeout: 10 * 60 * 1000,
     },
@@ -88,7 +90,7 @@ async function start({ input, port, env, mode = 'spa', hot }) {
       if (!devServer) {
         throw new Error('webpack-dev-server is not defined');
       }
-      middlewares.unshift((req, res, next) => {
+      middlewares.unshift(async (req, res, next) => {
         if (req.originalUrl.indexOf('.hot-update.') === -1) {
           if (req.originalUrl.startsWith('/nullstack/')) {
             console.log(`  ⚙️ [${req.method}] ${req.originalUrl}`)
@@ -96,7 +98,22 @@ async function start({ input, port, env, mode = 'spa', hot }) {
             console.log(`  🕸️ [${req.method}] ${req.originalUrl}`)
           }
         }
-        next()
+        async function waitForServer() {
+          if (req.originalUrl.includes('.')) {
+            return next()
+          }
+          try {
+            await fetch(`${target}${req.originalUrl}`)
+            next()
+          } catch (error) {
+            if (error.message.includes('ECONNREFUSED')) {
+              setTimeout(waitForServer, 100)
+            } else {
+              throw error
+            }
+          }
+        }
+        waitForServer()
       });
       return middlewares;
     },
