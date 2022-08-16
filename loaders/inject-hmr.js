@@ -26,6 +26,11 @@ module.exports = function (source) {
 
   return source + `
     if (module.hot) {
+      if (window.needsClientReload) {
+        window.location.reload()
+      }
+      module.hot.accept()
+      window.needsClientReload = true
       module.hot.accept('${klassPath}', () => {
         Nullstack.hotReload(${klassName})
       })
