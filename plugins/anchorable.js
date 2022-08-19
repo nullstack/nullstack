@@ -1,3 +1,5 @@
+import noop from '../shared/noop'
+
 function match(node) {
   return (
     node &&
@@ -8,21 +10,9 @@ function match(node) {
   )
 }
 
-function transform({ node, router }) {
+function transform({ node }) {
   if (!match(node)) return
-  const originalEvent = node.attributes.onclick
-  node.attributes.default = true
-  node.attributes.onclick = ({ event }) => {
-    if (!event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
-      event.preventDefault()
-      router.url = node.attributes.href
-    }
-    if (originalEvent) {
-      setTimeout(() => {
-        originalEvent({ ...node.attributes, event })
-      }, 0)
-    }
-  }
+  node.attributes.onclick ??= noop
 }
 
 export default { transform, client: true }

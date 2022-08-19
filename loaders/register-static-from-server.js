@@ -28,9 +28,6 @@ module.exports = function (source) {
   });
   if (!hasClass) return source;
   let output = source.substring(0, klassEnd);
-  for (const methodName of methodNames) {
-    output += `${methodName} = Nullstack.invoke('${methodName}');\n`
-  }
   output += source.substring(klassEnd);
   for (const methodName of methodNames) {
     output += `\nNullstack.registry["${hash}.${methodName}"] = ${klassName}.${methodName};`
@@ -38,5 +35,7 @@ module.exports = function (source) {
   }
   output += `\nNullstack.registry["${hash}"] = ${klassName};`
   output += `\nNullstack.registry["${legacyHash}"] = ${klassName};`
+  output += `\n${klassName}.hash = "${hash}";`
+  output += `\n${klassName}.bindStaticFunctions(${klassName});`
   return output;
 }

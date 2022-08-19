@@ -7,7 +7,6 @@ import router from './router'
 const client = {}
 
 client.initialized = false
-client.hydrated = false
 client.initializer = null
 client.instances = {}
 context.instances = client.instances
@@ -20,6 +19,12 @@ client.selector = null
 client.events = {}
 client.generateContext = generateContext
 client.renderQueue = null
+client.currentBody = {}
+client.nextBody = {}
+client.currentHead = []
+client.nextHead = []
+client.head = document.head
+client.body = document.body
 
 client.update = async function update() {
   if (client.initialized) {
@@ -30,11 +35,14 @@ client.update = async function update() {
       scope.plugins = loadPlugins(scope)
       client.initialized = false
       client.renewalQueue = []
-      client.nextVirtualDom = await generateTree(client.initializer(), scope)
-      rerender(client.selector)
-      client.virtualDom = client.nextVirtualDom
-      client.nextVirtualDom = null
-      client.processLifecycleQueues()
+      try {
+        client.nextVirtualDom = await generateTree(client.initializer(), scope)
+        rerender()
+        client.processLifecycleQueues()
+      } catch (e) {
+        client.skipHotReplacement = true
+        console.error(e)
+      }
     }, 16)
   }
 }
@@ -42,15 +50,22 @@ client.update = async function update() {
 client.processLifecycleQueues = async function processLifecycleQueues() {
   if (!client.initialized) {
     client.initialized = true
-    client.hydrated = true
   }
   let shouldUpdate = false
+  let shouldScroll = router._hash
   while (client.initiationQueue.length) {
     const instance = client.initiationQueue.shift()
     instance.initiate && await instance.initiate()
-    instance._self.initiated = true
+    instance.initiated = true
     instance.launch && instance.launch()
     shouldUpdate = true
+    if (instance._attributes.route && shouldScroll) {
+      const element = document.getElementById(router._hash)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' })
+      }
+      shouldScroll = false
+    }
   }
   shouldUpdate && client.update()
   shouldUpdate = false
@@ -58,7 +73,7 @@ client.processLifecycleQueues = async function processLifecycleQueues() {
     shouldUpdate = true
     const instance = client.realHydrationQueue.shift()
     instance.hydrate && await instance.hydrate()
-    instance._self.hydrated = true
+    instance.hydrated = true
   }
   shouldUpdate && client.update()
   shouldUpdate = false
@@ -70,10 +85,10 @@ client.processLifecycleQueues = async function processLifecycleQueues() {
   shouldUpdate && client.update()
   for (const key in client.instances) {
     const instance = client.instances[key]
-    if (!client.renewalQueue.includes(instance) && !instance._self.terminated) {
+    if (!client.renewalQueue.includes(instance) && !instance.terminated) {
       instance.terminate && await instance.terminate()
-      if (instance._self.persistent) {
-        instance._self.terminated = true
+      if (instance.persistent) {
+        instance.terminated = true
       } else {
         delete client.instances[key]
       }

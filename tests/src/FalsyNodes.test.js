@@ -14,8 +14,18 @@ describe('Falsy Nodes', () => {
     expect(truth).toBeTruthy();
   });
 
+  test('Components returning null should render a comment', async () => {
+    const truth = await page.$eval('[data-null-component]', (e) => e.childNodes[0] instanceof Comment);
+    expect(truth).toBeTruthy();
+  });
+
+  test('Components returning false should render a comment', async () => {
+    const truth = await page.$eval('[data-false-component]', (e) => e.childNodes[0] instanceof Comment);
+    expect(truth).toBeTruthy();
+  });
+
   test('Zero nodes should render a text node', async () => {
-    const truth = await page.$eval('[data-zero]', (e) => e.innerText === '0');
+    const truth = await page.$eval('[data-zero]', (e) => e.textContent === '0');
     expect(truth).toBeTruthy();
   });
 

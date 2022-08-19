@@ -6,13 +6,20 @@ class RenderableComponent extends Nullstack {
     return <div data-nested />
   }
 
-  renderInnerComponent({ children }) {
+  renderInnerComponent({ children, reference: Reference }) {
     return (
       <div class="InnerComponent">
         <p> Inner Component </p>
         <NestedInnerComponent />
+        <Reference prop />
         {children}
       </div>
+    )
+  }
+
+  renderInnerReference({ prop }) {
+    return (
+      <div data-reference={prop} />
     )
   }
 
@@ -37,7 +44,7 @@ class RenderableComponent extends Nullstack {
         <element class="element" tag={params.condition ? 'div' : 'span'}>
           element tag
         </element>
-        <InnerComponent>
+        <InnerComponent reference={InnerReference}>
           <span class="children"> children </span>
         </InnerComponent>
         <ul>

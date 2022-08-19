@@ -1,6 +1,6 @@
 import environment from './environment';
-import server from './server';
 import worker from './worker';
+import reqres from './reqres';
 
 const project = {};
 
@@ -19,9 +19,18 @@ project.favicon = '/favicon-96x96.png';
 project.disallow = [];
 project.icons = JSON.parse(`{{NULLSTACK_PROJECT_ICONS}}`);
 
+function getHost() {
+  if (reqres.request?.headers?.host) {
+    return reqres.request.headers.host
+  }
+  if (project.domain === 'localhost') {
+    return `localhost:${process.env['NULLSTACK_SERVER_PORT']}`
+  }
+  return project.domain
+}
+
 export function generateBase() {
-  const port = project.domain === 'localhost' ? `:${server.port}` : '';
-  return `${worker.protocol}://${project.domain}${port}`;
+  return `${worker.protocol}://${getHost()}`;
 }
 
 export default project;

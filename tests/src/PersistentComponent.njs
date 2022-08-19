@@ -13,8 +13,8 @@ class PersistentComponent extends Nullstack {
     this.count = -1;
   }
 
-  launch({ self }) {
-    if (self.initiated) {
+  launch() {
+    if (this.initiated) {
       this.launchCount++
     }
   }
@@ -27,21 +27,17 @@ class PersistentComponent extends Nullstack {
     this.count++
   }
 
-  self({ self }) {
-    return self
-  }
-
-  render({ self, instances }) {
+  render({ instances }) {
     const aCount = instances['PersistentComponent/0-0-33/persistent-component/a']?.count
-    const aTerminated = instances['PersistentComponent/0-0-33/persistent-component/a']?.self?.()?.terminated
+    const aTerminated = instances['PersistentComponent/0-0-33/persistent-component/a']?.terminated
     return (
       <div
         data-count={this.count}
-        data-key={self.key}
+        data-key={this.key}
         data-a-count={aCount}
         data-launch-count={this.launchCount}
-        data-persistent={self.persistent}
-        data-prerendered={self.prerendered}
+        data-persistent={this.persistent}
+        data-prerendered={this.prerendered}
         data-a-terminated={aTerminated}
       >
         <a href="/persistent-component/a"> a </a>

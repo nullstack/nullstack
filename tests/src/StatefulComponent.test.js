@@ -50,7 +50,7 @@ describe('StatefulComponent', () => {
   test('empty strings generate nodes', async () => {
     await page.click('[data-fill]');
     await page.waitForSelector('[data-empty="not"]');
-    const text = await page.$eval('[data-empty="not"]', (e) => e.innerText);
+    const text = await page.$eval('[data-empty="not"]', (e) => e.textContent);
     expect(text).toMatch('not');
   });
 
@@ -62,6 +62,37 @@ describe('StatefulComponent', () => {
     page.on("console", () => hasConsoleError = true)
     await page.waitForTimeout(2000)
     expect(hasConsoleError).toBeFalsy();
+  });
+
+  test('textareas with multiple nodes become a single node', async () => {
+    const text = await page.$eval('textarea', (e) => e.value);
+    expect(text).toMatch(' 1 1 ');
+  });
+
+  test('textareas with multiple nodes can be updated', async () => {
+    await page.click('.increment-by-one');
+    await page.waitForSelector('[data-count="2"]');
+    const text = await page.$eval('textarea', (e) => e.value);
+    expect(text).toMatch(' 2 2 ');
+  });
+
+  test('children of style become the tags html attribute', async () => {
+    await page.click('.increment-by-one');
+    await page.waitForSelector('[data-count="2"]');
+    const text = await page.$eval('button', (e) => getComputedStyle(e).backgroundColor);
+    expect(text).toMatch('rgba(0, 0, 0, 0.2)');
+  });
+
+  test('attributes can prerender a zero', async () => {
+    await page.waitForSelector('[data-zero="0"]');
+    const element = await page.$('[data-zero="0"]');
+    expect(element).toBeTruthy();
+  });
+
+  test('attributes can rererender a zero', async () => {
+    await page.waitForSelector('[data-hydrated-zero="0"]');
+    const element = await page.$('[data-hydrated-zero="0"]');
+    expect(element).toBeTruthy();
   });
 
 });

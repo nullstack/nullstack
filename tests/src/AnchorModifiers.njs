@@ -6,22 +6,44 @@ class AnchorModifiers extends Nullstack {
     <a href="/anchor-modifiers?source=html">html</a>
   `
 
-  hydrate(context) {
-    context.self.element.querySelector('a').addEventListener('click', () => {
-      context.clickedHTML = true
+  count = 0
+  objected = false
+  updated = false
+
+  hydrate() {
+    this._element.querySelector('a').addEventListener('click', () => {
+      this.clickedHTML = true
     })
   }
 
-  clickJSX(context) {
-    context.clickedJSX = true
+  clickJSX() {
+    this.clickedJSX = true
   }
 
-  render({ clickedJSX, clickedHTML }) {
+  markAsUpdated() {
+    document.body.dataset.updated = true
+  }
+
+  increment() {
+    this.count++
+  }
+
+  render() {
     return (
-      <div data-clicked-jsx={clickedJSX} data-clicked-html={clickedHTML}>
+      <div ref={this._element} data-clicked-jsx={this.clickedJSX} data-clicked-html={this.clickedHTML} data-count={this.count} data-objected={this.objected} data-updated={this.updated} data-hydrated={this.hydrated}>
         <div html={this.html} />
+        <button onclick={this.markAsUpdated}> update </button>
         <a href="/anchor-modifiers?source=jsx" onclick={this.clickJSX}>
           jsx
+        </a>
+        <a href="/anchor-modifiers?source=incremented" onclick={this.increment}>
+          increment
+        </a>
+        <a href="/anchor-modifiers?source=object" onclick={{ objected: true }}>
+          object
+        </a>
+        <a href="/anchor-modifiers?source=array" onclick={[this.increment, { objected: true }]}>
+          array
         </a>
       </div>
     )
