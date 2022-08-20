@@ -633,7 +633,7 @@ export interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
   placeholder?: string | undefined;
   slot?: string | undefined;
   spellcheck?: Booleanish | undefined;
-  style?: object | undefined;
+  style?: string | undefined;
   tabindex?: number | string | undefined;
   title?: string | undefined;
   translate?: "yes" | "no" | undefined;
@@ -1262,7 +1262,7 @@ export interface SVGAttributes<T> extends AriaAttributes, DOMAttributes<T> {
   method?: string | undefined;
   min?: number | string | undefined;
   name?: string | undefined;
-  style?: object | undefined;
+  style?: string | undefined;
   target?: string | undefined;
   type?: string | undefined;
   width?: number | string | undefined;
