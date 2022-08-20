@@ -134,9 +134,7 @@ if (module.hot) {
   }
   Nullstack.hotReload = function hotReload(klass) {
     if (client.skipHotReplacement) {
-      setInterval(() => {
-        fetch(window.location.href).then((r) => r.status !== 500 && window.location.reload())
-      }, 100)
+      window.location.reload()
     } else {
       Nullstack.start(klass);
       windowEvent('environment');
