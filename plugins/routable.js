@@ -16,13 +16,6 @@ function match(node) {
 
 function load({ router }) {
   router._routes = {};
-  if (!router._oldSegments) {
-    router._oldSegments = {};
-    router._newSegments = {};
-  } else {
-    router._oldSegments = router._newSegments;
-    router._newSegments = {};
-  }
 }
 
 function transform({ node, depth, router }) {
@@ -34,7 +27,6 @@ function transform({ node, depth, router }) {
     const params = routeMatches(router.url, node.attributes.route);
     if (params) {
       router._routes[routeDepth] = true;
-      router._newSegments[routeDepth] = params;
       Object.assign(router._segments, params);
     } else {
       erase(node);

@@ -27,24 +27,6 @@ async function generateBranch(siblings, node, depth, scope) {
 
   if (isClass(node)) {
     const key = generateKey(scope, node, depth)
-    if (
-      scope.context.environment.client &&
-      scope.context.router._changed &&
-      node.attributes &&
-      node.attributes.route &&
-      scope.context.environment.mode !== 'ssg'
-    ) {
-      const routeDepth = depth.slice(0, depth.lastIndexOf('-'))
-      const newSegments = scope.context.router._newSegments[routeDepth];
-      if (newSegments) {
-        const oldSegments = scope.context.router._oldSegments[routeDepth];
-        for (const segment in newSegments) {
-          if (oldSegments[segment] !== newSegments[segment]) {
-            delete scope.memory[key];
-          }
-        }
-      }
-    }
     const instance = scope.instances[key] || new node.type(scope);
     instance.persistent = !!node.attributes.persistent
     instance.key = key;
