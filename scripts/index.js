@@ -48,6 +48,19 @@ function getPort(port) {
   return port || process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
 }
 
+function clearOutput(outputPath) {
+  if (!existsSync(outputPath)) return
+  readdir(outputPath, (err, files) => {
+    if (err) throw err;
+    for (const file of files) {
+      if (file === '.cache') continue;
+      unlink(path.join(outputPath, file), err => {
+        if (err) throw err;
+      });
+    }
+  });
+}
+
 async function start({ input, port, env, mode = 'spa', cold, disk }) {
   const environment = 'development'
   console.log(` 🚀️ Starting your application in ${environment} mode...`);
@@ -123,16 +136,7 @@ async function start({ input, port, env, mode = 'spa', cold, disk }) {
     port: process.env['NULLSTACK_SERVER_PORT']
   };
   const compiler = getCompiler({ environment, input, disk });
-  const outputPath = compiler.compilers[0].outputPath;
-  readdir(outputPath, (err, files) => {
-    if (err) throw err;
-    for (const file of files) {
-      if (file === '.cache') continue;
-      unlink(path.join(outputPath, file), err => {
-        if (err) throw err;
-      });
-    }
-  });
+  clearOutput(compiler.compilers[0].outputPath)
   const server = new WebpackDevServer(devServerOptions, compiler);
   const portChecker = require('express')().listen(process.env['NULLSTACK_SERVER_PORT'], () => {
     portChecker.close()
