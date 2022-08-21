@@ -244,6 +244,7 @@ function server(env, argv) {
 }
 
 function client(env, argv) {
+  const disk = !!argv.disk
   const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd();
   const isDev = argv.environment === 'development';
   const folder = isDev ? '.development' : '.production';
@@ -255,7 +256,7 @@ function client(env, argv) {
       chunkFilename: '[chunkhash].client.css'
     }),
   ]
-  if (isDev) {
+  if (disk) {
     plugins.push(new CopyPlugin({
       patterns: [
         { from: "public", to: "../.development" },

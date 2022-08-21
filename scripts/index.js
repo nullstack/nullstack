@@ -4,7 +4,7 @@ const { version } = require('../package.json');
 
 const webpack = require('webpack');
 const path = require('path');
-const { existsSync } = require('fs');
+const { existsSync, rmdirSync, readdir, unlink } = require('fs');
 const customConfig = path.resolve(process.cwd(), './webpack.config.js');
 const config = existsSync(customConfig) ? require(customConfig) : require('../webpack.config');
 const dotenv = require('dotenv')
@@ -48,7 +48,7 @@ function getPort(port) {
   return port || process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
 }
 
-async function start({ input, port, env, mode = 'spa', hot }) {
+async function start({ input, port, env, mode = 'spa', cold, disk }) {
   const environment = 'development'
   console.log(` 🚀️ Starting your application in ${environment} mode...`);
   loadEnv(env)
@@ -60,10 +60,12 @@ async function start({ input, port, env, mode = 'spa', hot }) {
   const ports = await getFreePorts()
   process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT'] = ports[0]
   process.env['NULSTACK_SERVER_SOCKET_PORT_YOU_SHOULD_NOT_CARE_ABOUT'] = ports[1]
-  process.env['NULLSTACK_ENVIRONMENT_HOT'] = (!!hot).toString()
+  process.env['NULLSTACK_ENVIRONMENT_HOT'] = (!cold).toString()
+  process.env['NULLSTACK_ENVIRONMENT_DISK'] = (!!disk).toString()
   if (!process.env['NULLSTACK_PROJECT_DOMAIN']) process.env['NULLSTACK_PROJECT_DOMAIN'] = 'localhost'
   if (!process.env['NULLSTACK_WORKER_PROTOCOL']) process.env['NULLSTACK_WORKER_PROTOCOL'] = 'http'
   const target = `${process.env['NULLSTACK_WORKER_PROTOCOL']}://${process.env['NULLSTACK_PROJECT_DOMAIN']}:${process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT']}`
+  const writeToDisk = disk ? true : (path) => path.includes('server')
   const devServerOptions = {
     hot: 'only',
     open: false,
@@ -71,7 +73,7 @@ async function start({ input, port, env, mode = 'spa', hot }) {
     devMiddleware: {
       index: false,
       stats: 'none',
-      writeToDisk: true,
+      writeToDisk,
     },
     client: {
       overlay: { errors: true, warnings: false },
@@ -120,8 +122,18 @@ async function start({ input, port, env, mode = 'spa', hot }) {
     webSocketServer: require.resolve('./socket'),
     port: process.env['NULLSTACK_SERVER_PORT']
   };
-  const clientCompiler = getCompiler({ environment, input });
-  const server = new WebpackDevServer(devServerOptions, clientCompiler);
+  const compiler = getCompiler({ environment, input, disk });
+  const outputPath = compiler.compilers[0].outputPath;
+  readdir(outputPath, (err, files) => {
+    if (err) throw err;
+    for (const file of files) {
+      if (file === '.cache') continue;
+      unlink(path.join(outputPath, file), err => {
+        if (err) throw err;
+      });
+    }
+  });
+  const server = new WebpackDevServer(devServerOptions, compiler);
   const portChecker = require('express')().listen(process.env['NULLSTACK_SERVER_PORT'], () => {
     portChecker.close()
     server.startCallback(() => {
@@ -155,7 +167,8 @@ program
   .option('-p, --port <port>', 'Port number to run the server')
   .option('-i, --input <input>', 'Path to project that will be started')
   .option('-e, --env <name>', 'Name of the environment file that should be loaded')
-  .option('--hot', 'Enable hot module replacement')
+  .option('-d, --disk', 'Write files to disk')
+  .option('-c, --cold', 'Disable hot module replacement')
   .helpOption('-h, --help', 'Learn more about this command')
   .action(start)
 

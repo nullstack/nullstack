@@ -222,9 +222,11 @@ server.start = function () {
 
     server.listen(server.port, async () => {
       if (environment.development) {
-        const content = await server.prerender('/');
-        const target = process.cwd() + `/.development/index.html`
-        writeFileSync(target, content)
+        if (process.env['NULLSTACK_ENVIRONMENT_DISK'] === 'true') {
+          const content = await server.prerender('/');
+          const target = process.cwd() + `/.development/index.html`
+          writeFileSync(target, content)
+        }
         const socket = new WebSocket(`ws://localhost:${process.env['NULLSTACK_SERVER_PORT']}/ws`);
         socket.onopen = async function (e) {
           socket.send('{"type":"NULLSTACK_SERVER_STARTED"}')
