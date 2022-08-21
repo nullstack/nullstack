@@ -54,7 +54,7 @@ describe('FullStackLifecycle ssr', () => {
 
   test('terminate should run', async () => {
     await page.click('a[href="/"]');
-    await page.waitForFunction(() => location.search == '?terminated=true');
+    await page.waitForFunction(() => location.search === '?terminated=true');
     const element = await page.$('.FullStackLifecycle');
     expect(element).toBeFalsy();
   });
@@ -118,7 +118,7 @@ describe('FullStackLifecycle spa', () => {
 
   test('terminate should run', async () => {
     await page.click('a[href="/"]');
-    await page.waitForFunction(() => location.search == '?terminated=true');
+    await page.waitForFunction(() => location.search === '?terminated=true');
     const element = await page.$('.FullStackLifecycle');
     expect(element).toBeFalsy();
   });

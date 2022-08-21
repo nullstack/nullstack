@@ -1,5 +1,6 @@
 export function isUndefined(node) {
   if (node === undefined) return true
+  if (node === null) return false
   return node.hasOwnProperty('type') && node.type === undefined
 }
 
@@ -9,13 +10,13 @@ export function isFalse(node) {
 }
 
 export function isClass(node) {
-  return typeof (node.type) === 'function' && node.type.prototype && typeof (node.type.prototype.render) === 'function';
+  return typeof node.type === 'function' && node.type.prototype && typeof node.type.prototype.render === 'function';
 }
 
 export function isFunction(node) {
-  return typeof (node.type) === 'function';
+  return typeof node.type === 'function';
 }
 
 export function isText(node) {
-  return typeof (node.children) === 'undefined';
+  return node.type === 'text'
 }

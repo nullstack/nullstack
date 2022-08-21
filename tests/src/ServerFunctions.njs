@@ -63,10 +63,15 @@ class ServerFunctions extends Nullstack {
     return true
   }
 
+  static async getRequestUrl({ request }) {
+    return request.originalUrl.startsWith('/')
+  }
+
   async initiate() {
     this.statement = await this.useNodeFileSystem();
     this.response = await this.useFetchInNode();
     this.doublePlusOneServer = await ServerFunctions.getDoublePlusOne({ number: 34 })
+    this.originalUrl = await ServerFunctions.getRequestUrl()
   }
 
   async hydrate() {
@@ -74,11 +79,12 @@ class ServerFunctions extends Nullstack {
     this.clientOnly = clientOnly();
     this.doublePlusOneClient = await ServerFunctions.getDoublePlusOne({ number: 34 })
     this.acceptsSpecialCharacters = await this.getEncodedString({ string: decodedString })
+    this.hydratedOriginalUrl = await ServerFunctions.getRequestUrl()
   }
 
   render() {
     return (
-      <div>
+      <div data-hydrated={this.hydrated}>
         <button class="set-count-to-one" onclick={this.setCountToOne}>1</button>
         <button class="set-count-to-two" onclick={this.setCountToTwo}>2</button>
         <button class="set-date" onclick={this.setDate}>1992</button>
@@ -91,6 +97,8 @@ class ServerFunctions extends Nullstack {
         <div data-double-plus-one-client={this.doublePlusOneClient === 69} />
         <div data-accepts-special-characters={this.acceptsSpecialCharacters} />
         <div data-underline-removed-from-client={this.underlineRemovedFromClient} />
+        <div data-hydrated-original-url={this.hydratedOriginalUrl} />
+        <div data-original-url={this.originalUrl} />
       </div>
     )
   }

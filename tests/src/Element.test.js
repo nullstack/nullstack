@@ -19,4 +19,20 @@ describe('FullStackLifecycle', () => {
     expect(element).toBeFalsy();
   });
 
+  test('elements can be inner components and receive props', async () => {
+    const element = await page.$('[data-inner-component]');
+    expect(element).toBeTruthy();
+  });
+
+  test('elements can be class components and receive props', async () => {
+    const element = await page.$('[data-class-component]');
+    expect(element).toBeTruthy();
+  });
+
+  test('elements can be functional components and receive props', async () => {
+    const element = await page.$('[data-functional-component]');
+    expect(element).toBeTruthy();
+  });
+
+
 });

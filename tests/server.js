@@ -7,11 +7,15 @@ import ContextWorker from './src/ContextWorker';
 import vueable from './src/plugins/vueable';
 import ServerRequestAndResponse from './src/ServerRequestAndResponse';
 
-Nullstack.use([vueable], vueable);
+Nullstack.use(vueable);
 
 const context = Nullstack.start(Application);
 
 const methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT'];
+
+context.server.get('/custom-api-before-start', (request, response) => {
+  response.json({ startValue: context.startValue })
+})
 
 context.server.use('/api', (request, response, next) => {
   request.status = 200;
@@ -22,7 +26,7 @@ context.server.use('/api', (request, response, next) => {
 
 for (const method of methods) {
   context.server[method.toLowerCase()]('/api', (request, response) => {
-    response.status(request.status).send(request.method);
+    response.status(request.status).json({ method: request.method });
   });
 }
 

@@ -29,4 +29,40 @@ describe('Context', () => {
     expect(element).toBeTruthy();
   });
 
+  test('hydrated static async underline function has no context', async () => {
+    await page.waitForSelector('[data-hydrated-static-async-underline-function-has-no-context]');
+    const element = await page.$('[data-hydrated-static-async-underline-function-has-no-context]');
+    expect(element).toBeTruthy();
+  });
+
+  test('hydrated static underline function has no context', async () => {
+    await page.waitForSelector('[data-hydrated-static-underline-function-has-no-context]');
+    const element = await page.$('[data-hydrated-static-underline-function-has-no-context]');
+    expect(element).toBeTruthy();
+  });
+
+  test('hydrated static function has no context', async () => {
+    await page.waitForSelector('[data-hydrated-static-function-has-no-context]');
+    const element = await page.$('[data-hydrated-static-function-has-no-context]');
+    expect(element).toBeTruthy();
+  });
+
+  test('static async underline function has no context', async () => {
+    await page.waitForSelector('[data-static-async-underline-function-has-no-context]');
+    const element = await page.$('[data-static-async-underline-function-has-no-context]');
+    expect(element).toBeTruthy();
+  });
+
+  test('static underline function has no context', async () => {
+    await page.waitForSelector('[data-static-underline-function-has-no-context]');
+    const element = await page.$('[data-static-underline-function-has-no-context]');
+    expect(element).toBeTruthy();
+  });
+
+  test('static function has no context', async () => {
+    await page.waitForSelector('[data-static-function-has-no-context]');
+    const element = await page.$('[data-static-function-has-no-context]');
+    expect(element).toBeTruthy();
+  });
+
 });

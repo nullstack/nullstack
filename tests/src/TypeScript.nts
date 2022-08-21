@@ -17,12 +17,12 @@ class TypeScript extends Nullstack {
     return <div data-inner-component />
   }
 
-  render({ self }: NullstackClientContext) {
+  render() {
     return (
       <div data-count={this.count}>
         <input bind={this.count} />
         <button
-          data-initiated={self.initiated}
+          data-initiated={this.initiated}
           value={1}
           onclick={this.incrementByCount}
         > TS </button>
