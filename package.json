@@ -1,6 +1,6 @@
 {
   "name": "nullstack",
-  "version": "0.15.10",
+  "version": "0.16.0",
   "description": "Full-stack Javascript Components for one-dev armies",
   "main": "nullstack.js",
   "author": "Mortaro",
@@ -12,11 +12,12 @@
   },
   "types": "./types/index.d.ts",
   "dependencies": {
-    "@swc/core": "1.2.179",
     "@babel/parser": "7.17.12",
     "@babel/traverse": "7.17.12",
+    "@swc/core": "1.2.179",
     "body-parser": "1.20.0",
     "commander": "8.3.0",
+    "copy-webpack-plugin": "^11.0.0",
     "cors": "2.8.5",
     "css-loader": "6.7.1",
     "dotenv": "8.6.0",
@@ -24,12 +25,13 @@
     "fs-extra": "10.1.0",
     "mini-css-extract-plugin": "2.6.0",
     "node-fetch": "2.6.7",
-    "nodemon-webpack-plugin": "4.7.1",
+    "nodemon-webpack-plugin": "^4.8.1",
     "sass": "1.51.0",
     "sass-loader": "8.0.2",
     "swc-loader": "0.2.1",
     "terser-webpack-plugin": "5.3.1",
     "webpack": "5.72.1",
+    "webpack-dev-server": "4.9.0",
     "ws": "7.5.7"
   }
 }

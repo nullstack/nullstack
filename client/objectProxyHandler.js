@@ -2,37 +2,34 @@ import client from './client';
 
 const objectProxyHandler = {
   set(target, name, value) {
-    if(isProxyable(name, value)) {
-      value._isProxy = true;
+    if (isProxyable(name, value)) {
       target[name] = new Proxy(value, this);
     } else {
       target[name] = value;
     }
-    if(!name.startsWith('_')) {
+    if (!name.startsWith('_')) {
       client.update();
     }
     return true;
   },
   get(target, name) {
-    if(name === '_isProxy') return true;
+    if (name === '_isProxy') return true;
     return Reflect.get(...arguments);
   }
 }
 
 function isProxyable(name, value) {
-  return (
-    !name.startsWith('_') && 
-    value !== null && 
-    typeof(value) === 'object' && 
-    value._isProxy === undefined && 
-    !(value instanceof Date)
-  );
+  if (name.startsWith('_')) return false
+  const constructor = value?.constructor
+  if (!constructor) return false
+  if (value._isProxy) return false
+  return constructor === Array || constructor === Object
 }
 
 export function generateObjectProxy(name, value) {
-  if(isProxyable(name, value)) {
-    if(typeof(value) === 'object') {
-      for(const key of Object.keys(value)) {
+  if (isProxyable(name, value)) {
+    if (typeof (value) === 'object') {
+      for (const key of Object.keys(value)) {
         value[key] = generateObjectProxy(key, value[key]);
       }
     }

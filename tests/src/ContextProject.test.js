@@ -11,7 +11,7 @@ describe('ContextProject', () => {
 describe('ContextProject', () => {
 
   beforeAll(async () => {
-    await page.goto('http://localhost:6969/context-project');
+    await page.goto('http://localhost:6969/context-project', { waitUntil: "networkidle0" });
     await page.waitForSelector('[data-project]');
   });
 
@@ -107,12 +107,12 @@ describe('ContextProject', () => {
 
   test('css bundle can use a cdn', async () => {
     const text = await page.$eval('[rel="stylesheet"]', (element) => element.href);
-    expect(text).toMatch(/127\.0\.0\.1:6969/);
+    expect(text).toMatch('localhost:6969');
   });
 
   test('javacript bundle can use a cdn', async () => {
     const text = await page.$eval('script[integrity]', (element) => element.src);
-    expect(text).toMatch(/127\.0\.0\.1:6969/);
+    expect(text).toMatch('localhost:6969');
   });
 
   test('css bundle has an empty integrity in dev mode', async () => {
@@ -137,7 +137,7 @@ describe('robots.txt', () => {
   let text;
 
   beforeAll(async () => {
-    await page.goto('http://localhost:6969/robots.txt');
+    await page.goto('http://localhost:6969/robots.txt', { waitUntil: "networkidle0" });
     text = await page.evaluate(() => document.body.innerHTML);
   });
 
@@ -157,7 +157,7 @@ describe('robots.txt', () => {
   });
 
   test('it reflects project.sitemap', async () => {
-    const index = text.indexOf('Sitemap: http://localhost:6969/sitemap.xml')
+    const index = text.indexOf('Sitemap: https://localhost:6969/sitemap.xml')
     expect(index).toBeGreaterThan(-1);
   });
 

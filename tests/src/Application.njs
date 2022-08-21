@@ -46,7 +46,13 @@ import WorkerVerbs from './WorkerVerbs';
 import MetatagState from './MetatagState';
 import TypeScriptExtension from './TypeScriptExtension';
 import JavaScriptExtension from './JavaScriptExtension';
-import HydrateElement from './HydrateElement';
+import Refs from './Refs';
+import OptimizedEvents from './OptimizedEvents';
+import DynamicHead from './DynamicHead'
+import TextObserver from './TextObserver';
+import BodyFragment from './BodyFragment';
+import ArrayAttributes from './ArrayAttributes';
+import RouteScroll from './RouteScroll';
 
 class Application extends Nullstack {
 
@@ -56,11 +62,12 @@ class Application extends Nullstack {
 
   prepare(context) {
     context.string = 'nullstack';
+    context.refInstanceCount = 0
   }
 
-  render({ project, page, environment }) {
+  render({ project, page, environment, refInstanceCount }) {
     return (
-      <main data-window={WindowDependency.key}>
+      <body data-window={WindowDependency.key}>
         <h1> {project.name} </h1>
         {page.status !== 200 && <div route="*" data-page-status={page.status}></div>}
         <div route="/">
@@ -69,7 +76,10 @@ class Application extends Nullstack {
           <a href="/routes-and-params/a"> router with params </a>
           <a href="/undefined-nodes"> undefined nodes </a>
           <a href="/full-stack-lifecycle"> lifecycle </a>
-          <a href="/hydrate-element"> hydrate element </a>
+          <a href="/refs"> refs </a>
+          <a href="/error-on-child-node?dom=true"> error-on-child-node?dom=true </a>
+          <a href="/error-on-child-node?serialization=true"> error-on-child-node?serialization=true </a>
+          <a href="/route-scroll/class?changed=1#bottom">#bottom</a>
         </div>
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
@@ -112,13 +122,19 @@ class Application extends Nullstack {
         <UndefinedNodes route="/undefined-nodes" />
         <WebpackCustomPlugin route="/webpack-custom-plugin" />
         <ComponentTernary route="/component-ternary" />
-        <AnchorModifiers route="/anchor-modifiers" />
+        <AnchorModifiers route="/anchor-modifiers" key="anchorModifiers" />
         <MetatagState route="/metatag-state" />
         <JavaScriptExtension route="/javascript-extension" />
         <TypeScriptExtension route="/typescript-extension" generic />
-        <HydrateElement route="/hydrate-element" />
+        <Refs route="/refs" key={'refs' + refInstanceCount} />
+        <OptimizedEvents route="/optimized-events" />
+        <DynamicHead route="/dynamic-head" />
+        <TextObserver route="/text-observer" />
+        <BodyFragment route="/body-fragment" />
+        <ArrayAttributes route="/array-attributes" />
+        <RouteScroll route="/route-scroll/*" key="routeScroll" />
         <ErrorPage route="*" />
-      </main>
+      </body>
     )
   }
 

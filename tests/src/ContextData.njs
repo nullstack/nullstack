@@ -2,29 +2,23 @@ import Nullstack from 'nullstack';
 
 class ContextData extends Nullstack {
 
-  count = 1;
-
-  calculate({data}) {
-    this.count = (this.count * data.multiply) + data.sum;
+  calculateWithDefault({ data }) {
+    this.countWithDefault = data.multiplyBy * data.count;
   }
 
-  renderInner({data}) {
-    return (
-      <div data={data}>
-        {data.frameworkName}
-      </div>
-    )
+  calculateWithoutDefault({ data }) {
+    this.countWithoutDefault = data.setTo;
   }
-  
-  render({data}) {
+
+  render() {
     return (
-      <div> 
-        <div data-data={!!data} />
-        <button onclick={this.calculate} data-multiply={3} data={{sum: 2}}>
-          ({this.count}*3) + 2
+      <div data-count-with-default={this.countWithDefault} data-count-without-default={this.countWithoutDefault}>
+        <button onclick={this.calculateWithDefault} data-multiply-by={3} data={{ count: 2 }}>
+          calculateWithDefault
         </button>
-        <div data-count={this.count} />
-        <Inner data-framework-name="Nullstack" />
+        <button onclick={this.calculateWithoutDefault} data-set-to={2}>
+          calculateWithoutDefault
+        </button>
       </div>
     )
   }

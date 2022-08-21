@@ -1,8 +1,9 @@
 import generateKey from '../shared/generateKey';
 import { isClass, isFalse, isFunction, isUndefined } from '../shared/nodes';
+import fragment from './fragment';
 import { transformNodes } from './plugins';
 
-async function generateBranch(parent, node, depth, scope) {
+async function generateBranch(siblings, node, depth, scope) {
 
   transformNodes(scope, node, depth);
 
@@ -14,57 +15,41 @@ async function generateBranch(parent, node, depth, scope) {
       message += 'This error usually happens because of a missing import statement or a typo on a component tag';
     }
     throw new Error(message)
-    return;
   }
 
   if (isFalse(node)) {
-    parent.children.push(false);
+    siblings.push({
+      type: false,
+      attributes: {}
+    });
     return;
   }
 
   if (isClass(node)) {
-    const key = node.attributes.key ? node.attributes.key : generateKey(node, depth) + (node.attributes.route ? (scope.context.environment.mode === 'ssg' ? scope.context.router.path : scope.context.router.url) : '')
-    if (
-      scope.context.environment.client &&
-      scope.context.router._changed &&
-      node.attributes &&
-      node.attributes.route &&
-      scope.context.environment.mode !== 'ssg'
-    ) {
-      const routeDepth = depth.slice(0, -1).join('.');
-      const newSegments = scope.context.router._newSegments[routeDepth];
-      if (newSegments) {
-        const oldSegments = scope.context.router._oldSegments[routeDepth];
-        for (const segment in newSegments) {
-          if (oldSegments[segment] !== newSegments[segment]) {
-            delete scope.memory[key];
-          }
-        }
-      }
-    }
+    const key = generateKey(scope, node, depth)
     const instance = scope.instances[key] || new node.type(scope);
-    instance._self.persistent = !!node.attributes.persistent
-    instance._self.key = key;
+    instance.persistent = !!node.attributes.persistent
+    instance.key = key;
     instance._attributes = node.attributes;
     instance._scope = scope;
     let memory;
     if (scope.memory) {
       memory = scope.memory[key];
       if (memory) {
-        instance._self.prerendered = true;
-        instance._self.initiated = true;
+        instance.prerendered = true;
+        instance.initiated = true;
         Object.assign(instance, memory);
         delete scope.memory[key];
       }
     }
     let shouldHydrate = false;
-    const shouldLaunch = instance._self.initiated && (
-      !instance._self.prerendered ||
-      (instance._self.persistent && instance._self.terminated)
+    const shouldLaunch = instance.initiated && (
+      !instance.prerendered ||
+      (instance.persistent && instance.terminated)
     )
-    if (instance._self.terminated) {
+    if (instance.terminated) {
       shouldHydrate = true;
-      instance._self.terminated = false;
+      instance.terminated = false;
     }
     const shouldPrepare = scope.instances[key] === undefined;
     scope.instances[key] = instance;
@@ -73,7 +58,7 @@ async function generateBranch(parent, node, depth, scope) {
         instance.prepare && instance.prepare();
         if (scope.context.environment.server) {
           instance.initiate && await instance.initiate();
-          instance._self.initiated = true;
+          instance.initiated = true;
           instance.launch && instance.launch();
         } else {
           scope.initiationQueue.push(instance);
@@ -85,7 +70,7 @@ async function generateBranch(parent, node, depth, scope) {
       if (shouldHydrate) {
         shouldLaunch && instance.launch && instance.launch();
         scope.hydrationQueue.push(instance);
-      } else if (instance._self.initiated == true) {
+      } else if (instance.initiated === true) {
         instance.update && instance.update();
       }
     }
@@ -98,9 +83,34 @@ async function generateBranch(parent, node, depth, scope) {
     }
     node.children = [].concat(children);
     for (let i = 0; i < node.children.length; i++) {
-      await generateBranch(parent, node.children[i], [...depth, i], scope);
+      await generateBranch(siblings, node.children[i], depth + '-' + i, scope);
     }
     return;
+  }
+
+  if (node.type === 'body') {
+    node.type = fragment
+    for (const attribute in node.attributes) {
+      if (attribute === 'children' || attribute.startsWith('_')) continue;
+      if (attribute === 'class' || attribute === 'style') {
+        if (!scope.nextBody[attribute]) {
+          scope.nextBody[attribute] = []
+        }
+        scope.nextBody[attribute].push(node.attributes[attribute])
+      } else if (attribute.startsWith('on')) {
+        if (scope.context.environment.server) continue
+        if (!scope.nextBody[attribute]) {
+          scope.nextBody[attribute] = []
+        }
+        if (Array.isArray(node.attributes[attribute])) {
+          scope.nextBody[attribute].push(...node.attributes[attribute])
+        } else {
+          scope.nextBody[attribute].push(node.attributes[attribute])
+        }
+      } else {
+        scope.nextBody[attribute] = node.attributes[attribute]
+      }
+    }
   }
 
   if (isFunction(node)) {
@@ -108,33 +118,45 @@ async function generateBranch(parent, node, depth, scope) {
     const children = node.type(context);
     node.children = [].concat(children);
     for (let i = 0; i < node.children.length; i++) {
-      await generateBranch(parent, node.children[i], [...depth, i], scope);
+      await generateBranch(siblings, node.children[i], depth + '-' + i, scope);
     }
     return;
   }
 
   if (node.type) {
-    const branch = {
-      type: node.type,
-      attributes: node.attributes || {},
-      instance: node.instance,
-      children: []
-    }
-    if (node.children) {
+    if (node.type === 'head') {
+      siblings.push({
+        type: false,
+        attributes: {}
+      });
       for (let i = 0; i < node.children.length; i++) {
-        await generateBranch(branch, node.children[i], [...depth, i], scope);
+        const id = depth + '-' + i
+        await generateBranch(scope.nextHead, node.children[i], id, scope);
+        scope.nextHead[scope.nextHead.length - 1].attributes.id ??= id
       }
+    } else if (node.children) {
+      const branch = {
+        type: node.type,
+        attributes: node.attributes,
+        children: []
+      }
+      for (let i = 0; i < node.children.length; i++) {
+        await generateBranch(branch.children, node.children[i], depth + '-' + i, scope);
+      }
+      siblings.push(branch);
     }
-    parent.children.push(branch);
     return;
   }
 
-  parent.children.push(node);
+  siblings.push({
+    type: 'text',
+    text: node
+  });
 
 }
 
 export default async function generateTree(node, scope) {
   const tree = { type: 'div', attributes: { id: 'application' }, children: [] };
-  await generateBranch(tree, node, [0], scope);
+  await generateBranch(tree.children, node, '0', scope);
   return tree;
 }

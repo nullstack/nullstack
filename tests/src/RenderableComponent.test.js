@@ -84,6 +84,11 @@ describe('RenderableComponent', () => {
     expect(element).toBeFalsy();
   });
 
+  test('inner components can be referenced and receive props', async () => {
+    const element = await page.$('[data-reference]');
+    expect(element).toBeTruthy();
+  });
+
 });
 
 describe('RenderableComponent ?condition=true', () => {

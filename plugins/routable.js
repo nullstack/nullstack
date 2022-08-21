@@ -8,33 +8,25 @@ function erase(node) {
 
 function match(node) {
   return (
-    node && 
+    node &&
     node.attributes !== undefined &&
     node.attributes.route !== undefined
   )
 }
 
-function load({router}) {
+function load({ router }) {
   router._routes = {};
-  if(!router._oldSegments) {
-    router._oldSegments = {};
-    router._newSegments = {};
-  } else {
-    router._oldSegments = router._newSegments;
-    router._newSegments = {};
-  }
 }
 
-function transform({node, depth, router}) {
-  if(!match(node)) return;
-  const routeDepth = depth.slice(0, -1).join('.');
-  if(router._routes[routeDepth] !== undefined) {
+function transform({ node, depth, router }) {
+  if (!match(node)) return;
+  const routeDepth = depth.slice(0, depth.lastIndexOf('-'))
+  if (router._routes[routeDepth] !== undefined) {
     erase(node);
   } else {
     const params = routeMatches(router.url, node.attributes.route);
-    if(params) {
+    if (params) {
       router._routes[routeDepth] = true;
-      router._newSegments[routeDepth] = params;
       Object.assign(router._segments, params);
     } else {
       erase(node);
