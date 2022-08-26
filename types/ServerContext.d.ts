@@ -1,15 +1,14 @@
-import { NullstackEnvironment } from "./Environment";
-import { NullstackProject } from "./Project";
-import { NullstackSecrets } from "./Secrets";
-import { NullstackServer } from "./Server";
-import { NullstackSettings } from "./Settings";
-import { NullstackWorker } from "./Worker";
+import { NullstackEnvironment } from './Environment';
+import { NullstackProject } from './Project';
+import { NullstackSecrets } from './Secrets';
+import { NullstackServer } from './Server';
+import { NullstackSettings } from './Settings';
+import { NullstackWorker } from './Worker';
 
 /**
  * @see https://nullstack.app/context
  */
 export type NullstackServerContext = {
-
   /**
    * Information about the app manifest and some metatags.
    *
@@ -80,5 +79,4 @@ export type NullstackServerContext = {
   secrets?: NullstackSecrets;
 
   [key: string]: any;
-
 };

@@ -1,16 +1,15 @@
-import { NullstackEnvironment } from "./Environment";
-import { NullstackPage } from "./Page";
-import { NullstackParams } from "./Params";
-import { NullstackProject } from "./Project";
-import { NullstackRouter } from "./Router";
-import { NullstackSettings } from "./Settings";
-import { NullstackWorker } from "./Worker";
+import { NullstackEnvironment } from './Environment';
+import { NullstackPage } from './Page';
+import { NullstackParams } from './Params';
+import { NullstackProject } from './Project';
+import { NullstackRouter } from './Router';
+import { NullstackSettings } from './Settings';
+import { NullstackWorker } from './Worker';
 
 /**
  * @see https://nullstack.app/context
  */
 export type NullstackClientContext = {
-
   /**
    * Information about the document `head` metatags.
    *
@@ -99,5 +98,4 @@ export type NullstackClientContext = {
    * Custom context prop.
    */
   [key: string]: any;
-
 };

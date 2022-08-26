@@ -1,24 +1,22 @@
-import { NullstackClientContext } from "./ClientContext";
-import { NullstackPlugin } from "./Plugin";
-import { NullstackServerContext } from "./ServerContext";
+import { NullstackClientContext } from './ClientContext';
+import { NullstackPlugin } from './Plugin';
+import { NullstackServerContext } from './ServerContext';
 
-export interface NullstackContext
-  extends NullstackClientContext,
-  NullstackServerContext { }
+export interface NullstackContext extends NullstackClientContext, NullstackServerContext {}
 
-export * from "./ClientContext";
-export * from "./Environment";
-export * from "./Page";
-export * from "./Params";
-export * from "./Plugin";
-export * from "./Project";
-export * from "./Router";
-export * from "./Secrets";
-export * from "./Server";
-export * from "./ServerContext";
-export * from "./Settings";
-export * from "./Worker";
-export * from "./JSX";
+export * from './ClientContext';
+export * from './Environment';
+export * from './Page';
+export * from './Params';
+export * from './Plugin';
+export * from './Project';
+export * from './Router';
+export * from './Secrets';
+export * from './Server';
+export * from './ServerContext';
+export * from './Settings';
+export * from './Worker';
+export * from './JSX';
 
 export default class Nullstack<TProps = {}> {
   constructor(props?: TProps);

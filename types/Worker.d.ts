@@ -1,5 +1,4 @@
 export type NullstackWorker = {
-
   /**
    * - keys: server functions names
    * - values: array of these functions arguments
@@ -21,5 +20,4 @@ export type NullstackWorker = {
    * @see https://nullstack.app/service-worker#loading-screens
    */
   loading: boolean;
-
 };
