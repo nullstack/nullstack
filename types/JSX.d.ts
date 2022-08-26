@@ -45,20 +45,20 @@ type Booleanish = boolean | 'true' | 'false';
 // ----------------------------------------------------------------------
 
 export interface Attributes {
-  html?: string | undefined;
-  source?: object | undefined;
-  bind?: any | undefined;
-  debounce?: number | undefined;
-  ref?: any | undefined;
-  data?: object | undefined;
+  html?: string;
+  source?: object;
+  bind?: any;
+  debounce?: number;
+  ref?: any;
+  data?: object;
   'data-'?: any;
   [key: string]: any;
 }
 
 export interface NullstackAttributes extends Attributes {
   children?: NullstackNode;
-  route?: string | undefined;
-  persistent?: boolean | undefined;
+  route?: string;
+  persistent?: boolean;
   key?: string;
 }
 
@@ -221,228 +221,228 @@ export interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes {}
 
 export interface DOMAttributes<T> extends Attributes {
   // Focus Events
-  onfocus?: FocusEventHandler<T> | undefined;
-  onblur?: FocusEventHandler<T> | undefined;
+  onfocus?: FocusEventHandler<T>;
+  onblur?: FocusEventHandler<T>;
 
   // Form Events
-  onchange?: FormEventHandler<T> | undefined;
-  oninput?: FormEventHandler<T> | undefined;
-  onreset?: FormEventHandler<T> | undefined;
-  onsubmit?: FormEventHandler<T> | undefined;
-  oninvalid?: FormEventHandler<T> | undefined;
+  onchange?: FormEventHandler<T>;
+  oninput?: FormEventHandler<T>;
+  onreset?: FormEventHandler<T>;
+  onsubmit?: FormEventHandler<T>;
+  oninvalid?: FormEventHandler<T>;
 
   // Image Events
-  onload?: NullstackEventHandler<T> | undefined;
-  onerror?: NullstackEventHandler<T> | undefined; // also a Media Event
+  onload?: NullstackEventHandler<T>;
+  onerror?: NullstackEventHandler<T>; // also a Media Event
 
   // Keyboard Events
-  onkeydown?: KeyboardEventHandler<T> | undefined;
+  onkeydown?: KeyboardEventHandler<T>;
   /** @deprecated */
-  onkeypress?: KeyboardEventHandler<T> | undefined;
-  onkeyup?: KeyboardEventHandler<T> | undefined;
+  onkeypress?: KeyboardEventHandler<T>;
+  onkeyup?: KeyboardEventHandler<T>;
 
   // Media Events
-  onabort?: NullstackEventHandler<T> | undefined;
-  oncanplay?: NullstackEventHandler<T> | undefined;
-  oncanplaythrough?: NullstackEventHandler<T> | undefined;
-  ondurationchange?: NullstackEventHandler<T> | undefined;
-  onemptied?: NullstackEventHandler<T> | undefined;
-  onended?: NullstackEventHandler<T> | undefined;
-  onloadeddata?: NullstackEventHandler<T> | undefined;
-  onloadedmetadata?: NullstackEventHandler<T> | undefined;
-  onloadstart?: NullstackEventHandler<T> | undefined;
-  onpause?: NullstackEventHandler<T> | undefined;
-  onplay?: NullstackEventHandler<T> | undefined;
-  onplaying?: NullstackEventHandler<T> | undefined;
-  onprogress?: NullstackEventHandler<T> | undefined;
-  onratechange?: NullstackEventHandler<T> | undefined;
-  onseeked?: NullstackEventHandler<T> | undefined;
-  onseeking?: NullstackEventHandler<T> | undefined;
-  onstalled?: NullstackEventHandler<T> | undefined;
-  onsuspend?: NullstackEventHandler<T> | undefined;
-  ontimeupdate?: NullstackEventHandler<T> | undefined;
-  onvolumechange?: NullstackEventHandler<T> | undefined;
-  onwaiting?: NullstackEventHandler<T> | undefined;
+  onabort?: NullstackEventHandler<T>;
+  oncanplay?: NullstackEventHandler<T>;
+  oncanplaythrough?: NullstackEventHandler<T>;
+  ondurationchange?: NullstackEventHandler<T>;
+  onemptied?: NullstackEventHandler<T>;
+  onended?: NullstackEventHandler<T>;
+  onloadeddata?: NullstackEventHandler<T>;
+  onloadedmetadata?: NullstackEventHandler<T>;
+  onloadstart?: NullstackEventHandler<T>;
+  onpause?: NullstackEventHandler<T>;
+  onplay?: NullstackEventHandler<T>;
+  onplaying?: NullstackEventHandler<T>;
+  onprogress?: NullstackEventHandler<T>;
+  onratechange?: NullstackEventHandler<T>;
+  onseeked?: NullstackEventHandler<T>;
+  onseeking?: NullstackEventHandler<T>;
+  onstalled?: NullstackEventHandler<T>;
+  onsuspend?: NullstackEventHandler<T>;
+  ontimeupdate?: NullstackEventHandler<T>;
+  onvolumechange?: NullstackEventHandler<T>;
+  onwaiting?: NullstackEventHandler<T>;
 
   // MouseEvents
-  onclick?: MouseEventHandler<T> | undefined;
-  oncontextmenu?: MouseEventHandler<T> | undefined;
-  ondblclick?: MouseEventHandler<T> | undefined;
-  ondrag?: DragEventHandler<T> | undefined;
-  ondragend?: DragEventHandler<T> | undefined;
-  ondragenter?: DragEventHandler<T> | undefined;
-  ondragleave?: DragEventHandler<T> | undefined;
-  ondragover?: DragEventHandler<T> | undefined;
-  ondragstart?: DragEventHandler<T> | undefined;
-  ondrop?: DragEventHandler<T> | undefined;
-  onmousedown?: MouseEventHandler<T> | undefined;
-  onmouseenter?: MouseEventHandler<T> | undefined;
-  onmouseleave?: MouseEventHandler<T> | undefined;
-  onmousemove?: MouseEventHandler<T> | undefined;
-  onmouseout?: MouseEventHandler<T> | undefined;
-  onmouseover?: MouseEventHandler<T> | undefined;
-  onmouseup?: MouseEventHandler<T> | undefined;
+  onclick?: MouseEventHandler<T>;
+  oncontextmenu?: MouseEventHandler<T>;
+  ondblclick?: MouseEventHandler<T>;
+  ondrag?: DragEventHandler<T>;
+  ondragend?: DragEventHandler<T>;
+  ondragenter?: DragEventHandler<T>;
+  ondragleave?: DragEventHandler<T>;
+  ondragover?: DragEventHandler<T>;
+  ondragstart?: DragEventHandler<T>;
+  ondrop?: DragEventHandler<T>;
+  onmousedown?: MouseEventHandler<T>;
+  onmouseenter?: MouseEventHandler<T>;
+  onmouseleave?: MouseEventHandler<T>;
+  onmousemove?: MouseEventHandler<T>;
+  onmouseout?: MouseEventHandler<T>;
+  onmouseover?: MouseEventHandler<T>;
+  onmouseup?: MouseEventHandler<T>;
 
   // Wheel Events
   /** @deprecated */
-  onmousewheel?: WheelEventHandler<T> | undefined;
+  onmousewheel?: WheelEventHandler<T>;
 
   // Selection Events
-  onselect?: NullstackEventHandler<T> | undefined;
+  onselect?: NullstackEventHandler<T>;
 
   // Pointer Events
-  onpointerdown?: PointerEventHandler<T> | undefined;
-  onpointermove?: PointerEventHandler<T> | undefined;
-  onpointerup?: PointerEventHandler<T> | undefined;
-  onpointercancel?: PointerEventHandler<T> | undefined;
-  onpointerenter?: PointerEventHandler<T> | undefined;
-  onpointerleave?: PointerEventHandler<T> | undefined;
-  onpointerover?: PointerEventHandler<T> | undefined;
-  onpointerout?: PointerEventHandler<T> | undefined;
+  onpointerdown?: PointerEventHandler<T>;
+  onpointermove?: PointerEventHandler<T>;
+  onpointerup?: PointerEventHandler<T>;
+  onpointercancel?: PointerEventHandler<T>;
+  onpointerenter?: PointerEventHandler<T>;
+  onpointerleave?: PointerEventHandler<T>;
+  onpointerover?: PointerEventHandler<T>;
+  onpointerout?: PointerEventHandler<T>;
 
   // UI Events
-  onscroll?: UIEventHandler<T> | undefined;
+  onscroll?: UIEventHandler<T>;
 }
 
 // All the WAI-ARIA 1.1 attributes from https://www.w3.org/TR/wai-aria-1.1/
 export interface AriaAttributes {
   /** Identifies the currently active element when DOM focus is on a composite widget, textbox, group, or applicatio */
-  'aria-activedescendant'?: string | undefined;
+  'aria-activedescendant'?: string;
   /** Indicates whether assistive technologies will present all, or only parts of, the changed region based on the change notifications defined by the aria-relevant attribute. */
-  'aria-atomic'?: Booleanish | undefined;
+  'aria-atomic'?: Booleanish;
   /**
    * Indicates whether inputting text could trigger display of one or more predictions of the user's intended value for an input and specifies how predictions would be
    * presented if they are made.
    */
-  'aria-autocomplete'?: 'none' | 'inline' | 'list' | 'both' | undefined;
+  'aria-autocomplete'?: 'none' | 'inline' | 'list' | 'both';
   /** Indicates an element is being modified and that assistive technologies MAY want to wait until the modifications are complete before exposing them to the user. */
-  'aria-busy'?: Booleanish | undefined;
+  'aria-busy'?: Booleanish;
   /**
    * Indicates the current "checked" state of checkboxes, radio buttons, and other widgets.
    * @see aria-pressed @see aria-selected.
    */
-  'aria-checked'?: boolean | 'false' | 'mixed' | 'true' | undefined;
+  'aria-checked'?: boolean | 'false' | 'mixed' | 'true';
   /**
    * Defines the total number of columns in a table, grid, or treegrid.
    * @see aria-colindex.
    */
-  'aria-colcount'?: number | undefined;
+  'aria-colcount'?: number;
   /**
    * Defines an element's column index or position with respect to the total number of columns within a table, grid, or treegrid.
    * @see aria-colcount @see aria-colspa
    */
-  'aria-colindex'?: number | undefined;
+  'aria-colindex'?: number;
   /**
    * Defines the number of columns spanned by a cell or gridcell within a table, grid, or treegrid.
    * @see aria-colindex @see aria-rowspa
    */
-  'aria-colspan'?: number | undefined;
+  'aria-colspan'?: number;
   /**
    * Identifies the element (or elements) whose contents or presence are controlled by the current element.
    * @see aria-owns.
    */
-  'aria-controls'?: string | undefined;
+  'aria-controls'?: string;
   /** Indicates the element that represents the current item within a container or set of related elements. */
-  'aria-current'?: boolean | 'false' | 'true' | 'page' | 'step' | 'location' | 'date' | 'time' | undefined;
+  'aria-current'?: boolean | 'false' | 'true' | 'page' | 'step' | 'location' | 'date' | 'time';
   /**
    * Identifies the element (or elements) that describes the object.
    * @see aria-labelledby
    */
-  'aria-describedby'?: string | undefined;
+  'aria-describedby'?: string;
   /**
    * Identifies the element that provides a detailed, extended description for the object.
    * @see aria-describedby.
    */
-  'aria-details'?: string | undefined;
+  'aria-details'?: string;
   /**
    * Indicates that the element is perceivable but disabled, so it is not editable or otherwise operable.
    * @see aria-hidden @see aria-readonly.
    */
-  'aria-disabled'?: Booleanish | undefined;
+  'aria-disabled'?: Booleanish;
   /**
    * Indicates what functions can be performed when a dragged object is released on the drop target.
    * @deprecated in ARIA 1.1
    */
-  'aria-dropeffect'?: 'none' | 'copy' | 'execute' | 'link' | 'move' | 'popup' | undefined;
+  'aria-dropeffect'?: 'none' | 'copy' | 'execute' | 'link' | 'move' | 'popup';
   /**
    * Identifies the element that provides an error message for the object.
    * @see aria-invalid @see aria-describedby.
    */
-  'aria-errormessage'?: string | undefined;
+  'aria-errormessage'?: string;
   /** Indicates whether the element, or another grouping element it controls, is currently expanded or collapsed. */
-  'aria-expanded'?: Booleanish | undefined;
+  'aria-expanded'?: Booleanish;
   /**
    * Identifies the next element (or elements) in an alternate reading order of content which, at the user's discretion,
    * allows assistive technology to override the general default of reading in document source order.
    */
-  'aria-flowto'?: string | undefined;
+  'aria-flowto'?: string;
   /**
    * Indicates an element's "grabbed" state in a drag-and-drop operatio
    * @deprecated in ARIA 1.1
    */
-  'aria-grabbed'?: Booleanish | undefined;
+  'aria-grabbed'?: Booleanish;
   /** Indicates the availability and type of interactive popup element, such as menu or dialog, that can be triggered by an element. */
-  'aria-haspopup'?: boolean | 'false' | 'true' | 'menu' | 'listbox' | 'tree' | 'grid' | 'dialog' | undefined;
+  'aria-haspopup'?: boolean | 'false' | 'true' | 'menu' | 'listbox' | 'tree' | 'grid' | 'dialog';
   /**
    * Indicates whether the element is exposed to an accessibility API.
    * @see aria-disabled.
    */
-  'aria-hidden'?: Booleanish | undefined;
+  'aria-hidden'?: Booleanish;
   /**
    * Indicates the entered value does not conform to the format expected by the applicatio
    * @see aria-errormessage.
    */
-  'aria-invalid'?: boolean | 'false' | 'true' | 'grammar' | 'spelling' | undefined;
+  'aria-invalid'?: boolean | 'false' | 'true' | 'grammar' | 'spelling';
   /** Indicates keyboard shortcuts that an author has implemented to activate or give focus to an element. */
-  'aria-keyshortcuts'?: string | undefined;
+  'aria-keyshortcuts'?: string;
   /**
    * Defines a string value that labels the current element.
    * @see aria-labelledby.
    */
-  'aria-label'?: string | undefined;
+  'aria-label'?: string;
   /**
    * Identifies the element (or elements) that labels the current element.
    * @see aria-describedby.
    */
-  'aria-labelledby'?: string | undefined;
+  'aria-labelledby'?: string;
   /** Defines the hierarchical level of an element within a structure. */
-  'aria-level'?: number | undefined;
+  'aria-level'?: number;
   /** Indicates that an element will be updated, and describes the types of updates the user agents, assistive technologies, and user can expect from the live regio */
-  'aria-live'?: 'off' | 'assertive' | 'polite' | undefined;
+  'aria-live'?: 'off' | 'assertive' | 'polite';
   /** Indicates whether an element is modal when displayed. */
-  'aria-modal'?: Booleanish | undefined;
+  'aria-modal'?: Booleanish;
   /** Indicates whether a text box accepts multiple lines of input or only a single line. */
-  'aria-multiline'?: Booleanish | undefined;
+  'aria-multiline'?: Booleanish;
   /** Indicates that the user may select more than one item from the current selectable descendants. */
-  'aria-multiselectable'?: Booleanish | undefined;
+  'aria-multiselectable'?: Booleanish;
   /** Indicates whether the element's orientation is horizontal, vertical, or unknown/ambiguous. */
-  'aria-orientation'?: 'horizontal' | 'vertical' | undefined;
+  'aria-orientation'?: 'horizontal' | 'vertical';
   /**
    * Identifies an element (or elements) in order to define a visual, functional, or contextual parent/child relationship
    * between DOM elements where the DOM hierarchy cannot be used to represent the relationship.
    * @see aria-controls.
    */
-  'aria-owns'?: string | undefined;
+  'aria-owns'?: string;
   /**
    * Defines a short hint (a word or short phrase) intended to aid the user with data entry when the control has no value.
    * A hint could be a sample value or a brief description of the expected format.
    */
-  'aria-placeholder'?: string | undefined;
+  'aria-placeholder'?: string;
   /**
    * Defines an element's number or position in the current set of listitems or treeitems. Not required if all elements in the set are present in the DOM.
    * @see aria-setsize.
    */
-  'aria-posinset'?: number | undefined;
+  'aria-posinset'?: number;
   /**
    * Indicates the current "pressed" state of toggle buttons.
    * @see aria-checked @see aria-selected.
    */
-  'aria-pressed'?: boolean | 'false' | 'mixed' | 'true' | undefined;
+  'aria-pressed'?: boolean | 'false' | 'mixed' | 'true';
   /**
    * Indicates that the element is not editable, but is otherwise operable.
    * @see aria-disabled.
    */
-  'aria-readonly'?: Booleanish | undefined;
+  'aria-readonly'?: Booleanish;
   /**
    * Indicates what notifications the user agent will trigger when the accessibility tree within a live region is modified.
    * @see aria-atomic.
@@ -460,47 +460,47 @@ export interface AriaAttributes {
     | 'text removals'
     | undefined;
   /** Indicates that user input is required on the element before a form may be submitted. */
-  'aria-required'?: Booleanish | undefined;
+  'aria-required'?: Booleanish;
   /** Defines a human-readable, author-localized description for the role of an element. */
-  'aria-roledescription'?: string | undefined;
+  'aria-roledescription'?: string;
   /**
    * Defines the total number of rows in a table, grid, or treegrid.
    * @see aria-rowindex.
    */
-  'aria-rowcount'?: number | undefined;
+  'aria-rowcount'?: number;
   /**
    * Defines an element's row index or position with respect to the total number of rows within a table, grid, or treegrid.
    * @see aria-rowcount @see aria-rowspa
    */
-  'aria-rowindex'?: number | undefined;
+  'aria-rowindex'?: number;
   /**
    * Defines the number of rows spanned by a cell or gridcell within a table, grid, or treegrid.
    * @see aria-rowindex @see aria-colspa
    */
-  'aria-rowspan'?: number | undefined;
+  'aria-rowspan'?: number;
   /**
    * Indicates the current "selected" state of various widgets.
    * @see aria-checked @see aria-pressed.
    */
-  'aria-selected'?: Booleanish | undefined;
+  'aria-selected'?: Booleanish;
   /**
    * Defines the number of items in the current set of listitems or treeitems. Not required if all elements in the set are present in the DOM.
    * @see aria-posinset.
    */
-  'aria-setsize'?: number | undefined;
+  'aria-setsize'?: number;
   /** Indicates if items in a table or grid are sorted in ascending or descending order. */
-  'aria-sort'?: 'none' | 'ascending' | 'descending' | 'other' | undefined;
+  'aria-sort'?: 'none' | 'ascending' | 'descending' | 'other';
   /** Defines the maximum allowed value for a range widget. */
-  'aria-valuemax'?: number | undefined;
+  'aria-valuemax'?: number;
   /** Defines the minimum allowed value for a range widget. */
-  'aria-valuemin'?: number | undefined;
+  'aria-valuemin'?: number;
   /**
    * Defines the current value for a range widget.
    * @see aria-valuetext.
    */
-  'aria-valuenow'?: number | undefined;
+  'aria-valuenow'?: number;
   /** Defines the human readable text alternative of aria-valuenow for a range widget. */
-  'aria-valuetext'?: string | undefined;
+  'aria-valuetext'?: string;
 }
 
 // All the WAI-ARIA 1.1 role attribute values from https://www.w3.org/TR/wai-aria-1.1/#role_definitions
@@ -578,143 +578,143 @@ type AriaRole =
 
 export interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
   // Standard HTML Attributes
-  accesskey?: string | undefined;
-  class?: string | undefined;
-  contenteditable?: Booleanish | 'inherit' | undefined;
-  contextmenu?: string | undefined;
-  dir?: string | undefined;
-  draggable?: Booleanish | undefined;
-  hidden?: boolean | undefined;
-  id?: string | undefined;
-  lang?: string | undefined;
-  placeholder?: string | undefined;
-  slot?: string | undefined;
-  spellcheck?: Booleanish | undefined;
-  style?: string | undefined;
-  tabindex?: number | string | undefined;
-  title?: string | undefined;
-  translate?: 'yes' | 'no' | undefined;
+  accesskey?: string;
+  class?: string;
+  contenteditable?: Booleanish | 'inherit';
+  contextmenu?: string;
+  dir?: string;
+  draggable?: Booleanish;
+  hidden?: boolean;
+  id?: string;
+  lang?: string;
+  placeholder?: string;
+  slot?: string;
+  spellcheck?: Booleanish;
+  style?: string;
+  tabindex?: number | string;
+  title?: string;
+  translate?: 'yes' | 'no';
 
   // WAI-ARIA
-  role?: AriaRole | undefined;
+  role?: AriaRole;
 
   // Non-standard Attributes
-  autocapitalize?: string | undefined;
-  itemprop?: string | undefined;
-  itemscope?: boolean | undefined;
-  itemtype?: string | undefined;
-  itemid?: string | undefined;
-  itemref?: string | undefined;
+  autocapitalize?: string;
+  itemprop?: string;
+  itemscope?: boolean;
+  itemtype?: string;
+  itemid?: string;
+  itemref?: string;
 
   // Living Standard
   /**
    * Hints at the type of data that might be entered by the user while editing the element or its contents
    * @see https://html.spec.whatwg.org/multipage/interactiohtml#input-modalities:-the-inputmode-attribute
    */
-  inputmode?: 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search' | undefined;
+  inputmode?: 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search';
   /**
    * Specify that a standard HTML element should behave like a defined custom built-in element
    * @see https://html.spec.whatwg.org/multipage/custom-elements.html#attr-is
    */
-  is?: string | undefined;
+  is?: string;
 }
 
 export interface AllHTMLAttributes<T> extends HTMLAttributes<T> {
   // Standard HTML Attributes
-  accept?: string | undefined;
-  'accept-charset'?: string | undefined;
-  action?: string | undefined;
-  allowfullScreen?: boolean | undefined;
-  allowTransparency?: boolean | undefined;
-  alt?: string | undefined;
-  as?: string | undefined;
-  async?: boolean | undefined;
-  autocomplete?: string | undefined;
-  autofocus?: boolean | undefined;
-  autoplay?: boolean | undefined;
-  capture?: boolean | 'user' | 'environment' | undefined;
-  charset?: string | undefined;
-  checked?: boolean | undefined;
-  cite?: string | undefined;
-  classid?: string | undefined;
-  cols?: number | undefined;
-  colspan?: number | undefined;
-  content?: string | undefined;
-  controls?: boolean | undefined;
-  coords?: string | undefined;
-  crossorigin?: 'anonymous' | 'use-credentials' | '' | undefined;
-  datetime?: string | undefined;
-  default?: boolean | undefined;
-  defer?: boolean | undefined;
-  disabled?: boolean | undefined;
+  accept?: string;
+  'accept-charset'?: string;
+  action?: string;
+  allowfullScreen?: boolean;
+  allowTransparency?: boolean;
+  alt?: string;
+  as?: string;
+  async?: boolean;
+  autocomplete?: string;
+  autofocus?: boolean;
+  autoplay?: boolean;
+  capture?: boolean | 'user' | 'environment';
+  charset?: string;
+  checked?: boolean;
+  cite?: string;
+  classid?: string;
+  cols?: number;
+  colspan?: number;
+  content?: string;
+  controls?: boolean;
+  coords?: string;
+  crossorigin?: 'anonymous' | 'use-credentials' | '';
+  datetime?: string;
+  default?: boolean;
+  defer?: boolean;
+  disabled?: boolean;
   download?: any;
-  enctype?: string | undefined;
-  form?: string | undefined;
-  formaction?: string | undefined;
-  formenctype?: string | undefined;
-  formmethod?: string | undefined;
-  formnovalidate?: boolean | undefined;
-  formtarget?: string | undefined;
-  headers?: string | undefined;
-  height?: number | string | undefined;
-  high?: number | undefined;
-  href?: string | undefined;
-  hreflang?: string | undefined;
-  'http-equiv'?: string | undefined;
-  integrity?: string | undefined;
-  kind?: string | undefined;
-  label?: string | undefined;
-  list?: string | undefined;
-  loop?: boolean | undefined;
-  low?: number | undefined;
-  manifest?: string | undefined;
-  max?: number | string | undefined;
-  maxlength?: number | undefined;
-  media?: string | undefined;
-  mediagroup?: string | undefined;
-  method?: string | undefined;
-  min?: number | string | undefined;
-  minlength?: number | undefined;
-  multiple?: boolean | undefined;
-  muted?: boolean | undefined;
-  name?: string | undefined;
-  nonce?: string | undefined;
-  novalidate?: boolean | undefined;
-  open?: boolean | undefined;
-  optimum?: number | undefined;
-  pattern?: string | undefined;
-  placeholder?: string | undefined;
-  playsinline?: boolean | undefined;
-  poster?: string | undefined;
-  preload?: string | undefined;
-  readonly?: boolean | undefined;
-  rel?: string | undefined;
-  required?: boolean | undefined;
-  reversed?: boolean | undefined;
-  rows?: number | undefined;
-  rowspan?: number | undefined;
-  sandbox?: string | undefined;
-  scope?: string | undefined;
-  scoped?: boolean | undefined;
-  seamless?: boolean | undefined;
-  selected?: boolean | undefined;
-  shape?: string | undefined;
-  size?: number | undefined;
-  sizes?: string | undefined;
-  span?: number | undefined;
-  src?: string | undefined;
-  srcdoc?: string | undefined;
-  srclang?: string | undefined;
-  srcset?: string | undefined;
-  start?: number | undefined;
-  step?: number | string | undefined;
-  summary?: string | undefined;
-  target?: string | undefined;
-  type?: string | undefined;
-  usemap?: string | undefined;
-  value?: string | ReadonlyArray<string> | number | undefined;
-  width?: number | string | undefined;
-  wrap?: string | undefined;
+  enctype?: string;
+  form?: string;
+  formaction?: string;
+  formenctype?: string;
+  formmethod?: string;
+  formnovalidate?: boolean;
+  formtarget?: string;
+  headers?: string;
+  height?: number | string;
+  high?: number;
+  href?: string;
+  hreflang?: string;
+  'http-equiv'?: string;
+  integrity?: string;
+  kind?: string;
+  label?: string;
+  list?: string;
+  loop?: boolean;
+  low?: number;
+  manifest?: string;
+  max?: number | string;
+  maxlength?: number;
+  media?: string;
+  mediagroup?: string;
+  method?: string;
+  min?: number | string;
+  minlength?: number;
+  multiple?: boolean;
+  muted?: boolean;
+  name?: string;
+  nonce?: string;
+  novalidate?: boolean;
+  open?: boolean;
+  optimum?: number;
+  pattern?: string;
+  placeholder?: string;
+  playsinline?: boolean;
+  poster?: string;
+  preload?: string;
+  readonly?: boolean;
+  rel?: string;
+  required?: boolean;
+  reversed?: boolean;
+  rows?: number;
+  rowspan?: number;
+  sandbox?: string;
+  scope?: string;
+  scoped?: boolean;
+  seamless?: boolean;
+  selected?: boolean;
+  shape?: string;
+  size?: number;
+  sizes?: string;
+  span?: number;
+  src?: string;
+  srcdoc?: string;
+  srclang?: string;
+  srcset?: string;
+  start?: number;
+  step?: number | string;
+  summary?: string;
+  target?: string;
+  type?: string;
+  usemap?: string;
+  value?: string | ReadonlyArray<string> | number;
+  width?: number | string;
+  wrap?: string;
 }
 
 type HTMLAttributeReferrerPolicy =
@@ -732,158 +732,158 @@ type HTMLAttributeAnchorTarget = '_self' | '_blank' | '_parent' | '_top' | (stri
 
 export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
   download?: any;
-  href?: string | undefined;
-  hreflang?: string | undefined;
-  media?: string | undefined;
-  ping?: string | undefined;
-  rel?: string | undefined;
-  target?: HTMLAttributeAnchorTarget | undefined;
-  type?: string | undefined;
-  referrerpolicy?: HTMLAttributeReferrerPolicy | undefined;
+  href?: string;
+  hreflang?: string;
+  media?: string;
+  ping?: string;
+  rel?: string;
+  target?: HTMLAttributeAnchorTarget;
+  type?: string;
+  referrerpolicy?: HTMLAttributeReferrerPolicy;
 
   // Nullstack Router
-  params?: object | undefined;
-  path?: string | undefined;
+  params?: object;
+  path?: string;
 }
 
 export interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> {}
 
 export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
-  alt?: string | undefined;
-  coords?: string | undefined;
+  alt?: string;
+  coords?: string;
   download?: any;
-  href?: string | undefined;
-  hreflang?: string | undefined;
-  media?: string | undefined;
-  referrerpolicy?: HTMLAttributeReferrerPolicy | undefined;
-  rel?: string | undefined;
-  shape?: string | undefined;
-  target?: string | undefined;
+  href?: string;
+  hreflang?: string;
+  media?: string;
+  referrerpolicy?: HTMLAttributeReferrerPolicy;
+  rel?: string;
+  shape?: string;
+  target?: string;
 }
 
 export interface BaseHTMLAttributes<T> extends HTMLAttributes<T> {
-  href?: string | undefined;
-  target?: string | undefined;
+  href?: string;
+  target?: string;
 }
 
 export interface BlockquoteHTMLAttributes<T> extends HTMLAttributes<T> {
-  cite?: string | undefined;
+  cite?: string;
 }
 
 export interface ButtonHTMLAttributes<T> extends HTMLAttributes<T> {
-  autofocus?: boolean | undefined;
-  disabled?: boolean | undefined;
-  form?: string | undefined;
-  formaction?: string | undefined;
-  formenctype?: string | undefined;
-  formmethod?: string | undefined;
-  formnovalidate?: boolean | undefined;
-  formtarget?: string | undefined;
-  name?: string | undefined;
-  type?: 'submit' | 'reset' | 'button' | undefined;
-  value?: string | ReadonlyArray<string> | number | undefined;
+  autofocus?: boolean;
+  disabled?: boolean;
+  form?: string;
+  formaction?: string;
+  formenctype?: string;
+  formmethod?: string;
+  formnovalidate?: boolean;
+  formtarget?: string;
+  name?: string;
+  type?: 'submit' | 'reset' | 'button';
+  value?: string | ReadonlyArray<string> | number;
 }
 
 export interface CanvasHTMLAttributes<T> extends HTMLAttributes<T> {
-  height?: number | string | undefined;
-  width?: number | string | undefined;
+  height?: number | string;
+  width?: number | string;
 }
 
 export interface ColHTMLAttributes<T> extends HTMLAttributes<T> {
-  span?: number | undefined;
+  span?: number;
   /** @deprecated */
-  width?: number | string | undefined;
+  width?: number | string;
 }
 
 export interface ColgroupHTMLAttributes<T> extends HTMLAttributes<T> {
-  span?: number | undefined;
+  span?: number;
 }
 
 export interface DataHTMLAttributes<T> extends HTMLAttributes<T> {
-  value?: string | ReadonlyArray<string> | number | undefined;
+  value?: string | ReadonlyArray<string> | number;
 }
 
 export interface DetailsHTMLAttributes<T> extends HTMLAttributes<T> {
-  open?: boolean | undefined;
+  open?: boolean;
 }
 
 export interface DelHTMLAttributes<T> extends HTMLAttributes<T> {
-  cite?: string | undefined;
-  datetime?: string | undefined;
+  cite?: string;
+  datetime?: string;
 }
 
 export interface DialogHTMLAttributes<T> extends HTMLAttributes<T> {
-  open?: boolean | undefined;
+  open?: boolean;
 }
 
 export interface EmbedHTMLAttributes<T> extends HTMLAttributes<T> {
-  height?: number | string | undefined;
-  src?: string | undefined;
-  type?: string | undefined;
-  width?: number | string | undefined;
+  height?: number | string;
+  src?: string;
+  type?: string;
+  width?: number | string;
 }
 
 export interface FieldsetHTMLAttributes<T> extends HTMLAttributes<T> {
-  disabled?: boolean | undefined;
-  form?: string | undefined;
-  name?: string | undefined;
+  disabled?: boolean;
+  form?: string;
+  name?: string;
 }
 
 export interface FormHTMLAttributes<T> extends HTMLAttributes<T> {
-  'accept-charset'?: string | undefined;
-  action?: string | undefined;
-  autocomplete?: string | undefined;
-  enctype?: string | undefined;
-  method?: string | undefined;
-  name?: string | undefined;
-  novalidate?: boolean | undefined;
-  target?: string | undefined;
+  'accept-charset'?: string;
+  action?: string;
+  autocomplete?: string;
+  enctype?: string;
+  method?: string;
+  name?: string;
+  novalidate?: boolean;
+  target?: string;
 }
 
 export interface HtmlHTMLAttributes<T> extends HTMLAttributes<T> {
-  manifest?: string | undefined;
+  manifest?: string;
 }
 
 export interface IframeHTMLAttributes<T> extends HTMLAttributes<T> {
-  allow?: string | undefined;
-  allowfullScreen?: boolean | undefined;
-  allowTransparency?: boolean | undefined;
+  allow?: string;
+  allowfullScreen?: boolean;
+  allowTransparency?: boolean;
   /** @deprecated */
-  frameBorder?: number | string | undefined;
-  height?: number | string | undefined;
-  loading?: 'eager' | 'lazy' | undefined;
+  frameBorder?: number | string;
+  height?: number | string;
+  loading?: 'eager' | 'lazy';
   /** @deprecated */
-  marginHeight?: number | undefined;
+  marginHeight?: number;
   /** @deprecated */
-  marginWidth?: number | undefined;
-  name?: string | undefined;
-  referrerpolicy?: HTMLAttributeReferrerPolicy | undefined;
-  sandbox?: string | undefined;
+  marginWidth?: number;
+  name?: string;
+  referrerpolicy?: HTMLAttributeReferrerPolicy;
+  sandbox?: string;
   /** @deprecated */
-  scrolling?: string | undefined;
-  seamless?: boolean | undefined;
-  src?: string | undefined;
-  srcdoc?: string | undefined;
-  width?: number | string | undefined;
+  scrolling?: string;
+  seamless?: boolean;
+  src?: string;
+  srcdoc?: string;
+  width?: number | string;
 }
 
 export interface ImgHTMLAttributes<T> extends HTMLAttributes<T> {
-  alt?: string | undefined;
-  crossorigin?: 'anonymous' | 'use-credentials' | '' | undefined;
-  decoding?: 'async' | 'auto' | 'sync' | undefined;
-  height?: number | string | undefined;
-  loading?: 'eager' | 'lazy' | undefined;
-  referrerpolicy?: HTMLAttributeReferrerPolicy | undefined;
-  sizes?: string | undefined;
-  src?: string | undefined;
-  srcset?: string | undefined;
-  usemap?: string | undefined;
-  width?: number | string | undefined;
+  alt?: string;
+  crossorigin?: 'anonymous' | 'use-credentials' | '';
+  decoding?: 'async' | 'auto' | 'sync';
+  height?: number | string;
+  loading?: 'eager' | 'lazy';
+  referrerpolicy?: HTMLAttributeReferrerPolicy;
+  sizes?: string;
+  src?: string;
+  srcset?: string;
+  usemap?: string;
+  width?: number | string;
 }
 
 export interface InsHTMLAttributes<T> extends HTMLAttributes<T> {
-  cite?: string | undefined;
-  datetime?: string | undefined;
+  cite?: string;
+  datetime?: string;
 }
 
 type HTMLInputTypeAttribute =
@@ -913,272 +913,272 @@ type HTMLInputTypeAttribute =
   | (string & {});
 
 export interface InputHTMLAttributes<T> extends HTMLAttributes<T> {
-  accept?: string | undefined;
-  alt?: string | undefined;
-  autocomplete?: string | undefined;
-  autofocus?: boolean | undefined;
+  accept?: string;
+  alt?: string;
+  autocomplete?: string;
+  autofocus?: boolean;
   /** @see https://www.w3.org/TR/html-media-capture/#the-capture-attribute */
-  capture?: boolean | 'user' | 'environment' | undefined;
-  checked?: boolean | undefined;
-  disabled?: boolean | undefined;
-  enterkeyhint?: 'enter' | 'done' | 'go' | 'next' | 'previous' | 'search' | 'send' | undefined;
-  form?: string | undefined;
-  formaction?: string | undefined;
-  formenctype?: string | undefined;
-  formmethod?: string | undefined;
-  formnovalidate?: boolean | undefined;
-  formtarget?: string | undefined;
-  height?: number | string | undefined;
-  list?: string | undefined;
-  max?: number | string | undefined;
-  maxlength?: number | undefined;
-  min?: number | string | undefined;
-  minlength?: number | undefined;
-  multiple?: boolean | undefined;
-  name?: string | undefined;
-  pattern?: string | undefined;
-  placeholder?: string | undefined;
-  readonly?: boolean | undefined;
-  required?: boolean | undefined;
-  size?: number | undefined;
-  src?: string | undefined;
-  step?: number | string | undefined;
-  type?: HTMLInputTypeAttribute | undefined;
-  value?: string | ReadonlyArray<string> | number | undefined;
-  width?: number | string | undefined;
+  capture?: boolean | 'user' | 'environment';
+  checked?: boolean;
+  disabled?: boolean;
+  enterkeyhint?: 'enter' | 'done' | 'go' | 'next' | 'previous' | 'search' | 'send';
+  form?: string;
+  formaction?: string;
+  formenctype?: string;
+  formmethod?: string;
+  formnovalidate?: boolean;
+  formtarget?: string;
+  height?: number | string;
+  list?: string;
+  max?: number | string;
+  maxlength?: number;
+  min?: number | string;
+  minlength?: number;
+  multiple?: boolean;
+  name?: string;
+  pattern?: string;
+  placeholder?: string;
+  readonly?: boolean;
+  required?: boolean;
+  size?: number;
+  src?: string;
+  step?: number | string;
+  type?: HTMLInputTypeAttribute;
+  value?: string | ReadonlyArray<string> | number;
+  width?: number | string;
 
-  onchange?: ChangeEventHandler<T> | undefined;
+  onchange?: ChangeEventHandler<T>;
 }
 
 export interface KeygenHTMLAttributes<T> extends HTMLAttributes<T> {
-  autofocus?: boolean | undefined;
-  challenge?: string | undefined;
-  disabled?: boolean | undefined;
-  form?: string | undefined;
-  keytype?: string | undefined;
-  keyparams?: string | undefined;
-  name?: string | undefined;
+  autofocus?: boolean;
+  challenge?: string;
+  disabled?: boolean;
+  form?: string;
+  keytype?: string;
+  keyparams?: string;
+  name?: string;
 }
 
 export interface LabelHTMLAttributes<T> extends HTMLAttributes<T> {
-  form?: string | undefined;
+  form?: string;
 }
 
 export interface LiHTMLAttributes<T> extends HTMLAttributes<T> {
-  value?: string | ReadonlyArray<string> | number | undefined;
+  value?: string | ReadonlyArray<string> | number;
 }
 
 export interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
-  as?: string | undefined;
-  crossorigin?: true | 'anonymous' | 'use-credentials' | '' | undefined;
-  href?: string | undefined;
-  hreflang?: string | undefined;
-  integrity?: string | undefined;
-  media?: string | undefined;
-  referrerpolicy?: HTMLAttributeReferrerPolicy | undefined;
-  rel?: string | undefined;
-  sizes?: string | undefined;
-  type?: string | undefined;
-  charset?: string | undefined;
+  as?: string;
+  crossorigin?: true | 'anonymous' | 'use-credentials' | '';
+  href?: string;
+  hreflang?: string;
+  integrity?: string;
+  media?: string;
+  referrerpolicy?: HTMLAttributeReferrerPolicy;
+  rel?: string;
+  sizes?: string;
+  type?: string;
+  charset?: string;
 }
 
 export interface MapHTMLAttributes<T> extends HTMLAttributes<T> {
-  name?: string | undefined;
+  name?: string;
 }
 
 export interface MenuHTMLAttributes<T> extends HTMLAttributes<T> {
-  type?: string | undefined;
+  type?: string;
 }
 
 export interface MediaHTMLAttributes<T> extends HTMLAttributes<T> {
-  autoplay?: boolean | undefined;
-  controls?: boolean | undefined;
-  crossorigin?: true | 'anonymous' | 'use-credentials' | '' | undefined;
-  loop?: boolean | undefined;
-  mediagroup?: string | undefined;
-  muted?: boolean | undefined;
-  playsinline?: boolean | undefined;
-  preload?: string | undefined;
-  src?: string | undefined;
+  autoplay?: boolean;
+  controls?: boolean;
+  crossorigin?: true | 'anonymous' | 'use-credentials' | '';
+  loop?: boolean;
+  mediagroup?: string;
+  muted?: boolean;
+  playsinline?: boolean;
+  preload?: string;
+  src?: string;
 }
 
 export interface MetaHTMLAttributes<T> extends HTMLAttributes<T> {
-  charset?: string | undefined;
-  content?: string | undefined;
-  'http-equiv'?: string | undefined;
-  name?: string | undefined;
-  media?: string | undefined;
+  charset?: string;
+  content?: string;
+  'http-equiv'?: string;
+  name?: string;
+  media?: string;
 }
 
 export interface MeterHTMLAttributes<T> extends HTMLAttributes<T> {
-  form?: string | undefined;
-  high?: number | undefined;
-  low?: number | undefined;
-  max?: number | string | undefined;
-  min?: number | string | undefined;
-  optimum?: number | undefined;
-  value?: string | ReadonlyArray<string> | number | undefined;
+  form?: string;
+  high?: number;
+  low?: number;
+  max?: number | string;
+  min?: number | string;
+  optimum?: number;
+  value?: string | ReadonlyArray<string> | number;
 }
 
 export interface QuoteHTMLAttributes<T> extends HTMLAttributes<T> {
-  cite?: string | undefined;
+  cite?: string;
 }
 
 export interface ObjectHTMLAttributes<T> extends HTMLAttributes<T> {
-  classid?: string | undefined;
-  form?: string | undefined;
-  height?: number | string | undefined;
-  name?: string | undefined;
-  type?: string | undefined;
-  usemap?: string | undefined;
-  width?: number | string | undefined;
+  classid?: string;
+  form?: string;
+  height?: number | string;
+  name?: string;
+  type?: string;
+  usemap?: string;
+  width?: number | string;
 }
 
 export interface OlHTMLAttributes<T> extends HTMLAttributes<T> {
-  reversed?: boolean | undefined;
-  start?: number | undefined;
-  type?: '1' | 'a' | 'A' | 'i' | 'I' | undefined;
+  reversed?: boolean;
+  start?: number;
+  type?: '1' | 'a' | 'A' | 'i' | 'I';
 }
 
 export interface OptgroupHTMLAttributes<T> extends HTMLAttributes<T> {
-  disabled?: boolean | undefined;
-  label?: string | undefined;
+  disabled?: boolean;
+  label?: string;
 }
 
 export interface OptionHTMLAttributes<T> extends HTMLAttributes<T> {
-  disabled?: boolean | undefined;
-  label?: string | undefined;
-  selected?: boolean | undefined;
-  value?: string | ReadonlyArray<string> | number | boolean | undefined;
+  disabled?: boolean;
+  label?: string;
+  selected?: boolean;
+  value?: string | ReadonlyArray<string> | number | boolean;
 }
 
 export interface OutputHTMLAttributes<T> extends HTMLAttributes<T> {
-  form?: string | undefined;
-  name?: string | undefined;
+  form?: string;
+  name?: string;
 }
 
 export interface ParamHTMLAttributes<T> extends HTMLAttributes<T> {
-  name?: string | undefined;
-  value?: string | ReadonlyArray<string> | number | undefined;
+  name?: string;
+  value?: string | ReadonlyArray<string> | number;
 }
 
 export interface ProgressHTMLAttributes<T> extends HTMLAttributes<T> {
-  max?: number | string | undefined;
-  value?: string | ReadonlyArray<string> | number | undefined;
+  max?: number | string;
+  value?: string | ReadonlyArray<string> | number;
 }
 
 export interface SlotHTMLAttributes<T> extends HTMLAttributes<T> {
-  name?: string | undefined;
+  name?: string;
 }
 
 export interface ScriptHTMLAttributes<T> extends HTMLAttributes<T> {
-  async?: boolean | undefined;
+  async?: boolean;
   /** @deprecated */
-  charset?: string | undefined;
-  crossorigin?: true | 'anonymous' | 'use-credentials' | '' | undefined;
-  defer?: boolean | undefined;
-  integrity?: string | undefined;
-  nomodule?: boolean | undefined;
-  nonce?: string | undefined;
-  referrerpolicy?: HTMLAttributeReferrerPolicy | undefined;
-  src?: string | undefined;
-  type?: string | undefined;
+  charset?: string;
+  crossorigin?: true | 'anonymous' | 'use-credentials' | '';
+  defer?: boolean;
+  integrity?: string;
+  nomodule?: boolean;
+  nonce?: string;
+  referrerpolicy?: HTMLAttributeReferrerPolicy;
+  src?: string;
+  type?: string;
 }
 
 export interface SelectHTMLAttributes<T> extends HTMLAttributes<T> {
-  autocomplete?: string | undefined;
-  autofocus?: boolean | undefined;
-  disabled?: boolean | undefined;
-  form?: string | undefined;
-  multiple?: boolean | undefined;
-  name?: string | undefined;
-  required?: boolean | undefined;
-  size?: number | undefined;
-  value?: string | ReadonlyArray<string> | number | undefined;
-  onchange?: ChangeEventHandler<T> | undefined;
+  autocomplete?: string;
+  autofocus?: boolean;
+  disabled?: boolean;
+  form?: string;
+  multiple?: boolean;
+  name?: string;
+  required?: boolean;
+  size?: number;
+  value?: string | ReadonlyArray<string> | number;
+  onchange?: ChangeEventHandler<T>;
 }
 
 export interface SourceHTMLAttributes<T> extends HTMLAttributes<T> {
-  height?: number | string | undefined;
-  media?: string | undefined;
-  sizes?: string | undefined;
-  src?: string | undefined;
-  srcset?: string | undefined;
-  type?: string | undefined;
-  width?: number | string | undefined;
+  height?: number | string;
+  media?: string;
+  sizes?: string;
+  src?: string;
+  srcset?: string;
+  type?: string;
+  width?: number | string;
 }
 
 export interface StyleHTMLAttributes<T> extends HTMLAttributes<T> {
-  media?: string | undefined;
-  nonce?: string | undefined;
-  scoped?: boolean | undefined;
-  type?: string | undefined;
+  media?: string;
+  nonce?: string;
+  scoped?: boolean;
+  type?: string;
 }
 
 export interface TableHTMLAttributes<T> extends HTMLAttributes<T> {
-  summary?: string | undefined;
-  width?: number | string | undefined;
+  summary?: string;
+  width?: number | string;
 }
 
 export interface TextareaHTMLAttributes<T> extends HTMLAttributes<T> {
-  autocomplete?: string | undefined;
-  autofocus?: boolean | undefined;
-  cols?: number | undefined;
-  dirname?: string | undefined;
-  disabled?: boolean | undefined;
-  form?: string | undefined;
-  maxlength?: number | undefined;
-  minlength?: number | undefined;
-  name?: string | undefined;
-  placeholder?: string | undefined;
-  readonly?: boolean | undefined;
-  required?: boolean | undefined;
-  rows?: number | undefined;
-  value?: string | ReadonlyArray<string> | number | undefined;
-  wrap?: string | undefined;
+  autocomplete?: string;
+  autofocus?: boolean;
+  cols?: number;
+  dirname?: string;
+  disabled?: boolean;
+  form?: string;
+  maxlength?: number;
+  minlength?: number;
+  name?: string;
+  placeholder?: string;
+  readonly?: boolean;
+  required?: boolean;
+  rows?: number;
+  value?: string | ReadonlyArray<string> | number;
+  wrap?: string;
 
-  onchange?: ChangeEventHandler<T> | undefined;
+  onchange?: ChangeEventHandler<T>;
 }
 
 export interface TdHTMLAttributes<T> extends HTMLAttributes<T> {
-  align?: 'left' | 'center' | 'right' | 'justify' | 'char' | undefined;
-  colspan?: number | undefined;
-  headers?: string | undefined;
-  rowspan?: number | undefined;
-  scope?: string | undefined;
-  abbr?: string | undefined;
-  height?: number | string | undefined;
-  width?: number | string | undefined;
+  align?: 'left' | 'center' | 'right' | 'justify' | 'char';
+  colspan?: number;
+  headers?: string;
+  rowspan?: number;
+  scope?: string;
+  abbr?: string;
+  height?: number | string;
+  width?: number | string;
 }
 
 export interface ThHTMLAttributes<T> extends HTMLAttributes<T> {
-  align?: 'left' | 'center' | 'right' | 'justify' | 'char' | undefined;
-  colspan?: number | undefined;
-  headers?: string | undefined;
-  rowspan?: number | undefined;
-  scope?: string | undefined;
-  abbr?: string | undefined;
+  align?: 'left' | 'center' | 'right' | 'justify' | 'char';
+  colspan?: number;
+  headers?: string;
+  rowspan?: number;
+  scope?: string;
+  abbr?: string;
 }
 
 export interface TimeHTMLAttributes<T> extends HTMLAttributes<T> {
-  datetime?: string | undefined;
+  datetime?: string;
 }
 
 export interface TrackHTMLAttributes<T> extends HTMLAttributes<T> {
-  default?: boolean | undefined;
-  kind?: string | undefined;
-  label?: string | undefined;
-  src?: string | undefined;
-  srclang?: string | undefined;
+  default?: boolean;
+  kind?: string;
+  label?: string;
+  src?: string;
+  srclang?: string;
 }
 
 export interface VideoHTMLAttributes<T> extends MediaHTMLAttributes<T> {
-  height?: number | string | undefined;
-  playsinline?: boolean | undefined;
-  poster?: string | undefined;
-  width?: number | string | undefined;
-  disablePictureInPicture?: boolean | undefined;
-  disableRemotePlayback?: boolean | undefined;
+  height?: number | string;
+  playsinline?: boolean;
+  poster?: string;
+  width?: number | string;
+  disablePictureInPicture?: boolean;
+  disableRemotePlayback?: boolean;
 }
 
 // The three broad type categories are (in order of restrictiveness):
@@ -1187,45 +1187,45 @@ export interface VideoHTMLAttributes<T> extends MediaHTMLAttributes<T> {
 //   - union of string literals
 export interface SVGAttributes<T> extends AriaAttributes, DOMAttributes<T> {
   // Attributes which also defined in HTMLAttributes
-  class?: string | undefined;
-  color?: string | undefined;
-  height?: number | string | undefined;
-  id?: string | undefined;
-  lang?: string | undefined;
-  max?: number | string | undefined;
-  media?: string | undefined;
-  method?: string | undefined;
-  min?: number | string | undefined;
-  name?: string | undefined;
-  style?: string | undefined;
-  target?: string | undefined;
-  type?: string | undefined;
-  width?: number | string | undefined;
+  class?: string;
+  color?: string;
+  height?: number | string;
+  id?: string;
+  lang?: string;
+  max?: number | string;
+  media?: string;
+  method?: string;
+  min?: number | string;
+  name?: string;
+  style?: string;
+  target?: string;
+  type?: string;
+  width?: number | string;
 
   // Other HTML properties supported by SVG elements in browsers
-  role?: AriaRole | undefined;
-  tabindex?: number | undefined;
-  crossorigin?: true | 'anonymous' | 'use-credentials' | '' | undefined;
+  role?: AriaRole;
+  tabindex?: number;
+  crossorigin?: true | 'anonymous' | 'use-credentials' | '';
 
   // SVG Specific attributes
-  contentScriptType?: number | string | undefined;
-  contentStyleType?: number | string | undefined;
-  cursor?: number | string | undefined;
-  display?: number | string | undefined;
-  fill?: string | undefined;
-  filter?: string | undefined;
-  mask?: string | undefined;
-  opacity?: number | string | undefined;
-  preserveAspectRatio?: string | undefined;
-  requiredExtensions?: number | string | undefined;
-  stroke?: string | undefined;
-  systemLanguage?: number | string | undefined;
-  transform?: string | undefined;
-  viewBox?: string | undefined;
-  visibility?: number | string | undefined;
-  x?: number | string | undefined;
-  xmlns?: string | undefined;
-  y?: number | string | undefined;
+  contentScriptType?: number | string;
+  contentStyleType?: number | string;
+  cursor?: number | string;
+  display?: number | string;
+  fill?: string;
+  filter?: string;
+  mask?: string;
+  opacity?: number | string;
+  preserveAspectRatio?: string;
+  requiredExtensions?: number | string;
+  stroke?: string;
+  systemLanguage?: number | string;
+  transform?: string;
+  viewBox?: string;
+  visibility?: number | string;
+  x?: number | string;
+  xmlns?: string;
+  y?: number | string;
 }
 
 export type ElementTagHTMLAttributes = AllHTMLAttributes<'div'> & {
