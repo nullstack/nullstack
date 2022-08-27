@@ -1,16 +1,16 @@
-import { NullstackEnvironment } from "./Environment";
-import { NullstackPage } from "./Page";
-import { NullstackParams } from "./Params";
-import { NullstackProject } from "./Project";
-import { NullstackRouter } from "./Router";
-import { NullstackSettings } from "./Settings";
-import { NullstackWorker } from "./Worker";
+import { NullstackEnvironment } from './Environment';
+import { NullstackNode } from './JSX';
+import { NullstackPage } from './Page';
+import { NullstackParams } from './Params';
+import { NullstackProject } from './Project';
+import { NullstackRouter } from './Router';
+import { NullstackSettings } from './Settings';
+import { NullstackWorker } from './Worker';
 
 /**
  * @see https://nullstack.app/context
  */
-export type NullstackClientContext = {
-
+export type NullstackClientContext<TProps = unknown, TBindValue = undefined> = TProps & {
   /**
    * Information about the document `head` metatags.
    *
@@ -48,7 +48,7 @@ export type NullstackClientContext = {
    * @scope client
    * @see https://nullstack.app/context-instances
    */
-  instances?: Record<string, any>;
+  instances?: Record<string, unknown>;
 
   /**
    * It gives you information about the current environment.
@@ -93,11 +93,19 @@ export type NullstackClientContext = {
    *
    * @see https://nullstack.app/renderable-components#components-with-children
    */
-  children?: Readonly<Array<any>>;
+  children?: NullstackNode;
 
   /**
-   * Custom context prop.
+   * Bind object.
+   *
+   * @see https://nullstack.app/two-way-bindings#complex-bindable-components
    */
-  [key: string]: any;
+  bind?: { object: Record<string, unknown>; property: string };
 
+  /**
+   * Bind value.
+   *
+   * @see https://nullstack.app/two-way-bindings#complex-bindable-components
+   */
+  value?: TBindValue;
 };

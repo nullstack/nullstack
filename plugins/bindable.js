@@ -15,7 +15,6 @@ function transform({ node, environment }) {
   } else {
     node.attributes.value = object[property] ?? '';
   }
-  node.attributes.name = node.attributes.name || node.attributes.bind;
   if (environment.client) {
     if (node.attributes.type === 'checkbox' || node.attributes.type === 'radio') {
       node.attributes.onclick ??= noop;
