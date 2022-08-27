@@ -10,7 +10,7 @@ import { NullstackWorker } from './Worker';
 /**
  * @see https://nullstack.app/context
  */
-export type NullstackClientContext<TProps = unknown> = TProps & Partial<{
+export type NullstackClientContext<TProps = unknown> = TProps & {
   /**
    * Information about the document `head` metatags.
    *
@@ -122,4 +122,4 @@ export type NullstackClientContext<TProps = unknown> = TProps & Partial<{
   * @see https://nullstack.app/refs#complex-refable-components
   */
   element?: HTMLElement
-}>;
+};

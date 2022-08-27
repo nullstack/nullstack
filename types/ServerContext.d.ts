@@ -8,7 +8,7 @@ import { NullstackWorker } from './Worker';
 /**
  * @see https://nullstack.app/context
  */
-export type NullstackServerContext<TProps = unknown> = TProps & Partial<{
+export type NullstackServerContext<TProps = unknown> = TProps & {
   /**
    * Information about the app manifest and some metatags.
    *
@@ -77,4 +77,4 @@ export type NullstackServerContext<TProps = unknown> = TProps & Partial<{
    * @see https://nullstack.app/context-secrets
    */
   secrets: NullstackSecrets;
-}>;
+};

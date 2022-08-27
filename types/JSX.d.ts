@@ -54,13 +54,14 @@ export interface Attributes {
   children?: NullstackNode;
   route?: string;
   persistent?: boolean;
-  key?: string;
   [key: string]: any;
 }
 
 export interface NullstackAttributes extends Attributes { }
 
-export interface ClassAttributes extends Attributes { }
+export interface ClassAttributes extends Attributes {
+  key?: string;
+}
 
 //
 // Factories
