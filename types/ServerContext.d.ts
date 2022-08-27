@@ -8,27 +8,27 @@ import { NullstackWorker } from './Worker';
 /**
  * @see https://nullstack.app/context
  */
-export type NullstackServerContext = {
+export type NullstackServerContext<TProps = unknown> = TProps & Partial<{
   /**
    * Information about the app manifest and some metatags.
    *
    * @see https://nullstack.app/context-project
    */
-  project?: NullstackProject;
+  project: NullstackProject;
 
   /**
    * Gives you granular control of your PWA behavior.
    *
    * @see https://nullstack.app/service-worker
    */
-  worker?: NullstackWorker;
+  worker: NullstackWorker;
 
   /**
    * It gives you information about the current environment.
    *
    * @see https://nullstack.app/context-environment
    */
-  environment?: NullstackEnvironment;
+  environment: NullstackEnvironment;
 
   /**
    * The server key is a proxy around the [Express](https://expressjs.com/) instance that runs Nullstack under the hood.
@@ -36,7 +36,7 @@ export type NullstackServerContext = {
    * @scope server
    * @see https://nullstack.app/server-request-and-response
    */
-  server?: NullstackServer;
+  server: NullstackServer;
 
   /**
    * Original `request` object from [Express](https://expressjs.com/)
@@ -64,7 +64,7 @@ export type NullstackServerContext = {
    * ```
    * @see https://nullstack.app/context-settings
    */
-  settings?: NullstackSettings;
+  settings: NullstackSettings;
 
   /**
    * You can assign any key with any type of private information.
@@ -76,7 +76,5 @@ export type NullstackServerContext = {
    * ```
    * @see https://nullstack.app/context-secrets
    */
-  secrets?: NullstackSecrets;
-
-  [key: string]: any;
-};
+  secrets: NullstackSecrets;
+}>;

@@ -3,8 +3,6 @@ import { NullstackNode } from './JSX';
 import { NullstackPlugin } from './Plugin';
 import { NullstackServerContext } from './ServerContext';
 
-export interface NullstackContext extends NullstackClientContext, NullstackServerContext {}
-
 export * from './ClientContext';
 export * from './Environment';
 export * from './Page';
@@ -25,7 +23,7 @@ export default class Nullstack<TProps = unknown> {
   /**
    * @param App A Nullstack app root component
    */
-  static start(App: typeof this): NullstackContext;
+  static start(App: Nullstack): NullstackClientContext | NullstackServerContext;
 
   /**
    * Use a plugin
@@ -36,13 +34,13 @@ export default class Nullstack<TProps = unknown> {
    * Could run on the server or client.
    * @see https://nullstack.app/full-stack-lifecycle#prepare
    */
-  prepare?(context: NullstackContext<TProps>): void;
+  prepare?(context: NullstackClientContext<TProps>);
 
   /**
    * Could run on the server or client.
    * @see https://nullstack.app/full-stack-lifecycle#initiate
    */
-  initiate?(context: NullstackContext<TProps>): void;
+  initiate?(context: NullstackClientContext<TProps>);
 
   initiated: boolean;
 
@@ -50,13 +48,13 @@ export default class Nullstack<TProps = unknown> {
    * Could run on the server or client.
    * @see https://nullstack.app/full-stack-lifecycle#launch
    */
-  launch?(context: NullstackContext<TProps>): void;
+  launch?(context: NullstackClientContext<TProps>);
 
   /**
    * Runs on the client.
    * @see https://nullstack.app/full-stack-lifecycle#hydrate
    */
-  hydrate?(context: NullstackClientContext<TProps>): void;
+  hydrate?(context: NullstackClientContext<TProps>);
 
   hydrated: boolean;
 
@@ -64,17 +62,17 @@ export default class Nullstack<TProps = unknown> {
    * Runs on the client.
    * @see https://nullstack.app/full-stack-lifecycle#update
    */
-  update?(context: NullstackContext<TProps>): void;
+  update?(context: NullstackClientContext<TProps>);
 
   /**
    * Runs on the client.
    * @see https://nullstack.app/full-stack-lifecycle#terminate
    */
-  terminate?(context: NullstackContext<TProps>): void;
+  terminate?(context: NullstackClientContext<TProps>);
 
   terminated: boolean;
 
-  render?(context: NullstackContext<TProps>): void;
+  render?(context: NullstackClientContext<TProps>): NullstackNode;
 
   prerendered: boolean;
 

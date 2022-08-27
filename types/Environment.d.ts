@@ -23,4 +23,8 @@ export type NullstackEnvironment = {
    * @see https://nullstack.app/context-environment
    */
   event: string;
+
+  hot?: boolean;
+
+  disk?: boolean;
 };

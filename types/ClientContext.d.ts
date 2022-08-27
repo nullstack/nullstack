@@ -10,27 +10,27 @@ import { NullstackWorker } from './Worker';
 /**
  * @see https://nullstack.app/context
  */
-export type NullstackClientContext<TProps = unknown, TBindValue = undefined> = TProps & {
+export type NullstackClientContext<TProps = unknown> = TProps & Partial<{
   /**
    * Information about the document `head` metatags.
    *
    * @see https://nullstack.app/context-page
    */
-  page?: NullstackPage;
+  page: NullstackPage;
 
   /**
    * Information about the app manifest and some metatags.
    *
    * @see https://nullstack.app/context-project
    */
-  project?: NullstackProject;
+  project: NullstackProject;
 
   /**
    * Gives you granular control of your PWA behavior.
    *
    * @see https://nullstack.app/service-worker
    */
-  worker?: NullstackWorker;
+  worker: NullstackWorker;
 
   /**
    * It gives you information about the element dataset.
@@ -48,14 +48,14 @@ export type NullstackClientContext<TProps = unknown, TBindValue = undefined> = T
    * @scope client
    * @see https://nullstack.app/context-instances
    */
-  instances?: Record<string, unknown>;
+  instances: Record<string, unknown>;
 
   /**
    * It gives you information about the current environment.
    *
    * @see https://nullstack.app/context-environment
    */
-  environment?: NullstackEnvironment;
+  environment: NullstackEnvironment;
 
   /**
    * Each query string param is mapped to this object.
@@ -67,14 +67,14 @@ export type NullstackClientContext<TProps = unknown, TBindValue = undefined> = T
    *   {expanded: true, page: 2}
    * ```
    */
-  params?: NullstackParams;
+  params: NullstackParams;
 
   /**
    * Nullstack router.
    *
    * @see https://nullstack.app/routes-and-params#router
    */
-  router?: NullstackRouter;
+  router: NullstackRouter;
 
   /**
    * You can assign any key with any type of public information.
@@ -86,26 +86,40 @@ export type NullstackClientContext<TProps = unknown, TBindValue = undefined> = T
    * ```
    * @see https://nullstack.app/context-settings
    */
-  settings?: NullstackSettings;
+  settings: NullstackSettings;
 
   /**
    * Children elements of this component.
    *
    * @see https://nullstack.app/renderable-components#components-with-children
    */
-  children?: NullstackNode;
+  children: NullstackNode;
 
   /**
    * Bind object.
    *
    * @see https://nullstack.app/two-way-bindings#complex-bindable-components
    */
-  bind?: { object: Record<string, unknown>; property: string };
+  bind?: { property?: string | number, object?: any };
 
   /**
    * Bind value.
    *
    * @see https://nullstack.app/two-way-bindings#complex-bindable-components
    */
-  value?: TBindValue;
-};
+  value?: any;
+
+  /**
+  * Ref object.
+  *
+  * @see https://nullstack.app/refs#complex-refable-components
+  */
+  ref?: { property?: string | number, object?: any } | ((context: NullstackClientContext) => void);
+
+  /**
+  * Ref element.
+  *
+  * @see https://nullstack.app/refs#complex-refable-components
+  */
+  element?: HTMLElement
+}>;

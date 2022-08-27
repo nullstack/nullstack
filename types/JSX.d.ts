@@ -50,19 +50,17 @@ export interface Attributes {
   bind?: any;
   debounce?: number;
   ref?: any;
-  data?: object;
   'data-'?: any;
-  [key: string]: any;
-}
-
-export interface NullstackAttributes extends Attributes {
   children?: NullstackNode;
   route?: string;
   persistent?: boolean;
   key?: string;
+  [key: string]: any;
 }
 
-export interface ClassAttributes extends Attributes {}
+export interface NullstackAttributes extends Attributes { }
+
+export interface ClassAttributes extends Attributes { }
 
 //
 // Factories
@@ -70,7 +68,7 @@ export interface ClassAttributes extends Attributes {}
 
 type DetailedHTMLFactory<P, T = any> = P;
 
-export interface SVGFactory {}
+export interface SVGFactory { }
 
 export type NullstackFragment = NullstackNode[];
 export type NullstackNode = NullstackFragment | string | number | boolean | null | undefined;
@@ -102,7 +100,7 @@ export interface BaseSyntheticEvent<E = object, C = any, T = any> {
  * This might be a child element to the element on which the event listener is registered.
  * If you thought this should be `EventTarget & T`, see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11508#issuecomment-256045682
  */
-export interface SyntheticEvent<T = Element, E = Event> extends BaseSyntheticEvent<E, EventTarget & T, EventTarget> {}
+export interface SyntheticEvent<T = Element, E = Event> extends BaseSyntheticEvent<E, EventTarget & T, EventTarget> { }
 
 export interface DragEvent<T = Element> extends MouseEvent<T, NativeDragEvent> {
   dataTransfer: DataTransfer;
@@ -127,7 +125,7 @@ export interface FocusEvent<Target = Element, RelatedTarget = Element>
   target: EventTarget & Target;
 }
 
-export interface FormEvent<T = Element> extends SyntheticEvent<T> {}
+export interface FormEvent<T = Element> extends SyntheticEvent<T> { }
 
 export interface ChangeEvent<T = Element> extends SyntheticEvent<T> {
   target: EventTarget & T;
@@ -197,8 +195,8 @@ export interface WheelEvent<T = Element> extends MouseEvent<T, NativeWheelEvent>
 type EventHandler<E extends SyntheticEvent<any>> =
   | object
   | {
-      bivarianceHack(event: { event: E } & NullstackClientContext): void;
-    }['bivarianceHack'];
+    bivarianceHack(event: { event: E } & NullstackClientContext): void;
+  }['bivarianceHack'];
 
 type NullstackEventHandler<T = Element> = EventHandler<SyntheticEvent<T>>;
 type DragEventHandler<T = Element> = EventHandler<DragEvent<T>>;
@@ -217,7 +215,7 @@ type WheelEventHandler<T = Element> = EventHandler<WheelEvent<T>>;
 
 type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = E;
 
-export interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes {}
+export interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes { }
 
 export interface DOMAttributes<T> extends Attributes {
   // Focus Events
@@ -448,17 +446,17 @@ export interface AriaAttributes {
    * @see aria-atomic.
    */
   'aria-relevant'?:
-    | 'additions'
-    | 'additions removals'
-    | 'additions text'
-    | 'all'
-    | 'removals'
-    | 'removals additions'
-    | 'removals text'
-    | 'text'
-    | 'text additions'
-    | 'text removals'
-    | undefined;
+  | 'additions'
+  | 'additions removals'
+  | 'additions text'
+  | 'all'
+  | 'removals'
+  | 'removals additions'
+  | 'removals text'
+  | 'text'
+  | 'text additions'
+  | 'text removals'
+  | undefined;
   /** Indicates that user input is required on the element before a form may be submitted. */
   'aria-required'?: Booleanish;
   /** Defines a human-readable, author-localized description for the role of an element. */
@@ -746,7 +744,7 @@ export interface AnchorHTMLAttributes<T> extends HTMLAttributes<T> {
   path?: string;
 }
 
-export interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> {}
+export interface AudioHTMLAttributes<T> extends MediaHTMLAttributes<T> { }
 
 export interface AreaHTMLAttributes<T> extends HTMLAttributes<T> {
   alt?: string;
@@ -1238,8 +1236,8 @@ declare global {
   namespace JSX {
     type Element = NullstackNode;
 
-    interface IntrinsicAttributes extends NullstackAttributes {}
-    interface IntrinsicClassAttributes extends ClassAttributes {}
+    interface IntrinsicAttributes extends NullstackAttributes { }
+    interface IntrinsicClassAttributes extends ClassAttributes { }
 
     interface AllElements {
       // HTML
@@ -1424,6 +1422,6 @@ declare global {
       element: ElementTagHTMLAttributes;
     }
 
-    interface IntrinsicElements extends ExoticElements, AllElements {}
+    interface IntrinsicElements extends ExoticElements, AllElements { }
   }
 }
