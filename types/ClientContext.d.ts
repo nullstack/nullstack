@@ -1,36 +1,36 @@
-import { NullstackEnvironment } from "./Environment";
-import { NullstackPage } from "./Page";
-import { NullstackParams } from "./Params";
-import { NullstackProject } from "./Project";
-import { NullstackRouter } from "./Router";
-import { NullstackSettings } from "./Settings";
-import { NullstackWorker } from "./Worker";
+import { NullstackEnvironment } from './Environment';
+import { NullstackNode } from './JSX';
+import { NullstackPage } from './Page';
+import { NullstackParams } from './Params';
+import { NullstackProject } from './Project';
+import { NullstackRouter } from './Router';
+import { NullstackSettings } from './Settings';
+import { NullstackWorker } from './Worker';
 
 /**
  * @see https://nullstack.app/context
  */
-export type NullstackClientContext = {
-
+export type NullstackClientContext<TProps = unknown> = TProps & {
   /**
    * Information about the document `head` metatags.
    *
    * @see https://nullstack.app/context-page
    */
-  page?: NullstackPage;
+  page: NullstackPage;
 
   /**
    * Information about the app manifest and some metatags.
    *
    * @see https://nullstack.app/context-project
    */
-  project?: NullstackProject;
+  project: NullstackProject;
 
   /**
    * Gives you granular control of your PWA behavior.
    *
    * @see https://nullstack.app/service-worker
    */
-  worker?: NullstackWorker;
+  worker: NullstackWorker;
 
   /**
    * It gives you information about the element dataset.
@@ -48,14 +48,14 @@ export type NullstackClientContext = {
    * @scope client
    * @see https://nullstack.app/context-instances
    */
-  instances?: Record<string, any>;
+  instances: Record<string, unknown>;
 
   /**
    * It gives you information about the current environment.
    *
    * @see https://nullstack.app/context-environment
    */
-  environment?: NullstackEnvironment;
+  environment: NullstackEnvironment;
 
   /**
    * Each query string param is mapped to this object.
@@ -67,14 +67,14 @@ export type NullstackClientContext = {
    *   {expanded: true, page: 2}
    * ```
    */
-  params?: NullstackParams;
+  params: NullstackParams;
 
   /**
    * Nullstack router.
    *
    * @see https://nullstack.app/routes-and-params#router
    */
-  router?: NullstackRouter;
+  router: NullstackRouter;
 
   /**
    * You can assign any key with any type of public information.
@@ -86,18 +86,40 @@ export type NullstackClientContext = {
    * ```
    * @see https://nullstack.app/context-settings
    */
-  settings?: NullstackSettings;
+  settings: NullstackSettings;
 
   /**
    * Children elements of this component.
    *
    * @see https://nullstack.app/renderable-components#components-with-children
    */
-  children?: Readonly<Array<any>>;
+  children: NullstackNode;
 
   /**
-   * Custom context prop.
+   * Bind object.
+   *
+   * @see https://nullstack.app/two-way-bindings#complex-bindable-components
    */
-  [key: string]: any;
+  bind?: { property?: string | number, object?: any };
 
+  /**
+   * Bind value.
+   *
+   * @see https://nullstack.app/two-way-bindings#complex-bindable-components
+   */
+  value?: any;
+
+  /**
+  * Ref object.
+  *
+  * @see https://nullstack.app/refs#complex-refable-components
+  */
+  ref?: { property?: string | number, object?: any } | ((context: NullstackClientContext) => void);
+
+  /**
+  * Ref element.
+  *
+  * @see https://nullstack.app/refs#complex-refable-components
+  */
+  element?: HTMLElement
 };

@@ -1,5 +1,4 @@
 export type NullstackEnvironment = {
-
   client: boolean;
 
   server: boolean;
@@ -25,4 +24,7 @@ export type NullstackEnvironment = {
    */
   event: string;
 
+  hot?: boolean;
+
+  disk?: boolean;
 };

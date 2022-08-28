@@ -1,5 +1,4 @@
 export type NullstackServer = {
-
   get(...args);
 
   post(...args);
@@ -24,5 +23,4 @@ export type NullstackServer = {
    * Will be passed as the argument to [express cors plugin](https://expressjs.com/en/resources/middleware/cors.html).
    */
   cors: object;
-
 };

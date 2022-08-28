@@ -1,5 +1,4 @@
 export type NullstackPage = {
-
   /**
    * Current page title
    *
@@ -49,14 +48,7 @@ export type NullstackPage = {
    *
    * @see https://nullstack.app/context-page
    */
-  changes:
-    | "always"
-    | "hourly"
-    | "daily"
-    | "weekly"
-    | "monthly"
-    | "yearly"
-    | "never";
+  changes: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
 
   /**
    * Represents the `priority` key in the **sitemap.xml**
@@ -81,5 +73,4 @@ export type NullstackPage = {
    * @see https://nullstack.app/context-page#custom-events
    */
   event: string;
-
 };

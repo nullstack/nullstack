@@ -1,3 +1,1 @@
-export type NullstackSecrets = {
-  [key: string]: string | boolean;
-};
+export type NullstackSecrets = Record<string, string | boolean>;

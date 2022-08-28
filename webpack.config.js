@@ -213,14 +213,14 @@ function server(env, argv) {
             { loader: getLoader('ignore-import.js') }
           ]
         },
+        {
+          test: /\.(njs|nts|jsx|tsx)$/,
+          loader: getLoader('register-inner-components.js'),
+        },
         nullstackTypescript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('add-source-to-node.js'),
-        },
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('register-inner-components.js'),
         },
         {
           test: /\.(njs|nts|jsx|tsx)$/,
@@ -328,14 +328,14 @@ function client(env, argv) {
             { loader: require.resolve('sass-loader') }
           ],
         },
+        {
+          test: /\.(njs|nts|jsx|tsx)$/,
+          loader: getLoader('register-inner-components.js'),
+        },
         nullstackTypescript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('add-source-to-node.js'),
-        },
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('register-inner-components.js'),
         },
         {
           test: /\.(njs|nts|jsx|tsx)$/,
