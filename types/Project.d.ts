@@ -1,5 +1,4 @@
 export type NullstackProject = {
-
   domain: string;
 
   /**
@@ -54,6 +53,5 @@ export type NullstackProject = {
 
   cdn: string;
 
-  protocol: "http" | "https";
-
+  protocol: 'http' | 'https';
 };
