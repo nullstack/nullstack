@@ -57,7 +57,7 @@ const swcJs = {
 };
 
 const swcTs = {
-  test: /\.js$/,
+  test: /\.ts$/,
   use: {
     loader: require.resolve('swc-loader'),
     options: {
