@@ -38,7 +38,7 @@ function terserMinimizer(file, _sourceMap) {
   })
 }
 
-const swc = {
+const swcJs = {
   test: /\.js$/,
   use: {
     loader: require.resolve('swc-loader'),
@@ -48,6 +48,24 @@ const swc = {
           syntax: "ecmascript",
           exportDefaultFrom: true
         }
+      },
+      env: {
+        targets: { node: "10" }
+      }
+    }
+  }
+};
+
+const swcTs = {
+  test: /\.js$/,
+  use: {
+    loader: require.resolve('swc-loader'),
+    options: {
+      jsc: {
+        parser: {
+          syntax: "typescript",
+          exportDefaultFrom: true,
+        },
       },
       env: {
         targets: { node: "10" }
@@ -197,7 +215,8 @@ function server(env, argv) {
             ]
           }
         },
-        swc,
+        swcJs,
+        swcTs,
         nullstackJavascript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
@@ -306,7 +325,8 @@ function client(env, argv) {
             ]
           }
         },
-        swc,
+        swcJs,
+        swcTs,
         nullstackJavascript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
