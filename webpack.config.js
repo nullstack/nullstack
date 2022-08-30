@@ -128,6 +128,7 @@ const nullstackTypescript = {
 
 function server(env, argv) {
   const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd();
+  const entryExtension = fs.existsSync(path.join(dir, 'server.ts')) ? 'ts' : 'js';
   const icons = {};
   const publicFiles = readdirSync(path.join(dir, 'public'));
   for (const file of publicFiles) {
@@ -155,7 +156,7 @@ function server(env, argv) {
     infrastructureLogging: {
       console: customConsole,
     },
-    entry: './server.js',
+    entry: './server.' + entryExtension,
     output: {
       path: path.join(dir, folder),
       filename: 'server.js',
@@ -265,6 +266,7 @@ function server(env, argv) {
 function client(env, argv) {
   const disk = !!argv.disk
   const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd();
+  const entryExtension = fs.existsSync(path.join(dir, 'client.ts')) ? 'ts' : 'js';
   const isDev = argv.environment === 'development';
   const folder = isDev ? '.development' : '.production';
   const devtool = isDev ? 'inline-cheap-module-source-map' : false;
@@ -287,7 +289,7 @@ function client(env, argv) {
       console: customConsole,
     },
     mode: argv.environment,
-    entry: './client.js',
+    entry: './client.' + entryExtension,
     output: {
       publicPath: `/`,
       path: path.join(dir, folder),
