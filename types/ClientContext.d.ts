@@ -12,6 +12,11 @@ import { NullstackWorker } from './Worker';
  */
 export type NullstackClientContext<TProps = unknown> = TProps & {
   /**
+   * Callback function that bootstrap the context for the application.
+   */
+  start?: () => void;
+
+  /**
    * Information about the document `head` metatags.
    *
    * @see https://nullstack.app/context-page
