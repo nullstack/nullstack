@@ -2,7 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const crypto = require("crypto");
-const { readdirSync } = require('fs');
+const { existsSync, readdirSync } = require('fs');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 
@@ -38,7 +38,7 @@ function terserMinimizer(file, _sourceMap) {
   })
 }
 
-const swc = {
+const swcJs = {
   test: /\.js$/,
   use: {
     loader: require.resolve('swc-loader'),
@@ -48,6 +48,24 @@ const swc = {
           syntax: "ecmascript",
           exportDefaultFrom: true
         }
+      },
+      env: {
+        targets: { node: "10" }
+      }
+    }
+  }
+};
+
+const swcTs = {
+  test: /\.ts$/,
+  use: {
+    loader: require.resolve('swc-loader'),
+    options: {
+      jsc: {
+        parser: {
+          syntax: "typescript",
+          exportDefaultFrom: true,
+        },
       },
       env: {
         targets: { node: "10" }
@@ -110,6 +128,7 @@ const nullstackTypescript = {
 
 function server(env, argv) {
   const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd();
+  const entryExtension = existsSync(path.join(dir, 'server.ts')) ? 'ts' : 'js';
   const icons = {};
   const publicFiles = readdirSync(path.join(dir, 'public'));
   for (const file of publicFiles) {
@@ -137,7 +156,7 @@ function server(env, argv) {
     infrastructureLogging: {
       console: customConsole,
     },
-    entry: './server.js',
+    entry: './server.' + entryExtension,
     output: {
       path: path.join(dir, folder),
       filename: 'server.js',
@@ -197,7 +216,8 @@ function server(env, argv) {
             ]
           }
         },
-        swc,
+        swcJs,
+        swcTs,
         nullstackJavascript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
@@ -246,6 +266,7 @@ function server(env, argv) {
 function client(env, argv) {
   const disk = !!argv.disk
   const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd();
+  const entryExtension = existsSync(path.join(dir, 'client.ts')) ? 'ts' : 'js';
   const isDev = argv.environment === 'development';
   const folder = isDev ? '.development' : '.production';
   const devtool = isDev ? 'inline-cheap-module-source-map' : false;
@@ -268,7 +289,7 @@ function client(env, argv) {
       console: customConsole,
     },
     mode: argv.environment,
-    entry: './client.js',
+    entry: './client.' + entryExtension,
     output: {
       publicPath: `/`,
       path: path.join(dir, folder),
@@ -306,7 +327,8 @@ function client(env, argv) {
             ]
           }
         },
-        swc,
+        swcJs,
+        swcTs,
         nullstackJavascript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,

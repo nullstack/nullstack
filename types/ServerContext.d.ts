@@ -10,6 +10,11 @@ import { NullstackWorker } from './Worker';
  */
 export type NullstackServerContext<TProps = unknown> = TProps & {
   /**
+   * Callback function that bootstrap the context for the application.
+   */
+  start?: () => void;
+
+  /**
    * Information about the app manifest and some metatags.
    *
    * @see https://nullstack.app/context-project
