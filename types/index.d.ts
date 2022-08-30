@@ -23,7 +23,7 @@ export default class Nullstack<TProps = unknown> {
   /**
    * @param App A Nullstack app root component
    */
-  static start(App: Nullstack): NullstackClientContext | NullstackServerContext;
+  static start(App: typeof this): NullstackClientContext | NullstackServerContext;
 
   /**
    * Use a plugin
