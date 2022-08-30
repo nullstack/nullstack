@@ -23,7 +23,7 @@ export * from './JSX';
  * @example
  *
  * ```
- * import { FC, NullstackClientContext } from 'nullstack';
+ * import { NullstackClientContext, NullstackFunctionalComponent } from 'nullstack';
  *
  * interface InputProps {
  *   label: string;
@@ -34,10 +34,10 @@ export * from './JSX';
  *   return <p>{label}</p>;
  * }
  *
- * export default Input as FC<InputProps>;
+ * export default Input as NullstackFunctionalComponent<InputProps>;
  * ```
  */
-export type FC<TProps> = (props: TProps) => NullstackNode;
+export type NullstackFunctionalComponent<TProps> = (props: TProps) => NullstackNode;
 
 export default class Nullstack<TProps = unknown> {
   constructor(props?: TProps);
