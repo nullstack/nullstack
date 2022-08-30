@@ -17,6 +17,28 @@ export * from './Settings';
 export * from './Worker';
 export * from './JSX';
 
+/**
+ * Functional component
+ *
+ * @example
+ *
+ * ```
+ * import { FC, NullstackClientContext } from 'nullstack';
+ *
+ * interface InputProps {
+ *   label: string;
+ * }
+ *
+ * function Input({ label, page }: NullstackClientContext<InputProps>) {
+ *   console.log(page.title);
+ *   return <p>{label}</p>;
+ * }
+ *
+ * export default Input as FC<InputProps>;
+ * ```
+ */
+export type FC<TProps> = (props: TProps) => NullstackNode;
+
 export default class Nullstack<TProps = unknown> {
   constructor(props?: TProps);
 

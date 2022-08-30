@@ -105,7 +105,7 @@ export type NullstackClientContext<TProps = unknown> = TProps & {
    *
    * @see https://nullstack.app/two-way-bindings#complex-bindable-components
    */
-  bind?: { property?: string | number, object?: any };
+  bind?: { property?: string | number; object?: any };
 
   /**
    * Bind value.
@@ -115,16 +115,16 @@ export type NullstackClientContext<TProps = unknown> = TProps & {
   value?: any;
 
   /**
-  * Ref object.
-  *
-  * @see https://nullstack.app/refs#complex-refable-components
-  */
-  ref?: { property?: string | number, object?: any } | ((context: NullstackClientContext) => void);
+   * Ref object.
+   *
+   * @see https://nullstack.app/refs#complex-refable-components
+   */
+  ref?: { property?: string | number; object?: any } | ((context: NullstackClientContext) => void);
 
   /**
-  * Ref element.
-  *
-  * @see https://nullstack.app/refs#complex-refable-components
-  */
-  element?: HTMLElement
+   * Ref element.
+   *
+   * @see https://nullstack.app/refs#complex-refable-components
+   */
+  element?: HTMLElement;
 };
