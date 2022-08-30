@@ -2,7 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const crypto = require("crypto");
-const { readdirSync } = require('fs');
+const { existsSync, readdirSync } = require('fs');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 
@@ -128,7 +128,7 @@ const nullstackTypescript = {
 
 function server(env, argv) {
   const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd();
-  const entryExtension = fs.existsSync(path.join(dir, 'server.ts')) ? 'ts' : 'js';
+  const entryExtension = existsSync(path.join(dir, 'server.ts')) ? 'ts' : 'js';
   const icons = {};
   const publicFiles = readdirSync(path.join(dir, 'public'));
   for (const file of publicFiles) {
@@ -266,7 +266,7 @@ function server(env, argv) {
 function client(env, argv) {
   const disk = !!argv.disk
   const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd();
-  const entryExtension = fs.existsSync(path.join(dir, 'client.ts')) ? 'ts' : 'js';
+  const entryExtension = existsSync(path.join(dir, 'client.ts')) ? 'ts' : 'js';
   const isDev = argv.environment === 'development';
   const folder = isDev ? '.development' : '.production';
   const devtool = isDev ? 'inline-cheap-module-source-map' : false;
