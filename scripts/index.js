@@ -4,7 +4,7 @@ const { version } = require('../package.json');
 
 const webpack = require('webpack');
 const path = require('path');
-const { existsSync, rmdirSync, readdir, unlink } = require('fs');
+const { existsSync, readdir, unlink } = require('fs');
 const customConfig = path.resolve(process.cwd(), './webpack.config.js');
 const config = existsSync(customConfig) ? require(customConfig) : require('../webpack.config');
 const dotenv = require('dotenv')
@@ -61,7 +61,7 @@ function clearOutput(outputPath) {
   });
 }
 
-async function start({ input, port, env, mode = 'spa', cold, disk }) {
+async function start({ input, port, env, mode = 'spa', cold, disk, loader = 'swc' }) {
   const environment = 'development'
   console.log(` 🚀️ Starting your application in ${environment} mode...`);
   loadEnv(env)
@@ -135,7 +135,7 @@ async function start({ input, port, env, mode = 'spa', cold, disk }) {
     webSocketServer: require.resolve('./socket'),
     port: process.env['NULLSTACK_SERVER_PORT']
   };
-  const compiler = getCompiler({ environment, input, disk });
+  const compiler = getCompiler({ environment, input, disk, loader });
   clearOutput(compiler.compilers[0].outputPath)
   const server = new WebpackDevServer(devServerOptions, compiler);
   const portChecker = require('express')().listen(process.env['NULLSTACK_SERVER_PORT'], () => {
@@ -173,6 +173,7 @@ program
   .option('-e, --env <name>', 'Name of the environment file that should be loaded')
   .option('-d, --disk', 'Write files to disk')
   .option('-c, --cold', 'Disable hot module replacement')
+  .addOption(new program.Option('-l, --loader <loader>', 'Use Babel or SWC loader').choices(['swc', 'babel']))
   .helpOption('-h, --help', 'Learn more about this command')
   .action(start)
 
