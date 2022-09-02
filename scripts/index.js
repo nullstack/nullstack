@@ -85,7 +85,7 @@ async function start({ input, port, env, mode = 'spa', cold, disk, loader = 'swc
     host: process.env['NULLSTACK_PROJECT_DOMAIN'],
     devMiddleware: {
       index: false,
-      stats: 'none',
+      stats: 'errors-only',
       writeToDisk,
     },
     client: {
