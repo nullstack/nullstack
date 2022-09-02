@@ -14,7 +14,7 @@ export type NullstackClientContext<TProps = unknown> = TProps & {
   /**
    * Callback function that bootstrap the context for the application.
    */
-  start?: () => void;
+  start?: () => Promise<void>;
 
   /**
    * Information about the document `head` metatags.
