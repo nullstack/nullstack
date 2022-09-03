@@ -1,4 +1,4 @@
-describe('ServerFunctions', () => {
+describe('IsomorphicImport', () => {
 
   beforeEach(async () => {
     await page.goto('http://localhost:6969/isomorphic-import');
@@ -29,7 +29,5 @@ describe('ServerFunctions', () => {
     const element = await page.$('[data-namespaced-server-only]');
     expect(element).toBeTruthy();
   });
-
-
 
 });

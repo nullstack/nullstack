@@ -107,8 +107,6 @@ const babelTs = {
       ],
       "plugins": [
         "@babel/plugin-transform-typescript",
-        // "@babel/plugin-proposal-export-default-from",
-        // "@babel/plugin-proposal-class-properties"
       ]
     }
   }
@@ -210,8 +208,6 @@ const babelNullstackTypescript = {
           tsxPragma: "Nullstack.element",
           tsxPragmaFrag: "Nullstack.fragment"
         }],
-        // "@babel/plugin-proposal-export-default-from",
-        // "@babel/plugin-proposal-class-properties",
         ["@babel/plugin-transform-react-jsx", {
           "pragma": "Nullstack.element",
           "pragmaFrag": "Nullstack.fragment",
