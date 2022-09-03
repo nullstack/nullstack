@@ -1,7 +1,6 @@
 // server function works
 import { readFileSync } from 'fs';
 import Nullstack from 'nullstack';
-import { clientOnly, serverOnly } from './helpers';
 
 const decodedString = "! * ' ( ) ; : @ & = + $ , / ? % # [ ]"
 
@@ -40,7 +39,6 @@ class ServerFunctions extends Nullstack {
   }
 
   static async useNodeFileSystem() {
-    serverOnly();
     const text = readFileSync('src/ServerFunctions.njs', 'utf-8');
     return text.split(`\n`)[0].trim();
   }
@@ -76,7 +74,6 @@ class ServerFunctions extends Nullstack {
 
   async hydrate() {
     this.underlineRemovedFromClient = !ServerFunctions._privateFunction;
-    this.clientOnly = clientOnly();
     this.doublePlusOneClient = await ServerFunctions.getDoublePlusOne({ number: 34 })
     this.acceptsSpecialCharacters = await this.getEncodedString({ string: decodedString })
     this.hydratedOriginalUrl = await ServerFunctions.getRequestUrl()
@@ -92,7 +89,6 @@ class ServerFunctions extends Nullstack {
         <div data-year={this.year} />
         <div data-statement={this.statement} />
         <div data-response={this.response} />
-        <div data-client-only={this.clientOnly} />
         <div data-double-plus-one-server={this.doublePlusOneServer === 69} />
         <div data-double-plus-one-client={this.doublePlusOneClient === 69} />
         <div data-accepts-special-characters={this.acceptsSpecialCharacters} />

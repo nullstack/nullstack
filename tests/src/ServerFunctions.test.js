@@ -41,11 +41,6 @@ describe('ServerFunctions', () => {
     expect(element).toBeTruthy();
   });
 
-  test('isomorphic imports stay in the client', async () => {
-    const element = await page.$('[data-client-only]');
-    expect(element).toBeTruthy();
-  });
-
   test('server functions can be invoked from the constructor constant on server', async () => {
     await page.waitForSelector('[data-double-plus-one-server]');
     const element = await page.$('[data-double-plus-one-server]');
