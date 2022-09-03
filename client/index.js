@@ -131,6 +131,7 @@ if (module.hot) {
       }
     }
     klassMap[hash] = klass
+    client.update()
   }
   Nullstack.hotReload = function hotReload(klass) {
     if (client.skipHotReplacement) {

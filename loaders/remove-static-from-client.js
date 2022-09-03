@@ -56,7 +56,7 @@ module.exports = function removeStaticFromClient(source) {
   }
   let newSource = outputs.reverse().join('')
   if (klassName) {
-    newSource += `\nif (module.hot) { Nullstack.updateInstancesPrototypes(${klassName}.hash, ${klassName}) }`;
+    newSource += `\nif (module.hot) { module.hot.accept(); Nullstack.updateInstancesPrototypes(${klassName}.hash, ${klassName}) }`;
   }
   return newSource
 }
