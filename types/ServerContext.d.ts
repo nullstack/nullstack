@@ -12,7 +12,7 @@ export type NullstackServerContext<TProps = unknown> = TProps & {
   /**
    * Callback function that bootstrap the context for the application.
    */
-  start?: () => void;
+  start?: () => Promise<void>;
 
   /**
    * Information about the app manifest and some metatags.

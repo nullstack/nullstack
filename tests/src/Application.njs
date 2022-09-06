@@ -53,6 +53,7 @@ import TextObserver from './TextObserver';
 import BodyFragment from './BodyFragment';
 import ArrayAttributes from './ArrayAttributes';
 import RouteScroll from './RouteScroll';
+import IsomorphicImport from './IsomorphicImport.njs';
 
 class Application extends Nullstack {
 
@@ -133,6 +134,7 @@ class Application extends Nullstack {
         <BodyFragment route="/body-fragment" />
         <ArrayAttributes route="/array-attributes" />
         <RouteScroll route="/route-scroll/*" key="routeScroll" />
+        <IsomorphicImport route="/isomorphic-import" />
         <ErrorPage route="*" />
       </body>
     )
