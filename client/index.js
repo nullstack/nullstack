@@ -17,7 +17,6 @@ import hydrate from './hydrate';
 import router from './router';
 import settings from './settings';
 import worker from './worker';
-import klassMap from './klassMap';
 import windowEvent from './windowEvent'
 
 context.page = page;
@@ -42,7 +41,6 @@ export default class Nullstack {
   static invoke = invoke;
   static fragment = fragment;
   static use = useClientPlugins;
-  static klassMap = {}
   static context = generateContext({})
 
   static start(Starter) {
@@ -108,29 +106,25 @@ export default class Nullstack {
 }
 
 if (module.hot) {
+  Nullstack.serverHashes ??= {}
   const socket = new WebSocket('ws' + router.base.slice(4) + '/ws');
-  Nullstack.lastHash
   socket.onmessage = async function (e) {
     const data = JSON.parse(e.data)
-    if (data.type === 'NULLSTACK_SERVER_STARTED') {
-      (Nullstack.needsReload || !environment.hot) && window.location.reload()
-    } else if (data.type === 'hash') {
-      const newHash = data.data.slice(20)
-      if (newHash === Nullstack.lastHash) {
-        Nullstack.needsReload = true
-      } else {
-        Nullstack.lastHash = newHash
-      }
+    if (data.type === 'NULLSTACK_SERVER_STARTED' && (Nullstack.needsReload || !environment.hot)) {
+      window.location.reload()
     }
   };
-  Nullstack.updateInstancesPrototypes = function updateInstancesPrototypes(hash, klass) {
+  Nullstack.updateInstancesPrototypes = function updateInstancesPrototypes(klass, hash, serverHashes) {
     for (const key in context.instances) {
       const instance = context.instances[key]
       if (instance.constructor.hash === hash) {
         Object.setPrototypeOf(instance, klass.prototype);
       }
     }
-    klassMap[hash] = klass
+    if (Nullstack.serverHashes[hash] && Nullstack.serverHashes[hash] !== serverHashes) {
+      Nullstack.needsReload = true
+    }
+    Nullstack.serverHashes[hash] = serverHashes
     client.update()
   }
   Nullstack.hotReload = function hotReload(klass) {

@@ -406,7 +406,7 @@ function client(env, argv) {
     module: {
       rules: [
         {
-          test: /client.js$/,
+          test: /client\.(js|ts)$/,
           loader: getLoader('inject-hmr.js'),
         },
         {
