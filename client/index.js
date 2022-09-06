@@ -107,24 +107,36 @@ export default class Nullstack {
 
 if (module.hot) {
   Nullstack.serverHashes ??= {}
+  Nullstack.serverPings = 0
+  Nullstack.clientPings = 0
   const socket = new WebSocket('ws' + router.base.slice(4) + '/ws');
   socket.onmessage = async function (e) {
     const data = JSON.parse(e.data)
-    if (data.type === 'NULLSTACK_SERVER_STARTED' && (Nullstack.needsReload || !environment.hot)) {
-      window.location.reload()
+    if (data.type === 'NULLSTACK_SERVER_STARTED') {
+      Nullstack.serverPings++
+      if (Nullstack.needsReload || !environment.hot) {
+        window.location.reload()
+      }
     }
   };
-  Nullstack.updateInstancesPrototypes = function updateInstancesPrototypes(klass, hash, serverHashes) {
+  Nullstack.updateInstancesPrototypes = function updateInstancesPrototypes(klass, hash, serverHash) {
     for (const key in context.instances) {
       const instance = context.instances[key]
       if (instance.constructor.hash === hash) {
         Object.setPrototypeOf(instance, klass.prototype);
       }
     }
-    if (Nullstack.serverHashes[hash] && Nullstack.serverHashes[hash] !== serverHashes) {
-      Nullstack.needsReload = true
+    if (Nullstack.serverHashes[hash]) {
+      if (Nullstack.serverHashes[hash] !== serverHash) {
+        if (Nullstack.clientPings < Nullstack.serverPings) {
+          window.location.reload()
+        } else {
+          Nullstack.needsReload = true
+        }
+      }
+      Nullstack.clientPings++
     }
-    Nullstack.serverHashes[hash] = serverHashes
+    Nullstack.serverHashes[hash] = serverHash
     client.update()
   }
   Nullstack.hotReload = function hotReload(klass) {
