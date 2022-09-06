@@ -56,6 +56,25 @@ const swcJs = {
   }
 };
 
+const babelJs = {
+  test: /\.js$/,
+  resolve: {
+    extensions: ['.njs', '.js', '.nts', '.ts', '.jsx', '.tsx']
+  },
+  use: {
+    loader: require.resolve('babel-loader'),
+    options: {
+      "presets": [
+        ["@babel/preset-env", { "targets": { node: "10" } }]
+      ],
+      "plugins": [
+        "@babel/plugin-proposal-export-default-from",
+        "@babel/plugin-proposal-class-properties"
+      ]
+    }
+  }
+};
+
 const swcTs = {
   test: /\.ts$/,
   use: {
@@ -74,7 +93,26 @@ const swcTs = {
   }
 };
 
-const nullstackJavascript = {
+const babelTs = {
+  test: /\.ts$/,
+  resolve: {
+    extensions: ['.njs', '.js', '.nts', '.ts', '.jsx', '.tsx']
+  },
+  use: {
+    loader: require.resolve('babel-loader'),
+    options: {
+      "presets": [
+        ["@babel/preset-env", { "targets": { node: "10" } }],
+        "@babel/preset-react",
+      ],
+      "plugins": [
+        "@babel/plugin-transform-typescript",
+      ]
+    }
+  }
+};
+
+const swcNullstackJavascript = {
   test: /\.(njs|nts|jsx|tsx)$/,
   use: {
     loader: require.resolve('swc-loader'),
@@ -100,7 +138,32 @@ const nullstackJavascript = {
   }
 };
 
-const nullstackTypescript = {
+const babelNullstackJavascript = {
+  test: /\.(njs|jsx)$/,
+  resolve: {
+    extensions: ['.njs', '.js', '.nts', '.ts', '.jsx', '.tsx']
+  },
+  use: {
+    loader: require.resolve('babel-loader'),
+    options: {
+      "presets": [
+        ["@babel/preset-env", { "targets": { node: "10" } }],
+        "@babel/preset-react",
+      ],
+      "plugins": [
+        "@babel/plugin-proposal-export-default-from",
+        "@babel/plugin-proposal-class-properties",
+        ["@babel/plugin-transform-react-jsx", {
+          "pragma": "Nullstack.element",
+          "pragmaFrag": "Nullstack.fragment",
+          "throwIfNamespace": false
+        }]
+      ]
+    }
+  }
+};
+
+const swcNullstackTypescript = {
   test: /\.(nts|tsx)$/,
   use: {
     loader: require.resolve('swc-loader'),
@@ -126,11 +189,41 @@ const nullstackTypescript = {
   }
 };
 
+const babelNullstackTypescript = {
+  test: /\.(nts|tsx)$/,
+  resolve: {
+    extensions: ['.njs', '.js', '.nts', '.ts', '.jsx', '.tsx']
+  },
+  use: {
+    loader: require.resolve('babel-loader'),
+    options: {
+      "presets": [
+        ["@babel/preset-env", { "targets": { node: "10" } }],
+        "@babel/preset-react",
+      ],
+      "plugins": [
+        ["@babel/plugin-transform-typescript", {
+          isTSX: true,
+          allExtensions: true,
+          tsxPragma: "Nullstack.element",
+          tsxPragmaFrag: "Nullstack.fragment"
+        }],
+        ["@babel/plugin-transform-react-jsx", {
+          "pragma": "Nullstack.element",
+          "pragmaFrag": "Nullstack.fragment",
+          "throwIfNamespace": false
+        }]
+      ]
+    }
+  }
+};
+
 function server(env, argv) {
   const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd();
   const entryExtension = existsSync(path.join(dir, 'server.ts')) ? 'ts' : 'js';
   const icons = {};
   const publicFiles = readdirSync(path.join(dir, 'public'));
+  const babel = argv.babel;
   for (const file of publicFiles) {
     if (file.startsWith('icon-')) {
       const size = file.split('x')[1].split('.')[0];
@@ -216,9 +309,9 @@ function server(env, argv) {
             ]
           }
         },
-        swcJs,
-        swcTs,
-        nullstackJavascript,
+        babel ? babelJs : swcJs,
+        babel ? babelTs : swcTs,
+        babel ? babelNullstackJavascript : swcNullstackJavascript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('inject-nullstack.js'),
@@ -237,7 +330,7 @@ function server(env, argv) {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('register-inner-components.js'),
         },
-        nullstackTypescript,
+        babel ? babelNullstackTypescript : swcNullstackTypescript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('add-source-to-node.js'),
@@ -271,6 +364,7 @@ function client(env, argv) {
   const folder = isDev ? '.development' : '.production';
   const devtool = isDev ? 'inline-cheap-module-source-map' : false;
   const minimize = !isDev;
+  const babel = argv.loader === 'babel';
   const plugins = [
     new MiniCssExtractPlugin({
       filename: "client.css",
@@ -312,7 +406,7 @@ function client(env, argv) {
     module: {
       rules: [
         {
-          test: /client.js$/,
+          test: /client\.(js|ts)$/,
           loader: getLoader('inject-hmr.js'),
         },
         {
@@ -327,9 +421,9 @@ function client(env, argv) {
             ]
           }
         },
-        swcJs,
-        swcTs,
-        nullstackJavascript,
+        babel ? babelJs : swcJs,
+        babel ? babelTs : swcTs,
+        babel ? babelNullstackJavascript : swcNullstackJavascript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('remove-import-from-client.js'),
@@ -354,7 +448,7 @@ function client(env, argv) {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('register-inner-components.js'),
         },
-        nullstackTypescript,
+        babel ? babelNullstackTypescript : swcNullstackTypescript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('add-source-to-node.js'),

@@ -5,6 +5,7 @@ const traverse = require("@babel/traverse").default;
 module.exports = function removeStaticFromClient(source) {
   const id = this.resourcePath.replace(this.rootContext, '')
   const hash = crypto.createHash('md5').update(id).digest("hex");
+  let serverSource = ''
   let hashPosition;
   let klassName;
   const injections = {};
@@ -25,6 +26,7 @@ module.exports = function removeStaticFromClient(source) {
     ClassMethod(path) {
       if (path.node.static && path.node.async) {
         injections[path.node.start] = { end: path.node.end, name: path.node.key.name };
+        serverSource += source.slice(path.node.start, path.node.end)
         if (!positions.includes(path.node.start)) {
           positions.push(path.node.start);
         }
@@ -56,7 +58,8 @@ module.exports = function removeStaticFromClient(source) {
   }
   let newSource = outputs.reverse().join('')
   if (klassName) {
-    newSource += `\nif (module.hot) { Nullstack.updateInstancesPrototypes(${klassName}.hash, ${klassName}) }`;
+    const serverHash = crypto.createHash('md5').update(serverSource).digest("hex");
+    newSource += `\nif (module.hot) { module.hot.accept(); Nullstack.updateInstancesPrototypes(${klassName}, ${klassName}.hash, '${serverHash}') }`;
   }
   return newSource
 }
