@@ -223,7 +223,7 @@ function server(env, argv) {
   const entryExtension = existsSync(path.join(dir, 'server.ts')) ? 'ts' : 'js';
   const icons = {};
   const publicFiles = readdirSync(path.join(dir, 'public'));
-  const babel = argv.babel;
+  const babel = argv.loader === 'babel';
   for (const file of publicFiles) {
     if (file.startsWith('icon-')) {
       const size = file.split('x')[1].split('.')[0];
