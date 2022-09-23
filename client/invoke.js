@@ -4,7 +4,7 @@ import page from './page';
 import worker from './worker';
 
 export default function invoke(name, hash) {
-  return async function _invoke(params = {}) {
+  return async function _invoke(params = {}, fetchOptions = {}) {
     let payload;
     worker.fetching = true;
     if (Object.isFrozen(worker.queues[name])) {
@@ -22,7 +22,8 @@ export default function invoke(name, hash) {
       credentials: 'same-origin',
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
-    }
+      ...fetchOptions,
+    };
     if (/get[A-Z]([*]*)/.test(name)) {
       options.method = 'GET';
       url += `?payload=${encodeURIComponent(body)}`;
@@ -54,5 +55,5 @@ export default function invoke(name, hash) {
     }
     worker.fetching = !!Object.keys(worker.queues).length;
     return payload;
-  }
+  };
 }
