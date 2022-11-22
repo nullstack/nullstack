@@ -60,4 +60,10 @@ describe('ChildComponent', () => {
     expect(element).toBeTruthy();
   });
 
+  test('Nullstack is injected in tsx files', async () => {
+    await page.waitForSelector('[data-static-child-this]');
+    const element = await page.$('[data-static-child-this]');
+    expect(element).toBeTruthy();
+  });
+
 });
