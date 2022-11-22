@@ -69,8 +69,8 @@ class TwoWayBindings extends Nullstack {
         {!this.boolean && <div data-boolean-type={typeof this.boolean} />}
         {this.number > 1 && <div data-number-type={typeof this.number} />}
         <input bind={this.number} name="number" oninput={this.updateCharacter} />
-        <textarea bind={this.text} name="text" data-text={this.text} />
-        <button onclick={{ text: 'bbbb' }} data-textarea>textarea b</button>
+        <textarea bind={this.text} name="text" />
+        <button onclick={{ text: 'bbbb' }} data-textarea data-text={this.text}>textarea b</button>
         <div data-character={this.character} />
         <select bind={this.character} name="character">
           {this.array.map((character) => <option>{character}</option>)}

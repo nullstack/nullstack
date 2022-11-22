@@ -31,8 +31,8 @@ describe('TwoWayBindings', () => {
 
   test('textareas value reflects variable changes', async () => {
     await page.click('[data-textarea]')
-    await page.waitForSelector('textarea[data-text="bbbb"]')
-    const value = await page.$eval('[name="text"]', (element) => element.value);
+    await page.waitForSelector('[data-text="bbbb"]')
+    const value = await page.$eval('textarea', (element) => element.value);
     expect(value).toMatch('bbbb');
   });
 
