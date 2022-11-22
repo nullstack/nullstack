@@ -314,10 +314,6 @@ function server(env, argv) {
         babel ? babelNullstackJavascript : swcNullstackJavascript,
         {
           test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('inject-nullstack.js'),
-        },
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('register-static-from-server.js'),
         },
         {
@@ -329,6 +325,10 @@ function server(env, argv) {
         {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('register-inner-components.js'),
+        },
+        {
+          test: /\.(njs|nts|jsx|tsx)$/,
+          loader: getLoader('inject-nullstack.js'),
         },
         babel ? babelNullstackTypescript : swcNullstackTypescript,
         {
@@ -430,10 +430,6 @@ function client(env, argv) {
         },
         {
           test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('inject-nullstack.js'),
-        },
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('remove-static-from-client.js'),
         },
         {
@@ -447,6 +443,10 @@ function client(env, argv) {
         {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('register-inner-components.js'),
+        },
+        {
+          test: /\.(njs|nts|jsx|tsx)$/,
+          loader: getLoader('inject-nullstack.js'),
         },
         babel ? babelNullstackTypescript : swcNullstackTypescript,
         {
