@@ -109,6 +109,13 @@ function _rerender(current, next) {
     return
   }
 
+  if (current.type === 'textarea') {
+    current.value = current.children[0].text
+    next.value = next.children[0].text
+    updateAttributes(selector, current, next)
+    return
+  }
+
   if (isText(current) && isText(next)) {
     if (current.text !== next.text) {
       selector.textContent = next.text;
