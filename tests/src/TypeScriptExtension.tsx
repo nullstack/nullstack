@@ -1,5 +1,5 @@
-import Nullstack from 'nullstack';
-import { NullstackClientContext } from 'nullstack/types';
+import Nullstack from 'nullstack'
+import { NullstackClientContext } from 'nullstack/types'
 
 interface TypeScriptExtensionProps {
   generic: boolean
@@ -18,4 +18,4 @@ class TypeScriptExtension extends Nullstack<TypeScriptExtensionProps> {
 
 }
 
-export default TypeScriptExtension;
+export default TypeScriptExtension

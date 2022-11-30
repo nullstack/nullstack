@@ -1,54 +1,55 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type NullstackPage = {
   /**
    * Current page title
    *
    * @see https://nullstack.app/context-page
    */
-  title: string;
+  title: string
 
   /**
    * Path to site banner at **public** folder
    *
    * @see https://nullstack.app/context-page
    */
-  image: string;
+  image: string
 
   /**
    * Current page description
    *
    * @see https://nullstack.app/context-page
    */
-  description?: string;
+  description?: string
 
   /**
    * Absolute canonical url
    *
    * @see https://nullstack.app/context-page
    */
-  canonical: string;
+  canonical: string
 
   /**
    * Current page locale, example: `en-US`
    *
    * @see https://nullstack.app/context-page
    */
-  locale: string;
+  locale: string
 
   /**
    * Related to robots.txt file generation
    *
    * @see https://nullstack.app/context-page
    */
-  robots: string;
+  robots: string
 
-  schema?: any;
+  schema?: any
 
   /**
    * Represents the `changefreq` key in the **sitemap.xml**
    *
    * @see https://nullstack.app/context-page
    */
-  changes: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
+  changes: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
 
   /**
    * Represents the `priority` key in the **sitemap.xml**
@@ -57,14 +58,14 @@ export type NullstackPage = {
    *
    * @see https://nullstack.app/context-page
    */
-  priority: number;
+  priority: number
 
   /**
    * The page current HTTP response, example: `200`
    *
    * @see https://nullstack.app/context-page
    */
-  status: number;
+  status: number
 
   /**
    * Event raised when `page.title` changes.
@@ -72,5 +73,5 @@ export type NullstackPage = {
    * @scope client
    * @see https://nullstack.app/context-page#custom-events
    */
-  event: string;
-};
+  event: string
+}

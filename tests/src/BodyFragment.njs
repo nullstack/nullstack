@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class BodyFragment extends Nullstack {
 
@@ -20,15 +20,31 @@ class BodyFragment extends Nullstack {
 
   render() {
     return (
-      <body data-chars="a" onclick={[this.increment, this.countDataKeys, { objected: true }]} data-count={this.count} class={["class-one", "class-two", false]} style="background-color: black;" data-keys={this.hasDataKeys} data-hydrated={this.hydrated}>
-        <body data-chars="b" data-numbers="0" data-count={this.count} onclick={this.reveal} class="class-three class-four" style="color: white;" data-objected={this.objected}>
+      <body
+        data-chars="a"
+        onclick={[this.increment, this.countDataKeys, { objected: true }]}
+        data-count={this.count}
+        class={['class-one', 'class-two', false]}
+        style="background-color: black;"
+        data-keys={this.hasDataKeys}
+        data-hydrated={this.hydrated}
+      >
+        <body
+          data-chars="b"
+          data-numbers="0"
+          data-count={this.count}
+          onclick={this.reveal}
+          class="class-three class-four"
+          style="color: white;"
+          data-objected={this.objected}
+        >
           BodyFragment
         </body>
-        {this.visible &&
+        {this.visible && (
           <body data-visible data-has-visible={this.hasDataVisible}>
             BodyFragment2
           </body>
-        }
+        )}
         <a href="/">home</a>
       </body>
     )
@@ -36,4 +52,4 @@ class BodyFragment extends Nullstack {
 
 }
 
-export default BodyFragment;
+export default BodyFragment

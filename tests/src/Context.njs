@@ -1,15 +1,15 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class Context extends Nullstack {
 
   frameworkInitial = '';
 
   static async setContextKey(context) {
-    context.framework = 'Nullstack';
+    context.framework = 'Nullstack'
   }
 
   static async getContextKey({ framework }) {
-    return framework;
+    return framework
   }
 
   static staticFunction(context) {
@@ -29,9 +29,9 @@ class Context extends Nullstack {
   }
 
   async initiate(context) {
-    await this.setContextKey();
-    context.framework = await this.getContextKey();
-    this.setFrameworkInitial();
+    await this.setContextKey()
+    context.framework = await this.getContextKey()
+    this.setFrameworkInitial()
     this.staticFunctionHasNoContext = await Context.staticFunction()
     this.staticUnderlineFunctionHasNoContext = await Context._staticUnderlineFunction()
     this.staticAsyncUnderlineFunctionHasNoContext = await Context.invokeStaticAsyncUnderlineFunction()
@@ -44,7 +44,7 @@ class Context extends Nullstack {
   }
 
   setFrameworkInitial({ framework }) {
-    this.frameworkInitial = framework[0];
+    this.frameworkInitial = framework[0]
   }
 
   render({ framework }) {
@@ -57,11 +57,13 @@ class Context extends Nullstack {
         data-static-async-underline-function-has-no-context={this.staticAsyncUnderlineFunctionHasNoContext}
         data-hydrated-static-function-has-no-context={this.hydratedStaticFunctionHasNoContext}
         data-hydrated-static-underline-function-has-no-context={this.hydratedStaticUnderlineFunctionHasNoContext}
-        data-hydrated-static-async-underline-function-has-no-context={this.hydratedStaticAsyncUnderlineFunctionHasNoContext}
+        data-hydrated-static-async-underline-function-has-no-context={
+          this.hydratedStaticAsyncUnderlineFunctionHasNoContext
+        }
       />
     )
   }
 
 }
 
-export default Context;
+export default Context

@@ -1,5 +1,6 @@
+/* eslint-disable nullstack/no-unused-vars */
 async function load(event) {
-  const response = await event.preloadResponse;
-  if (response) return response;
-  return await fetch(event.request);
+  const response = await event.preloadResponse
+  if (response) return response
+  return fetch(event.request)
 }

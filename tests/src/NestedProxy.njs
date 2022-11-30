@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class ShouldNotProxy {
 
@@ -12,20 +12,16 @@ class ShouldNotProxy {
 
 class NestedProxy extends Nullstack {
 
-  array = [
-    { object: { object: true } }
-  ]
+  array = [{ object: { object: true } }]
 
   object = {
-    array: [true]
+    array: [true],
   }
 
   prepare(context) {
-    context.array = [
-      { object: { object: true } }
-    ]
+    context.array = [{ object: { object: true } }]
     context.object = {
-      array: [true]
+      array: [true],
     }
   }
 
@@ -46,7 +42,6 @@ class NestedProxy extends Nullstack {
         data-object={!!this.object._isProxy}
         data-object-array={!!this.object.array._isProxy}
         data-should-not-proxy={!this.shouldNotProxy._isProxy}
-
         data-context-array={!!array._isProxy}
         data-context-array-zero={!!array[0]._isProxy}
         data-context-array-zero-object={!!array[0].object._isProxy}
@@ -56,7 +51,6 @@ class NestedProxy extends Nullstack {
       />
     )
   }
-
 }
 
-export default NestedProxy;
+export default NestedProxy

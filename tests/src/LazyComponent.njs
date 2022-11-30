@@ -1,5 +1,5 @@
-import Nullstack from 'nullstack';
-import './LazyComponent.css';
+import Nullstack from 'nullstack'
+import './LazyComponent.css'
 
 class LazyComponent extends Nullstack {
 
@@ -13,10 +13,13 @@ class LazyComponent extends Nullstack {
 
   render() {
     return (
-      <div data-lazy data-safelisted={this.safelisted}> LazyComponent </div>
+      <div data-lazy data-safelisted={this.safelisted}>
+        {' '}
+        LazyComponent{' '}
+      </div>
     )
   }
 
 }
 
-export default LazyComponent;
+export default LazyComponent

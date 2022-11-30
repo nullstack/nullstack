@@ -1,10 +1,10 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class FalsyNodes extends Nullstack {
 
   nullNode = null;
-  zeroNode = 0;
-  falseNode = false;
+  zeroNode = 0
+  falseNode = false
 
   renderNullComponent() {
     return null
@@ -19,8 +19,12 @@ class FalsyNodes extends Nullstack {
       <>
         <div data-null>{this.nullNode}</div>
         <div data-false>{this.falseNode}</div>
-        <div data-null-component><NullComponent /></div>
-        <div data-false-component><FalseComponent /></div>
+        <div data-null-component>
+          <NullComponent />
+        </div>
+        <div data-false-component>
+          <FalseComponent />
+        </div>
         <div data-zero>{this.zeroNode}</div>
       </>
     )
@@ -28,4 +32,4 @@ class FalsyNodes extends Nullstack {
 
 }
 
-export default FalsyNodes;
+export default FalsyNodes

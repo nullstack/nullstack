@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class DynamicHead extends Nullstack {
 
@@ -7,9 +7,7 @@ class DynamicHead extends Nullstack {
 
   renderHead() {
     const innerComponent = `[data-inner-component] { color: blue }`
-    return (
-      <style html={innerComponent} data-inner-component />
-    )
+    return <style html={innerComponent} data-inner-component />
   }
 
   render() {
@@ -31,43 +29,62 @@ class DynamicHead extends Nullstack {
           </>
           <Head />
         </head>
-        {this.count === 1 &&
+        {this.count === 1 && (
           <head>
             <style html={conditionalHead} data-conditional-head />
           </head>
-        }
+        )}
         <head>
-          {this.count % 2 === 0 ? <style html="" data-ternary-head-children /> : <meta name="test" content="nullstack" data-ternary-head-children />}
+          {this.count % 2 === 0 ? (
+            <style html="" data-ternary-head-children />
+          ) : (
+            <meta name="test" content="nullstack" data-ternary-head-children />
+          )}
         </head>
         <head>
-          {Array(this.count + 1 - this.negativeCount).fill(<style html={dynamicLength} data-dynamic-length={this.count} data-negative-count={this.negativeCount === 1} />)}
+          {Array(this.count + 1 - this.negativeCount).fill(
+            <style
+              html={dynamicLength}
+              data-dynamic-length={this.count}
+              data-negative-count={this.negativeCount === 1}
+            />,
+          )}
         </head>
-        <button onclick={{ count: this.count + 1 }} data-increment> inc {this.count} </button>
-        <button onclick={{ negativeCount: this.negativeCount + 1 }} data-decrement> dec {this.negativeCount} </button>
+        <button onclick={{ count: this.count + 1 }} data-increment>
+          {' '}
+          inc {this.count}{' '}
+        </button>
+        <button onclick={{ negativeCount: this.negativeCount + 1 }} data-decrement>
+          {' '}
+          dec {this.negativeCount}{' '}
+        </button>
         <span data-red-blue> data-red-blue </span>
         <span data-prerender-conditional> data-prerender-conditional </span>
         <span data-rerender-conditional> data-rerender-conditional </span>
         <span data-fragment> data-fragment </span>
         <span data-conditional-head> data-conditional-head </span>
         <span data-inner-component> data-inner-component </span>
-        {this.count % 2 === 0 ?
+        {this.count % 2 === 0 ? (
           <head>
             <meta name="test" content="nullstack" data-ternary-head id="ternary-head" />
-          </head> : <span data-ternary-span> not head </span>
-        }
-        {this.count % 2 === 0
-          ? <head>
+          </head>
+        ) : (
+          <span data-ternary-span> not head </span>
+        )}
+        {this.count % 2 === 0 ? (
+          <head>
             <meta name="test" content="nullstack" data-a1 />
           </head>
-          : <head>
+        ) : (
+          <head>
             <meta name="test" content="nullstack" data-b1 />
             <meta name="test" content="nullstack" data-b2 />
           </head>
-        }
+        )}
       </div>
     )
   }
 
 }
 
-export default DynamicHead;
+export default DynamicHead

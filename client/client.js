@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import generateTree from '../shared/generateTree'
 import { loadPlugins } from '../shared/plugins'
 import context, { generateContext } from './context'
@@ -55,7 +56,7 @@ client.processLifecycleQueues = async function processLifecycleQueues() {
   let shouldScroll = router._hash
   while (client.initiationQueue.length) {
     const instance = client.initiationQueue.shift()
-    instance.initiate && await instance.initiate()
+    instance.initiate && (await instance.initiate())
     instance.initiated = true
     instance.launch && instance.launch()
     shouldUpdate = true
@@ -72,7 +73,7 @@ client.processLifecycleQueues = async function processLifecycleQueues() {
   while (client.realHydrationQueue.length) {
     shouldUpdate = true
     const instance = client.realHydrationQueue.shift()
-    instance.hydrate && await instance.hydrate()
+    instance.hydrate && (await instance.hydrate())
     instance.hydrated = true
   }
   shouldUpdate && client.update()
@@ -86,7 +87,7 @@ client.processLifecycleQueues = async function processLifecycleQueues() {
   for (const key in client.instances) {
     const instance = client.instances[key]
     if (!client.renewalQueue.includes(instance) && !instance.terminated) {
-      instance.terminate && await instance.terminate()
+      instance.terminate && (await instance.terminate())
       if (instance.persistent) {
         instance.terminated = true
       } else {

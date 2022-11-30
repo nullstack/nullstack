@@ -1,3 +1,3 @@
-export default function fragment({children}) {
-  return children;
+export default function fragment({ children }) {
+  return children
 }

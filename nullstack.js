@@ -1,3 +1,3 @@
-import Nullstack from "./{{NULLSTACK_ENVIRONMENT_NAME}}";
+import Nullstack from './{{NULLSTACK_ENVIRONMENT_NAME}}'
 
-export default Nullstack;
+export default Nullstack

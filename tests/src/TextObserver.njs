@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class TextObserver extends Nullstack {
 
@@ -10,15 +10,15 @@ class TextObserver extends Nullstack {
       characterData: true,
       childList: true,
       subtree: true,
-    };
+    }
     const observer = new MutationObserver((mutationsList, observer) => {
       for (const mutation of mutationsList) {
         mutation.target.parentElement.dataset.mutated = true
       }
-      observer.disconnect();
-    });
+      observer.disconnect()
+    })
     for (const element of [...document.querySelectorAll('[data-text-observer]')]) {
-      observer.observe(element, config);
+      observer.observe(element, config)
     }
     this.mutatedText = 'mutated'
   }
@@ -26,13 +26,22 @@ class TextObserver extends Nullstack {
   render() {
     return (
       <div>
-        <span data-text-observer data-regular-text> regular text </span>
-        <span data-text-observer data-unmutated-text> {this.unmutatedText} </span>
-        <span data-text-observer data-mutated-text onclick={{ mutatedText: 'hi' }}> {this.mutatedText} </span>
+        <span data-text-observer data-regular-text>
+          {' '}
+          regular text{' '}
+        </span>
+        <span data-text-observer data-unmutated-text>
+          {' '}
+          {this.unmutatedText}{' '}
+        </span>
+        <span data-text-observer data-mutated-text onclick={{ mutatedText: 'hi' }}>
+          {' '}
+          {this.mutatedText}{' '}
+        </span>
       </div>
     )
   }
 
 }
 
-export default TextObserver;
+export default TextObserver

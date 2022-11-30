@@ -1,0 +1,12 @@
+{
+  "extends": "plugin:nullstack/recommended",
+  "plugins": [
+    "jest"
+  ],
+  "env": {
+    "jest/globals": true
+  },
+  "globals": {
+    "page": "writable"
+  }
+}

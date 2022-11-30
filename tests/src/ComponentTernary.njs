@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class CommponentA extends Nullstack {
   render() {
@@ -13,7 +13,6 @@ class CommponentB extends Nullstack {
 }
 
 class ComponentTernary extends Nullstack {
-
   showA = true
 
   render() {
@@ -27,4 +26,4 @@ class ComponentTernary extends Nullstack {
 
 }
 
-export default ComponentTernary;
+export default ComponentTernary

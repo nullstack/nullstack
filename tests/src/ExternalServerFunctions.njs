@@ -1,5 +1,6 @@
-import Nullstack from 'nullstack';
-import PublicServerFunctions from './PublicServerFunctions';
+import Nullstack from 'nullstack'
+
+import PublicServerFunctions from './PublicServerFunctions'
 
 class ExternalServerFunctions extends Nullstack {
 
@@ -26,4 +27,4 @@ class ExternalServerFunctions extends Nullstack {
 
 }
 
-export default ExternalServerFunctions;
+export default ExternalServerFunctions

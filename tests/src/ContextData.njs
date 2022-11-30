@@ -1,13 +1,13 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class ContextData extends Nullstack {
 
   calculateWithDefault({ data }) {
-    this.countWithDefault = data.multiplyBy * data.count;
+    this.countWithDefault = data.multiplyBy * data.count
   }
 
   calculateWithoutDefault({ data }) {
-    this.countWithoutDefault = data.setTo;
+    this.countWithoutDefault = data.setTo
   }
 
   render() {
@@ -25,4 +25,4 @@ class ContextData extends Nullstack {
 
 }
 
-export default ContextData;
+export default ContextData

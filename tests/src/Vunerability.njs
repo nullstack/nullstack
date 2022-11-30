@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class Vunerability extends Nullstack {
 
@@ -7,7 +7,7 @@ class Vunerability extends Nullstack {
   hydrate() {
     this.dangerous = `<b> <script> document.querySelector("[data-secure]").remove(); </script> </b>`
   }
-  
+
   render() {
     return (
       <>
@@ -19,4 +19,4 @@ class Vunerability extends Nullstack {
 
 }
 
-export default Vunerability;
+export default Vunerability

@@ -5,13 +5,15 @@ function install(event) {
     '/manifest.webmanifest',
     `/client.js?fingerprint=${self.context.environment.key}`,
     `/client.css?fingerprint=${self.context.environment.key}`,
-    "{{BUNDLE}}",
-  ];
-  event.waitUntil(async function () {
-    const cache = await caches.open(self.context.environment.key);
-    await cache.addAll([...new Set(urls)]);
-    self.skipWaiting();
-  }());
+    '{{BUNDLE}}',
+  ]
+  event.waitUntil(
+    (async function () {
+      const cache = await caches.open(self.context.environment.key)
+      await cache.addAll([...new Set(urls)])
+      self.skipWaiting()
+    })(),
+  )
 }
 
-self.addEventListener('install', install);
+self.addEventListener('install', install)

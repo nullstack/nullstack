@@ -6,8 +6,8 @@ type NullstackLogoProps = {
 }
 
 export default function Logo({ light, height, monotone }: NullstackLogoProps) {
-  const themeColor = light ? '#fff' : '#2d3748';
-  const accentColor = monotone ? themeColor : '#d22365';
+  const themeColor = light ? '#fff' : '#2d3748'
+  const accentColor = monotone ? themeColor : '#d22365'
   return (
     <svg xmlns="http://www.w3.org/2000/svg" height={height} viewBox="0 0 511.5039 113.7368">
       <title> Nullstack </title>
@@ -52,8 +52,8 @@ export default function Logo({ light, height, monotone }: NullstackLogoProps) {
         fill={themeColor}
       />
       <path
-        d="M458.1224,14.2911H475.375l-8.95,46.0463L490.2134,39.964H512L482.2643,64.5769l18.43,41.3356H482.382L469.31,75.058l-6.83,5.6527-4.8284,25.2018H440.3987Z" 
-        transform="translate(-0.4961)" 
+        d="M458.1224,14.2911H475.375l-8.95,46.0463L490.2134,39.964H512L482.2643,64.5769l18.43,41.3356H482.382L469.31,75.058l-6.83,5.6527-4.8284,25.2018H440.3987Z"
+        transform="translate(-0.4961)"
         fill={themeColor}
       />
     </svg>

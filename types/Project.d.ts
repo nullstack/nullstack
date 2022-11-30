@@ -1,31 +1,31 @@
 export type NullstackProject = {
-  domain: string;
+  domain: string
 
   /**
    * Name of the project
    *
    * @see https://nullstack.app/context-project
    */
-  name: string;
+  name: string
 
-  shortName?: string;
+  shortName?: string
 
-  color: string;
+  color: string
 
-  backgroundColor?: string;
+  backgroundColor?: string
 
   /**
    * Type of the app, example: `website`
    */
-  type: string;
+  type: string
 
-  display: string;
+  display: string
 
-  orientation: string;
+  orientation: string
 
-  scope: string;
+  scope: string
 
-  root: string;
+  root: string
 
   /**
    * App icons size/path
@@ -34,24 +34,24 @@ export type NullstackProject = {
    *
    * @example { '72': '/icon-72x72.png' }
    */
-  icons: Record<string, string>;
+  icons: Record<string, string>
 
   /**
    * Relative or absolute url to favicon
    */
-  favicon: string;
+  favicon: string
 
   /**
    * Relative paths
    */
-  disallow: string[];
+  disallow: string[]
 
   /**
    * If active or relative/absolute url
    */
-  sitemap: boolean | string;
+  sitemap: boolean | string
 
-  cdn: string;
+  cdn: string
 
-  protocol: 'http' | 'https';
-};
+  protocol: 'http' | 'https'
+}

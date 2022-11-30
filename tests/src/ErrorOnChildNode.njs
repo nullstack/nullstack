@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class ObjectId {
 
@@ -7,29 +7,29 @@ class ObjectId {
   }
 
   toJSON() {
-    return this.id;
+    return this.id
   }
 
 }
 
 class ErrorOnChildNode extends Nullstack {
 
-  value = 'initial Value';
+  value = 'initial Value'
 
-  records = [
-    { _id: new ObjectId('a') },
-  ]
+  records = [{ _id: new ObjectId('a') }]
 
   testClick() {
-    this.value = 'Changed Value';
+    this.value = 'Changed Value'
   }
 
   renderSerializationError() {
     const records = this.records.filter((r) => r._id === 'a')
-    if (!records.length) return false;
+    if (!records.length) return false
     return (
       <div>
-        {records.map((record) => <div>{record._id}</div>)}
+        {records.map((record) => (
+          <div>{record._id}</div>
+        ))}
       </div>
     )
   }
@@ -64,13 +64,14 @@ class ErrorOnChildNode extends Nullstack {
         <h2> Table Error </h2>
         {params.serialization && <SerializationError />}
         {params.dom && <DOMError />}
-        <div data-value={this.value}>
-          {this.value}
-        </div>
-        <button data-dom-error onclick={this.testClick}> Change Value </button>
+        <div data-value={this.value}>{this.value}</div>
+        <button data-dom-error onclick={this.testClick}>
+          {' '}
+          Change Value{' '}
+        </button>
       </>
-    );
+    )
   }
 }
 
-export default ErrorOnChildNode;
+export default ErrorOnChildNode

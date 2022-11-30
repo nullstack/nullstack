@@ -5,9 +5,9 @@ const defaultOptions = {
   server: {
     command: 'npm run build && node .production/server.js',
     port: 6969,
-    launchTimeout: 25000
+    launchTimeout: 25000,
   },
-  browserContext: 'incognito'
+  browserContext: 'incognito',
 }
 
 const ciPipelineOptions = {
@@ -19,15 +19,15 @@ const ciPipelineOptions = {
       '--no-sandbox',
       '--disable-setuid-sandbox',
       '--disable-accelerated-2d-canvas',
-      '--disable-gpu'
-    ]
+      '--disable-gpu',
+    ],
   },
   server: {
     command: 'npm run build && node .production/server.js',
     port: 6969,
-    launchTimeout: 25000
+    launchTimeout: 25000,
   },
-  browserContext: 'incognito'
+  browserContext: 'incognito',
 }
 
-module.exports = process.env.CI ? ciPipelineOptions : defaultOptions;
+module.exports = process.env.CI ? ciPipelineOptions : defaultOptions

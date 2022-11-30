@@ -1,25 +1,25 @@
-import project, { generateBase } from './project';
-import files from './files';
+import files from './files'
+import project, { generateBase } from './project'
 
 export default function generateRobots() {
-  if(files['robots.txt']) return files['robots.txt'];
+  if (files['robots.txt']) return files['robots.txt']
   const lines = []
-  lines.push('User-Agent: *');
-  if(!project.disallow.includes('/')) {
-    lines.push(`Allow: ${project.root}`);
+  lines.push('User-Agent: *')
+  if (!project.disallow.includes('/')) {
+    lines.push(`Allow: ${project.root}`)
   }
-  for(const path of project.disallow) {
-    lines.push(`Disallow: ${path}`);
+  for (const path of project.disallow) {
+    lines.push(`Disallow: ${path}`)
   }
-  if(project.sitemap) {
-    if(project.sitemap === true) {
-      lines.push(`Sitemap: ${generateBase()}/sitemap.xml`);
+  if (project.sitemap) {
+    if (project.sitemap === true) {
+      lines.push(`Sitemap: ${generateBase()}/sitemap.xml`)
     } else if (project.sitemap.indexOf('//') === -1) {
-      lines.push(`Sitemap: ${generateBase()}${project.sitemap}`);
+      lines.push(`Sitemap: ${generateBase()}${project.sitemap}`)
     } else {
-      lines.push(`Sitemap: ${project.sitemap}`);
+      lines.push(`Sitemap: ${project.sitemap}`)
     }
   }
-  files['robots.txt'] = lines.join(`\n`);
+  files['robots.txt'] = lines.join(`\n`)
   return files['robots.txt']
 }

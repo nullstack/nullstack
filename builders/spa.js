@@ -1,16 +1,17 @@
+/* eslint-disable no-console */
 module.exports = async function spa({ output, cache, environment }) {
-  const folder = output || 'spa';
-  process.env.NULLSTACK_ENVIRONMENT_MODE = 'spa';
+  const folder = output || 'spa'
+  process.env.NULLSTACK_ENVIRONMENT_MODE = 'spa'
 
-  const dir = process.cwd();
-  const application = require(`${dir}/.${environment}/server`).default;
-  const projectName = application.project.name || 'The Nullstack application';
-  const { existsSync, mkdirSync, writeFileSync, copySync, removeSync } = require('fs-extra');
-  const path = `${dir}/${folder}`;
+  const dir = process.cwd()
+  const application = require(`${dir}/.${environment}/server`).default
+  const projectName = application.project.name || 'The Nullstack application'
+  const { existsSync, mkdirSync, writeFileSync, copySync, removeSync } = require('fs-extra')
+  const path = `${dir}/${folder}`
 
   async function copy(url, file) {
     console.log(` ⚙️  ${file || url}`)
-    const content = await application.server.prerender(url);
+    const content = await application.server.prerender(url)
     const target = `${dir}/${folder}${file || url}`
     writeFileSync(target, content)
   }
@@ -21,11 +22,11 @@ module.exports = async function spa({ output, cache, environment }) {
 
   console.log()
   if (existsSync(path)) {
-    removeSync(path);
+    removeSync(path)
   }
   mkdirSync(path)
   console.log(` ⚙️  /public/`)
-  copySync(`${dir}/public`, path);
+  copySync(`${dir}/public`, path)
   await copy('/', '/index.html')
   console.log(` ⚙️  /.${environment}/`)
   copySync(`${dir}/.${environment}`, path, { filter })
@@ -34,11 +35,11 @@ module.exports = async function spa({ output, cache, environment }) {
   await copy('/robots.txt')
   console.log()
 
-  console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${projectName} is ready at ${folder}\n`);
+  console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${projectName} is ready at ${folder}\n`)
 
   if (cache) {
-    console.log('Storing cache...');
+    console.log('Storing cache...')
   } else if (environment === 'production') {
-    process.exit();
+    process.exit()
   }
 }

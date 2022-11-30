@@ -1,2 +1,2 @@
-const registry = {};
-export default registry;
+const registry = {}
+export default registry

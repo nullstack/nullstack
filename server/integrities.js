@@ -1,11 +1,12 @@
-import { createHash } from 'crypto';
+import { createHash } from 'crypto'
+
 import environment from './environment'
 
-const integrities = {};
+const integrities = {}
 
 export function generateIntegrity(key, source) {
   if (environment.development) return
-  integrities[key] = 'sha512-' + createHash('sha512', 'utf8').update(source).digest('base64');
+  integrities[key] = `sha512-${createHash('sha512', 'utf8').update(source).digest('base64')}`
 }
 
-export default integrities;
+export default integrities

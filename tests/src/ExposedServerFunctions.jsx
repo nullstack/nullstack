@@ -1,14 +1,14 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 async function request(method) {
   const body = {
     number: 69,
     date: new Date(),
-    string: 'nullstack'
+    string: 'nullstack',
   }
   const response = await fetch(`/data/${method}/param?query=query&truthy=true&falsy=false`, {
     method: method.toUpperCase(),
-    body: method === 'get' ? undefined : JSON.stringify(body)
+    body: method === 'get' ? undefined : JSON.stringify(body),
   })
   const data = await response.json()
   return data.status
@@ -18,18 +18,14 @@ class ExposedServerFunctions extends Nullstack {
 
   static async getData({ request, project, param, query, truthy, falsy, number, date, string }) {
     return {
-      status: (
-        param === 'param'
-        && query === 'query'
-        && truthy === true
-        && falsy === false
-        && project.name === 'Nullstack Tests'
-        && (request.originalUrl.includes('/get/') || (
-          number === 69
-          && date.getFullYear() === new Date().getFullYear()
-          && string === 'nullstack'
-        ))
-      )
+      status:
+        param === 'param' &&
+        query === 'query' &&
+        truthy === true &&
+        falsy === false &&
+        project.name === 'Nullstack Tests' &&
+        (request.originalUrl.includes('/get/') ||
+          (number === 69 && date.getFullYear() === new Date().getFullYear() && string === 'nullstack')),
     }
   }
 
@@ -57,4 +53,4 @@ class ExposedServerFunctions extends Nullstack {
 
 }
 
-export default ExposedServerFunctions;
+export default ExposedServerFunctions

@@ -2,11 +2,7 @@ import noop from '../shared/noop'
 
 function match(node) {
   return (
-    node &&
-    node.type === 'a' &&
-    node.attributes.href &&
-    node.attributes.href.startsWith('/') &&
-    !node.attributes.target
+    node && node.type === 'a' && node.attributes.href && node.attributes.href.startsWith('/') && !node.attributes.target
   )
 }
 

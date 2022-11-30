@@ -1,3 +1,4 @@
+/* eslint-disable prefer-rest-params */
 const instanceProxyHandler = {
   get(target, name) {
     if (typeof target[name] === 'function' && name !== 'constructor') {
@@ -5,12 +6,12 @@ const instanceProxyHandler = {
         return target[name].bind(target)
       }
       return (args) => {
-        const context = target._scope.generateContext({ ...target._attributes, ...args });
-        return target[name](context);
+        const context = target._scope.generateContext({ ...target._attributes, ...args })
+        return target[name](context)
       }
     }
-    return Reflect.get(...arguments);
-  }
+    return Reflect.get(...arguments)
+  },
 }
 
-export default instanceProxyHandler;
+export default instanceProxyHandler

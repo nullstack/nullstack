@@ -1,2 +1,2 @@
-const generator = {};
-export default generator;
+const generator = {}
+export default generator

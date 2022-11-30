@@ -1,17 +1,19 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class ClassRoute extends Nullstack {
+
   render() {
     return (
       <div>
         <a href="#bottom">#bottom</a>
-        <div style="height: 3000px;">
-          big ass div in a class
+        <div style="height: 3000px;">big ass div in a class</div>
+        <div id="bottom" style="height: 3000px;">
+          bottom div
         </div>
-        <div id="bottom" style="height: 3000px;">bottom div</div>
       </div>
     )
   }
+
 }
 
 function FunctionalRoute() {
@@ -31,7 +33,6 @@ class RouteScroll extends Nullstack {
       </div>
     )
   }
-
 }
 
-export default RouteScroll;
+export default RouteScroll
