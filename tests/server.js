@@ -4,6 +4,7 @@ import ContextProject from './src/ContextProject';
 import ContextSecrets from './src/ContextSecrets';
 import ContextSettings from './src/ContextSettings';
 import ContextWorker from './src/ContextWorker';
+import ExposedServerFunctions from './src/ExposedServerFunctions';
 import vueable from './src/plugins/vueable';
 import ServerRequestAndResponse from './src/ServerRequestAndResponse';
 
@@ -12,6 +13,13 @@ Nullstack.use(vueable);
 const context = Nullstack.start(Application);
 
 const methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT'];
+
+context.server.get('/data/all/:param', ExposedServerFunctions.getData)
+context.server.get('/data/get/:param', ExposedServerFunctions.getData)
+context.server.post('/data/post/:param', ExposedServerFunctions.getData)
+context.server.put('/data/put/:param', ExposedServerFunctions.getData)
+context.server.patch('/data/patch/:param', ExposedServerFunctions.getData)
+context.server.delete('/data/delete/:param', ExposedServerFunctions.getData)
 
 context.server.get('/custom-api-before-start', (request, response) => {
   response.json({ startValue: context.startValue })

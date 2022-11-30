@@ -18,6 +18,7 @@ import { generateServiceWorker } from './worker';
 import reqres from './reqres'
 import WebSocket from 'ws';
 import { writeFileSync } from 'fs'
+import extractParamValue from '../shared/extractParamValue';
 
 if (!global.fetch) {
   global.fetch = fetch;
@@ -29,6 +30,36 @@ server.port = process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT'] || p
 
 let contextStarted = false
 let serverStarted = false
+
+for (const method of ['get', 'post', 'put', 'patch', 'delete', 'all']) {
+  const original = server[method].bind(server)
+  server[method] = function (...args) {
+    if (typeof args[1] === 'function' && args[1].name === '_invoke') {
+      original(args[0], bodyParser.text({ limit: server.maximumPayloadSize }), async (request, response) => {
+        const params = {}
+        for (const key of Object.keys(request.params)) {
+          params[key] = extractParamValue(request.params[key])
+        }
+        for (const key of Object.keys(request.query)) {
+          params[key] = extractParamValue(request.query[key])
+        }
+        if (request.method !== 'GET') {
+          Object.assign(params, deserialize(request.body));
+        }
+        try {
+          const context = generateContext({ request, response, ...params });
+          const result = await args[1](context);
+          response.json(result);
+        } catch (error) {
+          printError(error);
+          response.status(500).json({});
+        }
+      })
+    } else {
+      original(...args)
+    }
+  }
+}
 
 server.use(async (request, response, next) => {
   if (!contextStarted) {

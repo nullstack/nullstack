@@ -54,6 +54,7 @@ import BodyFragment from './BodyFragment';
 import ArrayAttributes from './ArrayAttributes';
 import RouteScroll from './RouteScroll';
 import IsomorphicImport from './IsomorphicImport.njs';
+import ExposedServerFunctions from './ExposedServerFunctions';
 
 class Application extends Nullstack {
 
@@ -135,6 +136,7 @@ class Application extends Nullstack {
         <ArrayAttributes route="/array-attributes" />
         <RouteScroll route="/route-scroll/*" key="routeScroll" />
         <IsomorphicImport route="/isomorphic-import" />
+        <ExposedServerFunctions route="/exposed-server-functions" />
         <ErrorPage route="*" />
       </body>
     )
