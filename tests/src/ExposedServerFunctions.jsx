@@ -1,6 +1,6 @@
 import Nullstack from 'nullstack'
 
-async function request(method) {
+async function api(method) {
   const body = {
     number: 69,
     date: new Date(),
@@ -30,12 +30,12 @@ class ExposedServerFunctions extends Nullstack {
   }
 
   async hydrate() {
-    this.all = await request('get')
-    this.get = await request('get')
-    this.post = await request('post')
-    this.put = await request('put')
-    this.patch = await request('patch')
-    this.delete = await request('delete')
+    this.all = await api('get')
+    this.get = await api('get')
+    this.post = await api('post')
+    this.put = await api('put')
+    this.patch = await api('patch')
+    this.delete = await api('delete')
   }
 
   render() {

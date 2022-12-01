@@ -1,4 +1,3 @@
-/* eslint-disable no-undefined */
 export function isUndefined(node) {
   if (node === undefined) return true
   if (node === null) return false

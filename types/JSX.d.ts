@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable nullstack/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-empty-interface */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // Type definitions for Nullstack
 // Project: http://github.com/nullstack/nullstack/
 // Definitions by: Asana <https://asana.com>
@@ -73,7 +69,7 @@ export interface ClassAttributes extends Attributes {
 
 type DetailedHTMLFactory<P, T = any> = P
 
-export interface SVGFactory {}
+export interface SVGFactory { }
 
 export type NullstackFragment = NullstackNode[]
 export type NullstackNode = NullstackFragment | string | number | boolean | null | undefined
@@ -200,8 +196,8 @@ export interface WheelEvent<T = Element> extends MouseEvent<T, NativeWheelEvent>
 type EventHandler<E extends SyntheticEvent<any>> =
   | object
   | {
-      bivarianceHack(event: { event: E } & NullstackClientContext): void
-    }['bivarianceHack']
+    bivarianceHack(event: { event: E } & NullstackClientContext): void
+  }['bivarianceHack']
 
 type NullstackEventHandler<T = Element> = EventHandler<SyntheticEvent<T>>
 type DragEventHandler<T = Element> = EventHandler<DragEvent<T>>
@@ -220,7 +216,7 @@ type WheelEventHandler<T = Element> = EventHandler<WheelEvent<T>>
 
 type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = E
 
-export interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes {}
+export interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes { }
 
 export interface DOMAttributes<T> extends Attributes {
   // Focus Events
@@ -451,17 +447,17 @@ export interface AriaAttributes {
    * @see aria-atomic.
    */
   'aria-relevant'?:
-    | 'additions'
-    | 'additions removals'
-    | 'additions text'
-    | 'all'
-    | 'removals'
-    | 'removals additions'
-    | 'removals text'
-    | 'text'
-    | 'text additions'
-    | 'text removals'
-    | undefined
+  | 'additions'
+  | 'additions removals'
+  | 'additions text'
+  | 'all'
+  | 'removals'
+  | 'removals additions'
+  | 'removals text'
+  | 'text'
+  | 'text additions'
+  | 'text removals'
+  | undefined
   /** Indicates that user input is required on the element before a form may be submitted. */
   'aria-required'?: Booleanish
   /** Defines a human-readable, author-localized description for the role of an element. */
@@ -1427,6 +1423,6 @@ declare global {
       element: ElementTagHTMLAttributes
     }
 
-    interface IntrinsicElements extends ExoticElements, AllElements {}
+    interface IntrinsicElements extends ExoticElements, AllElements { }
   }
 }

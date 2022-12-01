@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 process.env.NULLSTACK_ENVIRONMENT_NAME = 'test'
 
 const { default: application } = require('../../.production/server.js')

@@ -1,4 +1,3 @@
-/* eslint-disable no-undefined */
 import fragment from './fragment'
 
 const seed = Object.freeze([])

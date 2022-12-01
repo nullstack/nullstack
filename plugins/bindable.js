@@ -1,4 +1,3 @@
-/* eslint-disable no-undefined */
 import noop from '../shared/noop'
 
 function match(node) {

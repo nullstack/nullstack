@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 module.exports = async function ssr({ cache }) {
   const dir = process.cwd()
   const application = require(`${dir}/.production/server`).default

@@ -1,7 +1,9 @@
-/* eslint-disable no-undefined */
 export default function extractLocation(originalUrl) {
-  let [target, hash] = originalUrl.split('#')
-  let [path, search] = target.split('?')
+  const urlFragments = originalUrl.split('#')
+  let hash = urlFragments[1]
+  const targetFragments = urlFragments[0].split('?')
+  let path = targetFragments[0]
+  const search = targetFragments[1]
   if (path !== '/' && path.endsWith('/')) {
     path = path.substring(0, path.length - 1)
   }

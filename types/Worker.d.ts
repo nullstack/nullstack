@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export type NullstackWorker = {
   /**
    * - keys: server functions names

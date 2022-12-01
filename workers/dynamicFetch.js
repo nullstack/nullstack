@@ -1,4 +1,3 @@
-/* eslint-disable nullstack/no-undef */
 function dynamicStrategy(event) {
   event.waitUntil(
     (async function () {

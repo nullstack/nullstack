@@ -1,4 +1,3 @@
-/* eslint-disable no-undefined */
 function match(node) {
   return (
     node &&

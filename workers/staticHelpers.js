@@ -1,4 +1,3 @@
-/* eslint-disable nullstack/no-unused-vars */
 function withAPI(url) {
   const fragments = url.split('?')
   let path = fragments[0]

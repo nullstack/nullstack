@@ -1,4 +1,3 @@
-/* eslint-disable no-continue */
 import generateTruthyString from '../shared/generateTruthyString'
 
 export default function renderAttributes(attributes) {

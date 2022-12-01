@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import generateTree from '../shared/generateTree'
 import { loadPlugins } from '../shared/plugins'
 import context, { generateContext } from './context'

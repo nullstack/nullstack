@@ -1,18 +1,23 @@
 import Nullstack from 'nullstack'
 
 class CommponentA extends Nullstack {
+
   render() {
     return <p data-a> A </p>
   }
+
 }
 
 class CommponentB extends Nullstack {
+
   render() {
     return <p data-b> B </p>
   }
+
 }
 
 class ComponentTernary extends Nullstack {
+
   showA = true
 
   render() {
@@ -23,7 +28,6 @@ class ComponentTernary extends Nullstack {
       </div>
     )
   }
-
 }
 
 export default ComponentTernary

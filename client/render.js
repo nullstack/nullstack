@@ -1,5 +1,3 @@
-/* eslint-disable no-undefined */
-/* eslint-disable no-continue */
 import generateTruthyString from '../shared/generateTruthyString'
 import { isFalse, isText } from '../shared/nodes'
 import { anchorableElement } from './anchorableNode'
@@ -49,7 +47,7 @@ export default function render(node, options) {
       }
       const type = typeof nodeValue
       if (type !== 'object' && type !== 'function') {
-        if (name != 'value' && nodeValue === true) {
+        if (name !== 'value' && nodeValue === true) {
           node.element.setAttribute(name, '')
         } else if (name === 'value' || (nodeValue !== false && nodeValue !== null && nodeValue !== undefined)) {
           node.element.setAttribute(name, nodeValue)

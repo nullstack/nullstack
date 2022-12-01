@@ -1,4 +1,3 @@
-/* eslint-disable no-undefined */
 /* eslint-disable prefer-rest-params */
 export function generateContext(context) {
   const contextProxyHandler = {

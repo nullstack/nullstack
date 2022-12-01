@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-function */
 const CopyPlugin = require('copy-webpack-plugin')
 const crypto = require('crypto')
 const { existsSync, readdirSync } = require('fs')

@@ -1,4 +1,3 @@
-/* eslint-disable nullstack/no-undef */
 function install(event) {
   const urls = [
     '/',

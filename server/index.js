@@ -1,5 +1,3 @@
-/* eslint-disable no-continue */
-/* eslint-disable no-inner-declarations */
 import './dotenv'
 import { normalize } from 'path'
 

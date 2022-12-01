@@ -1,4 +1,3 @@
-/* eslint-disable no-continue */
 import { isFalse } from '../shared/nodes'
 import { sanitizeHtml } from '../shared/sanitizeString'
 import renderAttributes from './renderAttributes'

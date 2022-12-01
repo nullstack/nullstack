@@ -1,4 +1,3 @@
-/* eslint-disable no-undefined */
 import generateKey from '../shared/generateKey'
 import { isClass, isFalse, isFunction, isUndefined } from '../shared/nodes'
 import fragment from './fragment'

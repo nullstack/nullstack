@@ -52,8 +52,7 @@ class StatefulComponent extends Nullstack {
         </button>
         <p data-empty={this.empty}>{this.empty}</p>
         <button onclick={{ empty: 'not' }} data-fill>
-          {' '}
-          fill{' '}
+          fill
         </button>
         <>
           <div data-prepared={this.prepared} />
@@ -62,18 +61,15 @@ class StatefulComponent extends Nullstack {
           <div data-year={this.date.getFullYear()} />
         </>
         <button onclick={{ visible: !this.visible }} data-toggle>
-          {' '}
-          Toggle{' '}
+          Toggle
         </button>
         {this.visible && (
           <button onclick={undefined} data-undefined-event>
-            {' '}
-            button{' '}
+            button
           </button>
         )}
         <textarea>
-          {' '}
-          {this.count} {this.count}{' '}
+          {this.count} {this.count}
         </textarea>
       </form>
     )

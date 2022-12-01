@@ -34,8 +34,7 @@ class OptimizedEvents extends Nullstack {
               data-works-after-rendered={this.worksAfterRender}
               data-after-render
             >
-              {' '}
-              after render{' '}
+              after render
             </button>
           </div>
         )}
@@ -47,28 +46,23 @@ class OptimizedEvents extends Nullstack {
           data-last-click={this.lastClick}
           data-even-odd
         >
-          {' '}
-          even odd{' '}
+          even odd
         </button>
         <button onclick={this.count === 0 ? this.incrementCount : undefined} data-zero-only-increment>
-          {' '}
-          zero only{' '}
+          zero only
         </button>
         {this.count === 0 ? (
           <button onclick={this.incrementCount} data-zero-nothing-increment>
-            {' '}
-            zero only{' '}
+            zero only
           </button>
         ) : (
           <button data-zero-nothing-increment> nothing </button>
         )}
         <button onclick={this.incrementCount} data-increment-count>
-          {' '}
-          increment{' '}
+          increment
         </button>
         <button onclick={this.doubleCount} data-count={this.count} data-double-count>
-          {' '}
-          double{' '}
+          double
         </button>
       </main>
     )

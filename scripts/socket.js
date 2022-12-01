@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-function */
 'use strict'
 
 const BaseServer = require('webpack-dev-server/lib/servers/BaseServer')

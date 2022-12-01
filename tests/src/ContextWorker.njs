@@ -1,20 +1,14 @@
 import Nullstack from 'nullstack'
 
 function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms)
+  })
 }
 
 class ContextWorker extends Nullstack {
 
   header = '';
-
-  static async serverFunctionName() {
-    await sleep(1000)
-  }
-
-  async invokeServerFunction() {
-    await this.serverFunctionName()
-  }
 
   static async start({ worker }) {
     worker.enabled = true
@@ -30,7 +24,7 @@ class ContextWorker extends Nullstack {
     this.header = await this.inspectHeaders()
   }
 
-  static async longServerFunction({ id }) {
+  static async longServerFunction() {
     await sleep(3000)
   }
 

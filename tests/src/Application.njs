@@ -102,7 +102,6 @@ class Application extends Nullstack {
         <ServerRequestAndResponse route="/server-request-and-response" />
         <ContextData route="/context-data" />
         <DateParser route="/date-parser" />
-        <RemoveStart route="/remove-start" />
         <StaticThis route="/static-this" />
         <ChildComponent route="/child-component" />
         <ParentComponent route="/parent-component" />

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 let hasConsoleError = false
 const originalConsole = console.error
 

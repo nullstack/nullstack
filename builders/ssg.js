@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 module.exports = async function ssg({ output, cache, environment }) {
   const folder = output || 'ssg'
   process.env.NULLSTACK_ENVIRONMENT_MODE = 'ssg'
@@ -50,6 +49,7 @@ module.exports = async function ssg({ output, cache, environment }) {
     writeFileSync(`${target}/index.json`, json)
 
     const pattern = /href="(.*?)"/g
+    let match
     while ((match = pattern.exec(content))) {
       const link = match[1].split('#')[0]
       if (link.startsWith('/')) {
@@ -76,9 +76,9 @@ module.exports = async function ssg({ output, cache, environment }) {
   async function createSitemap() {
     console.log(' ⚙️  /sitemap.xml')
     const timestamp = new Date().toJSON().substring(0, 10)
-    const urls = Object.keys(pages).map((path) => {
-      const page = pages[path]
-      const canonical = `https://${application.project.domain}${path}`
+    const urls = Object.keys(pages).map((p) => {
+      const page = pages[p]
+      const canonical = `https://${application.project.domain}${p}`
       return `<url><loc>${canonical}</loc><lastmod>${timestamp}</lastmod>${
         page.changes ? `<changefreq>${page.changes}</changefreq>` : ''
       }${page.priority ? `<priority>${page.priority.toFixed(1)}</priority>` : ''}</url>`

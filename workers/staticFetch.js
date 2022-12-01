@@ -1,4 +1,3 @@
-/* eslint-disable nullstack/no-undef */
 function staticStrategy(event) {
   event.waitUntil(
     (async function () {

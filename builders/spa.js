@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 module.exports = async function spa({ output, cache, environment }) {
   const folder = output || 'spa'
   process.env.NULLSTACK_ENVIRONMENT_MODE = 'spa'

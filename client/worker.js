@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import client from './client'
 import environment from './environment'
 import router from './router'

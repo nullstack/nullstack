@@ -1,4 +1,3 @@
-/* eslint-disable no-undefined */
 import client from './client'
 import { generateObjectProxy } from './objectProxyHandler'
 import state from './state'

@@ -1,5 +1,3 @@
-/* eslint-disable no-undefined */
-/* eslint-disable no-continue */
 import generateTruthyString from '../shared/generateTruthyString'
 import { isFalse, isText, isUndefined } from '../shared/nodes'
 import { anchorableElement } from './anchorableNode'

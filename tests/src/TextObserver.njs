@@ -11,11 +11,11 @@ class TextObserver extends Nullstack {
       childList: true,
       subtree: true,
     }
-    const observer = new MutationObserver((mutationsList, observer) => {
+    const observer = new MutationObserver((mutationsList, current) => {
       for (const mutation of mutationsList) {
         mutation.target.parentElement.dataset.mutated = true
       }
-      observer.disconnect()
+      current.disconnect()
     })
     for (const element of [...document.querySelectorAll('[data-text-observer]')]) {
       observer.observe(element, config)
@@ -27,16 +27,13 @@ class TextObserver extends Nullstack {
     return (
       <div>
         <span data-text-observer data-regular-text>
-          {' '}
-          regular text{' '}
+          regular text
         </span>
         <span data-text-observer data-unmutated-text>
-          {' '}
-          {this.unmutatedText}{' '}
+          {this.unmutatedText}
         </span>
         <span data-text-observer data-mutated-text onclick={{ mutatedText: 'hi' }}>
-          {' '}
-          {this.mutatedText}{' '}
+          {this.mutatedText}
         </span>
       </div>
     )

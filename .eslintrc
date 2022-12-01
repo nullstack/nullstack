@@ -6,7 +6,35 @@
   "env": {
     "jest/globals": true
   },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx",
+          ".njs",
+          ".nts"
+        ]
+      }
+    }
+  },
   "globals": {
-    "page": "writable"
-  }
+    "page": "writable",
+    "browser": "writable"
+  },
+  "rules": {
+    "no-undefined": "off",
+    "no-console": "off",
+    "no-empty-function": "off",
+    "no-continue": "off",
+    "no-inner-declarations": "off",
+    "no-explicit-any": "off",
+  },
+  "ignorePatterns": [
+    "temp.js",
+    "types/*.d.ts",
+    "workers/*.js"
+  ]
 }

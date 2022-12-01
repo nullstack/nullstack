@@ -1,5 +1,3 @@
-/* eslint-disable nullstack/no-undef */
-/* eslint-disable nullstack/no-unused-vars */
 async function networkFirst(event) {
   const cache = await caches.open(self.context.environment.key)
   try {

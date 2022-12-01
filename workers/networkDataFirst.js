@@ -1,5 +1,3 @@
-/* eslint-disable nullstack/no-unused-vars */
-/* eslint-disable nullstack/no-undef */
 async function networkDataFirst(event) {
   const cache = await caches.open(self.context.environment.key)
   const url = new URL(event.request.url)

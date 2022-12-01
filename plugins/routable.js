@@ -1,4 +1,3 @@
-/* eslint-disable no-undefined */
 import routeMatches from '../shared/routeMatches'
 
 function erase(node) {

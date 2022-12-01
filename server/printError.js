@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 export default function (error) {
   const lines = error.stack.split(`\n`)
   let initiator = lines.find((line) => line.indexOf('Proxy') > -1)
@@ -18,8 +17,9 @@ export default function (error) {
   }
   let file, line
   if (source) {
-    // eslint-disable-next-line nullstack/prettier
-    [file, line] = source.split(':')
+    const sourceAndLine = source.split(':')
+    file = sourceAndLine[0]
+    line = sourceAndLine[1]
     let className = file.split('/').find((segment) => segment.indexOf('.') > -1)
     if (className) {
       className = className.replace('.njs', '')

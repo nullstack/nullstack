@@ -1,23 +1,6 @@
 const parse = require('@babel/parser').parse
 const traverse = require('@babel/traverse').default
 
-function identify(path, positions, injections, subpath) {
-  if (/^[A-Z]/.test(subpath.node.name)) {
-    if (!path.scope.hasBinding(subpath.node.name)) {
-      const start = path.node.body.body[0].start
-      if (!positions.includes(start)) {
-        positions.push(start)
-      }
-      if (!injections[start]) {
-        injections[start] = []
-      }
-      if (!injections[start].includes(subpath.node.name)) {
-        injections[start].push(subpath.node.name)
-      }
-    }
-  }
-}
-
 module.exports = function (source) {
   const injections = {}
   const positions = []
@@ -27,12 +10,28 @@ module.exports = function (source) {
   })
   traverse(ast, {
     ClassMethod(path) {
+      function identify(subpath) {
+        if (/^[A-Z]/.test(subpath.node.name)) {
+          if (!path.scope.hasBinding(subpath.node.name)) {
+            const start = path.node.body.body[0].start
+            if (!positions.includes(start)) {
+              positions.push(start)
+            }
+            if (!injections[start]) {
+              injections[start] = []
+            }
+            if (!injections[start].includes(subpath.node.name)) {
+              injections[start].push(subpath.node.name)
+            }
+          }
+        }
+      }
       if (path.node.key.name.startsWith('render')) {
         traverse(
           path.node,
           {
-            JSXIdentifier: (subpath) => identify(path, positions, injections, subpath),
-            Identifier: (subpath) => identify(path, positions, injections, subpath),
+            JSXIdentifier: identify,
+            Identifier: identify,
           },
           path.scope,
           path,

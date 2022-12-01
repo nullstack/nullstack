@@ -1,6 +1,4 @@
 #! /usr/bin/env node
-/* eslint-disable no-continue */
-/* eslint-disable no-console */
 const { program } = require('commander')
 const dotenv = require('dotenv')
 const { existsSync, readdir, unlink } = require('fs')
@@ -77,7 +75,7 @@ async function start({ input, port, env, mode = 'spa', cold, disk, loader = 'swc
   if (!process.env.NULLSTACK_PROJECT_DOMAIN) process.env.NULLSTACK_PROJECT_DOMAIN = 'localhost'
   if (!process.env.NULLSTACK_WORKER_PROTOCOL) process.env.NULLSTACK_WORKER_PROTOCOL = 'http'
   const target = `${process.env.NULLSTACK_WORKER_PROTOCOL}://${process.env.NULLSTACK_PROJECT_DOMAIN}:${process.env.NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT}`
-  const writeToDisk = disk ? true : (path) => path.includes('server')
+  const writeToDisk = disk ? true : (p) => p.includes('server')
   const devServerOptions = {
     hot: 'only',
     open: false,

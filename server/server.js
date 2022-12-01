@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable no-undefined */
-/* eslint-disable no-empty-function */
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import express from 'express'
@@ -267,7 +264,7 @@ server.start = function () {
           writeFileSync(target, content)
         }
         const socket = new WebSocket(`ws://localhost:${process.env.NULLSTACK_SERVER_PORT}/ws`)
-        socket.onopen = async function (e) {
+        socket.onopen = async function () {
           socket.send('{"type":"NULLSTACK_SERVER_STARTED"}')
         }
       } else {

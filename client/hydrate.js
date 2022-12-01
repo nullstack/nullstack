@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { isFalse } from '../shared/nodes'
 import { anchorableElement } from './anchorableNode'
 import client from './client'

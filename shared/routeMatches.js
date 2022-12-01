@@ -1,4 +1,3 @@
-/* eslint-disable no-continue */
 import extractLocation from '../shared/extractLocation'
 import extractParamValue from './extractParamValue'
 

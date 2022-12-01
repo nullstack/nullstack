@@ -1,10 +1,10 @@
+/* eslint-disable nullstack/prettier */
 /* eslint-disable nullstack/no-undef */
 import Nullstack from 'nullstack'
 
 class UndefinedNodes extends Nullstack {
 
   renderWithoutReturn() {
-    // eslint-disable-next-line nullstack/prettier
     <div> forgot to return </div>
   }
 

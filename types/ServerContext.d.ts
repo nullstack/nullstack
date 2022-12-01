@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NullstackEnvironment } from './Environment.d.ts'
 import { NullstackProject } from './Project.d.ts'
 import { NullstackSecrets } from './Secrets.d.ts'

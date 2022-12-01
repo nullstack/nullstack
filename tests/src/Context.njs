@@ -25,7 +25,7 @@ class Context extends Nullstack {
   }
 
   static async invokeStaticAsyncUnderlineFunction() {
-    return await this._staticAsyncUnderlineFunction()
+    return this._staticAsyncUnderlineFunction()
   }
 
   async initiate(context) {

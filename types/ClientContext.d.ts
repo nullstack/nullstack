@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NullstackEnvironment } from './Environment.d.ts'
 import { NullstackNode } from './JSX.d.ts'
 import { NullstackPage } from './Page.d.ts'
