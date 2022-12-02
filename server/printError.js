@@ -28,17 +28,17 @@ export default function (error) {
       }
     }
   }
-  console.log()
-  console.log('\x1b[31m', error.name, '-', error.message, '\x1b[0m')
-  console.log()
+  console.info()
+  console.info('\x1b[31m', error.name, '-', error.message, '\x1b[0m')
+  console.info()
   if (initiator) {
-    console.log('\x1b[2m', 'initiator:', '\x1b[0m', '\x1b[37m', initiator, '\x1b[0m')
+    console.info('\x1b[2m', 'initiator:', '\x1b[0m', '\x1b[37m', initiator, '\x1b[0m')
   }
   if (file) {
-    console.log('\x1b[2m', 'file:     ', '\x1b[0m', '\x1b[37m', file, '\x1b[0m')
+    console.info('\x1b[2m', 'file:     ', '\x1b[0m', '\x1b[37m', file, '\x1b[0m')
   }
   if (line) {
-    console.log('\x1b[2m', 'line:     ', '\x1b[0m', '\x1b[37m', line, '\x1b[0m')
+    console.info('\x1b[2m', 'line:     ', '\x1b[0m', '\x1b[37m', line, '\x1b[0m')
   }
-  console.log()
+  console.info()
 }

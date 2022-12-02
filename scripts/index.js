@@ -60,7 +60,7 @@ function clearOutput(outputPath) {
 
 async function start({ input, port, env, mode = 'spa', cold, disk, loader = 'swc' }) {
   const environment = 'development'
-  console.log(` 🚀️ Starting your application in ${environment} mode...`)
+  console.info(` 🚀️ Starting your application in ${environment} mode...`)
   loadEnv(env)
   const WebpackDevServer = require('webpack-dev-server')
   const { setLogLevel } = require('webpack/hot/log')
@@ -107,9 +107,9 @@ async function start({ input, port, env, mode = 'spa', cold, disk, loader = 'swc
       middlewares.unshift(async (req, res, next) => {
         if (req.originalUrl.indexOf('.hot-update.') === -1) {
           if (req.originalUrl.startsWith('/nullstack/')) {
-            console.log(`  ⚙️ [${req.method}] ${req.originalUrl}`)
+            console.info(`  ⚙️ [${req.method}] ${req.originalUrl}`)
           } else {
-            console.log(`  🕸️ [${req.method}] ${req.originalUrl}`)
+            console.info(`  🕸️ [${req.method}] ${req.originalUrl}`)
           }
         }
         async function waitForServer() {
@@ -140,7 +140,7 @@ async function start({ input, port, env, mode = 'spa', cold, disk, loader = 'swc
   const portChecker = require('express')().listen(process.env.NULLSTACK_SERVER_PORT, () => {
     portChecker.close()
     server.startCallback(() => {
-      console.log(
+      console.info(
         '\x1b[36m%s\x1b[0m',
         ` ✅️ Your application is ready at http://${process.env.NULLSTACK_PROJECT_DOMAIN}:${process.env.NULLSTACK_SERVER_PORT}\n`,
       )
@@ -154,10 +154,10 @@ function build({ input, output, cache, env, mode = 'ssr' }) {
   if (env) {
     process.env.NULLSTACK_ENVIRONMENT_NAME = env
   }
-  console.log(` 🚀️ Building your application in ${mode} mode...`)
+  console.info(` 🚀️ Building your application in ${mode} mode...`)
   compiler.run((error, stats) => {
     if (stats.hasErrors()) {
-      console.log(stats.toString({ colors: true }))
+      console.info(stats.toString({ colors: true }))
       process.exit(1)
     }
     if (stats.hasErrors()) process.exit(1)

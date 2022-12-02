@@ -1,5 +1,5 @@
 const reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/
-const reMsAjax = /^\/Date\((d|-|.*)\)[\/|\\]$/
+const reMsAjax = /^\/Date\((d|-|.*)\)[/|\\]$/
 
 function dateParser(key, value) {
   if (typeof value === 'string') {

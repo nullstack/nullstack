@@ -6,26 +6,24 @@
   "env": {
     "jest/globals": true
   },
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".ts",
-          ".tsx",
-          ".njs",
-          ".nts"
-        ]
+  "rules": {
+    "nullstack/prettier": [
+      "warn",
+      {
+        "trailingComma": "all",
+        "tabWidth": 2,
+        "semi": false,
+        "singleQuote": true,
+        "printWidth": 120
+      },
+      {
+        "usePrettierrc": false
       }
-    }
+    ]
   },
   "globals": {
     "page": "writable",
     "browser": "writable"
-  },
-  "rules": {
-    "no-console": "off"
   },
   "ignorePatterns": [
     "temp.js",

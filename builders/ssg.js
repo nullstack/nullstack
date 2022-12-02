@@ -24,7 +24,7 @@ module.exports = async function ssg({ output, cache, environment }) {
     const content = await application.server.prerender(url)
     const target = path(url)
 
-    console.log(` ⚙️  ${url}`)
+    console.info(` ⚙️  ${url}`)
     if (!existsSync(target)) {
       mkdirSync(target, { recursive: true })
     }
@@ -67,14 +67,14 @@ module.exports = async function ssg({ output, cache, environment }) {
   }
 
   async function copyBundle(url) {
-    console.log(` ⚙️  ${url}`)
+    console.info(` ⚙️  ${url}`)
     const content = await application.server.prerender(url)
     const target = path(url)
     writeFileSync(target, content)
   }
 
   async function createSitemap() {
-    console.log(' ⚙️  /sitemap.xml')
+    console.info(' ⚙️  /sitemap.xml')
     const timestamp = new Date().toJSON().substring(0, 10)
     const urls = Object.keys(pages).map((p) => {
       const page = pages[p]
@@ -93,14 +93,14 @@ module.exports = async function ssg({ output, cache, environment }) {
     return dest.endsWith(folder) || (src.includes('client') && !src.includes('.txt'))
   }
 
-  console.log()
+  console.info()
   if (existsSync(path())) {
     removeSync(path())
   }
   mkdirSync(path())
-  console.log(` ⚙️  /public/`)
+  console.info(` ⚙️  /public/`)
   copySync(path(`../public`), path())
-  console.log(` ⚙️  /.${environment}/`)
+  console.info(` ⚙️  /.${environment}/`)
   copySync(path(`../.${environment}`), path(), { filter })
   await copyRoute()
   await copyRoute(`/nullstack/${application.environment.key}/offline`)
@@ -109,12 +109,12 @@ module.exports = async function ssg({ output, cache, environment }) {
   await copyBundle(`/service-worker.js`)
   await copyBundle('/robots.txt')
   await createSitemap()
-  console.log()
+  console.info()
 
-  console.log('\x1b[36m%s\x1b[0m', ` ✅️ ${projectName} is ready at ${folder}\n`)
+  console.info('\x1b[36m%s\x1b[0m', ` ✅️ ${projectName} is ready at ${folder}\n`)
 
   if (cache) {
-    console.log('Storing cache...')
+    console.info('Storing cache...')
   } else if (environment === 'production') {
     process.exit()
   }

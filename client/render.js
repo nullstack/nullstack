@@ -35,7 +35,6 @@ export default function render(node, options) {
         const eventName = name.substring(2)
         const callback = generateCallback(node.element, name)
         node.element.addEventListener(eventName, callback)
-        console.log(node.attributes.onclick)
         eventCallbacks.set(node.element, callback)
         eventSubjects.set(node.element, node.attributes)
       }

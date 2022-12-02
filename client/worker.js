@@ -39,7 +39,7 @@ async function register() {
     try {
       proxy.registration = await navigator.serviceWorker.register(request, { scope: '/' })
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 }

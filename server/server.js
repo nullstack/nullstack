@@ -252,7 +252,7 @@ server.start = function () {
 
   if (!server.less) {
     if (!server.port) {
-      console.log('\x1b[31mServer port is not defined!\x1b[0m')
+      console.info('\x1b[31mServer port is not defined!\x1b[0m')
       process.exit()
     }
 
@@ -268,7 +268,7 @@ server.start = function () {
           socket.send('{"type":"NULLSTACK_SERVER_STARTED"}')
         }
       } else {
-        console.log(
+        console.info(
           '\x1b[36m%s\x1b[0m',
           ` ✅️ Your application is ready at http://${process.env.NULLSTACK_PROJECT_DOMAIN}:${process.env.NULLSTACK_SERVER_PORT}\n`,
         )
