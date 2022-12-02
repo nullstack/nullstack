@@ -1,4 +1,3 @@
-/* eslint-disable prefer-rest-params */
 import client from './client'
 
 const objectProxyHandler = {
@@ -13,9 +12,9 @@ const objectProxyHandler = {
     }
     return true
   },
-  get(target, name) {
+  get(target, name, receiver) {
     if (name === '_isProxy') return true
-    return Reflect.get(...arguments)
+    return Reflect.get(target, name, receiver)
   },
 }
 

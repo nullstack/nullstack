@@ -1,4 +1,3 @@
-/* eslint-disable prefer-rest-params */
 import client from './client'
 import { generateContext } from './context'
 import { generateObjectProxy } from './objectProxyHandler'
@@ -6,7 +5,7 @@ import { generateObjectProxy } from './objectProxyHandler'
 export const instanceProxies = new WeakMap()
 
 const instanceProxyHandler = {
-  get(target, name) {
+  get(target, name, receiver) {
     if (name === '_isProxy') return true
     if (target.constructor[name]?.name === '_invoke') return target.constructor[name].bind(target.constructor)
     if (typeof target[name] === 'function' && name !== 'constructor') {
@@ -22,7 +21,7 @@ const instanceProxyHandler = {
       }
       return named
     }
-    return Reflect.get(...arguments)
+    return Reflect.get(target, name, receiver)
   },
   set(target, name, value) {
     if (!name.startsWith('_')) {

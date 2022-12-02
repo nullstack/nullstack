@@ -1,4 +1,3 @@
-/* eslint-disable prefer-rest-params */
 import client from './client'
 import state from './state'
 import windowEvent from './windowEvent'
@@ -11,11 +10,11 @@ const page = {
 delete state.page
 
 const pageProxyHandler = {
-  set(target, name, value) {
+  set(target, name, value, receiver) {
     if (name === 'title') {
       document.title = value
     }
-    const result = Reflect.set(...arguments)
+    const result = Reflect.set(target, name, value, receiver)
     if (name === 'title') {
       windowEvent('page')
     }

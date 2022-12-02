@@ -8,6 +8,7 @@ export const eventDebouncer = new WeakMap()
 
 function executeEvent(callback, subject, event, data) {
   if (typeof callback === 'object') {
+    console.log(subject, callback)
     Object.assign(subject.source, callback)
   } else {
     callback({ ...subject, event, data })

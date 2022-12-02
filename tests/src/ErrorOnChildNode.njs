@@ -72,6 +72,7 @@ class ErrorOnChildNode extends Nullstack {
       </>
     )
   }
+
 }
 
 export default ErrorOnChildNode

@@ -51,6 +51,7 @@ class NestedProxy extends Nullstack {
       />
     )
   }
+
 }
 
 export default NestedProxy

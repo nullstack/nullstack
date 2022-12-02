@@ -28,6 +28,7 @@ class ComponentTernary extends Nullstack {
       </div>
     )
   }
+
 }
 
 export default ComponentTernary

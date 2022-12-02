@@ -1,6 +1,5 @@
-/* eslint-disable prefer-rest-params */
 const instanceProxyHandler = {
-  get(target, name) {
+  get(target, name, receiver) {
     if (typeof target[name] === 'function' && name !== 'constructor') {
       if (name.startsWith('_')) {
         return target[name].bind(target)
@@ -10,7 +9,7 @@ const instanceProxyHandler = {
         return target[name](context)
       }
     }
-    return Reflect.get(...arguments)
+    return Reflect.get(target, name, receiver)
   },
 }
 

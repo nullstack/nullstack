@@ -1,9 +1,8 @@
-/* eslint-disable prefer-rest-params */
 export function generateContext(context) {
   const contextProxyHandler = {
-    set(target, name, value) {
+    set(target, name, value, receiver) {
       context[name] = value
-      return Reflect.set(...arguments)
+      return Reflect.set(target, name, value, receiver)
     },
     get(target, name) {
       return target[name] === undefined ? context[name] : target[name]

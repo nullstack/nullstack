@@ -113,8 +113,8 @@ class Application extends Nullstack {
         <FalsyNodes route="/falsy-nodes" />
         <ErrorOnChildNode route="/error-on-child-node" />
         <Vunerability route="/vunerability" />
-        <PersistentComponent route="/persistent-component/:id" persistent />
         <UnderscoredAttributes route="/underscored-attributes" />
+        <PersistentComponent route="/persistent-component/:id" persistent />
         <IsomorphicStartup route="/isomorphic-startup" />
         <WorkerVerbs route="/worker-verbs" />
         <TypeScript route="/typescript" />

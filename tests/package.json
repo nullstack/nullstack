@@ -18,5 +18,8 @@
     "build": "npx nullstack build --input=./tests --env=test",
     "test": "npm run build && jest --runInBand",
     "script": "node src/scripts/run.js"
+  },
+  "dependencies": {
+    "eslint-plugin-nullstack": "^0.0.3"
   }
 }

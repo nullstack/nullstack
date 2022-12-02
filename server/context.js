@@ -1,10 +1,9 @@
-/* eslint-disable prefer-rest-params */
 const context = {}
 
 const contextProxyHandler = {
-  set(target, name, value) {
+  set(target, name, value, receiver) {
     context[name] = value
-    return Reflect.set(...arguments)
+    return Reflect.set(target, name, value, receiver)
   },
 }
 

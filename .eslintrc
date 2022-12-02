@@ -25,12 +25,7 @@
     "browser": "writable"
   },
   "rules": {
-    "no-undefined": "off",
-    "no-console": "off",
-    "no-empty-function": "off",
-    "no-continue": "off",
-    "no-inner-declarations": "off",
-    "no-explicit-any": "off",
+    "no-console": "off"
   },
   "ignorePatterns": [
     "temp.js",
