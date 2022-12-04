@@ -57,7 +57,7 @@ export interface Attributes {
   [key: string]: any
 }
 
-export type NullstackAttributes = Attributes
+export interface NullstackAttributes extends Attributes {}
 
 export interface ClassAttributes extends Attributes {
   key?: string
@@ -69,7 +69,7 @@ export interface ClassAttributes extends Attributes {
 
 type DetailedHTMLFactory<P, T = any> = P
 
-export interface SVGFactory { }
+export interface SVGFactory {}
 
 export type NullstackFragment = NullstackNode[]
 export type NullstackNode = NullstackFragment | string | number | boolean | null | undefined
@@ -101,6 +101,7 @@ export interface BaseSyntheticEvent<E = object, C = any, T = any> {
  * This might be a child element to the element on which the event listener is registered.
  * If you thought this should be `EventTarget & T`, see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11508#issuecomment-256045682
  */
+
 export type SyntheticEvent<T = Element, E = Event> = BaseSyntheticEvent<E, EventTarget & T, EventTarget>
 
 export interface DragEvent<T = Element> extends MouseEvent<T, NativeDragEvent> {
@@ -196,6 +197,7 @@ export interface WheelEvent<T = Element> extends MouseEvent<T, NativeWheelEvent>
 type EventHandler<E extends SyntheticEvent<any>> =
   | object
   | {
+
     bivarianceHack(event: { event: E } & NullstackClientContext): void
   }['bivarianceHack']
 
@@ -216,7 +218,7 @@ type WheelEventHandler<T = Element> = EventHandler<WheelEvent<T>>
 
 type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = E
 
-export interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes { }
+export interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes {}
 
 export interface DOMAttributes<T> extends Attributes {
   // Focus Events
@@ -305,7 +307,7 @@ export interface DOMAttributes<T> extends Attributes {
 
 // All the WAI-ARIA 1.1 attributes from https://www.w3.org/TR/wai-aria-1.1/
 export interface AriaAttributes {
-  /** Identifies the currently active element when DOM focus is on a composite widget, textbox, group, or applicatio */
+  /** Identifies the currently active element when DOM focus is on a composite widget, textbox, group, or application */
   'aria-activedescendant'?: string
   /** Indicates whether assistive technologies will present all, or only parts of, the changed region based on the change notifications defined by the aria-relevant attribute. */
   'aria-atomic'?: Booleanish
@@ -1423,6 +1425,6 @@ declare global {
       element: ElementTagHTMLAttributes
     }
 
-    interface IntrinsicElements extends ExoticElements, AllElements { }
+    interface IntrinsicElements extends ExoticElements, AllElements {}
   }
 }
