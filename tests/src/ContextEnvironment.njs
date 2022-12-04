@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class ContextEnvironment extends Nullstack {
 
@@ -19,4 +19,4 @@ class ContextEnvironment extends Nullstack {
 
 }
 
-export default ContextEnvironment;
+export default ContextEnvironment

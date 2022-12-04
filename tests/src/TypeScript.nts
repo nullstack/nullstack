@@ -1,13 +1,13 @@
-import Nullstack from 'nullstack';
-import { NullstackClientContext } from 'nullstack/types';
+import Nullstack from 'nullstack'
+import { NullstackClientContext } from 'nullstack/types/index.d.ts'
 
 interface TypeScriptClientContext extends NullstackClientContext {
-  value: number
+  value: number;
 }
 
 class TypeScript extends Nullstack {
 
-  count: number = 1;
+  count = 1
 
   incrementByCount({ value }: TypeScriptClientContext) {
     this.count += value
@@ -21,11 +21,10 @@ class TypeScript extends Nullstack {
     return (
       <div data-count={this.count}>
         <input bind={this.count} />
-        <button
-          data-initiated={this.initiated}
-          value={1}
-          onclick={this.incrementByCount}
-        > TS </button>
+        <button data-initiated={this.initiated} value={1} onclick={this.incrementByCount}>
+          {' '}
+          TS{' '}
+        </button>
         <InnerComponent />
       </div>
     )
@@ -33,4 +32,4 @@ class TypeScript extends Nullstack {
 
 }
 
-export default TypeScript;
+export default TypeScript

@@ -1,34 +1,39 @@
-import { sanitizeString } from '../shared/sanitizeString';
-import environment from './environment';
-import integrities from './integrities';
-import { absolute, cdn, cdnOrAbsolute } from './links';
-import project from './project';
-import settings from './settings';
-import renderAttributes from './renderAttributes';
+import { sanitizeString } from '../shared/sanitizeString'
+import environment from './environment'
+import integrities from './integrities'
+import { absolute, cdn, cdnOrAbsolute } from './links'
+import project from './project'
+import renderAttributes from './renderAttributes'
+import settings from './settings'
 
 export default function ({ head, body, nextBody, context, instances }) {
-  const { page, router, worker, params } = context;
-  const canonical = absolute(page.canonical || router.url);
-  const image = cdnOrAbsolute(page.image);
-  const serializableContext = {};
-  const blacklist = ['scope', 'router', 'page', 'environment', 'settings', 'worker', 'params', 'project', 'instances'];
+  const { page, router, worker, params } = context
+  const canonical = absolute(page.canonical || router.url)
+  const image = cdnOrAbsolute(page.image)
+  const serializableContext = {}
+  const blacklist = ['scope', 'router', 'page', 'environment', 'settings', 'worker', 'params', 'project', 'instances']
   for (const [key, value] of Object.entries(context)) {
     if (!blacklist.includes(key) && typeof value !== 'function') {
-      serializableContext[key] = value;
+      serializableContext[key] = value
     }
   }
-  const serializableInstances = {};
+  const serializableInstances = {}
   for (const [key, value] of Object.entries(instances)) {
     if (Object.keys(value).length) {
-      serializableInstances[key] = value;
+      serializableInstances[key] = value
     }
   }
   const state = {
-    page, environment, settings, worker, params, project,
+    page,
+    environment,
+    settings,
+    worker,
+    params,
+    project,
     instances: environment.mode === 'spa' ? {} : serializableInstances,
-    context: environment.mode === 'spa' ? {} : serializableContext
-  };
-  return (`<!DOCTYPE html>
+    context: environment.mode === 'spa' ? {} : serializableContext,
+  }
+  return `<!DOCTYPE html>
 <html${page.locale ? ` lang="${page.locale}"` : ''}>
   <head>
     <meta charset="utf-8">
@@ -53,16 +58,20 @@ export default function ({ head, body, nextBody, context, instances }) {
     ${page.robots ? `<meta name="robots" content="${page.robots}" />` : ''}
     <meta name="msapplication-starturl" content="/">
     ${project.viewport ? `<meta name="viewport" content="${project.viewport}">` : ''}
-    <link rel="stylesheet" href="${cdn(`/client.css?fingerprint=${environment.key}`)}" integrity="${integrities['client.css'] || ''}" crossorigin="anonymous">
+    <link rel="stylesheet" href="${cdn(`/client.css?fingerprint=${environment.key}`)}" integrity="${
+    integrities['client.css'] || ''
+  }" crossorigin="anonymous">
     ${page.schema ? `<script type="application/ld+json">${JSON.stringify(page.schema)}</script>` : ''}
     ${project.icons['180'] ? `<link rel="apple-touch-icon" sizes="180x180" href="${cdn(project.icons['180'])}">` : ''}
     <meta name="msapplication-TileColor" content="${project.backgroundColor || project.color}">
     <meta name="nullstack" content="${encodeURIComponent(sanitizeString(JSON.stringify(state)))}">
     ${head.split('<!--#-->').join('')}
-    <script src="${cdn(`/client.js?fingerprint=${environment.key}`)}" integrity="${integrities['client.js'] || ''}" defer crossorigin="anonymous"></script>
+    <script src="${cdn(`/client.js?fingerprint=${environment.key}`)}" integrity="${
+    integrities['client.js'] || ''
+  }" defer crossorigin="anonymous"></script>
   </head>
   <body ${renderAttributes(nextBody)}>
     ${environment.mode === 'spa' ? '<div id="application"></div>' : body}
   </body>
-</html>`)
+</html>`
 }

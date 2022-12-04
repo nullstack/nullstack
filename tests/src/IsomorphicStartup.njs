@@ -1,9 +1,9 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class IsomorphicStartup extends Nullstack {
 
   static async getServerStartValue({ startValue }) {
-    return startValue;
+    return startValue
   }
 
   async initiate() {
@@ -11,7 +11,7 @@ class IsomorphicStartup extends Nullstack {
   }
 
   static async getServerStartIncrementalValue({ startIncrementalValue }) {
-    return startIncrementalValue;
+    return startIncrementalValue
   }
 
   async hydrate() {
@@ -31,4 +31,4 @@ class IsomorphicStartup extends Nullstack {
 
 }
 
-export default IsomorphicStartup;
+export default IsomorphicStartup

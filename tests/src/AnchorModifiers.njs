@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class AnchorModifiers extends Nullstack {
 
@@ -30,7 +30,15 @@ class AnchorModifiers extends Nullstack {
 
   render() {
     return (
-      <div ref={this._element} data-clicked-jsx={this.clickedJSX} data-clicked-html={this.clickedHTML} data-count={this.count} data-objected={this.objected} data-updated={this.updated} data-hydrated={this.hydrated}>
+      <div
+        ref={this._element}
+        data-clicked-jsx={this.clickedJSX}
+        data-clicked-html={this.clickedHTML}
+        data-count={this.count}
+        data-objected={this.objected}
+        data-updated={this.updated}
+        data-hydrated={this.hydrated}
+      >
         <div html={this.html} />
         <button onclick={this.markAsUpdated}> update </button>
         <a href="/anchor-modifiers?source=jsx" onclick={this.clickJSX}>
@@ -51,4 +59,4 @@ class AnchorModifiers extends Nullstack {
 
 }
 
-export default AnchorModifiers;
+export default AnchorModifiers

@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 class RoutesAndParams extends Nullstack {
 
   paramHydrated = false;
@@ -30,11 +30,11 @@ class RoutesAndParams extends Nullstack {
   }
 
   hydrate(context) {
-    const { router, params } = context;
-    this.paramHydrated = params.id === 'a';
+    const { router, params } = context
+    this.paramHydrated = params.id === 'a'
     window.addEventListener(router.event, () => {
-      context.eventTriggered = true;
-    });
+      context.eventTriggered = true
+    })
   }
 
   renderOther({ params }) {
@@ -48,30 +48,34 @@ class RoutesAndParams extends Nullstack {
   }
 
   renderWildcard() {
-    return (
-      <div data-wildcard />
-    )
+    return <div data-wildcard />
   }
 
   renderInnerHTML() {
     const html = `<a href="/routes-and-params/inner-html">a</a>`
     return (
       <div>
-        <button data-html-click data-html-clicked={this.clickedHTML} onclick={{ clickedHTML: true }}>click html</button>
-        <button onclick={{ updatedHTML: true }} data-update-initial-html>update html</button>
+        <button data-html-click data-html-clicked={this.clickedHTML} onclick={{ clickedHTML: true }}>
+          click html
+        </button>
+        <button onclick={{ updatedHTML: true }} data-update-initial-html>
+          update html
+        </button>
         <div data-initial-html html={this.updatedHTML ? html + html : html} />
-        <button onclick={{ visibleHTML: true }} data-show-conditional-html>show html</button>
+        <button onclick={{ visibleHTML: true }} data-show-conditional-html>
+          show html
+        </button>
         {this.visibleHTML && <div data-conditional-html html={html} />}
       </div>
     )
   }
 
   setParamsDate({ params }) {
-    params.date = new Date('1992-10-16');
+    params.date = new Date('1992-10-16')
   }
 
   goToDocs({ router }) {
-    router.url = 'https://nullstack.app';
+    router.url = 'https://nullstack.app'
   }
 
   renderHrefs() {
@@ -80,9 +84,22 @@ class RoutesAndParams extends Nullstack {
         <a href="https://nullstack.app/"> Nullstack HTTPS</a>
         <a href="http://nullstack.app/"> Nullstack HTTP</a>
         <a href="//nullstack.app/"> Nullstack SAME</a>
-        <a href="ftp://nullstack.app/" data-ftp-clicked={this.clickedFtp} onclick={{ clickedFtp: true }}> Nullstack FTP</a>
-        <a href="tel:1555696969" data-tel-clicked={this.clickedTel} onclick={{ clickedTel: true }}> Nullstack TEL</a>
-        <a href="mailto:contact@nullstack.app" data-mailto-clicked={this.clickedMailTo} onclick={{ clickedMailTo: true }}> Nullstack MAILTO</a>
+        <a href="ftp://nullstack.app/" data-ftp-clicked={this.clickedFtp} onclick={{ clickedFtp: true }}>
+          {' '}
+          Nullstack FTP
+        </a>
+        <a href="tel:1555696969" data-tel-clicked={this.clickedTel} onclick={{ clickedTel: true }}>
+          {' '}
+          Nullstack TEL
+        </a>
+        <a
+          href="mailto:contact@nullstack.app"
+          data-mailto-clicked={this.clickedMailTo}
+          onclick={{ clickedMailTo: true }}
+        >
+          {' '}
+          Nullstack MAILTO
+        </a>
         <a href="relative"> Nullstack RELATIVE</a>
         <a href="relative/6969"> Nullstack RELATIVE TWO</a>
         <a href="/root/6969"> Nullstack ROOT</a>
@@ -96,7 +113,10 @@ class RoutesAndParams extends Nullstack {
     return (
       <div>
         <Hrefs />
-        <button data-absolute onclick={this.goToDocs}> Nullstack </button>
+        <button data-absolute onclick={this.goToDocs}>
+          {' '}
+          Nullstack{' '}
+        </button>
         <a href="/routes-and-params/no-hash#hash">hash</a>
         <div data-hydrated={this.hydrated} data-event-triggered={eventTriggered} />
         <div data-router={!!router} />
@@ -112,7 +132,10 @@ class RoutesAndParams extends Nullstack {
         <div data-base={router.base} />
         <div data-empty={params.empty} />
         <div data-boolean={params.boolean} />
-        <button data-params onclick={this.setParamsDate}> date </button>
+        <button data-params onclick={this.setParamsDate}>
+          {' '}
+          date{' '}
+        </button>
         <div data-date={params.date} />
         <div data-hydrated-param={this.paramHydrated} />
         <div data-previous={String(router.previous)} />
@@ -122,4 +145,4 @@ class RoutesAndParams extends Nullstack {
 
 }
 
-export default RoutesAndParams;
+export default RoutesAndParams

@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class PersistentComponent extends Nullstack {
 
@@ -6,11 +6,11 @@ class PersistentComponent extends Nullstack {
   launchCount = 0
 
   prepare() {
-    this.count = -1;
+    this.count = -1
   }
 
   async initiate() {
-    this.count = -1;
+    this.count = -1
   }
 
   launch() {
@@ -48,4 +48,4 @@ class PersistentComponent extends Nullstack {
 
 }
 
-export default PersistentComponent;
+export default PersistentComponent

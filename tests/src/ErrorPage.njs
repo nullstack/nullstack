@@ -1,15 +1,15 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class ErrorPage extends Nullstack {
 
   async initiate({ page, params }) {
     if (params.status === '500') {
-      this.error.simulate;
+      this.error.simulate
     } else {
-      page.status = 404;
+      page.status = 404
     }
   }
 
 }
 
-export default ErrorPage;
+export default ErrorPage

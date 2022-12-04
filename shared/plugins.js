@@ -1,18 +1,13 @@
-import routable from '../plugins/routable';
-import bindable from '../plugins/bindable';
-import parameterizable from '../plugins/parameterizable';
-import anchorable from '../plugins/anchorable';
+import anchorable from '../plugins/anchorable'
+import bindable from '../plugins/bindable'
+import parameterizable from '../plugins/parameterizable'
+import routable from '../plugins/routable'
 
-const plugins = [
-  parameterizable,
-  anchorable,
-  routable,
-  bindable
-];
+const plugins = [parameterizable, anchorable, routable, bindable]
 
 export function transformNodes(scope, node, depth) {
   for (const plugin of plugins) {
-    plugin.transform({ ...scope.context, node, depth });
+    plugin.transform({ ...scope.context, node, depth })
   }
 }
 
@@ -20,7 +15,7 @@ export function loadPlugins(scope) {
   for (const plugin of plugins) {
     plugin.load && plugin.load(scope.context)
   }
-  return plugins;
+  return plugins
 }
 
 export function useClientPlugins(plugin) {

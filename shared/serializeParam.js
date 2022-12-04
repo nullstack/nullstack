@@ -1,3 +1,3 @@
 export default function serializeParam(value) {
-  return value?.toJSON?.() ?? value;
+  return value?.toJSON?.() ?? value
 }

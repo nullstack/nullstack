@@ -1,13 +1,13 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class DateParser extends Nullstack {
 
   object = null;
 
   prepare(context) {
-    const date = new Date('1992-10-16');
+    const date = new Date('1992-10-16')
     context.object = { date }
-    this.object = { date };
+    this.object = { date }
   }
 
   render({ object }) {
@@ -23,4 +23,4 @@ class DateParser extends Nullstack {
 
 }
 
-export default DateParser;
+export default DateParser
