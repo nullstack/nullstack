@@ -1,4 +1,5 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
+
 import LazyComponentSafelist from './LazyComponent'
 
 let LazyComponent
@@ -20,4 +21,4 @@ class LazyComponentLoader extends Nullstack {
 
 }
 
-export default LazyComponentLoader;
+export default LazyComponentLoader

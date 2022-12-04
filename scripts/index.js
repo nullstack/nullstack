@@ -1,14 +1,14 @@
 #! /usr/bin/env node
-const { program } = require('commander');
-const { version } = require('../package.json');
-
-const webpack = require('webpack');
-const path = require('path');
-const { existsSync, readdir, unlink } = require('fs');
-const customConfig = path.resolve(process.cwd(), './webpack.config.js');
-const config = existsSync(customConfig) ? require(customConfig) : require('../webpack.config');
+const { program } = require('commander')
 const dotenv = require('dotenv')
+const { existsSync, readdir, unlink } = require('fs')
 const fetch = require('node-fetch')
+const path = require('path')
+const webpack = require('webpack')
+
+const { version } = require('../package.json')
+const customConfig = path.resolve(process.cwd(), './webpack.config.js')
+const config = existsSync(customConfig) ? require(customConfig) : require('../webpack.config')
 
 function getConfig(options) {
   return config.map((env) => env(null, options))
@@ -27,62 +27,59 @@ function loadEnv(env) {
 }
 
 function getFreePorts() {
-  return new Promise((resolve, reject) => {
-    const app1 = require('express')();
-    const app2 = require('express')();
+  return new Promise((resolve) => {
+    const app1 = require('express')()
+    const app2 = require('express')()
     const server1 = app1.listen(0, () => {
       const server2 = app2.listen(0, () => {
-        const ports = [
-          server1.address().port,
-          server2.address().port
-        ]
+        const ports = [server1.address().port, server2.address().port]
         server1.close()
         server2.close()
         resolve(ports)
-      });
-    });
+      })
+    })
   })
 }
 
 function getPort(port) {
-  return port || process.env['NULLSTACK_SERVER_PORT'] || process.env['PORT'] || 3000
+  return port || process.env.NULLSTACK_SERVER_PORT || process.env.PORT || 3000
 }
 
 function clearOutput(outputPath) {
   if (!existsSync(outputPath)) return
   readdir(outputPath, (err, files) => {
-    if (err) throw err;
+    if (err) throw err
     for (const file of files) {
-      if (file === '.cache') continue;
-      unlink(path.join(outputPath, file), err => {
-        if (err) throw err;
-      });
+      if (file === '.cache') continue
+      unlink(path.join(outputPath, file), (errr) => {
+        if (errr) throw errr
+      })
     }
-  });
+  })
 }
 
 async function start({ input, port, env, mode = 'spa', cold, disk, loader = 'swc' }) {
   const environment = 'development'
-  console.log(` 🚀️ Starting your application in ${environment} mode...`);
+  console.info(` 🚀️ Starting your application in ${environment} mode...`)
   loadEnv(env)
-  const WebpackDevServer = require('webpack-dev-server');
+  const WebpackDevServer = require('webpack-dev-server')
   const { setLogLevel } = require('webpack/hot/log')
   setLogLevel('none')
-  process.env['NULLSTACK_ENVIRONMENT_MODE'] = mode
-  process.env['NULLSTACK_SERVER_PORT'] = getPort(port)
+  process.env.NULLSTACK_ENVIRONMENT_MODE = mode
+  process.env.NULLSTACK_SERVER_PORT = getPort(port)
   const ports = await getFreePorts()
-  process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT'] = ports[0]
-  process.env['NULSTACK_SERVER_SOCKET_PORT_YOU_SHOULD_NOT_CARE_ABOUT'] = ports[1]
-  process.env['NULLSTACK_ENVIRONMENT_HOT'] = (!cold).toString()
-  process.env['NULLSTACK_ENVIRONMENT_DISK'] = (!!disk).toString()
-  if (!process.env['NULLSTACK_PROJECT_DOMAIN']) process.env['NULLSTACK_PROJECT_DOMAIN'] = 'localhost'
-  if (!process.env['NULLSTACK_WORKER_PROTOCOL']) process.env['NULLSTACK_WORKER_PROTOCOL'] = 'http'
-  const target = `${process.env['NULLSTACK_WORKER_PROTOCOL']}://${process.env['NULLSTACK_PROJECT_DOMAIN']}:${process.env['NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT']}`
-  const writeToDisk = disk ? true : (path) => path.includes('server')
+  process.env.NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT = ports[0]
+  process.env.NULSTACK_SERVER_SOCKET_PORT_YOU_SHOULD_NOT_CARE_ABOUT = ports[1]
+  process.env.NULLSTACK_ENVIRONMENT_HOT = (!cold).toString()
+  process.env.NULLSTACK_ENVIRONMENT_DISK = (!!disk).toString()
+  if (!process.env.NULLSTACK_PROJECT_DOMAIN) process.env.NULLSTACK_PROJECT_DOMAIN = 'localhost'
+  if (!process.env.NULLSTACK_WORKER_PROTOCOL) process.env.NULLSTACK_WORKER_PROTOCOL = 'http'
+  const target = `${process.env.NULLSTACK_WORKER_PROTOCOL}://${process.env.NULLSTACK_PROJECT_DOMAIN}:${process.env.NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT}`
+  const writeToDisk = disk ? true : (p) => p.includes('server')
   const devServerOptions = {
     hot: 'only',
     open: false,
-    host: process.env['NULLSTACK_PROJECT_DOMAIN'],
+    host: process.env.NULLSTACK_PROJECT_DOMAIN,
     devMiddleware: {
       index: false,
       stats: 'errors-only',
@@ -93,7 +90,9 @@ async function start({ input, port, env, mode = 'spa', cold, disk, loader = 'swc
       logging: 'none',
       progress: false,
       reconnect: true,
-      webSocketURL: `${process.env['NULLSTACK_WORKER_PROTOCOL'].replace('http', 'ws')}://${process.env['NULLSTACK_PROJECT_DOMAIN']}:${process.env['NULLSTACK_SERVER_PORT']}/ws`
+      webSocketURL: `${process.env.NULLSTACK_WORKER_PROTOCOL.replace('http', 'ws')}://${
+        process.env.NULLSTACK_PROJECT_DOMAIN
+      }:${process.env.NULLSTACK_SERVER_PORT}/ws`,
     },
     proxy: {
       context: () => true,
@@ -103,14 +102,14 @@ async function start({ input, port, env, mode = 'spa', cold, disk, loader = 'swc
     },
     setupMiddlewares: (middlewares, devServer) => {
       if (!devServer) {
-        throw new Error('webpack-dev-server is not defined');
+        throw new Error('webpack-dev-server is not defined')
       }
       middlewares.unshift(async (req, res, next) => {
         if (req.originalUrl.indexOf('.hot-update.') === -1) {
           if (req.originalUrl.startsWith('/nullstack/')) {
-            console.log(`  ⚙️ [${req.method}] ${req.originalUrl}`)
+            console.info(`  ⚙️ [${req.method}] ${req.originalUrl}`)
           } else {
-            console.log(`  🕸️ [${req.method}] ${req.originalUrl}`)
+            console.info(`  🕸️ [${req.method}] ${req.originalUrl}`)
           }
         }
         async function waitForServer() {
@@ -129,38 +128,41 @@ async function start({ input, port, env, mode = 'spa', cold, disk, loader = 'swc
           }
         }
         waitForServer()
-      });
-      return middlewares;
+      })
+      return middlewares
     },
     webSocketServer: require.resolve('./socket'),
-    port: process.env['NULLSTACK_SERVER_PORT']
-  };
-  const compiler = getCompiler({ environment, input, disk, loader });
+    port: process.env.NULLSTACK_SERVER_PORT,
+  }
+  const compiler = getCompiler({ environment, input, disk, loader })
   clearOutput(compiler.compilers[0].outputPath)
-  const server = new WebpackDevServer(devServerOptions, compiler);
-  const portChecker = require('express')().listen(process.env['NULLSTACK_SERVER_PORT'], () => {
+  const server = new WebpackDevServer(devServerOptions, compiler)
+  const portChecker = require('express')().listen(process.env.NULLSTACK_SERVER_PORT, () => {
     portChecker.close()
     server.startCallback(() => {
-      console.log('\x1b[36m%s\x1b[0m', ` ✅️ Your application is ready at http://${process.env['NULLSTACK_PROJECT_DOMAIN']}:${process.env['NULLSTACK_SERVER_PORT']}\n`);
-    });
+      console.info(
+        '\x1b[36m%s\x1b[0m',
+        ` ✅️ Your application is ready at http://${process.env.NULLSTACK_PROJECT_DOMAIN}:${process.env.NULLSTACK_SERVER_PORT}\n`,
+      )
+    })
   })
 }
 
 function build({ input, output, cache, env, mode = 'ssr' }) {
-  const environment = 'production';
-  const compiler = getCompiler({ environment, input, cache });
+  const environment = 'production'
+  const compiler = getCompiler({ environment, input, cache })
   if (env) {
-    process.env['NULLSTACK_ENVIRONMENT_NAME'] = env;
+    process.env.NULLSTACK_ENVIRONMENT_NAME = env
   }
-  console.log(` 🚀️ Building your application in ${mode} mode...`);
+  console.info(` 🚀️ Building your application in ${mode} mode...`)
   compiler.run((error, stats) => {
     if (stats.hasErrors()) {
-      console.log(stats.toString({ colors: true }))
-      process.exit(1);
+      console.info(stats.toString({ colors: true }))
+      process.exit(1)
     }
-    if (stats.hasErrors()) process.exit(1);
-    require(`../builders/${mode}`)({ output, cache, environment });
-  });
+    if (stats.hasErrors()) process.exit(1)
+    require(`../builders/${mode}`)({ output, cache, environment })
+  })
 }
 
 program
@@ -190,8 +192,8 @@ program
   .action(build)
 
 program
-  .name("nullstack")
+  .name('nullstack')
   .addHelpCommand(false)
   .helpOption('-h, --help', 'Learn more about a specific command')
   .version(version, '-v, --version', 'Nullstack version being used')
-  .parse(process.argv);
+  .parse(process.argv)

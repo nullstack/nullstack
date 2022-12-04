@@ -1,33 +1,33 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class WorkerVerbs extends Nullstack {
 
   static async getterSomething({ request }) {
-    return request.method;
+    return request.method
   }
 
   static async getSomething({ request }) {
-    return request.method;
+    return request.method
   }
 
   static async putSomething({ request }) {
-    return request.method;
+    return request.method
   }
 
   static async patchSomething({ request }) {
-    return request.method;
+    return request.method
   }
 
   static async deleteSomething({ request }) {
-    return request.method;
+    return request.method
   }
 
   static async postSomething({ request }) {
-    return request.method;
+    return request.method
   }
 
   static async regularSomething({ request }) {
-    return request.method;
+    return request.method
   }
 
   async hydrate() {
@@ -56,4 +56,4 @@ class WorkerVerbs extends Nullstack {
 
 }
 
-export default WorkerVerbs;
+export default WorkerVerbs

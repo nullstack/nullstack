@@ -1,3 +1,3 @@
-const prefix = 'nullstack';
+const prefix = 'nullstack'
 
-export default prefix;
+export default prefix

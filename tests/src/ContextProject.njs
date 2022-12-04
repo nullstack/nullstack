@@ -1,23 +1,23 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class ContextProject extends Nullstack {
 
   static async start({ project }) {
-    project.color = '#d22365';
-    project.backgroundColor = '#d22365';
-    project.type = 'website';
-    project.display = 'standalone';
-    project.orientation = 'portrait';
-    project.scope = '/';
-    project.root = '/';
+    project.color = '#d22365'
+    project.backgroundColor = '#d22365'
+    project.type = 'website'
+    project.display = 'standalone'
+    project.orientation = 'portrait'
+    project.scope = '/'
+    project.root = '/'
     project.icons = {
-      '72': '/icon-72x72.png',
-      '144': '/icon-144x144.png'
-    };
-    project.favicon = '/favicon-96x96.png';
-    project.disallow = ['/admin'];
-    project.sitemap = true;
-    project.viewport = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no viewport-fit=cover';
+      72: '/icon-72x72.png',
+      144: '/icon-144x144.png',
+    }
+    project.favicon = '/favicon-96x96.png'
+    project.disallow = ['/admin']
+    project.sitemap = true
+    project.viewport = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no viewport-fit=cover'
   }
 
   render({ project }) {
@@ -47,4 +47,4 @@ class ContextProject extends Nullstack {
 
 }
 
-export default ContextProject;
+export default ContextProject

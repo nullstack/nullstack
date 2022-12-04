@@ -1,23 +1,23 @@
-import ParentComponent from './ParentComponent';
+import ParentComponent from './ParentComponent'
 
 class ChildComponent extends ParentComponent {
 
   static async getChildThis() {
-    return this.name;
+    return this.name
   }
 
   async initiate() {
-    this.parentThis = await this.getParentThis();
-    this.childThis = await this.getChildThis();
-    this.staticChildThis = await ChildComponent.getChildThis();
-    this.staticParentThis = await ParentComponent.getParentThis();
+    this.parentThis = await this.getParentThis()
+    this.childThis = await this.getChildThis()
+    this.staticChildThis = await ChildComponent.getChildThis()
+    this.staticParentThis = await ParentComponent.getParentThis()
   }
 
   async hydrate() {
-    this.hydratedParentThis = await this.getParentThis();
-    this.hydratedChildThis = await this.getChildThis();
-    this.staticHydratedChildThis = await ChildComponent.getChildThis();
-    this.staticHydratedParentThis = await ParentComponent.getParentThis();
+    this.hydratedParentThis = await this.getParentThis()
+    this.hydratedChildThis = await this.getChildThis()
+    this.staticHydratedChildThis = await ChildComponent.getChildThis()
+    this.staticHydratedParentThis = await ParentComponent.getParentThis()
     this.bunda = 'true'
   }
 
@@ -40,4 +40,4 @@ class ChildComponent extends ParentComponent {
 
 }
 
-export default ChildComponent;
+export default ChildComponent

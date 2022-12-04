@@ -1,6 +1,6 @@
-import router from './router'
-import { camelize } from '../shared/string';
 import noop from '../shared/noop'
+import { camelize } from '../shared/string'
+import router from './router'
 
 export const eventCallbacks = new WeakMap()
 export const eventSubjects = new WeakMap()
@@ -8,9 +8,9 @@ export const eventDebouncer = new WeakMap()
 
 function executeEvent(callback, subject, event, data) {
   if (typeof callback === 'object') {
-    Object.assign(subject.source, callback);
+    Object.assign(subject.source, callback)
   } else {
-    callback({ ...subject, event, data });
+    callback({ ...subject, event, data })
   }
 }
 
@@ -35,28 +35,28 @@ export function generateCallback(selector, name) {
         router.url = subject.href
       }
     } else if (subject.default !== true) {
-      event.preventDefault();
+      event.preventDefault()
     }
     debounce(selector, name, subject.debounce, () => {
       const data = { ...subject.data }
       for (const attribute in subject) {
         if (attribute.startsWith('data-')) {
-          const key = camelize(attribute.slice(5));
-          data[key] = subject[attribute];
+          const key = camelize(attribute.slice(5))
+          data[key] = subject[attribute]
         }
       }
       if (subject?.bind !== undefined) {
-        const valueName = (subject.type === 'checkbox' || subject.type === 'radio') ? 'checked' : 'value'
+        const valueName = subject.type === 'checkbox' || subject.type === 'radio' ? 'checked' : 'value'
         const object = subject.bind.object
         const property = subject.bind.property
         if (valueName === 'checked') {
-          object[property] = event.target[valueName];
+          object[property] = event.target[valueName]
         } else if (object[property] === true || object[property] === false) {
-          object[property] = event.target[valueName] === 'true';
+          object[property] = event.target[valueName] === 'true'
         } else if (typeof object[property] === 'number') {
-          object[property] = +event.target[valueName] || 0;
+          object[property] = +event.target[valueName] || 0
         } else {
-          object[property] = event.target[valueName];
+          object[property] = event.target[valueName]
         }
       }
       if (subject[name] === noop) return
@@ -69,4 +69,4 @@ export function generateCallback(selector, name) {
       }
     })
   }
-};
+}

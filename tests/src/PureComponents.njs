@@ -1,18 +1,13 @@
-import Nullstack from 'nullstack';
-import { 
-  AnonComponent, 
-  NamedComponent, 
-  ArrowComponent 
-} from './PureFunctions';
+import Nullstack from 'nullstack'
+
+import { AnonComponent, ArrowComponent, NamedComponent } from './PureFunctions'
 
 class Component extends Nullstack {
 
   renderInnerComponent(context) {
-    return (
-      <div data-inner={context.params.works} id={context.id} />
-    )
+    return <div data-inner={context.params.works} id={context.id} />
   }
-  
+
   render() {
     return (
       <>
@@ -26,4 +21,4 @@ class Component extends Nullstack {
 
 }
 
-export default Component;
+export default Component
