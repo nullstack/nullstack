@@ -1,7 +1,7 @@
 export function serverOnly() {
-  return true;
+  return true
 }
 
 export function clientOnly() {
-  return true;
+  return true
 }

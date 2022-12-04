@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 function underscoredAfterConstructor(value) {
   this.c = value
@@ -7,7 +7,7 @@ function underscoredAfterConstructor(value) {
 const underscoredObject = {
   withoutUnderscore(value) {
     this.d = value
-  }
+  },
 }
 
 function _underscored({ string, value }) {
@@ -57,12 +57,22 @@ class UnderscoredAttributes extends Nullstack {
 
   render() {
     return (
-      <div data-a={this.a} data-b={this.b} data-c={this.c} data-d={this.d} data-e={this.e} data-f={this.f} data-g={this._g}>
-        <button ref={this.setEventListener} data-hydrated={this.hydrated}>UnderscoredAttributes</button>
+      <div
+        data-a={this.a}
+        data-b={this.b}
+        data-c={this.c}
+        data-d={this.d}
+        data-e={this.e}
+        data-f={this.f}
+        data-g={this._g}
+      >
+        <button ref={this.setEventListener} data-hydrated={this.hydrated}>
+          UnderscoredAttributes
+        </button>
       </div>
     )
   }
 
 }
 
-export default UnderscoredAttributes;
+export default UnderscoredAttributes

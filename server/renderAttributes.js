@@ -1,22 +1,22 @@
-import generateTruthyString from "../shared/generateTruthyString";
+import generateTruthyString from '../shared/generateTruthyString'
 
 export default function renderAttributes(attributes) {
   let element = ''
-  for (let name in attributes) {
+  for (const name in attributes) {
     if (name === 'debounce') continue
     if (!name.startsWith('on') && name !== 'html') {
-      let attribute = attributes[name];
+      let attribute = attributes[name]
       if ((name === 'class' || name === 'style') && Array.isArray(attributes[name])) {
-        attribute = generateTruthyString(attributes[name]);
+        attribute = generateTruthyString(attributes[name])
       } else {
-        attribute = attributes[name];
+        attribute = attributes[name]
       }
-      const type = typeof attribute;
+      const type = typeof attribute
       if (type !== 'object' && type !== 'function') {
-        if (name != 'value' && attribute === true) {
-          element += ` ${name}`;
+        if (name !== 'value' && attribute === true) {
+          element += ` ${name}`
         } else if (name === 'value' || (attribute !== false && attribute !== null && attribute !== undefined)) {
-          element += ` ${name}="${attribute}"`;
+          element += ` ${name}="${attribute}"`
         }
       }
     }

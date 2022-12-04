@@ -1,28 +1,28 @@
-import client from './client';
-import windowEvent from './windowEvent';
-import state from './state';
+import client from './client'
+import state from './state'
+import windowEvent from './windowEvent'
 
 const page = {
   ...state.page,
-  event: 'nullstack.page'
+  event: 'nullstack.page',
 }
 
-delete state.page;
+delete state.page
 
 const pageProxyHandler = {
-  set(target, name, value) {
+  set(target, name, value, receiver) {
     if (name === 'title') {
-      document.title = value;
+      document.title = value
     }
-    const result = Reflect.set(...arguments);
+    const result = Reflect.set(target, name, value, receiver)
     if (name === 'title') {
-      windowEvent('page');
+      windowEvent('page')
     }
-    client.update();
-    return result;
-  }
+    client.update()
+    return result
+  },
 }
 
-const proxy = new Proxy(page, pageProxyHandler);
+const proxy = new Proxy(page, pageProxyHandler)
 
-export default proxy;
+export default proxy

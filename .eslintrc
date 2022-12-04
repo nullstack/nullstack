@@ -1,0 +1,33 @@
+{
+  "extends": "plugin:nullstack/recommended",
+  "plugins": [
+    "jest"
+  ],
+  "env": {
+    "jest/globals": true
+  },
+  "rules": {
+    "nullstack/prettier": [
+      "warn",
+      {
+        "trailingComma": "all",
+        "tabWidth": 2,
+        "semi": false,
+        "singleQuote": true,
+        "printWidth": 120
+      },
+      {
+        "usePrettierrc": false
+      }
+    ]
+  },
+  "globals": {
+    "page": "writable",
+    "browser": "writable"
+  },
+  "ignorePatterns": [
+    "temp.js",
+    "types/*.d.ts",
+    "workers/*.js"
+  ]
+}

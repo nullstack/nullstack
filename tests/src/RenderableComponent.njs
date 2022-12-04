@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class RenderableComponent extends Nullstack {
 
@@ -18,18 +18,16 @@ class RenderableComponent extends Nullstack {
   }
 
   renderInnerReference({ prop }) {
-    return (
-      <div data-reference={prop} />
-    )
+    return <div data-reference={prop} />
   }
 
   renderFalsy() {
-    return false;
+    return false
   }
 
   render({ params }) {
     const list = params.shortList ? [1, 2, 3] : [1, 2, 3, 4, 5, 6]
-    const html = '<a href="/"> Nullstack </a>';
+    const html = '<a href="/"> Nullstack </a>'
     return (
       <div class="RenderableComponent">
         <Falsy />
@@ -48,17 +46,23 @@ class RenderableComponent extends Nullstack {
           <span class="children"> children </span>
         </InnerComponent>
         <ul>
-          {list.map((item) => <li> {item} </li>)}
+          {list.map((item) => (
+            <li> {item} </li>
+          ))}
         </ul>
         <div html={html} />
         <head>
           <link rel="preload" href="https://nullstack.app" as="fetch" crossorigin />
         </head>
-        {!!params.condition &&
-          <div class="condition"> conditionally rendered div </div>
-        }
-        <a params={{ shortList: true }} class="short-list"> long list </a>
-        <a params={{ condition: true }} class="true-condition"> long list </a>
+        {!!params.condition && <div class="condition"> conditionally rendered div </div>}
+        <a params={{ shortList: true }} class="short-list">
+          {' '}
+          long list{' '}
+        </a>
+        <a params={{ condition: true }} class="true-condition">
+          {' '}
+          long list{' '}
+        </a>
         <div data-condition={!!params.condition} />
         <div data-short-list={!!params.shortList} />
         <div data-name={this.name} />
@@ -68,4 +72,4 @@ class RenderableComponent extends Nullstack {
 
 }
 
-export default RenderableComponent;
+export default RenderableComponent

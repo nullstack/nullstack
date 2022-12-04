@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class Refs extends Nullstack {
 
@@ -15,9 +15,7 @@ class Refs extends Nullstack {
   }
 
   renderBubble({ ref }) {
-    return (
-      <div id="bubble" ref={ref} data-id={this._bubble?.id} />
-    )
+    return <div id="bubble" ref={ref} data-id={this._bubble?.id} />
   }
 
   changeInstance(context) {
@@ -29,8 +27,16 @@ class Refs extends Nullstack {
       <div id="hydrate-element" data-id={this.id} ref={this._element} data-instance={refInstanceCount}>
         <span id="composed-computed" ref={this[this.composedComputed]} data-id={this._composedComputed?.id} />
         <span id="logical-computed" ref={this[['_logical', 'Computed'].join('')]} data-id={this._logicalComputed?.id} />
-        <span id="literal-computed" ref={this['_literalComputed']} data-id={this._literalComputed?.id} />
-        <span id="function" ref={this.setRef} data-ref-received-props={this.refReceivedProps} data-dom={this.isOnDOM} data-id={this._function?.id}>span</span>
+        <span id="literal-computed" ref={this._literalComputed} data-id={this._literalComputed?.id} />
+        <span
+          id="function"
+          ref={this.setRef}
+          data-ref-received-props={this.refReceivedProps}
+          data-dom={this.isOnDOM}
+          data-id={this._function?.id}
+        >
+          span
+        </span>
         <Bubble ref={this._bubble} />
         <button onclick={this.changeInstance}>Change Instance</button>
       </div>
@@ -39,4 +45,4 @@ class Refs extends Nullstack {
 
 }
 
-export default Refs;
+export default Refs

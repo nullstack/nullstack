@@ -1,4 +1,4 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class PublicServerFunctions extends Nullstack {
 
@@ -8,4 +8,4 @@ class PublicServerFunctions extends Nullstack {
 
 }
 
-export default PublicServerFunctions;
+export default PublicServerFunctions

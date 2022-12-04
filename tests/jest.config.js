@@ -1,7 +1,7 @@
-const CI = !!process.env.CI;
+const CI = !!process.env.CI
 
 module.exports = {
-  preset: "jest-puppeteer",
+  preset: 'jest-puppeteer',
   forceExit: CI,
-  testTimeout: 60000
+  testTimeout: 60000,
 }

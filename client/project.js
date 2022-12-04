@@ -1,9 +1,9 @@
 import state from './state'
 
-const project = { ...state.project };
+const project = { ...state.project }
 
-delete state.project;
+delete state.project
 
-Object.freeze(project);
+Object.freeze(project)
 
-export default project;
+export default project

@@ -1,5 +1,6 @@
-import Nullstack from 'nullstack';
-import StatefulComponent from './StatefulComponent';
+import Nullstack from 'nullstack'
+
+import StatefulComponent from './StatefulComponent'
 
 class InstanceSelf extends Nullstack {
 
@@ -17,4 +18,4 @@ class InstanceSelf extends Nullstack {
 
 }
 
-export default InstanceSelf;
+export default InstanceSelf

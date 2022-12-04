@@ -1,13 +1,9 @@
-export const AnonComponent = function(context) {
-  return (
-    <div data-anon={context.params.works} id={context.id} />
-  )
+export const AnonComponent = function (context) {
+  return <div data-anon={context.params.works} id={context.id} />
 }
 
 export function NamedComponent(context) {
-  return (
-    <div data-named={context.params.works} id={context.id} />
-  )
+  return <div data-named={context.params.works} id={context.id} />
 }
 
 export const ArrowComponent = (context) => {

@@ -1,5 +1,5 @@
-import { createConfigurable } from './configurable';
+import { createConfigurable } from './configurable'
 
-const secrets = createConfigurable('SECRETS');
+const secrets = createConfigurable('SECRETS')
 
-export default secrets;
+export default secrets

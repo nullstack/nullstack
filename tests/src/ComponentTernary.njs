@@ -1,15 +1,19 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class CommponentA extends Nullstack {
+
   render() {
     return <p data-a> A </p>
   }
+
 }
 
 class CommponentB extends Nullstack {
+
   render() {
     return <p data-b> B </p>
   }
+
 }
 
 class ComponentTernary extends Nullstack {
@@ -27,4 +31,4 @@ class ComponentTernary extends Nullstack {
 
 }
 
-export default ComponentTernary;
+export default ComponentTernary

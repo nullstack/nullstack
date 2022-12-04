@@ -1,9 +1,9 @@
-let timer = null;
+const timer = null
 
 export default function windowEvent(name) {
-  clearTimeout(timer);
+  clearTimeout(timer)
   setTimeout(() => {
-    const event = new Event('nullstack.' + name);
-    window.dispatchEvent(event);
-  }, 0);
+    const event = new Event(`nullstack.${name}`)
+    window.dispatchEvent(event)
+  }, 0)
 }

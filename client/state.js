@@ -1,5 +1,5 @@
-import deserialize from '../shared/deserialize';
+import deserialize from '../shared/deserialize'
 
-const state = deserialize(decodeURIComponent(document.querySelector(`[name=nullstack]`).content));
+const state = deserialize(decodeURIComponent(document.querySelector(`[name=nullstack]`).content))
 
-export default state;
+export default state

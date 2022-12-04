@@ -1,40 +1,40 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class FullStackLifecycle extends Nullstack {
 
   prepared = false;
-  initiated = false;
-  launched = false;
-  hydrated = false;
-  updated = false;
+  initiated = false
+  launched = false
+  hydrated = false
+  updated = false
 
   prepare({ environment }) {
-    this.prepared = true;
+    this.prepared = true
     this.prepareEnv = environment.client ? 'client' : 'server'
   }
 
   async initiate({ environment }) {
-    this.initiated = this.prepared;
+    this.initiated = this.prepared
     this.initiateEnv = environment.client ? 'client' : 'server'
   }
 
   launch({ environment }) {
-    this.launched = this.initiated;
+    this.launched = this.initiated
     this.launchEnv = environment.client ? 'client' : 'server'
   }
 
   hydrate() {
-    this.hydrated = this.launched;
+    this.hydrated = this.launched
   }
 
   update() {
     if (!this.updated) {
-      this.updated = this.hydrated;
+      this.updated = this.hydrated
     }
   }
 
   async terminate({ params }) {
-    params.terminated = this.updated;
+    params.terminated = this.updated
   }
 
   render() {
@@ -52,4 +52,4 @@ class FullStackLifecycle extends Nullstack {
 
 }
 
-export default FullStackLifecycle;
+export default FullStackLifecycle
