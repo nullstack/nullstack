@@ -1,13 +1,13 @@
-const parse = require('@babel/parser').parse;
-const traverse = require("@babel/traverse").default;
+const parse = require('@babel/parser').parse
+const traverse = require('@babel/traverse').default
 
 const attributes = ['ref', 'bind']
 
 module.exports = function removeStaticFromClient(source) {
   const ast = parse(source, {
     sourceType: 'module',
-    plugins: ['classProperties', 'jsx', 'typescript']
-  });
+    plugins: ['classProperties', 'jsx', 'typescript'],
+  })
   const refs = []
   traverse(ast, {
     JSXAttribute(path) {
@@ -22,16 +22,16 @@ module.exports = function removeStaticFromClient(source) {
           if (property.type === 'Identifier' && !expression.computed) {
             refProperty = `'${refProperty}'`
           }
-          replacement = `${attribute}={{object: ${refObject}, property: ${refProperty}}}`
+          const replacement = `${attribute}={{object: ${refObject}, property: ${refProperty}}}`
           refs.push({
             start: path.node.start,
             end: path.node.end,
-            replacement
+            replacement,
           })
         }
       }
-    }
-  });
+    },
+  })
   if (refs.length === 0) return source
   const sources = []
   for (let i = 0; i <= refs.length; i++) {

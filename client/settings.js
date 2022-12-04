@@ -1,8 +1,8 @@
-import state from './state';
+import state from './state'
 
-const settings = { ...state.settings };
-delete state.settings;
+const settings = { ...state.settings }
+delete state.settings
 
-Object.freeze(settings);
+Object.freeze(settings)
 
-export default settings;
+export default settings

@@ -1,14 +1,15 @@
-import Nullstack from 'nullstack';
-import Application from './src/Application';
-import vueable from './src/plugins/vueable';
+import Nullstack from 'nullstack'
 
-Nullstack.use(vueable);
+import Application from './src/Application'
+import vueable from './src/plugins/vueable'
 
-const context = Nullstack.start(Application);
+Nullstack.use(vueable)
+
+const context = Nullstack.start(Application)
 
 context.start = function () {
   context.startValue = true
-  setTimeout(() => context.startTimedValue = true, 1000)
+  setTimeout(() => (context.startTimedValue = true), 1000)
 }
 
-export default context;
+export default context

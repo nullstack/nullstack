@@ -1,21 +1,21 @@
-import client from './client';
+import client from './client'
 
 const objectProxyHandler = {
   set(target, name, value) {
     if (isProxyable(name, value)) {
-      target[name] = new Proxy(value, this);
+      target[name] = new Proxy(value, this)
     } else {
-      target[name] = value;
+      target[name] = value
     }
     if (!name.startsWith('_')) {
-      client.update();
+      client.update()
     }
-    return true;
+    return true
   },
-  get(target, name) {
-    if (name === '_isProxy') return true;
-    return Reflect.get(...arguments);
-  }
+  get(target, name, receiver) {
+    if (name === '_isProxy') return true
+    return Reflect.get(target, name, receiver)
+  },
 }
 
 function isProxyable(name, value) {
@@ -28,15 +28,14 @@ function isProxyable(name, value) {
 
 export function generateObjectProxy(name, value) {
   if (isProxyable(name, value)) {
-    if (typeof (value) === 'object') {
+    if (typeof value === 'object') {
       for (const key of Object.keys(value)) {
-        value[key] = generateObjectProxy(key, value[key]);
+        value[key] = generateObjectProxy(key, value[key])
       }
     }
-    return new Proxy(value, objectProxyHandler);
-  } else {
-    return value;
+    return new Proxy(value, objectProxyHandler)
   }
+  return value
 }
 
-export default objectProxyHandler;
+export default objectProxyHandler

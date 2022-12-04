@@ -1,19 +1,19 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class ContextSecrets extends Nullstack {
 
   secrets = {};
 
   static async start({ secrets }) {
-    secrets.anyEnvironment = 'secrets';
+    secrets.anyEnvironment = 'secrets'
   }
 
   static async leakSecrets({ secrets }) {
-    return secrets;
+    return secrets
   }
 
   async initiate() {
-    this.secrets = await this.leakSecrets();
+    this.secrets = await this.leakSecrets()
   }
 
   render({ secrets }) {
@@ -29,4 +29,4 @@ class ContextSecrets extends Nullstack {
 
 }
 
-export default ContextSecrets;
+export default ContextSecrets

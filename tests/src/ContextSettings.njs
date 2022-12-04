@@ -1,11 +1,11 @@
-import Nullstack from 'nullstack';
+import Nullstack from 'nullstack'
 
 class ContextSettings extends Nullstack {
 
   settings = {};
 
   static async start({ settings }) {
-    settings.anyEnvironment = 'settings';
+    settings.anyEnvironment = 'settings'
   }
 
   render({ settings }) {
@@ -21,4 +21,4 @@ class ContextSettings extends Nullstack {
 
 }
 
-export default ContextSettings;
+export default ContextSettings

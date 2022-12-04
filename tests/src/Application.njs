@@ -1,68 +1,70 @@
-import Nullstack from 'nullstack';
-import AnchorModifiers from './AnchorModifiers';
-import './Application.css';
-import ChildComponent from './ChildComponent';
-import ComponentTernary from './ComponentTernary';
-import Context from './Context';
-import ContextData from './ContextData';
-import ContextEnvironment from './ContextEnvironment';
-import ContextPage from './ContextPage';
-import ContextProject from './ContextProject';
-import ContextSecrets from './ContextSecrets';
-import ContextSettings from './ContextSettings';
-import ContextWorker from './ContextWorker';
-import DateParser from './DateParser';
-import Element from './Element';
-import ErrorOnChildNode from './ErrorOnChildNode';
-import ErrorPage from './ErrorPage';
-import ExternalServerFunctions from './ExternalServerFunctions';
-import FalsyNodes from './FalsyNodes';
-import FullStackLifecycle from './FullStackLifecycle';
-import Instanceable from './Instanceable';
-import InstanceKey from './InstanceKey';
-import InstanceSelf from './InstanceSelf';
-import IsomorphicStartup from './IsomorphicStartup';
-import LazyComponentLoader from './LazyComponentLoader';
-import NestedProxy from './NestedProxy';
-import ParentComponent from './ParentComponent';
-import PersistentComponent from './PersistentComponent';
-import PluginAttributes from './PluginAttributes';
-import PublicServerFunctions from './PublicServerFunctions.njs';
-import PureComponents from './PureComponents';
-import WebpackCustomPlugin from './WebpackCustomPlugin';
-import RenderableComponent from './RenderableComponent';
-import RoutesAndParams from './RoutesAndParams';
-import ServerFunctions from './ServerFunctions';
-import ServerRequestAndResponse from './ServerRequestAndResponse';
-import StatefulComponent from './StatefulComponent';
-import StaticThis from './StaticThis';
-import TwoWayBindings from './TwoWayBindings';
-import TypeScript from './TypeScript';
-import UndefinedNodes from './UndefinedNodes';
-import UnderscoredAttributes from './UnderscoredAttributes';
-import Vunerability from './Vunerability';
-import WindowDependency from './WindowDependency';
-import WorkerVerbs from './WorkerVerbs';
-import MetatagState from './MetatagState';
-import TypeScriptExtension from './TypeScriptExtension';
-import JavaScriptExtension from './JavaScriptExtension';
-import Refs from './Refs';
-import OptimizedEvents from './OptimizedEvents';
+import Nullstack from 'nullstack'
+
+import AnchorModifiers from './AnchorModifiers'
+import './Application.css'
+import ArrayAttributes from './ArrayAttributes'
+import BodyFragment from './BodyFragment'
+import ChildComponent from './ChildComponent'
+import ComponentTernary from './ComponentTernary'
+import Context from './Context'
+import ContextData from './ContextData'
+import ContextEnvironment from './ContextEnvironment'
+import ContextPage from './ContextPage'
+import ContextProject from './ContextProject'
+import ContextSecrets from './ContextSecrets'
+import ContextSettings from './ContextSettings'
+import ContextWorker from './ContextWorker'
+import DateParser from './DateParser'
 import DynamicHead from './DynamicHead'
-import TextObserver from './TextObserver';
-import BodyFragment from './BodyFragment';
-import ArrayAttributes from './ArrayAttributes';
-import RouteScroll from './RouteScroll';
-import IsomorphicImport from './IsomorphicImport.njs';
+import Element from './Element'
+import ErrorOnChildNode from './ErrorOnChildNode'
+import ErrorPage from './ErrorPage'
+import ExposedServerFunctions from './ExposedServerFunctions'
+import ExternalServerFunctions from './ExternalServerFunctions'
+import FalsyNodes from './FalsyNodes'
+import FullStackLifecycle from './FullStackLifecycle'
+import Instanceable from './Instanceable'
+import InstanceKey from './InstanceKey'
+import InstanceSelf from './InstanceSelf'
+import IsomorphicImport from './IsomorphicImport.njs'
+import IsomorphicStartup from './IsomorphicStartup'
+import JavaScriptExtension from './JavaScriptExtension'
+import LazyComponentLoader from './LazyComponentLoader'
+import MetatagState from './MetatagState'
+import NestedProxy from './NestedProxy'
+import OptimizedEvents from './OptimizedEvents'
+import ParentComponent from './ParentComponent'
+import PersistentComponent from './PersistentComponent'
+import PluginAttributes from './PluginAttributes'
+import PublicServerFunctions from './PublicServerFunctions.njs'
+import PureComponents from './PureComponents'
+import Refs from './Refs'
+import RenderableComponent from './RenderableComponent'
+import RoutesAndParams from './RoutesAndParams'
+import RouteScroll from './RouteScroll'
+import ServerFunctions from './ServerFunctions'
+import ServerRequestAndResponse from './ServerRequestAndResponse'
+import StatefulComponent from './StatefulComponent'
+import StaticThis from './StaticThis'
+import TextObserver from './TextObserver'
+import TwoWayBindings from './TwoWayBindings'
+import TypeScript from './TypeScript'
+import TypeScriptExtension from './TypeScriptExtension'
+import UndefinedNodes from './UndefinedNodes'
+import UnderscoredAttributes from './UnderscoredAttributes'
+import Vunerability from './Vunerability'
+import WebpackCustomPlugin from './WebpackCustomPlugin'
+import WindowDependency from './WindowDependency'
+import WorkerVerbs from './WorkerVerbs'
 
 class Application extends Nullstack {
 
   async changeInstanceable({ instances }) {
-    await instances.instanceable.customMethod();
+    await instances.instanceable.customMethod()
   }
 
   prepare(context) {
-    context.string = 'nullstack';
+    context.string = 'nullstack'
     context.refInstanceCount = 0
   }
 
@@ -70,7 +72,7 @@ class Application extends Nullstack {
     return (
       <body data-window={WindowDependency.key}>
         <h1> {project.name} </h1>
-        {page.status !== 200 && <div route="*" data-page-status={page.status}></div>}
+        {page.status !== 200 && <div route="*" data-page-status={page.status} />}
         <div route="/">
           <a href={`/nullstack/${environment.key}/offline`}> offline </a>
           <a href="/static-this"> static this </a>
@@ -100,7 +102,6 @@ class Application extends Nullstack {
         <ServerRequestAndResponse route="/server-request-and-response" />
         <ContextData route="/context-data" />
         <DateParser route="/date-parser" />
-        <RemoveStart route="/remove-start" />
         <StaticThis route="/static-this" />
         <ChildComponent route="/child-component" />
         <ParentComponent route="/parent-component" />
@@ -112,8 +113,8 @@ class Application extends Nullstack {
         <FalsyNodes route="/falsy-nodes" />
         <ErrorOnChildNode route="/error-on-child-node" />
         <Vunerability route="/vunerability" />
-        <PersistentComponent route="/persistent-component/:id" persistent />
         <UnderscoredAttributes route="/underscored-attributes" />
+        <PersistentComponent route="/persistent-component/:id" persistent />
         <IsomorphicStartup route="/isomorphic-startup" />
         <WorkerVerbs route="/worker-verbs" />
         <TypeScript route="/typescript" />
@@ -127,7 +128,7 @@ class Application extends Nullstack {
         <MetatagState route="/metatag-state" />
         <JavaScriptExtension route="/javascript-extension" />
         <TypeScriptExtension route="/typescript-extension" generic />
-        <Refs route="/refs" key={'refs' + refInstanceCount} />
+        <Refs route="/refs" key={`refs${refInstanceCount}`} />
         <OptimizedEvents route="/optimized-events" />
         <DynamicHead route="/dynamic-head" />
         <TextObserver route="/text-observer" />
@@ -135,6 +136,7 @@ class Application extends Nullstack {
         <ArrayAttributes route="/array-attributes" />
         <RouteScroll route="/route-scroll/*" key="routeScroll" />
         <IsomorphicImport route="/isomorphic-import" />
+        <ExposedServerFunctions route="/exposed-server-functions" />
         <ErrorPage route="*" />
       </body>
     )
@@ -142,4 +144,4 @@ class Application extends Nullstack {
 
 }
 
-export default Application;
+export default Application

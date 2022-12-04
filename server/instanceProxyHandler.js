@@ -1,16 +1,16 @@
 const instanceProxyHandler = {
-  get(target, name) {
+  get(target, name, receiver) {
     if (typeof target[name] === 'function' && name !== 'constructor') {
       if (name.startsWith('_')) {
         return target[name].bind(target)
       }
       return (args) => {
-        const context = target._scope.generateContext({ ...target._attributes, ...args });
-        return target[name](context);
+        const context = target._scope.generateContext({ ...target._attributes, ...args })
+        return target[name](context)
       }
     }
-    return Reflect.get(...arguments);
-  }
+    return Reflect.get(target, name, receiver)
+  },
 }
 
-export default instanceProxyHandler;
+export default instanceProxyHandler

@@ -1,9 +1,7 @@
-import Nullstack from 'nullstack';
-import { clientOnly } from './helpers';
-import { serverOnly } from './helpers';
-import { serverOnly as serverOnlyAlias } from './helpers';
-import { clientOnly as clientOnlyAlias } from './helpers';
-import * as namespacedImport from './helpers';
+import Nullstack from 'nullstack'
+
+import { clientOnly, clientOnly as clientOnlyAlias, serverOnly, serverOnly as serverOnlyAlias } from './helpers'
+import * as namespacedImport from './helpers'
 
 class IsomorphicImport extends Nullstack {
 
@@ -37,4 +35,4 @@ class IsomorphicImport extends Nullstack {
 
 }
 
-export default IsomorphicImport;
+export default IsomorphicImport
