@@ -4,13 +4,6 @@ class ServerRequestAndResponse extends Nullstack {
 
   responses = {};
 
-  static async start({ server }) {
-    server.cors = {
-      origin: 'http://localhost:6969',
-      optionsSuccessStatus: 200,
-    }
-  }
-
   async hydrate() {
     const responses = {}
     const methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT']

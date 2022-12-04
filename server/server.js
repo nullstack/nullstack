@@ -1,5 +1,4 @@
 import bodyParser from 'body-parser'
-import cors from 'cors'
 import express from 'express'
 import { writeFileSync } from 'fs'
 import fetch from 'node-fetch'
@@ -153,8 +152,6 @@ server.prerender = async function (originalUrl) {
 server.start = function () {
   if (serverStarted) return
   serverStarted = true
-
-  server.use(cors(server.cors))
 
   server.use(express.static(path.join(__dirname, '..', 'public')))
 

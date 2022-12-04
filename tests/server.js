@@ -1,5 +1,7 @@
 import Nullstack from 'nullstack'
 
+import cors from 'cors'
+
 import Application from './src/Application'
 import ContextProject from './src/ContextProject'
 import ContextSecrets from './src/ContextSecrets'
@@ -7,13 +9,19 @@ import ContextSettings from './src/ContextSettings'
 import ContextWorker from './src/ContextWorker'
 import ExposedServerFunctions from './src/ExposedServerFunctions'
 import vueable from './src/plugins/vueable'
-import ServerRequestAndResponse from './src/ServerRequestAndResponse'
 
 Nullstack.use(vueable)
 
 const context = Nullstack.start(Application)
 
 const methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT']
+
+context.server.use(
+  cors({
+    origin: 'http://localhost:6969',
+    optionsSuccessStatus: 200,
+  }),
+)
 
 context.server.get('/data/all/:param', ExposedServerFunctions.getData)
 context.server.get('/data/get/:param', ExposedServerFunctions.getData)
@@ -46,7 +54,6 @@ context.start = async function () {
   await ContextSecrets.start(context)
   await ContextSettings.start(context)
   await ContextWorker.start(context)
-  await ServerRequestAndResponse.start(context)
   context.startValue = true
   context.startIncrementalValue++
 }
