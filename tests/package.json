@@ -16,6 +16,8 @@
   "scripts": {
     "start": "npx nullstack start --input=./tests --port=6969 --env=test --mode=spa",
     "build": "npx nullstack build --input=./tests --env=test",
+    "clear": "rm -rf ../node_modules ../package-lock.json node_modules .development .production package-lock.json",
+    "setup": "cd .. && npm install && npm link && cd tests && npm install && npm link nullstack",
     "test": "npm run build && jest --runInBand",
     "script": "node src/scripts/run.js"
   },

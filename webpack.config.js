@@ -432,7 +432,7 @@ function client(env, argv) {
           use: [
             MiniCssExtractPlugin.loader,
             { loader: require.resolve('css-loader'), options: { url: false } },
-            { loader: require.resolve('sass-loader') },
+            { loader: require.resolve('sass-loader'), options: { sassOptions: { fibers: false } } },
           ],
         },
         {
