@@ -2,7 +2,6 @@ import Nullstack from 'nullstack'
 
 import cors from 'cors'
 
-import worker from '../server/worker'
 import Application from './src/Application'
 import ContextProject from './src/ContextProject'
 import ContextSecrets from './src/ContextSecrets'
@@ -24,8 +23,8 @@ context.server.use(
   }),
 )
 
-worker.staleWhileRevalidate = [/[0-9]/]
-worker.cacheFirst = [/[0-9]/]
+context.worker.staleWhileRevalidate = [/[0-9]/]
+context.worker.cacheFirst = [/[0-9]/]
 
 context.server
   .get('/data/get/:param', ExposedServerFunctions.getData)

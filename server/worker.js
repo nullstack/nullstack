@@ -7,6 +7,7 @@ import cacheFirst from '../workers/cacheFirst.js?raw'
 import dynamicFetch from '../workers/dynamicFetch.js?raw'
 import dynamicInstall from '../workers/dynamicInstall.js?raw'
 import load from '../workers/load.js?raw'
+import match from '../workers/match.js?raw'
 import networkDataFirst from '../workers/networkDataFirst.js?raw'
 import networkFirst from '../workers/networkFirst.js?raw'
 import staleWhileRevalidate from '../workers/staleWhileRevalidate.js?raw'
@@ -42,7 +43,7 @@ worker.queues = new Proxy({}, queuesProxyHandler)
 
 function replacer(key, value) {
   if (value instanceof RegExp) {
-    return value.toString()
+    return JSON.stringify({ flags: value.flags, source: value.source })
   }
   return value
 }
@@ -62,6 +63,7 @@ export function generateServiceWorker() {
     .map((filename) => `'/${filename}'`)
   sources.push(`self.context = ${JSON.stringify(context, replacer, 2)};`)
   sources.push(load)
+  sources.push(match)
   if (environment.mode === 'ssg') {
     sources.push(staticHelpers)
     sources.push(cacheFirst)

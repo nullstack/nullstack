@@ -2,13 +2,13 @@ function staticStrategy(event) {
   event.waitUntil(
     (async function () {
       const url = new URL(event.request.url)
-      for (const regexp of self.context.worker.staleWhileRevalidate) {
-        if (new RegExp(regexp).test(url.href)) {
+      for (const matcher of self.context.worker.staleWhileRevalidate) {
+        if (match(matcher, url)) {
           return event.respondWith(staleWhileRevalidate(event))
         }
       }
-      for (const regexp of self.context.worker.cacheFirst) {
-        if (new RegExp(regexp).test(url.href)) {
+      for (const matcher of self.context.worker.cacheFirst) {
+        if (match(matcher, url)) {
           return event.respondWith(cacheFirst(event))
         }
       }
