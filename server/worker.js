@@ -23,6 +23,8 @@ const worker = {}
 worker.enabled = environment.production
 worker.fetching = false
 worker.preload = []
+worker.staleWhileRevalidate = []
+worker.cacheFirst = []
 worker.headers = {}
 worker.api = process.env.NULLSTACK_WORKER_API ?? ''
 worker.cdn = process.env.NULLSTACK_WORKER_CDN ?? ''
@@ -38,6 +40,13 @@ const queuesProxyHandler = {
 
 worker.queues = new Proxy({}, queuesProxyHandler)
 
+function replacer(key, value) {
+  if (value instanceof RegExp) {
+    return value.toString()
+  }
+  return value
+}
+
 export function generateServiceWorker() {
   if (files['service-worker.js']) return files['service-worker.js']
   const sources = []
@@ -51,7 +60,7 @@ export function generateServiceWorker() {
   const scripts = readdirSync(bundleFolder)
     .filter((filename) => filename.includes('.client.'))
     .map((filename) => `'/${filename}'`)
-  sources.push(`self.context = ${JSON.stringify(context, null, 2)};`)
+  sources.push(`self.context = ${JSON.stringify(context, replacer, 2)};`)
   sources.push(load)
   if (environment.mode === 'ssg') {
     sources.push(staticHelpers)

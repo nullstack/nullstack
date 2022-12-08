@@ -134,4 +134,10 @@ describe('DynamicHead', () => {
     const element = await page.$('style[data-ternary-head-children]')
     expect(element).toBeTruthy()
   })
+
+  test('empty script tags in head should have no children', async () => {
+    await page.waitForSelector('[data-script-is-empty]')
+    const element = await page.$('[data-script-is-empty]')
+    expect(element).toBeTruthy()
+  })
 })

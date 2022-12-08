@@ -2,6 +2,7 @@ import Nullstack from 'nullstack'
 
 import cors from 'cors'
 
+import worker from '../server/worker'
 import Application from './src/Application'
 import ContextProject from './src/ContextProject'
 import ContextSecrets from './src/ContextSecrets'
@@ -23,8 +24,18 @@ context.server.use(
   }),
 )
 
+worker.staleWhileRevalidate = [/[0-9]/]
+worker.cacheFirst = [/[0-9]/]
+
+context.server
+  .get('/data/get/:param', ExposedServerFunctions.getData)
+  .get('/chainable-server-function', (request, response) => {
+    response.json({ chainable: true })
+  })
+  .get('/chainable-regular-function', (request, response) => {
+    response.json({ chainable: true })
+  })
 context.server.get('/data/all/:param', ExposedServerFunctions.getData)
-context.server.get('/data/get/:param', ExposedServerFunctions.getData)
 context.server.post('/data/post/:param', ExposedServerFunctions.getData)
 context.server.put('/data/put/:param', ExposedServerFunctions.getData)
 context.server.patch('/data/patch/:param', ExposedServerFunctions.getData)

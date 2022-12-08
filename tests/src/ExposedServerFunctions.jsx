@@ -14,6 +14,12 @@ async function api(method) {
   return data.status
 }
 
+async function chainable(type) {
+  const response = await fetch(`/chainable-${type}-function`)
+  const data = await response.json()
+  return data.chainable
+}
+
 class ExposedServerFunctions extends Nullstack {
 
   static async getData({ request, project, param, query, truthy, falsy, number, date, string }) {
@@ -30,6 +36,8 @@ class ExposedServerFunctions extends Nullstack {
   }
 
   async hydrate() {
+    this.chainableServerFunction = await chainable('server')
+    this.chainableRegularFunction = await chainable('regular')
     this.all = await api('get')
     this.get = await api('get')
     this.post = await api('post')
@@ -47,6 +55,8 @@ class ExposedServerFunctions extends Nullstack {
         data-patch={this.patch}
         data-delete={this.delete}
         data-all={this.all}
+        data-chainable-server-function={this.chainableServerFunction}
+        data-chainable-regular-function={this.chainableRegularFunction}
       />
     )
   }
