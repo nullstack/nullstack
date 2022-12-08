@@ -3,6 +3,18 @@ beforeAll(async () => {
 })
 
 describe('ExposedServerFunctions', () => {
+  test('routes are chainable when receiving a server function', async () => {
+    await page.waitForSelector('[data-chainable-server-function]')
+    const element = await page.$('[data-chainable-server-function]')
+    expect(element).toBeTruthy()
+  })
+
+  test('routes are chainable when receiving a regular function', async () => {
+    await page.waitForSelector('[data-chainable-regular-function]')
+    const element = await page.$('[data-chainable-regular-function]')
+    expect(element).toBeTruthy()
+  })
+
   test('server functions can be exposed to GET and serialize params and query', async () => {
     await page.waitForSelector('[data-get]')
     const element = await page.$('[data-get]')

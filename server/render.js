@@ -63,7 +63,9 @@ function renderHead(scope) {
       scope.head += '/>'
     } else {
       scope.head += '>'
-      scope.head += node.attributes.html
+      if (node.attributes.html) {
+        scope.head += node.attributes.html
+      }
       scope.head += `</${node.type}>`
     }
   }
