@@ -1,3 +1,4 @@
+/* eslint-disable nullstack/self-closing-comp */
 import Nullstack from 'nullstack'
 
 class DynamicHead extends Nullstack {
@@ -8,6 +9,10 @@ class DynamicHead extends Nullstack {
   renderHead() {
     const innerComponent = `[data-inner-component] { color: blue }`
     return <style html={innerComponent} data-inner-component />
+  }
+
+  checkScriptChildren({ element }) {
+    this.scriptIsEmpty = !element.innerText
   }
 
   render() {
@@ -21,6 +26,7 @@ class DynamicHead extends Nullstack {
     return (
       <div>
         <head>
+          <script data-script-is-empty={this.scriptIsEmpty} ref={this.checkScriptChildren}></script>
           <style html={redBlue} data-count={this.count} data-red-blue />
           {this.count === 0 && <style html={prerenderConditional} data-prerender-conditional />}
           {this.count === 1 && <style html={rerenderConditional} data-rerender-conditional />}
