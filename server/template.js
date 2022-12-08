@@ -23,11 +23,16 @@ export default function ({ head, body, nextBody, context, instances }) {
       serializableInstances[key] = value
     }
   }
+  const serializedWorker = {
+    ...worker,
+    staleWhileRevalidate: worker.staleWhileRevalidate.map((matcher) => matcher.toString()),
+    cacheFirst: worker.cacheFirst.map((matcher) => matcher.toString()),
+  }
   const state = {
     page,
     environment,
     settings,
-    worker,
+    worker: serializedWorker,
     params,
     project,
     instances: environment.mode === 'spa' ? {} : serializableInstances,

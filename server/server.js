@@ -39,7 +39,7 @@ for (const method of ['get', 'post', 'put', 'patch', 'delete', 'all']) {
   const original = server[method].bind(server)
   server[method] = function (...args) {
     if (typeof args[1] === 'function' && args[1].name === '_invoke') {
-      original(args[0], bodyParser.text({ limit: server.maximumPayloadSize }), async (request, response) => {
+      return original(args[0], bodyParser.text({ limit: server.maximumPayloadSize }), async (request, response) => {
         const params = {}
         for (const key of Object.keys(request.params)) {
           params[key] = extractParamValue(request.params[key])
@@ -59,9 +59,8 @@ for (const method of ['get', 'post', 'put', 'patch', 'delete', 'all']) {
           response.status(500).json({})
         }
       })
-    } else {
-      original(...args)
     }
+    return original(...args)
   }
 }
 
