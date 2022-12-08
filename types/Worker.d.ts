@@ -20,4 +20,10 @@ export type NullstackWorker = {
    * @see https://nullstack.app/service-worker#loading-screens
    */
   loading: boolean
+
+  headers: Record<string, string>
+
+  cacheFirst: RegExp[]
+
+  staleWhileRevalidate: RegExp[]
 }
