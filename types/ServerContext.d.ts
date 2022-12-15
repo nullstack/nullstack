@@ -1,9 +1,9 @@
-import { NullstackEnvironment } from './Environment.d.ts'
-import { NullstackProject } from './Project.d.ts'
-import { NullstackSecrets } from './Secrets.d.ts'
-import { NullstackServer } from './Server.d.ts'
-import { NullstackSettings } from './Settings.d.ts'
-import { NullstackWorker } from './Worker.d.ts'
+import { NullstackEnvironment } from './Environment'
+import { NullstackProject } from './Project'
+import { NullstackSecrets } from './Secrets'
+import { NullstackServer } from './Server'
+import { NullstackSettings } from './Settings'
+import { NullstackWorker } from './Worker'
 
 /**
  * @see https://nullstack.app/context
