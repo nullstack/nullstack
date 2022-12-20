@@ -221,8 +221,12 @@ function server(env, argv) {
   const babel = argv.loader === 'babel'
   for (const file of publicFiles) {
     if (file.startsWith('icon-')) {
-      const size = file.split('x')[1].split('.')[0]
-      icons[size] = `/${file}`
+      try {
+        const size = file.split('x')[1].split('.')[0]
+        icons[size] = `/${file}`
+      } catch (error) {
+        console.warn(` ⚠️ You have an incorrectly named icon file inside your 'public' folder: ${file}`);
+      }
     }
   }
   const isDev = argv.environment === 'development'
