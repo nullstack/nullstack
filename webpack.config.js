@@ -220,12 +220,10 @@ function server(env, argv) {
   const publicFiles = readdirSync(path.join(dir, 'public'))
   const babel = argv.loader === 'babel'
   for (const file of publicFiles) {
-    if (file.startsWith('icon-')) {
-      try {
-        const size = file.split('x')[1].split('.')[0]
-        icons[size] = `/${file}`
-      } catch (error) {
-        console.warn(` ⚠️ You have an incorrectly named icon file inside your 'public' folder: ${file}`);
+    for (const file of publicFiles) {
+      if (iconFileRegex.test(file)) {
+        const size = file.split('x')[1].split('.')[0];
+        icons[size] = `/${file}`;
       }
     }
   }
