@@ -1,7 +1,7 @@
 {
   "name": "nullstack",
-  "version": "0.17.1",
-  "description": "Full-stack Javascript Components for one-dev armies",
+  "version": "0.17.2",
+  "description": "Full Stack Javascript Components for one-dev armies",
   "main": "nullstack.js",
   "author": "Mortaro",
   "repository": "github:nullstack/nullstack",
