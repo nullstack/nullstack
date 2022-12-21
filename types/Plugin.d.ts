@@ -1,5 +1,5 @@
-import { NullstackClientContext } from './ClientContext.d.ts'
-import { AllHTMLAttributes, NullstackAttributes } from './JSX.d.ts'
+import { NullstackClientContext } from './ClientContext'
+import { AllHTMLAttributes, NullstackAttributes } from './JSX'
 
 type NullstackPluginNode = {
   type: string | boolean

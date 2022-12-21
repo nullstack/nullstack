@@ -1,5 +1,4 @@
-import Nullstack from 'nullstack'
-import { NullstackClientContext } from 'nullstack/types/index.d.ts'
+import Nullstack, { NullstackClientContext } from 'nullstack'
 
 interface TypeScriptClientContext extends NullstackClientContext {
   value: number;
