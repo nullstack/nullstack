@@ -219,11 +219,11 @@ function server(env, argv) {
   const icons = {}
   const publicFiles = readdirSync(path.join(dir, 'public'))
   const babel = argv.loader === 'babel'
-  const iconFileRegex = /icon-(\d+)x\1\.[a-zA-Z]+/;
+  const iconFileRegex = /icon-(\d+)x\1\.[a-zA-Z]+/
   for (const file of publicFiles) {
     if (iconFileRegex.test(file)) {
-      const size = file.split('x')[1].split('.')[0];
-      icons[size] = `/${file}`;
+      const size = file.split('x')[1].split('.')[0]
+      icons[size] = `/${file}`
     }
   }
   const isDev = argv.environment === 'development'
