@@ -10,6 +10,7 @@ class ContextProject extends Nullstack {
     project.orientation = 'portrait'
     project.scope = '/'
     project.root = '/'
+    project.folderIcons = project.icons
     project.icons = {
       72: '/icon-72x72.png',
       144: '/icon-144x144.png',
@@ -21,6 +22,7 @@ class ContextProject extends Nullstack {
   }
 
   render({ project }) {
+    const ignoredUnmatchedIcon = !Object.keys(project.folderIcons).find((key) => /icon-(\d+)x\1\.[a-zA-Z]+/.test(key))
     return (
       <div>
         <div data-project={!!project} />
@@ -41,6 +43,7 @@ class ContextProject extends Nullstack {
         <div data-disallow-admin={project.disallow[0]} />
         <div data-sitemap={project.sitemap} />
         <div data-viewport={project.viewport} />
+        <div data-ignored-unmatched-icon={ignoredUnmatchedIcon} />
       </div>
     )
   }
