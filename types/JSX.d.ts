@@ -29,7 +29,7 @@
 //                 Guilherme Correia <https://github.com/GuiDevloper>
 // TypeScript Version: 2.8
 
-import { NullstackClientContext } from './ClientContext.d.ts'
+import { NullstackClientContext } from './ClientContext'
 
 type NativeDragEvent = globalThis.DragEvent
 type NativeFocusEvent = globalThis.FocusEvent

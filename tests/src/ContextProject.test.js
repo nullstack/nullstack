@@ -72,6 +72,11 @@ describe('ContextProject', () => {
     expect(element).toBeTruthy()
   })
 
+  test('icons that do not match the pattern are not loaded into icon key', async () => {
+    const element = await page.$('[data-ignored-unmatched-icon]')
+    expect(element).toBeTruthy()
+  })
+
   test('icons accepts an object with sizes', async () => {
     const element = await page.$('[data-icon-72="/icon-72x72.png"]')
     expect(element).toBeTruthy()
