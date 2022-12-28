@@ -1,11 +1,11 @@
-import { NullstackEnvironment } from './Environment.d.ts'
-import { NullstackNode } from './JSX.d.ts'
-import { NullstackPage } from './Page.d.ts'
-import { NullstackParams } from './Params.d.ts'
-import { NullstackProject } from './Project.d.ts'
-import { NullstackRouter } from './Router.d.ts'
-import { NullstackSettings } from './Settings.d.ts'
-import { NullstackWorker } from './Worker.d.ts'
+import { NullstackEnvironment } from './Environment'
+import { NullstackNode } from './JSX'
+import { NullstackPage } from './Page'
+import { NullstackParams } from './Params'
+import { NullstackProject } from './Project'
+import { NullstackRouter } from './Router'
+import { NullstackSettings } from './Settings'
+import { NullstackWorker } from './Worker'
 
 /**
  * @see https://nullstack.app/context
