@@ -1,6 +1,7 @@
 function dynamicStrategy(event) {
   event.waitUntil(
     (async function () {
+      if (event.request.method !== 'GET') return
       const url = new URL(event.request.url)
       for (const matcher of self.context.worker.staleWhileRevalidate) {
         if (match(matcher, url)) {
@@ -13,7 +14,6 @@ function dynamicStrategy(event) {
         }
       }
       if (url.origin !== location.origin) return
-      if (event.request.method !== 'GET') return
       if (url.pathname.indexOf('/nullstack/') > -1) {
         return event.respondWith(networkFirst(event))
       }
