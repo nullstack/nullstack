@@ -27,6 +27,8 @@ class TwoWayBindings extends Nullstack {
   debouncedEvent = '69'
   debounceTime = 1000
 
+  textareaDisabled = false
+
   parse({ event, source: bind, callback }) {
     const normalized = event.target.value.replace(',', '').padStart(3, '0')
     const whole = (parseInt(normalized.slice(0, -2)) || 0).toString()
@@ -68,9 +70,12 @@ class TwoWayBindings extends Nullstack {
         {!this.boolean && <div data-boolean-type={typeof this.boolean} />}
         {this.number > 1 && <div data-number-type={typeof this.number} />}
         <input bind={this.number} name="number" oninput={this.updateCharacter} />
-        <textarea bind={this.text} name="text" />
+        <textarea bind={this.text} name="text" disabled={this.textareaDisabled} />
         <button onclick={{ text: 'bbbb' }} data-textarea data-text={this.text}>
           textarea b
+        </button>
+        <button onclick={{ textareaDisabled: true }} data-textarea-disabled>
+          textarea disable
         </button>
         <div data-character={this.character} />
         <select bind={this.character} name="character">

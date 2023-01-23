@@ -28,11 +28,25 @@ describe('TwoWayBindings', () => {
     expect(value).toMatch('aaaa')
   })
 
+  test('textareas changes reflects variable value', async () => {
+    await page.type('textarea', 'new')
+    await page.waitForSelector('[data-text="newaaaa"]')
+    const element = await page.$('[data-text="newaaaa"]')
+    expect(element).toBeTruthy()
+  })
+
   test('textareas value reflects variable changes', async () => {
     await page.click('[data-textarea]')
     await page.waitForSelector('[data-text="bbbb"]')
     const value = await page.$eval('textarea', (element) => element.value)
     expect(value).toMatch('bbbb')
+  })
+
+  test('textareas attributes reflect variable changes', async () => {
+    await page.click('[data-textarea-disabled]')
+    await page.waitForSelector('textarea[disabled]')
+    const element = await page.$('textarea[disabled]')
+    expect(element).toBeTruthy()
   })
 
   test('checkboxes value reflects variable changes', async () => {
