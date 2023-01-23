@@ -109,9 +109,9 @@ function _rerender(current, next) {
   }
 
   if (current.type === 'textarea') {
-    current.value = current.children[0].text
-    next.value = next.children[0].text
-    updateAttributes(selector, current, next)
+    current.attributes.value = current.children[0].text
+    next.attributes.value = next.children[0].text
+    updateAttributes(selector, current.attributes, next.attributes)
     return
   }
 
