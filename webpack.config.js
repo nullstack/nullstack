@@ -37,6 +37,7 @@ function terserMinimizer(file, _sourceMap) {
   return require('@swc/core').minify(file, {
     keepClassnames: true,
     keepFnames: true,
+    sourceMap: true,
   })
 }
 
