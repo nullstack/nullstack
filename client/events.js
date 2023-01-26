@@ -26,7 +26,12 @@ function debounce(selector, name, time, callback) {
 }
 
 export function generateCallback(selector, name) {
-  return function eventCallback(event) {
+  let eventNames = eventCallbacks.get(selector)
+  if (!eventNames) {
+    eventNames = {}
+    eventCallbacks.set(selector, eventNames)
+  }
+  const callback = function eventCallback(event) {
     const subject = eventSubjects.get(selector)
     if (!subject) return
     if (subject.href) {
@@ -69,4 +74,6 @@ export function generateCallback(selector, name) {
       }
     })
   }
+  eventNames[name] = callback
+  return callback
 }

@@ -35,7 +35,7 @@ class ContextWorker extends Nullstack {
 
   render({ worker }) {
     return (
-      <div>
+      <div data-hydrated={this.hydrated}>
         <button onclick={this.invokeServerFunction}> Invoke </button>
         <div data-header={this.header} />
         <div data-worker={!!worker} />

@@ -111,7 +111,7 @@ class RoutesAndParams extends Nullstack {
 
   render({ router, params, eventTriggered }) {
     return (
-      <div>
+      <div data-hydrated={this.hydrated}>
         <Hrefs />
         <button data-absolute onclick={this.goToDocs}>
           {' '}

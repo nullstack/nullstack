@@ -12,7 +12,11 @@ class ContextData extends Nullstack {
 
   render() {
     return (
-      <div data-count-with-default={this.countWithDefault} data-count-without-default={this.countWithoutDefault}>
+      <div
+        data-count-with-default={this.countWithDefault}
+        data-count-without-default={this.countWithoutDefault}
+        data-hydrated={this.hydrated}
+      >
         <button onclick={this.calculateWithDefault} data-multiply-by={3} data={{ count: 2 }}>
           calculateWithDefault
         </button>

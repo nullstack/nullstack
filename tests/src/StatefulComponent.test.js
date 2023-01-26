@@ -1,5 +1,6 @@
 beforeAll(async () => {
   await page.goto('http://localhost:6969/stateful-component')
+  await page.waitForSelector('[data-hydrated]')
 })
 
 describe('StatefulComponent', () => {
