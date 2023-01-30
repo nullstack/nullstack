@@ -24,7 +24,7 @@ class DynamicHead extends Nullstack {
     const conditionalHead = `[data-conditional-head] { color: blue }`
     const dynamicLength = `[data-dynamic-length] { color: blue }`
     return (
-      <div>
+      <div data-hydrated={this.hydrated}>
         <head>
           <script data-script-is-empty={this.scriptIsEmpty} ref={this.checkScriptChildren}></script>
           <style html={redBlue} data-count={this.count} data-red-blue />

@@ -8,7 +8,7 @@ class InstanceKey extends Nullstack {
 
   render() {
     return (
-      <div>
+      <div data-hydrated={this.hydrated}>
         {this.count % 2 === 0 && <StatefulComponent key="KEY" />}
         {this.count % 2 !== 0 && <StatefulComponent key="KEY" />}
         <StatefulComponent key="KEY" />

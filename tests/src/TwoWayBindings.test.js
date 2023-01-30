@@ -1,6 +1,7 @@
 describe('TwoWayBindings', () => {
   beforeEach(async () => {
     await page.goto('http://localhost:6969/two-way-bindings?page=1')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('inputs can be bound to zero', async () => {
@@ -227,5 +228,23 @@ describe('TwoWayBindings', () => {
   test('binding to nested undefined sets the value to an empty string', async () => {
     const value = await page.$eval('[data-undeclared-nested]', (element) => element.value)
     expect(value).toMatch('')
+  })
+
+  test('elements can have multiple events on rerender', async () => {
+    await page.click('[data-rerender-click-and-input]')
+    await page.type('[data-rerender-click-and-input]', 'a')
+    await page.waitForSelector('[data-rerender-clicked-and-inputed]')
+    const element = await page.$('[data-rerender-clicked-and-inputed]')
+    expect(element).toBeTruthy()
+  })
+
+  test('elements can have multiple events on render', async () => {
+    await page.click('[data-render-input]')
+    await page.waitForSelector('[data-render-click-and-input]')
+    await page.click('[data-render-click-and-input]')
+    await page.type('[data-render-click-and-input]', 'a')
+    await page.waitForSelector('[data-render-clicked-and-inputed]')
+    const element = await page.$('[data-render-clicked-and-inputed]')
+    expect(element).toBeTruthy()
   })
 })

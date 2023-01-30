@@ -1,6 +1,7 @@
 describe('PersistentComponent instantiated', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/persistent-component/a')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('components should create a new instance when matching a dynamic segment', async () => {
@@ -25,6 +26,7 @@ describe('PersistentComponent instantiated', () => {
 describe('PersistentComponent terminated', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/persistent-component/a')
+    await page.waitForSelector('[data-hydrated]')
     await page.waitForSelector('[href="/persistent-component/b"]')
     await page.click('[href="/persistent-component/b"]')
     await page.waitForSelector('[data-key="PersistentComponent/0-0-33/persistent-component/b"]')
@@ -52,6 +54,7 @@ describe('PersistentComponent terminated', () => {
 describe('PersistentComponent reinstantiated', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/persistent-component/a')
+    await page.waitForSelector('[data-hydrated]')
     await page.waitForSelector('[href="/persistent-component/b"]')
     await page.click('[href="/persistent-component/b"]')
     await page.waitForSelector('[data-key="PersistentComponent/0-0-33/persistent-component/b"]')

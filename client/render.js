@@ -1,7 +1,7 @@
 import generateTruthyString from '../shared/generateTruthyString'
 import { isFalse, isText } from '../shared/nodes'
 import { anchorableElement } from './anchorableNode'
-import { eventCallbacks, eventSubjects, generateCallback } from './events'
+import { eventSubjects, generateCallback } from './events'
 import { ref } from './ref'
 
 export default function render(node, options) {
@@ -35,7 +35,6 @@ export default function render(node, options) {
         const eventName = name.substring(2)
         const callback = generateCallback(node.element, name)
         node.element.addEventListener(eventName, callback)
-        eventCallbacks.set(node.element, callback)
         eventSubjects.set(node.element, node.attributes)
       }
     } else {

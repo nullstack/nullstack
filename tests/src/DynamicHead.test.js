@@ -1,5 +1,6 @@
 beforeEach(async () => {
   await page.goto('http://localhost:6969/dynamic-head')
+  await page.waitForSelector('[data-hydrated]')
 })
 
 describe('DynamicHead', () => {

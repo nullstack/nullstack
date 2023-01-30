@@ -1,5 +1,6 @@
 beforeAll(async () => {
   await page.goto('http://localhost:6969/instance-key')
+  await page.waitForSelector('[data-hydrated]')
   await page.click('.increment-by-two')
   await page.waitForSelector('[data-count="3"]')
 })

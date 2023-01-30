@@ -1,5 +1,6 @@
 beforeAll(async () => {
   await page.goto('http://localhost:6969/context-data')
+  await page.waitForSelector('[data-hydrated]')
 })
 
 describe('ContextData', () => {

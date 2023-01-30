@@ -18,7 +18,7 @@ class TypeScript extends Nullstack {
 
   render() {
     return (
-      <div data-count={this.count}>
+      <div data-count={this.count} data-hydrated={this.hydrated}>
         <input bind={this.count} />
         <button data-initiated={this.initiated} value={1} onclick={this.incrementByCount}>
           {' '}

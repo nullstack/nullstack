@@ -23,16 +23,20 @@ function updateAttributes(selector, currentAttributes, nextAttributes) {
       }
     } else if (name.startsWith('on')) {
       const eventName = name.substring(2)
-      if (eventCallbacks.has(selector) && !nextAttributes[name]) {
-        selector.removeEventListener(eventName, eventCallbacks.get(selector))
-      }
-      if (nextAttributes[name]) {
-        if (!eventCallbacks.has(selector)) {
-          const callback = generateCallback(selector, name)
-          selector.addEventListener(eventName, callback)
-          eventCallbacks.set(selector, callback)
+      const eventNames = eventCallbacks.get(selector)
+      if (!eventNames) {
+        selector.addEventListener(eventName, generateCallback(selector, name))
+      } else {
+        const callback = eventNames[name]
+        if (callback && !nextAttributes[name]) {
+          selector.removeEventListener(eventName, callback)
+          delete eventNames[name]
+        } else if (nextAttributes[name]) {
+          if (!callback) {
+            selector.addEventListener(eventName, generateCallback(selector, name))
+          }
+          eventSubjects.set(selector, nextAttributes)
         }
-        eventSubjects.set(selector, nextAttributes)
       }
     } else {
       let currentValue

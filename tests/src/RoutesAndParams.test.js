@@ -7,6 +7,7 @@ beforeAll(async () => {
 describe('RoutesAndParams /routes-and-params', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/routes-and-params')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('router has a base key', async () => {
@@ -74,6 +75,7 @@ describe('RoutesAndParams event', () => {
     await page.click('[href="/routes-and-params/a"]')
     await page.waitForSelector('[data-hydrated]')
     await page.click('[href="/routes-and-params/a?framework=nullstack"]')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('a custom event is triggered when the url changes', async () => {
@@ -86,6 +88,7 @@ describe('RoutesAndParams event', () => {
 describe('RoutesAndParams /routes-and-params/?boolean=true', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/routes-and-params/?boolean=true')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('params with value of true are converted to boolean', async () => {
@@ -112,6 +115,7 @@ describe('RoutesAndParams /routes-and-params/?boolean=true', () => {
 describe('RoutesAndParams /routes-and-params?boolean=false', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/routes-and-params?boolean=false')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('params with value of false are converted to boolean', async () => {
@@ -123,6 +127,7 @@ describe('RoutesAndParams /routes-and-params?boolean=false', () => {
 describe('RoutesAndParams /routes-and-params/c', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/routes-and-params/c')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('wildcards are matched last', async () => {
@@ -139,6 +144,7 @@ describe('RoutesAndParams /routes-and-params/c', () => {
 describe('RoutesAndParams /routes-and-params/c', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/routes-and-params/c/a')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('wildcards can be prefixed', async () => {
@@ -150,6 +156,7 @@ describe('RoutesAndParams /routes-and-params/c', () => {
 describe('RoutesAndParams /routes-and-params/d?boolean=true#hash ssr', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/routes-and-params/d?boolean=true#hash')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('hash is not part of the router url', async () => {
@@ -168,6 +175,7 @@ describe('RoutesAndParams /routes-and-params/d?boolean=true#hash spa', () => {
     await page.goto('http://localhost:6969/routes-and-params/d?boolean=true#hash')
     await page.click('[href="/routes-and-params/no-hash#hash"]')
     await page.waitForSelector('[data-url="/routes-and-params/no-hash"]')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('hash is not part of the router url', async () => {
@@ -184,6 +192,7 @@ describe('RoutesAndParams /routes-and-params/d?boolean=true#hash spa', () => {
 describe('RoutesAndParams /routes-and-params', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/routes-and-params')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('a with absolute hrefs cause a hard redirect', async () => {
@@ -197,6 +206,7 @@ describe('RoutesAndParams /routes-and-params', () => {
 describe('RoutesAndParams /routes-and-params?previous=true', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/routes-and-params?previous=true')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('router previous key starts null', async () => {
@@ -215,6 +225,7 @@ describe('RoutesAndParams /routes-and-params?previous=true', () => {
 describe('RoutesAndParams /routes-and-params/inner-html', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/routes-and-params/inner-html')
+    await page.waitForSelector('[data-hydrated]')
     await page.click('[data-html-click]')
   })
 
