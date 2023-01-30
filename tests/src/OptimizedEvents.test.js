@@ -1,6 +1,7 @@
 describe('OptimizedEvents', () => {
   beforeEach(async () => {
     await page.goto('http://localhost:6969/optimized-events')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('events are triggered', async () => {

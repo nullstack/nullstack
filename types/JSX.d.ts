@@ -580,7 +580,7 @@ type AriaRole =
 export interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
   // Standard HTML Attributes
   accesskey?: string
-  class?: string
+  class?: string | string[]
   contenteditable?: Booleanish | 'inherit'
   contextmenu?: string
   dir?: string
@@ -1188,7 +1188,7 @@ export interface VideoHTMLAttributes<T> extends MediaHTMLAttributes<T> {
 //   - union of string literals
 export interface SVGAttributes<T> extends AriaAttributes, DOMAttributes<T> {
   // Attributes which also defined in HTMLAttributes
-  class?: string
+  class?: string | string[]
   color?: string
   height?: number | string
   id?: string

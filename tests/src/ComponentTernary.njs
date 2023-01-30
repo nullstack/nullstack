@@ -22,7 +22,7 @@ class ComponentTernary extends Nullstack {
 
   render() {
     return (
-      <div>
+      <div data-hydrated={this.hydrated}>
         {this.showA ? <CommponentA /> : <CommponentB />}
         <button onclick={{ showA: !this.showA }}> ab </button>
       </div>

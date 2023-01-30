@@ -39,6 +39,7 @@ class PersistentComponent extends Nullstack {
         data-persistent={this.persistent}
         data-prerendered={this.prerendered}
         data-a-terminated={aTerminated}
+        data-hydrated={this.hydrated}
       >
         <a href="/persistent-component/a"> a </a>
         <a href="/persistent-component/b"> b </a>

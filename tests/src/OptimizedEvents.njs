@@ -26,7 +26,7 @@ class OptimizedEvents extends Nullstack {
 
   render() {
     return (
-      <main>
+      <main data-hydrated={this.hydrated}>
         {this.count === 1 && (
           <div>
             <button

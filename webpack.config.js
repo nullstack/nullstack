@@ -37,6 +37,7 @@ function terserMinimizer(file, _sourceMap) {
   return require('@swc/core').minify(file, {
     keepClassnames: true,
     keepFnames: true,
+    sourceMap: true,
   })
 }
 
@@ -228,7 +229,7 @@ function server(env, argv) {
   }
   const isDev = argv.environment === 'development'
   const folder = isDev ? '.development' : '.production'
-  const devtool = isDev ? 'inline-cheap-module-source-map' : false
+  const devtool = isDev ? 'inline-cheap-module-source-map' : 'source-map'
   const minimize = !isDev
   const plugins = []
   if (isDev) {
@@ -358,7 +359,7 @@ function client(env, argv) {
   const entryExtension = existsSync(path.join(dir, 'client.ts')) ? 'ts' : 'js'
   const isDev = argv.environment === 'development'
   const folder = isDev ? '.development' : '.production'
-  const devtool = isDev ? 'inline-cheap-module-source-map' : false
+  const devtool = isDev ? 'inline-cheap-module-source-map' : 'source-map'
   const minimize = !isDev
   const babel = argv.loader === 'babel'
   const plugins = [

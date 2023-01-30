@@ -25,7 +25,7 @@ class PluginAttributes extends Nullstack {
 
   renderVueablePlugin() {
     return (
-      <div>
+      <div data-hydrated={this.hydrated}>
         <h1 v-if={this.showTitle} v-html={this.boldTitle()} data-vue />
 
         <button data-btn={(!this.showTitle).toString()} onclick={{ showTitle: !this.showTitle }}>

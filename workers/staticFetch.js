@@ -17,7 +17,7 @@ function staticStrategy(event) {
       if (url.pathname.indexOf('/nullstack/') > -1) {
         return event.respondWith(networkFirst(event))
       }
-      if (url.pathname.indexOf(self.context.environment.key) > -1) {
+      if (url.searchParams?.get('fingerprint') === self.context.environment.key) {
         return event.respondWith(cacheFirst(event))
       }
       if (url.pathname.indexOf('.') > -1) {

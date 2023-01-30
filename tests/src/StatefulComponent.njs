@@ -23,7 +23,7 @@ class StatefulComponent extends Nullstack {
 
   render() {
     return (
-      <form ref={this._element} data-zero={0} data-hydrated-zero={this.hydrated ? 0 : 1}>
+      <form ref={this._element} data-zero={0} data-hydrated-zero={this.hydrated ? 0 : 1} data-hydrated={this.hydrated}>
         <style>
           {`
             style { 

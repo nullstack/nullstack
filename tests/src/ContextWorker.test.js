@@ -1,6 +1,7 @@
 describe('ContextWorker', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/context-worker')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('queues keys always return at least an empty array', async () => {

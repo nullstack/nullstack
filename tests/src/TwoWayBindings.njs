@@ -64,7 +64,7 @@ class TwoWayBindings extends Nullstack {
 
   render({ params }) {
     return (
-      <div data-brings-happiness={this.bringsHappiness}>
+      <div data-brings-happiness={this.bringsHappiness} data-hydrated={this.hydrated}>
         <input bind={this.zero} name="zero" />
         <div data-number={this.number} />
         {!this.boolean && <div data-boolean-type={typeof this.boolean} />}
@@ -117,6 +117,23 @@ class TwoWayBindings extends Nullstack {
           debounce event{' '}
         </button>
         {this.hydrated && <input bind={this.debouncedBind} debounce={2000} data-debounced-hydrated />}
+        <input
+          onclick={{ clicked: true }}
+          oninput={{ inputed: true }}
+          data-rerender-clicked-and-inputed={this.clicked && this.inputed}
+          data-rerender-click-and-input
+        />
+        <button onclick={{ renderInput: true }} data-render-input>
+          rerender
+        </button>
+        {this.renderInput && (
+          <input
+            onclick={{ clicked: true }}
+            oninput={{ inputed: true }}
+            data-render-clicked-and-inputed={this.clicked && this.inputed}
+            data-render-click-and-input
+          />
+        )}
         <button
           onclick={{ debounceTime: 2000 }}
           debounce={this.debounceTime}
