@@ -4,6 +4,7 @@ import AnchorModifiers from './AnchorModifiers'
 import './Application.css'
 import ArrayAttributes from './ArrayAttributes'
 import BodyFragment from './BodyFragment'
+import CatchError from './CatchError'
 import ChildComponent from './ChildComponent'
 import ComponentTernary from './ComponentTernary'
 import Context from './Context'
@@ -137,6 +138,7 @@ class Application extends Nullstack {
         <RouteScroll route="/route-scroll/*" key="routeScroll" />
         <IsomorphicImport route="/isomorphic-import" />
         <ExposedServerFunctions route="/exposed-server-functions" />
+        <CatchError route="/catch-error" />
         <ErrorPage route="*" />
       </body>
     )

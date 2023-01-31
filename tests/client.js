@@ -12,4 +12,8 @@ context.start = function () {
   setTimeout(() => (context.startTimedValue = true), 1000)
 }
 
+context.catch = async function (error) {
+  console.info(error.name)
+}
+
 export default context

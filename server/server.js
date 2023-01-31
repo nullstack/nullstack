@@ -270,6 +270,11 @@ server.start = function () {
     }
   })
 
+  server.use((error, _request, response, _next) => {
+    printError(error)
+    response.status(500).json({})
+  })
+
   if (!server.less) {
     if (!server.port) {
       console.info('\x1b[31mServer port is not defined!\x1b[0m')

@@ -57,6 +57,10 @@ for (const method of methods) {
   })
 }
 
+context.server.get('/vaidamerda', (req, res) => {
+  res.vaidamerda()
+})
+
 context.startIncrementalValue = 0
 
 context.start = async function () {
@@ -66,6 +70,10 @@ context.start = async function () {
   await ContextWorker.start(context)
   context.startValue = true
   context.startIncrementalValue++
+}
+
+context.catch = async function (error) {
+  console.info(error.name)
 }
 
 export default context
