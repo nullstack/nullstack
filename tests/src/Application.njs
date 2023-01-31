@@ -41,6 +41,7 @@ import PublicServerFunctions from './PublicServerFunctions.njs'
 import PureComponents from './PureComponents'
 import Refs from './Refs'
 import RenderableComponent from './RenderableComponent'
+import ReqRes from './ReqRes'
 import RoutesAndParams from './RoutesAndParams'
 import RouteScroll from './RouteScroll'
 import ServerFunctions from './ServerFunctions'
@@ -139,6 +140,7 @@ class Application extends Nullstack {
         <IsomorphicImport route="/isomorphic-import" />
         <ExposedServerFunctions route="/exposed-server-functions" />
         <CatchError route="/catch-error" />
+        <ReqRes route="/reqres" />
         <ErrorPage route="*" />
       </body>
     )
