@@ -10,6 +10,7 @@ import ContextSettings from './src/ContextSettings'
 import ContextWorker from './src/ContextWorker'
 import ExposedServerFunctions from './src/ExposedServerFunctions'
 import vueable from './src/plugins/vueable'
+import ReqRes from './src/ReqRes'
 
 Nullstack.use(vueable)
 
@@ -40,6 +41,9 @@ context.server.post('/data/post/:param', ExposedServerFunctions.getData)
 context.server.put('/data/put/:param', ExposedServerFunctions.getData)
 context.server.patch('/data/patch/:param', ExposedServerFunctions.getData)
 context.server.delete('/data/delete/:param', ExposedServerFunctions.getData)
+
+context.server.get('/exposed-server-function-url.json', ReqRes.exposedServerFunction)
+context.server.get('/nested-exposed-server-function-url.json', ReqRes.nestedExposedServerFunction)
 
 context.server.get('/custom-api-before-start', (request, response) => {
   response.json({ startValue: context.startValue })
@@ -75,6 +79,7 @@ context.start = async function () {
 
 context.catch = async function (error) {
   CatchError.logError({ message: error.message })
+  console.error(error)
 }
 
 export default context

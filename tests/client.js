@@ -15,6 +15,7 @@ context.start = function () {
 
 context.catch = async function (error) {
   CatchError.logError({ message: error.message })
+  console.error(error)
 }
 
 export default context
