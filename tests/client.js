@@ -1,6 +1,7 @@
 import Nullstack from 'nullstack'
 
 import Application from './src/Application'
+import CatchError from './src/CatchError.njs'
 import vueable from './src/plugins/vueable'
 
 Nullstack.use(vueable)
@@ -13,7 +14,7 @@ context.start = function () {
 }
 
 context.catch = async function (error) {
-  console.info(error.name)
+  CatchError.logError({ message: error.message })
 }
 
 export default context

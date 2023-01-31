@@ -3,6 +3,7 @@ import Nullstack from 'nullstack'
 import cors from 'cors'
 
 import Application from './src/Application'
+import CatchError from './src/CatchError'
 import ContextProject from './src/ContextProject'
 import ContextSecrets from './src/ContextSecrets'
 import ContextSettings from './src/ContextSettings'
@@ -57,8 +58,8 @@ for (const method of methods) {
   })
 }
 
-context.server.get('/vaidamerda', (req, res) => {
-  res.vaidamerda()
+context.server.get('/vaidamerdanaapi.json', (_request, response) => {
+  response.vaidamerdanaapi()
 })
 
 context.startIncrementalValue = 0
@@ -73,7 +74,7 @@ context.start = async function () {
 }
 
 context.catch = async function (error) {
-  console.info(error.name)
+  CatchError.logError({ message: error.message })
 }
 
 export default context
