@@ -20,13 +20,10 @@ class CatchError extends Nullstack {
   }
 
   async hydrate({ params }) {
+    setTimeout(() => (this.hydrated = true), 0)
     if (params.error === 'hydrate') {
-      this.vaidamerdanoclient()
+      await this.vaidamerdanoclient()
     }
-  }
-
-  update() {
-    this.hydrated = true
   }
 
   async initiate({ params, page }) {
