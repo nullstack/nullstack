@@ -9,7 +9,7 @@ function transform({ node, environment }) {
   const object = node.attributes.bind.object ?? {}
   const property = node.attributes.bind.property
   if (node.type === 'textarea') {
-    node.children = [object[property]]
+    node.children = [object[property] ?? '']
   } else if (node.type === 'input' && node.attributes.type === 'checkbox') {
     node.attributes.checked = object[property]
   } else {
