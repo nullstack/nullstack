@@ -4,6 +4,7 @@ import AnchorModifiers from './AnchorModifiers'
 import './Application.css'
 import ArrayAttributes from './ArrayAttributes'
 import BodyFragment from './BodyFragment'
+import CatchError from './CatchError'
 import ChildComponent from './ChildComponent'
 import ComponentTernary from './ComponentTernary'
 import Context from './Context'
@@ -40,6 +41,7 @@ import PublicServerFunctions from './PublicServerFunctions.njs'
 import PureComponents from './PureComponents'
 import Refs from './Refs'
 import RenderableComponent from './RenderableComponent'
+import ReqRes from './ReqRes'
 import RoutesAndParams from './RoutesAndParams'
 import RouteScroll from './RouteScroll'
 import ServerFunctions from './ServerFunctions'
@@ -137,6 +139,8 @@ class Application extends Nullstack {
         <RouteScroll route="/route-scroll/*" key="routeScroll" />
         <IsomorphicImport route="/isomorphic-import" />
         <ExposedServerFunctions route="/exposed-server-functions" />
+        <CatchError route="/catch-error" />
+        <ReqRes route="/reqres" />
         <ErrorPage route="*" />
       </body>
     )
