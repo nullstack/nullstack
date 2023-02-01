@@ -40,6 +40,7 @@ for (const method of ['get', 'post', 'put', 'patch', 'delete', 'all']) {
   server[method] = function (...args) {
     if (typeof args[1] === 'function' && args[1].name === '_invoke') {
       return original(args[0], bodyParser.text({ limit: server.maximumPayloadSize }), async (request, response) => {
+        reqres.set(request, response)
         const params = {}
         for (const key of Object.keys(request.params)) {
           params[key] = extractParamValue(request.params[key])
@@ -53,9 +54,11 @@ for (const method of ['get', 'post', 'put', 'patch', 'delete', 'all']) {
         try {
           const subcontext = generateContext({ request, response, ...params })
           const result = await args[1](subcontext)
+          reqres.clear()
           response.json(result)
         } catch (error) {
           printError(error)
+          reqres.clear()
           response.status(500).json({})
         }
       })
@@ -224,6 +227,7 @@ server.start = function () {
 
   server.all(`/${prefix}/:hash/:methodName.json`, async (request, response) => {
     const payload = request.method === 'GET' ? request.query.payload : request.body
+    reqres.set(request, response)
     const args = deserialize(payload)
     const { hash, methodName } = request.params
     const [invokerHash, boundHash] = hash.split('-')
@@ -241,12 +245,15 @@ server.start = function () {
       try {
         const subcontext = generateContext({ request, response, ...args })
         const result = await method.call(boundKlass, subcontext)
+        reqres.clear()
         response.json({ result })
       } catch (error) {
         printError(error)
+        reqres.clear()
         response.status(500).json({})
       }
     } else {
+      reqres.clear()
       response.status(404).json({})
     }
   })
@@ -255,19 +262,21 @@ server.start = function () {
     if (request.originalUrl.split('?')[0].indexOf('.') > -1) {
       return next()
     }
-    reqres.request = request
-    reqres.response = response
+    reqres.set(request, response)
     const scope = await prerender(request, response)
     if (!response.headersSent) {
       const status = scope.context.page.status
       const html = template(scope)
-      reqres.request = null
-      reqres.response = null
+      reqres.clear()
       response.status(status).send(html)
     } else {
-      reqres.request = null
-      reqres.response = null
+      reqres.clear()
     }
+  })
+
+  server.use((error, _request, response, _next) => {
+    printError(error)
+    response.status(500).json({})
   })
 
   if (!server.less) {
