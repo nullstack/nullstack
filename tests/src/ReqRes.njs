@@ -60,14 +60,12 @@ class ReqRes extends Nullstack {
       <div
         data-server-function={this.serverFunctionUrl === '/reqres'}
         data-nested-server-function={this.nestedServerFunctionUrl === '/reqres'}
-        data-server-function-from-client={
-          this.serverFunctionFromClientUrl ===
-          '/nullstack/3f8aea65a953b05e7a7a412d1188ac14/serverFunctionFromClient.json'
-        }
-        data-nested-server-function-from-client={
-          this.nestedServerFunctionFromClientUrl ===
-          '/nullstack/3f8aea65a953b05e7a7a412d1188ac14/nestedServerFunctionFromClient.json'
-        }
+        data-server-function-from-client={this.serverFunctionFromClientUrl?.endsWith?.(
+          '/serverFunctionFromClient.json',
+        )}
+        data-nested-server-function-from-client={this.nestedServerFunctionFromClientUrl?.endsWith?.(
+          '/nestedServerFunctionFromClient.json',
+        )}
         data-exposed-server-function={this.exposedServerFunctionUrl === '/exposed-server-function-url.json'}
         data-exposed-nested-server-function={
           this.nestedExposedServerFunctionUrl === '/nested-exposed-server-function-url.json'
