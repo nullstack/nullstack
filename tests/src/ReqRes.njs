@@ -11,6 +11,9 @@ class ReqRes extends Nullstack {
   }
 
   static async serverFunctionFromClient(context) {
+    console.info('----------------')
+    console.info({ url: context.request.originalUrl })
+    console.info('----------------')
     return context.request.originalUrl
   }
 
