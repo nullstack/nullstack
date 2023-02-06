@@ -58,6 +58,9 @@ class Nullstack {
             const subcontext = generateContext({ request, response, ...params })
             return klass[propName].call(klass, subcontext)
           }
+          if (module.hot) {
+            _invoke.hash = klass[prop].hash
+          }
           klass[prop] = _invoke
           klass.prototype[prop] = _invoke
         }

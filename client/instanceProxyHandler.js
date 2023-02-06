@@ -20,7 +20,11 @@ const instanceProxyHandler = {
           try {
             result = target[name].call(proxy, scopedContext)
           } catch (error) {
-            context.catch && context.catch(error)
+            if (context.catch) {
+              context.catch(error)
+            } else {
+              throw error
+            }
             return null
           }
           if (result instanceof Promise) {

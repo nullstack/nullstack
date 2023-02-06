@@ -1,9 +1,7 @@
 import bodyParser from 'body-parser'
 import express from 'express'
-import { writeFileSync } from 'fs'
 import fetch from 'node-fetch'
 import path from 'path'
-import WebSocket from 'ws'
 
 import deserialize from '../shared/deserialize'
 import extractParamValue from '../shared/extractParamValue'
@@ -11,6 +9,7 @@ import prefix from '../shared/prefix'
 import context, { generateContext } from './context'
 import environment from './environment'
 import { generateFile } from './files'
+import hmr from './hmr'
 import generateManifest from './manifest'
 import { prerender } from './prerender'
 import printError from './printError'
@@ -24,13 +23,19 @@ if (!global.fetch) {
   global.fetch = fetch
 }
 
+if (!global.location) {
+  global.location = {
+    href: '/',
+  }
+}
+
 const server = express()
 
-server.port =
-  process.env.NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT ||
-  process.env.NULLSTACK_SERVER_PORT ||
-  process.env.PORT ||
-  3000
+if (module.hot) {
+  hmr(server)
+}
+
+server.port = process.env.NULLSTACK_SERVER_PORT || process.env.PORT || 3000
 
 let contextStarted = false
 let serverStarted = false
@@ -53,7 +58,8 @@ for (const method of ['get', 'post', 'put', 'patch', 'delete', 'all']) {
         }
         try {
           const subcontext = generateContext({ request, response, ...params })
-          const result = await args[1](subcontext)
+          const exposedFunction = module.hot ? registry[args[1].hash] : args[1]
+          const result = await exposedFunction(subcontext)
           reqres.clear()
           response.json(result)
         } catch (error) {
@@ -155,7 +161,7 @@ server.start = function () {
   if (serverStarted) return
   serverStarted = true
 
-  server.use(express.static(path.join(__dirname, '..', 'public')))
+  server.use(express.static(path.join(process.cwd(), 'public')))
 
   server.use(bodyParser.text({ limit: server.maximumPayloadSize }))
 
@@ -286,17 +292,7 @@ server.start = function () {
     }
 
     server.listen(server.port, async () => {
-      if (environment.development) {
-        if (process.env.NULLSTACK_ENVIRONMENT_DISK === 'true') {
-          const content = await server.prerender('/')
-          const target = `${process.cwd()}/.development/index.html`
-          writeFileSync(target, content)
-        }
-        const socket = new WebSocket(`ws://localhost:${process.env.NULLSTACK_SERVER_PORT}/ws`)
-        socket.onopen = async function () {
-          socket.send('{"type":"NULLSTACK_SERVER_STARTED"}')
-        }
-      } else {
+      if (environment.production) {
         console.info(
           '\x1b[36m%s\x1b[0m',
           ` ✅️ Your application is ready at http://${process.env.NULLSTACK_PROJECT_DOMAIN}:${process.env.NULLSTACK_SERVER_PORT}\n`,

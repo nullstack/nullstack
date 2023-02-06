@@ -2,7 +2,6 @@ const parse = require('@babel/parser').parse
 const traverse = require('@babel/traverse').default
 
 module.exports = function (source) {
-  this.cacheable && this.cacheable()
   const uniquePositions = new Set()
   const ast = parse(source, {
     sourceType: 'module',

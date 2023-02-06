@@ -11,7 +11,6 @@ class ContextWorker extends Nullstack {
   header = '';
 
   static async start({ worker }) {
-    worker.enabled = true
     worker.preload = ['/context-worker']
   }
 

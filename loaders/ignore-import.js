@@ -5,6 +5,5 @@ MIT Licensed
 https://npmjs.com/package/ignore-loader
 */
 module.exports = function () {
-  this.cacheable && this.cacheable()
   return ''
 }

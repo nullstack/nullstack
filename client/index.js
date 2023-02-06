@@ -2,6 +2,7 @@ import element from '../shared/element'
 import fragment from '../shared/fragment'
 import generateTree from '../shared/generateTree'
 import { loadPlugins, useClientPlugins } from '../shared/plugins'
+import dangerouslySilenceHmr from '../shared/silenceHmr'
 import client from './client'
 import context, { generateContext } from './context'
 import environment from './environment'
@@ -106,19 +107,26 @@ export default class Nullstack {
 }
 
 if (module.hot) {
-  Nullstack.serverHashes ??= {}
-  Nullstack.serverPings = 0
-  Nullstack.clientPings = 0
-  const socket = new WebSocket(`ws${router.base.slice(4)}/ws`)
-  socket.onmessage = async function (e) {
-    const data = JSON.parse(e.data)
-    if (data.type === 'NULLSTACK_SERVER_STARTED') {
-      Nullstack.serverPings++
-      if (Nullstack.needsReload || !environment.hot) {
+  dangerouslySilenceHmr()
+
+  const source = new window.EventSource('/nullstack/hmr')
+  const pingAndReload = async () => {
+    let serverBackOnline = false
+    try {
+      const response = await fetch('/nullstack/hmr')
+      serverBackOnline = response.ok
+    } catch (e) {
+      // setTimeout(pingAndReload, 100)
+    } finally {
+      if (serverBackOnline) {
         window.location.reload()
+      } else {
+        setTimeout(pingAndReload, 500)
       }
     }
   }
+  source.onerror = pingAndReload
+
   Nullstack.updateInstancesPrototypes = function updateInstancesPrototypes(klass, hash, serverHash) {
     for (const key in context.instances) {
       const instance = context.instances[key]
@@ -126,26 +134,11 @@ if (module.hot) {
         Object.setPrototypeOf(instance, klass.prototype)
       }
     }
-    if (Nullstack.serverHashes[hash]) {
-      if (Nullstack.serverHashes[hash] !== serverHash) {
-        if (Nullstack.clientPings < Nullstack.serverPings) {
-          window.location.reload()
-        } else {
-          Nullstack.needsReload = true
-        }
-      }
-      Nullstack.clientPings++
-    }
-    Nullstack.serverHashes[hash] = serverHash
+    windowEvent('environment')
     client.update()
   }
-  Nullstack.hotReload = function hotReload(klass) {
-    if (client.skipHotReplacement) {
-      window.location.reload()
-    } else {
-      Nullstack.start(klass)
-      windowEvent('environment')
-    }
+  Nullstack.hotReload = function hotReload() {
+    window.location.reload()
   }
   module.hot.decline()
 }

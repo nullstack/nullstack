@@ -63,9 +63,13 @@ export default function ({ head, body, nextBody, context, instances }) {
     ${page.robots ? `<meta name="robots" content="${page.robots}" />` : ''}
     <meta name="msapplication-starturl" content="/">
     ${project.viewport ? `<meta name="viewport" content="${project.viewport}">` : ''}
-    <link rel="stylesheet" href="${cdn(`/client.css?fingerprint=${environment.key}`)}" integrity="${
-    integrities['client.css'] || ''
-  }" crossorigin="anonymous">
+    ${
+      environment.production
+        ? `<link rel="stylesheet" href="${cdn(`/client.css?fingerprint=${environment.key}`)}" integrity="${
+            integrities['client.css'] || ''
+          }" crossorigin="anonymous">`
+        : ''
+    }
     ${page.schema ? `<script type="application/ld+json">${JSON.stringify(page.schema)}</script>` : ''}
     ${project.icons['180'] ? `<link rel="apple-touch-icon" sizes="180x180" href="${cdn(project.icons['180'])}">` : ''}
     <meta name="msapplication-TileColor" content="${project.backgroundColor || project.color}">

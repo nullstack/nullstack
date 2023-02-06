@@ -72,7 +72,7 @@ class Application extends Nullstack {
 
   render({ project, page, environment, refInstanceCount }) {
     return (
-      <body data-window={WindowDependency.key}>
+      <body data-window={WindowDependency.key} data-application-hydrated={this.hydrated}>
         <h1> {project.name} </h1>
         {page.status !== 200 && <div route="*" data-page-status={page.status} />}
         <div route="/">

@@ -5,29 +5,30 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const NodemonPlugin = require('nodemon-webpack-plugin')
 const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
+const webpack = require(`webpack`)
+
+const { version } = require('./package.json')
 
 const buildKey = crypto.randomBytes(20).toString('hex')
 
-const customConsole = new Proxy(
-  {},
-  {
-    get() {
-      return () => {}
-    },
-  },
-)
-
 function getLoader(loader) {
-  const loaders = path.resolve('./node_modules/nullstack/loaders')
-  return path.join(loaders, loader)
+  const loaders = path.resolve(__dirname, 'loaders')
+  return path.posix.join(loaders, loader)
+}
+
+const originalLog = console.log
+global.console.log = function (...args) {
+  if (args[0].toString().startsWith('[nodemon-webpack-plugin]')) return
+  originalLog(...args)
 }
 
 function cacheFactory(args, folder, name) {
   if (args.cache || args.environment === 'development') {
     return {
       type: 'filesystem',
-      cacheDirectory: path.resolve(`./${folder}/.cache`),
+      cacheDirectory: path.posix.join(process.cwd(), folder, '.cache'),
       name,
+      version,
     }
   }
   return false
@@ -35,28 +36,42 @@ function cacheFactory(args, folder, name) {
 
 function terserMinimizer(file, _sourceMap) {
   return require('@swc/core').minify(file, {
+    mangle: false,
+    compress: {
+      unused: false,
+    },
     keepClassnames: true,
     keepFnames: true,
     sourceMap: true,
   })
 }
 
-const swcJs = {
-  test: /\.js$/,
-  use: {
-    loader: require.resolve('swc-loader'),
-    options: {
-      jsc: {
-        parser: {
-          syntax: 'ecmascript',
-          exportDefaultFrom: true,
+function getTargets({ environment, target }) {
+  if (target === 'node') {
+    return { node: process.versions.node }
+  }
+  return environment === 'development' ? 'last 1 version' : 'defaults'
+}
+
+function swcJs({ environment, target }) {
+  const targets = getTargets({ environment, target })
+  return {
+    test: /\.js$/,
+    use: {
+      loader: require.resolve('swc-loader'),
+      options: {
+        jsc: {
+          parser: {
+            syntax: 'ecmascript',
+            exportDefaultFrom: true,
+          },
+        },
+        env: {
+          targets,
         },
       },
-      env: {
-        targets: { node: '10' },
-      },
     },
-  },
+  }
 }
 
 const babelJs = {
@@ -73,22 +88,25 @@ const babelJs = {
   },
 }
 
-const swcTs = {
-  test: /\.ts$/,
-  use: {
-    loader: require.resolve('swc-loader'),
-    options: {
-      jsc: {
-        parser: {
-          syntax: 'typescript',
-          exportDefaultFrom: true,
+function swcTs({ environment, target }) {
+  const targets = getTargets({ environment, target })
+  return {
+    test: /\.ts$/,
+    use: {
+      loader: require.resolve('swc-loader'),
+      options: {
+        jsc: {
+          parser: {
+            syntax: 'typescript',
+            exportDefaultFrom: true,
+          },
+        },
+        env: {
+          targets,
         },
       },
-      env: {
-        targets: { node: '10' },
-      },
     },
-  },
+  }
 }
 
 const babelTs = {
@@ -105,30 +123,33 @@ const babelTs = {
   },
 }
 
-const swcNullstackJavascript = {
-  test: /\.(njs|nts|jsx|tsx)$/,
-  use: {
-    loader: require.resolve('swc-loader'),
-    options: {
-      jsc: {
-        parser: {
-          syntax: 'ecmascript',
-          exportDefaultFrom: true,
-          jsx: true,
-        },
-        transform: {
-          react: {
-            pragma: 'Nullstack.element',
-            pragmaFrag: 'Nullstack.fragment',
-            throwIfNamespace: true,
+function swcNullstackJavascript({ environment, target }) {
+  const targets = getTargets({ environment, target })
+  return {
+    test: /\.(njs|nts|jsx|tsx)$/,
+    use: {
+      loader: require.resolve('swc-loader'),
+      options: {
+        jsc: {
+          parser: {
+            syntax: 'ecmascript',
+            exportDefaultFrom: true,
+            jsx: true,
+          },
+          transform: {
+            react: {
+              pragma: 'Nullstack.element',
+              pragmaFrag: 'Nullstack.fragment',
+              throwIfNamespace: true,
+            },
           },
         },
-      },
-      env: {
-        targets: { node: '10' },
+        env: {
+          targets,
+        },
       },
     },
-  },
+  }
 }
 
 const babelNullstackJavascript = {
@@ -156,30 +177,33 @@ const babelNullstackJavascript = {
   },
 }
 
-const swcNullstackTypescript = {
-  test: /\.(nts|tsx)$/,
-  use: {
-    loader: require.resolve('swc-loader'),
-    options: {
-      jsc: {
-        parser: {
-          syntax: 'typescript',
-          exportDefaultFrom: true,
-          tsx: true,
-        },
-        transform: {
-          react: {
-            pragma: 'Nullstack.element',
-            pragmaFrag: 'Nullstack.fragment',
-            throwIfNamespace: true,
+function swcNullstackTypescript({ environment, target }) {
+  const targets = getTargets({ environment, target })
+  return {
+    test: /\.(nts|tsx)$/,
+    use: {
+      loader: require.resolve('swc-loader'),
+      options: {
+        jsc: {
+          parser: {
+            syntax: 'typescript',
+            exportDefaultFrom: true,
+            tsx: true,
+          },
+          transform: {
+            react: {
+              pragma: 'Nullstack.element',
+              pragmaFrag: 'Nullstack.fragment',
+              throwIfNamespace: true,
+            },
           },
         },
-      },
-      env: {
-        targets: { node: '10' },
+        env: {
+          targets,
+        },
       },
     },
-  },
+  }
 }
 
 const babelNullstackTypescript = {
@@ -215,10 +239,9 @@ const babelNullstackTypescript = {
 }
 
 function server(env, argv) {
-  const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd()
-  const entryExtension = existsSync(path.join(dir, 'server.ts')) ? 'ts' : 'js'
+  const entryExtension = existsSync(path.posix.join(process.cwd(), 'server.ts')) ? 'ts' : 'js'
   const icons = {}
-  const publicFiles = readdirSync(path.join(dir, 'public'))
+  const publicFiles = readdirSync(path.posix.join(process.cwd(), 'public'))
   const babel = argv.loader === 'babel'
   const iconFileRegex = /icon-(\d+)x\1\.[a-zA-Z]+/
   for (const file of publicFiles) {
@@ -233,10 +256,11 @@ function server(env, argv) {
   const minimize = !isDev
   const plugins = []
   if (isDev) {
+    plugins.push(new webpack.HotModuleReplacementPlugin())
     plugins.push(
       new NodemonPlugin({
         ext: '*',
-        watch: ['.env', '.env.*', './.development/server.js'],
+        watch: ['.env', '.env.*', './server.js'],
         script: './.development/server.js',
         nodeArgs: ['--enable-source-maps'],
         quiet: true,
@@ -244,16 +268,26 @@ function server(env, argv) {
     )
   }
   return {
-    mode: argv.environment,
-    infrastructureLogging: {
-      console: customConsole,
+    experiments: {
+      lazyCompilation: {
+        imports: isDev,
+        entries: false,
+      },
     },
-    entry: `./server.${entryExtension}`,
+    mode: argv.environment,
+    infrastructureLogging: { level: 'error' },
+    entry: isDev
+      ? ['webpack/hot/poll?100', path.posix.join(__dirname, 'shared', 'accept.js'), `./server.${entryExtension}`]
+      : `./server.${entryExtension}`,
     output: {
-      path: path.join(dir, folder),
+      path: path.posix.join(process.cwd(), folder),
       filename: 'server.js',
       chunkFilename: '[chunkhash].server.js',
       libraryTarget: 'umd',
+      hotUpdateChunkFilename: 'nullstack-server-update-[id]-[fullhash].js',
+      hotUpdateMainFilename: 'nullstack-server-update-[runtime]-[fullhash].json',
+      pathinfo: false,
+      clean: isDev,
     },
     resolve: {
       extensions: ['.njs', '.js', '.nts', '.ts', '.tsx', '.jsx'],
@@ -269,9 +303,14 @@ function server(env, argv) {
       ],
     },
     devtool,
-    stats: 'errors-only',
+    stats: 'none',
     module: {
       rules: [
+        {
+          test: /server\.(js|ts)$/,
+          exclude: /node_modules/,
+          loader: getLoader('inject-server-hmr.js'),
+        },
         {
           test: /nullstack.js$/,
           loader: getLoader('string-replace.js'),
@@ -308,9 +347,9 @@ function server(env, argv) {
             ],
           },
         },
-        babel ? babelJs : swcJs,
-        babel ? babelTs : swcTs,
-        babel ? babelNullstackJavascript : swcNullstackJavascript,
+        babel ? babelJs : swcJs({ environment: argv.environment, target: 'node' }),
+        babel ? babelTs : swcTs({ environment: argv.environment, target: 'node' }),
+        babel ? babelNullstackJavascript : swcNullstackJavascript({ environment: argv.environment, target: 'node' }),
         {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('register-static-from-server.js'),
@@ -327,7 +366,7 @@ function server(env, argv) {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('inject-nullstack.js'),
         },
-        babel ? babelNullstackTypescript : swcNullstackTypescript,
+        babel ? babelNullstackTypescript : swcNullstackTypescript({ environment: argv.environment, target: 'node' }),
         {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('add-source-to-node.js'),
@@ -349,25 +388,33 @@ function server(env, argv) {
       __filename: false,
     },
     plugins,
+    externals: {
+      'webpack/hot/poll': 'webpack/hot/poll?100',
+    },
     cache: cacheFactory(argv, folder, 'server'),
   }
 }
 
 function client(env, argv) {
   const disk = !!argv.disk
-  const dir = argv.input ? path.join(__dirname, argv.input) : process.cwd()
-  const entryExtension = existsSync(path.join(dir, 'client.ts')) ? 'ts' : 'js'
+  const entryExtension = existsSync(path.posix.join(process.cwd(), 'client.ts')) ? 'ts' : 'js'
   const isDev = argv.environment === 'development'
   const folder = isDev ? '.development' : '.production'
   const devtool = isDev ? 'inline-cheap-module-source-map' : 'source-map'
   const minimize = !isDev
   const babel = argv.loader === 'babel'
-  const plugins = [
-    new MiniCssExtractPlugin({
-      filename: 'client.css',
-      chunkFilename: '[chunkhash].client.css',
-    }),
-  ]
+  const plugins = []
+  if (!isDev) {
+    plugins.push(
+      new MiniCssExtractPlugin({
+        filename: 'client.css',
+        chunkFilename: '[chunkhash].client.css',
+      }),
+    )
+  }
+  if (isDev) {
+    plugins.push(new webpack.HotModuleReplacementPlugin())
+  }
   if (disk) {
     plugins.push(
       new CopyPlugin({
@@ -376,16 +423,30 @@ function client(env, argv) {
     )
   }
   return {
-    infrastructureLogging: {
-      console: customConsole,
+    experiments: {
+      lazyCompilation: {
+        imports: isDev,
+        entries: false,
+      },
     },
     mode: argv.environment,
-    entry: `./client.${entryExtension}`,
+    infrastructureLogging: { level: 'error' },
+    entry: isDev
+      ? [
+          'webpack-hot-middleware/client?log=false&path=/nullstack/hmr&noInfo=true&quiet=true&timeout=20000',
+          path.posix.join(__dirname, 'shared', 'accept.js'),
+          `./client.${entryExtension}`,
+        ]
+      : `./client.${entryExtension}`,
     output: {
       publicPath: `/`,
-      path: path.join(dir, folder),
+      path: path.posix.join(process.cwd(), folder),
       filename: 'client.js',
       chunkFilename: '[chunkhash].client.js',
+      hotUpdateChunkFilename: 'nullstack-client-update-[id]-[fullhash].js',
+      hotUpdateMainFilename: 'nullstack-client-update-[runtime]-[fullhash].json',
+      pathinfo: false,
+      clean: isDev,
     },
     resolve: {
       extensions: ['.njs', '.js', '.nts', '.ts', '.tsx', '.jsx'],
@@ -399,12 +460,13 @@ function client(env, argv) {
       ],
     },
     devtool,
-    stats: 'errors-only',
+    stats: 'none',
     module: {
       rules: [
         {
           test: /client\.(js|ts)$/,
-          loader: getLoader('inject-hmr.js'),
+          exclude: /node_modules/,
+          loader: getLoader('inject-client-hmr.js'),
         },
         {
           test: /nullstack.js$/,
@@ -418,9 +480,9 @@ function client(env, argv) {
             ],
           },
         },
-        babel ? babelJs : swcJs,
-        babel ? babelTs : swcTs,
-        babel ? babelNullstackJavascript : swcNullstackJavascript,
+        babel ? babelJs : swcJs({ environment: argv.environment, target: 'web' }),
+        babel ? babelTs : swcTs({ environment: argv.environment, target: 'web' }),
+        babel ? babelNullstackJavascript : swcNullstackJavascript({ environment: argv.environment, target: 'node' }),
         {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('remove-import-from-client.js'),
@@ -432,7 +494,7 @@ function client(env, argv) {
         {
           test: /\.s?[ac]ss$/,
           use: [
-            MiniCssExtractPlugin.loader,
+            isDev ? { loader: require.resolve('style-loader') } : MiniCssExtractPlugin.loader,
             { loader: require.resolve('css-loader'), options: { url: false } },
             { loader: require.resolve('sass-loader'), options: { sassOptions: { fibers: false } } },
           ],
@@ -445,7 +507,7 @@ function client(env, argv) {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('inject-nullstack.js'),
         },
-        babel ? babelNullstackTypescript : swcNullstackTypescript,
+        babel ? babelNullstackTypescript : swcNullstackTypescript({ environment: argv.environment, target: 'node' }),
         {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('add-source-to-node.js'),
@@ -457,6 +519,14 @@ function client(env, argv) {
       ],
     },
     target: 'web',
+    externals: {
+      'webpack-hot-middleware/client':
+        'webpack-hot-middleware/client?log=false&path=/nullstack/hmr&noInfo=true&quiet=true&timeout=20000',
+    },
+    node: {
+      __dirname: false,
+      __filename: false,
+    },
     plugins,
     cache: cacheFactory(argv, folder, 'client'),
   }

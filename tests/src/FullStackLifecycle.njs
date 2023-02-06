@@ -39,7 +39,7 @@ class FullStackLifecycle extends Nullstack {
 
   render() {
     return (
-      <div class="FullStackLifecycle">
+      <div class="FullStackLifecycle" data-hydrated={this.hydrated}>
         <div data-prepared={this.prepared} data-prepare-env={this.prepareEnv} />
         <div data-initiated={this.initiated} data-initiate-env={this.initiateEnv} />
         <div data-launched={this.launched} data-launch-env={this.launchEnv} />

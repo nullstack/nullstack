@@ -37,5 +37,16 @@ module.exports = function (source) {
   output += `\nNullstack.registry["${legacyHash}"] = ${klassName};`
   output += `\n${klassName}.hash = "${hash}";`
   output += `\n${klassName}.bindStaticFunctions(${klassName});`
+  output += 'if (module.hot) {'
+  for (const methodName of methodNames) {
+    output += `\n${klassName}.${methodName}.hash = "${hash}.${methodName}";`
+    output += `\nNullstack.registry["${hash}.${methodName}"] = ${klassName}.${methodName};`
+    output += `\nNullstack.registry["${legacyHash}.${methodName}"] = ${klassName}.${methodName};`
+  }
+  output += `\nNullstack.registry["${hash}"] = ${klassName};`
+  output += `\nNullstack.registry["${legacyHash}"] = ${klassName};`
+  output += `\n${klassName}.hash = "${hash}";`
+  output += `\n${klassName}.bindStaticFunctions(${klassName});`
+  output += '}'
   return output
 }
