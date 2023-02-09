@@ -48,5 +48,6 @@ module.exports = function (source) {
   output += `\n${klassName}.hash = "${hash}";`
   output += `\n${klassName}.bindStaticFunctions(${klassName});`
   output += '}'
+  output += '\nif (module.hot) { module.hot.accept(); }'
   return output
 }

@@ -6,6 +6,7 @@ const NodemonPlugin = require('nodemon-webpack-plugin')
 const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
 const webpack = require(`webpack`)
+const nodeExternals = require('webpack-node-externals')
 
 const { version } = require('./package.json')
 
@@ -18,7 +19,7 @@ function getLoader(loader) {
 
 const originalLog = console.log
 global.console.log = function (...args) {
-  if (args[0].toString().startsWith('[nodemon-webpack-plugin]')) return
+  if (args[0] && args[0].toString().startsWith('[nodemon-webpack-plugin]')) return
   originalLog(...args)
 }
 
@@ -268,16 +269,10 @@ function server(env, argv) {
     )
   }
   return {
-    experiments: {
-      lazyCompilation: {
-        imports: isDev,
-        entries: false,
-      },
-    },
     mode: argv.environment,
     infrastructureLogging: { level: 'error' },
     entry: isDev
-      ? ['webpack/hot/poll?100', path.posix.join(__dirname, 'shared', 'accept.js'), `./server.${entryExtension}`]
+      ? ['webpack/hot/poll?1000', path.posix.join(__dirname, 'shared', 'accept.js'), `./server.${entryExtension}`]
       : `./server.${entryExtension}`,
     output: {
       path: path.posix.join(process.cwd(), folder),
@@ -287,7 +282,7 @@ function server(env, argv) {
       hotUpdateChunkFilename: 'nullstack-server-update-[id]-[fullhash].js',
       hotUpdateMainFilename: 'nullstack-server-update-[runtime]-[fullhash].json',
       pathinfo: false,
-      clean: isDev,
+      // clean: isDev,
     },
     resolve: {
       extensions: ['.njs', '.js', '.nts', '.ts', '.tsx', '.jsx'],
@@ -388,9 +383,11 @@ function server(env, argv) {
       __filename: false,
     },
     plugins,
-    externals: {
-      'webpack/hot/poll': 'webpack/hot/poll?100',
-    },
+    externals: [
+      nodeExternals({
+        allowlist: ['webpack/hot/poll?1000'],
+      }),
+    ],
     cache: cacheFactory(argv, folder, 'server'),
   }
 }
@@ -404,14 +401,12 @@ function client(env, argv) {
   const minimize = !isDev
   const babel = argv.loader === 'babel'
   const plugins = []
-  if (!isDev) {
-    plugins.push(
-      new MiniCssExtractPlugin({
-        filename: 'client.css',
-        chunkFilename: '[chunkhash].client.css',
-      }),
-    )
-  }
+  plugins.push(
+    new MiniCssExtractPlugin({
+      filename: 'client.css',
+      chunkFilename: '[chunkhash].client.css',
+    }),
+  )
   if (isDev) {
     plugins.push(new webpack.HotModuleReplacementPlugin())
   }
@@ -423,12 +418,6 @@ function client(env, argv) {
     )
   }
   return {
-    experiments: {
-      lazyCompilation: {
-        imports: isDev,
-        entries: false,
-      },
-    },
     mode: argv.environment,
     infrastructureLogging: { level: 'error' },
     entry: isDev
@@ -446,7 +435,7 @@ function client(env, argv) {
       hotUpdateChunkFilename: 'nullstack-client-update-[id]-[fullhash].js',
       hotUpdateMainFilename: 'nullstack-client-update-[runtime]-[fullhash].json',
       pathinfo: false,
-      clean: isDev,
+      // clean: isDev,
     },
     resolve: {
       extensions: ['.njs', '.js', '.nts', '.ts', '.tsx', '.jsx'],
@@ -493,11 +482,11 @@ function client(env, argv) {
         },
         {
           test: /\.s?[ac]ss$/,
-          use: [
-            isDev ? { loader: require.resolve('style-loader') } : MiniCssExtractPlugin.loader,
-            { loader: require.resolve('css-loader'), options: { url: false } },
-            { loader: require.resolve('sass-loader'), options: { sassOptions: { fibers: false } } },
-          ],
+          use: [MiniCssExtractPlugin.loader, { loader: require.resolve('css-loader'), options: { url: false } }],
+        },
+        {
+          test: /\.s[ac]ss$/,
+          use: [{ loader: require.resolve('sass-loader'), options: { sassOptions: { fibers: false } } }],
         },
         {
           test: /\.(njs|nts|jsx|tsx)$/,

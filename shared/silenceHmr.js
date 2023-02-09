@@ -6,8 +6,8 @@ export default function dangerouslySilenceHmr() {
   // (╯°□°）╯︵ ┻━┻
   const originalLog = console.log
   global.console.log = function (...args) {
-    if (args[0].toString().startsWith('[nodemon-webpack-plugin]')) return
-    if (args[0].toString().startsWith('[HMR]')) return
+    if (args[0] && args[0].toString().startsWith('[nodemon-webpack-plugin]')) return
+    if (args[0] && args[0].toString().startsWith('[HMR]')) return
     originalLog(...args)
   }
 }

@@ -26,11 +26,10 @@ function loadEnv(env) {
   dotenv.config({ path: envPath })
 }
 
-async function start({ port, env, mode = 'spa', cold, disk, loader = 'swc' }) {
+async function start({ port, env, mode = 'spa', disk, loader = 'swc' }) {
   loadEnv(env)
   const environment = 'development'
   process.env.NULLSTACK_ENVIRONMENT_MODE = mode
-  process.env.NULLSTACK_ENVIRONMENT_HOT = (!cold).toString()
   process.env.NULLSTACK_ENVIRONMENT_DISK = (!!disk).toString()
   process.env.__NULLSTACK_CLI_ENVIRONMENT = environment
   if (env) {
@@ -45,7 +44,7 @@ async function start({ port, env, mode = 'spa', cold, disk, loader = 'swc' }) {
   const settings = config[0](null, { environment, disk, loader })
   let loaded = false
   const compiler = webpack(settings)
-  compiler.watch({ aggregateTimeout: 300, hot: true, followSymlinks: true }, (error, stats) => {
+  compiler.watch({ aggregateTimeout: 300, poll: 1000, hot: true, ignored: /node_modules/ }, (error, stats) => {
     if (error) {
       console.error(error.stack || error)
       if (error.details) {
@@ -91,11 +90,9 @@ program
   .command('start')
   .alias('s')
   .description('Start application in development environment')
-  .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles').choices(['ssr', 'spa']))
   .option('-p, --port <port>', 'Port number to run the server')
   .option('-e, --env <name>', 'Name of the environment file that should be loaded')
   .option('-d, --disk', 'Write files to disk')
-  .option('-c, --cold', 'Disable hot module replacement')
   .addOption(new program.Option('-l, --loader <loader>', 'Use Babel or SWC loader').choices(['swc', 'babel']))
   .helpOption('-h, --help', 'Learn more about this command')
   .action(start)
