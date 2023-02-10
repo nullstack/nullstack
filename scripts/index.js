@@ -26,10 +26,11 @@ function loadEnv(env) {
   dotenv.config({ path: envPath })
 }
 
-async function start({ port, env, mode = 'spa', disk, loader = 'swc' }) {
+async function start({ port, env, disk, loader = 'swc' }) {
   loadEnv(env)
+  console.info(` 🚀️ Building your application in development mode...`)
   const environment = 'development'
-  process.env.NULLSTACK_ENVIRONMENT_MODE = mode
+  process.env.NULLSTACK_ENVIRONMENT_MODE = 'spa'
   process.env.NULLSTACK_ENVIRONMENT_DISK = (!!disk).toString()
   process.env.__NULLSTACK_CLI_ENVIRONMENT = environment
   if (env) {
@@ -42,7 +43,6 @@ async function start({ port, env, mode = 'spa', disk, loader = 'swc' }) {
   if (!process.env.NULLSTACK_PROJECT_DOMAIN) process.env.NULLSTACK_PROJECT_DOMAIN = 'localhost'
   if (!process.env.NULLSTACK_WORKER_PROTOCOL) process.env.NULLSTACK_WORKER_PROTOCOL = 'http'
   const settings = config[0](null, { environment, disk, loader })
-  let loaded = false
   const compiler = webpack(settings)
   compiler.watch({ aggregateTimeout: 300, poll: 1000, hot: true, ignored: /node_modules/ }, (error, stats) => {
     if (error) {
@@ -52,14 +52,6 @@ async function start({ port, env, mode = 'spa', disk, loader = 'swc' }) {
       }
     } else if (stats.hasErrors()) {
       console.info(stats.toString({ colors: true, warnings: false, logging: false, assets: false, modules: false }))
-    } else if (!loaded) {
-      loaded = true
-      console.info(
-        '\x1b[36m%s\x1b[0m',
-        ` ✅️ Your application is ready at http://${process.env.NULLSTACK_PROJECT_DOMAIN}:${
-          process.env.NULLSTACK_SERVER_PORT || process.env.PORT || 3000
-        }\n`,
-      )
     }
   })
 }

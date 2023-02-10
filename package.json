@@ -45,7 +45,6 @@
     "webpack": "5.75.0",
     "webpack-dev-server": "4.11.1",
     "webpack-hot-middleware": "^2.25.3",
-    "webpack-node-externals": "^3.0.0",
     "ws": "8.12.0"
   }
 }

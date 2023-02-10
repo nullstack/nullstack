@@ -6,7 +6,6 @@ const NodemonPlugin = require('nodemon-webpack-plugin')
 const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
 const webpack = require(`webpack`)
-const nodeExternals = require('webpack-node-externals')
 
 const { version } = require('./package.json')
 
@@ -383,11 +382,7 @@ function server(env, argv) {
       __filename: false,
     },
     plugins,
-    externals: [
-      nodeExternals({
-        allowlist: ['webpack/hot/poll?1000'],
-      }),
-    ],
+    externals: { 'webpack/hot/poll': 'webpack/hot/poll?1000' },
     cache: cacheFactory(argv, folder, 'server'),
   }
 }

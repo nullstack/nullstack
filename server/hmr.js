@@ -55,6 +55,15 @@ export default function hmr(server) {
 
     const instance = webpackDevMiddleware(compiler, webpackDevMiddlewareOptions)
 
+    instance.waitUntilValid(() => {
+      console.info(
+        '\x1b[36m%s\x1b[0m',
+        ` ✅️ Your application is ready at http://${process.env.NULLSTACK_PROJECT_DOMAIN}:${
+          process.env.NULLSTACK_SERVER_PORT || process.env.PORT || 3000
+        }\n`,
+      )
+    })
+
     server.use(instance)
 
     const webpackHotMiddleware = __non_webpack_require__(resolve(`webpack-hot-middleware`))
