@@ -2,7 +2,6 @@ import element from '../shared/element'
 import fragment from '../shared/fragment'
 import generateTree from '../shared/generateTree'
 import { loadPlugins, useClientPlugins } from '../shared/plugins'
-import dangerouslySilenceHmr from '../shared/silenceHmr'
 import client from './client'
 import context, { generateContext } from './context'
 import environment from './environment'
@@ -107,8 +106,6 @@ export default class Nullstack {
 }
 
 if (module.hot) {
-  dangerouslySilenceHmr()
-
   function pingAndReload() {
     const source = new window.EventSource('/nullstack/hmr')
     let shouldReconnect = false

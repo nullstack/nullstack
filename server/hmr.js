@@ -2,12 +2,8 @@
 import { existsSync } from 'fs'
 import path from 'path'
 
-import dangerouslySilenceHmr from '../shared/silenceHmr'
-
 export default function hmr(server) {
   if (module.hot) {
-    dangerouslySilenceHmr()
-
     const customConfig = path.resolve(process.cwd(), 'webpack.config.js')
     const webpackConfigs = existsSync(customConfig)
       ? __non_webpack_require__(customConfig)
