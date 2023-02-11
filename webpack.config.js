@@ -16,12 +16,6 @@ function getLoader(loader) {
   return path.posix.join(loaders, loader)
 }
 
-const originalLog = console.log
-global.console.log = function (...args) {
-  if (args[0] && args[0].toString().startsWith('[nodemon-webpack-plugin]')) return
-  originalLog(...args)
-}
-
 function cacheFactory(args, folder, name) {
   if (args.cache || args.environment === 'development') {
     return {
@@ -374,6 +368,14 @@ function server(env, argv) {
           resourceQuery: /raw/,
           type: 'asset/source',
         },
+        {
+          test: /webpack[\\\/]hot/,
+          loader: getLoader('shut-up-loader.js')
+        },
+        {
+          test: /webpack-hot-middleware/,
+          loader: getLoader('shut-up-loader.js')
+        }
       ],
     },
     target: 'node',
@@ -500,6 +502,14 @@ function client(env, argv) {
           test: /\.(njs|nts|jsx|tsx)$/,
           loader: getLoader('transform-node-ref.js'),
         },
+        {
+          test: /webpack[\\\/]hot/,
+          loader: getLoader('shut-up-loader.js')
+        },
+        {
+          test: /webpack-hot-middleware/,
+          loader: getLoader('shut-up-loader.js')
+        }
       ],
     },
     target: 'web',
