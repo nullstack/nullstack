@@ -275,7 +275,11 @@ function server(env, argv) {
       hotUpdateChunkFilename: 'nullstack-server-update-[id]-[fullhash].js',
       hotUpdateMainFilename: 'nullstack-server-update-[runtime]-[fullhash].json',
       pathinfo: false,
-      // clean: isDev,
+      clean: {
+        keep(asset) {
+          return isDev && !asset.includes('server')
+        },
+      },
     },
     resolve: {
       extensions: ['.njs', '.js', '.nts', '.ts', '.tsx', '.jsx'],
@@ -369,13 +373,9 @@ function server(env, argv) {
           type: 'asset/source',
         },
         {
-          test: /webpack[\\\/]hot/,
-          loader: getLoader('shut-up-loader.js')
+          test: /node_modules[\\/](webpack[\\/]hot|webpack-hot-middleware|mini-css-extract-plugin)/,
+          loader: getLoader('shut-up-loader.js'),
         },
-        {
-          test: /webpack-hot-middleware/,
-          loader: getLoader('shut-up-loader.js')
-        }
       ],
     },
     target: 'node',
@@ -419,7 +419,7 @@ function client(env, argv) {
     infrastructureLogging: { level: 'error' },
     entry: isDev
       ? [
-          'webpack-hot-middleware/client?log=false&path=/nullstack/hmr&noInfo=true&quiet=true&timeout=20000',
+          'webpack-hot-middleware/client?log=false&path=/nullstack/hmr&noInfo=true&quiet=true&timeout=1000&reload=true',
           path.posix.join(__dirname, 'shared', 'accept.js'),
           `./client.${entryExtension}`,
         ]
@@ -432,7 +432,11 @@ function client(env, argv) {
       hotUpdateChunkFilename: 'nullstack-client-update-[id]-[fullhash].js',
       hotUpdateMainFilename: 'nullstack-client-update-[runtime]-[fullhash].json',
       pathinfo: false,
-      // clean: isDev,
+      clean: {
+        keep(asset) {
+          return isDev && !asset.includes('server')
+        },
+      },
     },
     resolve: {
       extensions: ['.njs', '.js', '.nts', '.ts', '.tsx', '.jsx'],
@@ -503,19 +507,15 @@ function client(env, argv) {
           loader: getLoader('transform-node-ref.js'),
         },
         {
-          test: /webpack[\\\/]hot/,
-          loader: getLoader('shut-up-loader.js')
+          test: /node_modules[\\/](webpack[\\/]hot|webpack-hot-middleware|mini-css-extract-plugin)/,
+          loader: getLoader('shut-up-loader.js'),
         },
-        {
-          test: /webpack-hot-middleware/,
-          loader: getLoader('shut-up-loader.js')
-        }
       ],
     },
     target: 'web',
     externals: {
       'webpack-hot-middleware/client':
-        'webpack-hot-middleware/client?log=false&path=/nullstack/hmr&noInfo=true&quiet=true&timeout=20000',
+        'webpack-hot-middleware/client?log=false&path=/nullstack/hmr&noInfo=true&quiet=true&timeout=1000&reload=true',
     },
     node: {
       __dirname: false,

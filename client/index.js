@@ -106,22 +106,6 @@ export default class Nullstack {
 }
 
 if (module.hot) {
-  function pingAndReload() {
-    const source = new window.EventSource('/nullstack/hmr')
-    let shouldReconnect = false
-    source.onopen = () => {
-      if (shouldReconnect) {
-        window.location.reload()
-      }
-    }
-    source.onerror = () => {
-      shouldReconnect = true
-      setTimeout(pingAndReload, 500)
-    }
-  }
-
-  pingAndReload()
-
   Nullstack.updateInstancesPrototypes = function updateInstancesPrototypes(klass, hash) {
     for (const key in context.instances) {
       const instance = context.instances[key]
