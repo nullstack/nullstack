@@ -115,3 +115,9 @@ class Nullstack {
 }
 
 export default Nullstack
+
+if (module.hot) {
+  Nullstack.hotReload = function hotReload(klass) {
+    Nullstack.start(klass)
+  }
+}

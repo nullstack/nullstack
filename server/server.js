@@ -286,11 +286,6 @@ server.start = function () {
   })
 
   if (!server.less) {
-    if (!server.port) {
-      console.info('\x1b[31mServer port is not defined!\x1b[0m')
-      process.exit()
-    }
-
     server.listen(server.port, async () => {
       if (environment.production) {
         console.info(

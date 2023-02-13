@@ -277,7 +277,7 @@ function server(env, argv) {
       pathinfo: false,
       clean: {
         keep(asset) {
-          return isDev && !asset.includes('server')
+          return !isDev || !asset.includes('server')
         },
       },
     },
@@ -301,7 +301,7 @@ function server(env, argv) {
         {
           test: /server\.(js|ts)$/,
           exclude: /node_modules/,
-          loader: getLoader('inject-server-hmr.js'),
+          loader: getLoader('inject-hmr.js'),
         },
         {
           test: /nullstack.js$/,
@@ -434,7 +434,7 @@ function client(env, argv) {
       pathinfo: false,
       clean: {
         keep(asset) {
-          return isDev && !asset.includes('server')
+          return !isDev || !asset.includes('server')
         },
       },
     },
@@ -456,7 +456,7 @@ function client(env, argv) {
         {
           test: /client\.(js|ts)$/,
           exclude: /node_modules/,
-          loader: getLoader('inject-client-hmr.js'),
+          loader: getLoader('inject-hmr.js'),
         },
         {
           test: /nullstack.js$/,
