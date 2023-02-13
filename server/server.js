@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser'
 import express from 'express'
+import fs from 'fs'
 import fetch from 'node-fetch'
 import path from 'path'
 
@@ -66,6 +67,18 @@ for (const method of ['get', 'post', 'put', 'patch', 'delete', 'all']) {
           printError(error)
           reqres.clear()
           response.status(500).json({})
+        }
+      })
+    }
+    if (module.hot) {
+      server._router.stack.forEach((r) => {
+        if (r?.route?.path === args[0]) {
+          const exists = r.route.stack.find((l) => l.method === method)
+          if (!!exists && !!process.env.__NULLSTACK_FIRST_LOAD_COMPLETE) {
+            const filename = path.join(process.cwd(), 'server.js')
+            const time = new Date()
+            fs.utimesSync(filename, time, time)
+          }
         }
       })
     }
@@ -284,6 +297,10 @@ server.start = function () {
     printError(error)
     response.status(500).json({})
   })
+
+  if (module.hot) {
+    process.env.__NULLSTACK_FIRST_LOAD_COMPLETE = true
+  }
 
   if (!server.less) {
     server.listen(server.port, async () => {
