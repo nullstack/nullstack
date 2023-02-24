@@ -119,12 +119,22 @@ const babelTs = {
 
 function swcNullstackJavascript({ environment, target }) {
   const targets = getTargets({ environment, target })
+  const config = {
+    development: environment === 'development',
+    client: target === 'web',
+  }
+  const cacheRoot = path.posix.join(process.cwd(), `.${environment}`, '.cache', '.swc');
   return {
-    test: /\.(njs|nts|jsx|tsx)$/,
+    test: /\.(njs|jsx)$/,
     use: {
       loader: require.resolve('swc-loader'),
       options: {
+        minify: false,
         jsc: {
+          experimental: {
+            cacheRoot,
+            plugins: [['C:/Repositories/experiments/nullstack/target/wasm32-wasi/release/nullstack.wasm', config]],
+          },
           parser: {
             syntax: 'ecmascript',
             exportDefaultFrom: true,
@@ -132,13 +142,15 @@ function swcNullstackJavascript({ environment, target }) {
           },
           transform: {
             react: {
-              pragma: 'Nullstack.element',
-              pragmaFrag: 'Nullstack.fragment',
+              pragma: '$transpiler.element',
+              pragmaFrag: '$transpiler.fragment',
               throwIfNamespace: true,
             },
           },
+          keepClassNames: true,
         },
         env: {
+          name: 'test',
           targets,
         },
       },
@@ -161,8 +173,8 @@ const babelNullstackJavascript = {
         [
           '@babel/plugin-transform-react-jsx',
           {
-            pragma: 'Nullstack.element',
-            pragmaFrag: 'Nullstack.fragment',
+            pragma: '$transpiler.element',
+            pragmaFrag: '$transpiler.fragment',
             throwIfNamespace: false,
           },
         ],
@@ -173,12 +185,21 @@ const babelNullstackJavascript = {
 
 function swcNullstackTypescript({ environment, target }) {
   const targets = getTargets({ environment, target })
+  const config = {
+    development: environment === 'development',
+    client: target === 'web',
+  }
+  const cacheRoot = path.posix.join(process.cwd(), `.${environment}`, '.cache', '.swc');
   return {
     test: /\.(nts|tsx)$/,
     use: {
       loader: require.resolve('swc-loader'),
       options: {
         jsc: {
+          experimental: {
+            cacheRoot,
+            plugins: [['C:/Repositories/experiments/nullstack/target/wasm32-wasi/release/nullstack.wasm', config]],
+          },
           parser: {
             syntax: 'typescript',
             exportDefaultFrom: true,
@@ -186,8 +207,8 @@ function swcNullstackTypescript({ environment, target }) {
           },
           transform: {
             react: {
-              pragma: 'Nullstack.element',
-              pragmaFrag: 'Nullstack.fragment',
+              pragma: '$transpiler.element',
+              pragmaFrag: '$transpiler.fragment',
               throwIfNamespace: true,
             },
           },
@@ -215,15 +236,15 @@ const babelNullstackTypescript = {
           {
             isTSX: true,
             allExtensions: true,
-            tsxPragma: 'Nullstack.element',
-            tsxPragmaFrag: 'Nullstack.fragment',
+            tsxPragma: '$transpiler.element',
+            tsxPragmaFrag: '$transpiler.fragment',
           },
         ],
         [
           '@babel/plugin-transform-react-jsx',
           {
-            pragma: 'Nullstack.element',
-            pragmaFrag: 'Nullstack.fragment',
+            pragma: '$transpiler.element',
+            pragmaFrag: '$transpiler.fragment',
             throwIfNamespace: false,
           },
         ],
@@ -304,18 +325,6 @@ function server(env, argv) {
           loader: getLoader('inject-hmr.js'),
         },
         {
-          test: /nullstack.js$/,
-          loader: getLoader('string-replace.js'),
-          options: {
-            multiple: [
-              {
-                search: /{{NULLSTACK_ENVIRONMENT_NAME}}/gi,
-                replace: 'server',
-              },
-            ],
-          },
-        },
-        {
           test: /environment.js$/,
           loader: getLoader('string-replace.js'),
           options: {
@@ -341,36 +350,48 @@ function server(env, argv) {
         },
         babel ? babelJs : swcJs({ environment: argv.environment, target: 'node' }),
         babel ? babelTs : swcTs({ environment: argv.environment, target: 'node' }),
-        babel ? babelNullstackJavascript : swcNullstackJavascript({ environment: argv.environment, target: 'node' }),
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('register-static-from-server.js'),
-        },
-        {
-          test: /\.s?[ac]ss$/,
-          use: [{ loader: getLoader('ignore-import.js') }],
-        },
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('register-inner-components.js'),
-        },
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('inject-nullstack.js'),
-        },
-        babel ? babelNullstackTypescript : swcNullstackTypescript({ environment: argv.environment, target: 'node' }),
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('add-source-to-node.js'),
-        },
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('transform-node-ref.js'),
-        },
+        // {
+        //   test: /\.(njs|nts|jsx|tsx)$/,
+        //   loader: getLoader('register-static-from-server.js'),
+        // },
+        // {
+        //   test: /\.s?[ac]ss$/,
+        //   use: [{ loader: getLoader('ignore-import.js') }],
+        // },
+        // {
+        //   test: /\.(njs|nts|jsx|tsx)$/,
+        //   loader: getLoader('register-inner-components.js'),
+        // },
+        // {
+        //   test: /\.(njs|nts|jsx|tsx)$/,
+        //   loader: getLoader('inject-nullstack.js'),
+        // },
+        // {
+        //   test: /\.(njs|nts|jsx|tsx)$/,
+        //   loader: getLoader('add-source-to-node.js'),
+        // },
+        // {
+        //   test: /\.(njs|nts|jsx|tsx)$/,
+        //   loader: getLoader('transform-node-ref.js'),
+        // },
         {
           issuer: /worker.js/,
           resourceQuery: /raw/,
           type: 'asset/source',
+        },
+        babel ? babelNullstackJavascript : swcNullstackJavascript({ environment: argv.environment, target: 'node' }),
+        babel ? babelNullstackTypescript : swcNullstackTypescript({ environment: argv.environment, target: 'node' }),
+        {
+          test: /nullstack.js$/,
+          loader: getLoader('string-replace.js'),
+          options: {
+            multiple: [
+              {
+                search: /{{NULLSTACK_ENVIRONMENT_NAME}}/gi,
+                replace: 'server',
+              },
+            ],
+          },
         },
         {
           test: /node_modules[\\/](webpack[\\/]hot|webpack-hot-middleware|mini-css-extract-plugin)/,
@@ -419,10 +440,10 @@ function client(env, argv) {
     infrastructureLogging: { level: 'error' },
     entry: isDev
       ? [
-          'webpack-hot-middleware/client?log=false&path=/nullstack/hmr&noInfo=true&quiet=true&timeout=1000&reload=true',
-          path.posix.join(__dirname, 'shared', 'accept.js'),
-          `./client.${entryExtension}`,
-        ]
+        'webpack-hot-middleware/client?log=false&path=/nullstack/hmr&noInfo=true&quiet=true&timeout=1000&reload=true',
+        path.posix.join(__dirname, 'shared', 'accept.js'),
+        `./client.${entryExtension}`,
+      ]
       : `./client.${entryExtension}`,
     output: {
       publicPath: `/`,
@@ -458,6 +479,42 @@ function client(env, argv) {
           exclude: /node_modules/,
           loader: getLoader('inject-hmr.js'),
         },
+        babel ? babelJs : swcJs({ environment: argv.environment, target: 'web' }),
+        babel ? babelTs : swcTs({ environment: argv.environment, target: 'web' }),
+        // {
+        //   test: /\.(njs|nts|jsx|tsx)$/,
+        //   loader: getLoader('remove-import-from-client.js'),
+        // },
+        // {
+        //   test: /\.(njs|nts|jsx|tsx)$/,
+        //   loader: getLoader('remove-static-from-client.js'),
+        // },
+        {
+          test: /\.s?[ac]ss$/,
+          use: [MiniCssExtractPlugin.loader, { loader: require.resolve('css-loader'), options: { url: false } }],
+        },
+        {
+          test: /\.s[ac]ss$/,
+          use: [{ loader: require.resolve('sass-loader'), options: { sassOptions: { fibers: false } } }],
+        },
+        // {
+        //   test: /\.(njs|nts|jsx|tsx)$/,
+        //   loader: getLoader('register-inner-components.js'),
+        // },
+        // {
+        //   test: /\.(njs|nts|jsx|tsx)$/,
+        //   loader: getLoader('inject-nullstack.js'),
+        // },
+        // {
+        //   test: /\.(njs|nts|jsx|tsx)$/,
+        //   loader: getLoader('add-source-to-node.js'),
+        // },
+        // {
+        //   test: /\.(njs|nts|jsx|tsx)$/,
+        //   loader: getLoader('transform-node-ref.js'),
+        // },
+        babel ? babelNullstackJavascript : swcNullstackJavascript({ environment: argv.environment, target: 'web' }),
+        babel ? babelNullstackTypescript : swcNullstackTypescript({ environment: argv.environment, target: 'web' }),
         {
           test: /nullstack.js$/,
           loader: getLoader('string-replace.js'),
@@ -469,42 +526,6 @@ function client(env, argv) {
               },
             ],
           },
-        },
-        babel ? babelJs : swcJs({ environment: argv.environment, target: 'web' }),
-        babel ? babelTs : swcTs({ environment: argv.environment, target: 'web' }),
-        babel ? babelNullstackJavascript : swcNullstackJavascript({ environment: argv.environment, target: 'node' }),
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('remove-import-from-client.js'),
-        },
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('remove-static-from-client.js'),
-        },
-        {
-          test: /\.s?[ac]ss$/,
-          use: [MiniCssExtractPlugin.loader, { loader: require.resolve('css-loader'), options: { url: false } }],
-        },
-        {
-          test: /\.s[ac]ss$/,
-          use: [{ loader: require.resolve('sass-loader'), options: { sassOptions: { fibers: false } } }],
-        },
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('register-inner-components.js'),
-        },
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('inject-nullstack.js'),
-        },
-        babel ? babelNullstackTypescript : swcNullstackTypescript({ environment: argv.environment, target: 'node' }),
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('add-source-to-node.js'),
-        },
-        {
-          test: /\.(njs|nts|jsx|tsx)$/,
-          loader: getLoader('transform-node-ref.js'),
         },
         {
           test: /node_modules[\\/](webpack[\\/]hot|webpack-hot-middleware|mini-css-extract-plugin)/,

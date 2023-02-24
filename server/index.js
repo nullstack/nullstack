@@ -28,11 +28,15 @@ context.worker = worker
 
 server.less = normalize(__filename) !== normalize(process.argv[1])
 
+globalThis.$nullstack = context
+globalThis.$transpiler = {
+  element,
+  fragment,
+  registry,
+}
+
 class Nullstack {
 
-  static registry = registry
-  static element = element
-  static fragment = fragment
   static use = useServerPlugins
 
   static bindStaticFunctions(klass) {

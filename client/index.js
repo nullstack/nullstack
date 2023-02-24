@@ -35,11 +35,15 @@ scope.context = context
 
 client.plugins = loadPlugins(scope)
 
+globalThis.$nullstack = context
+globalThis.$transpiler = {
+  element,
+  fragment,
+  invoke,
+}
+
 export default class Nullstack {
 
-  static element = element
-  static invoke = invoke
-  static fragment = fragment
   static use = useClientPlugins
   static context = generateContext({})
 
