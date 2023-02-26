@@ -2,16 +2,13 @@ import './dotenv'
 import { normalize } from 'path'
 
 import element from '../shared/element'
-import fragment from '../shared/fragment'
 import getProxyableMethods from '../shared/getProxyableMethods'
 import { useServerPlugins } from '../shared/plugins'
-import context, { generateContext } from './context'
+import context from './context'
 import environment from './environment'
 import generator from './generator'
 import instanceProxyHandler from './instanceProxyHandler'
 import project from './project'
-import registry from './registry'
-import reqres from './reqres'
 import secrets from './secrets'
 import server from './server'
 import settings from './settings'
@@ -28,50 +25,13 @@ context.worker = worker
 
 server.less = normalize(__filename) !== normalize(process.argv[1])
 
-globalThis.$nullstack = context
-globalThis.$transpiler = {
-  element,
-  fragment,
-  registry,
+if (environment.development) {
+  globalThis.$nullstack = context
 }
 
 class Nullstack {
 
   static use = useServerPlugins
-
-  static bindStaticFunctions(klass) {
-    let parent = klass
-    while (parent.name !== 'Nullstack') {
-      const props = Object.getOwnPropertyNames(parent)
-      for (const prop of props) {
-        const underscored = prop.startsWith('_')
-        if (typeof klass[prop] === 'function') {
-          if (!underscored && !registry[`${parent.hash}.${prop}`]) {
-            return
-          }
-          const propName = `__NULLSTACK_${prop}`
-          if (!klass[propName]) {
-            klass[propName] = klass[prop]
-          }
-          function _invoke(...args) {
-            if (underscored) {
-              return klass[propName].call(klass, ...args)
-            }
-            const params = args[0] || {}
-            const { request, response } = reqres
-            const subcontext = generateContext({ request, response, ...params })
-            return klass[propName].call(klass, subcontext)
-          }
-          if (module.hot) {
-            _invoke.hash = klass[prop].hash
-          }
-          klass[prop] = _invoke
-          klass.prototype[prop] = _invoke
-        }
-      }
-      parent = Object.getPrototypeOf(parent)
-    }
-  }
 
   static start(Starter) {
     if (this.name.indexOf('Nullstack') > -1) {

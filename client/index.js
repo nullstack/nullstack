@@ -35,12 +35,15 @@ scope.context = context
 
 client.plugins = loadPlugins(scope)
 
-globalThis.$nullstack = context
-globalThis.$transpiler = {
-  element,
-  fragment,
-  invoke,
+if (environment.development) {
+  globalThis.$nullstack = context
 }
+
+// export {
+//   element,
+//   fragment,
+//   invoke,
+// }
 
 export default class Nullstack {
 
