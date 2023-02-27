@@ -1,5 +1,4 @@
 import element from '../shared/element'
-import fragment from '../shared/fragment'
 import generateTree from '../shared/generateTree'
 import { loadPlugins, useClientPlugins } from '../shared/plugins'
 import client from './client'
@@ -7,7 +6,6 @@ import context, { generateContext } from './context'
 import environment from './environment'
 import hydrate from './hydrate'
 import instanceProxyHandler, { instanceProxies } from './instanceProxyHandler'
-import invoke from './invoke'
 import page from './page'
 import params, { updateParams } from './params'
 import project from './project'
@@ -38,12 +36,6 @@ client.plugins = loadPlugins(scope)
 if (environment.development) {
   globalThis.$nullstack = context
 }
-
-// export {
-//   element,
-//   fragment,
-//   invoke,
-// }
 
 export default class Nullstack {
 
@@ -112,19 +104,19 @@ export default class Nullstack {
 
 }
 
-if (module.hot) {
-  Nullstack.updateInstancesPrototypes = function updateInstancesPrototypes(klass, hash) {
-    for (const key in context.instances) {
-      const instance = context.instances[key]
-      if (instance.constructor.hash === hash) {
-        Object.setPrototypeOf(instance, klass.prototype)
-      }
-    }
-    windowEvent('environment')
-    client.update()
-  }
-  Nullstack.hotReload = function hotReload() {
-    window.location.reload()
-  }
-  module.hot.decline()
-}
+// if (module.hot) {
+//   Nullstack.updateInstancesPrototypes = function updateInstancesPrototypes(klass, hash) {
+//     for (const key in context.instances) {
+//       const instance = context.instances[key]
+//       if (instance.constructor.hash === hash) {
+//         Object.setPrototypeOf(instance, klass.prototype)
+//       }
+//     }
+//     windowEvent('environment')
+//     client.update()
+//   }
+//   Nullstack.hotReload = function hotReload() {
+//     window.location.reload()
+//   }
+//   module.hot.decline()
+// }

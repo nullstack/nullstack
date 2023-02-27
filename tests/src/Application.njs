@@ -76,7 +76,7 @@ class Application extends Nullstack {
         <h1> {project.name} </h1>
         {page.status !== 200 && <div route="*" data-page-status={page.status} />}
         <div route="/">
-          <a href={`/nullstack/${environment.key}/offline`}> offline!11123123!!! </a>
+          <a href={`/nullstack/${environment.key}/offline`}> offline </a>
           <a href="/static-this"> static this </a>
           <a href="/routes-and-params/a"> router with params </a>
           <a href="/undefined-nodes"> undefined nodes </a>

@@ -14,7 +14,7 @@ function icons(options) {
   return { ICONS: JSON.stringify(icons) }
 }
 
-function environment(options) {
+function environment(_options) {
   const crypto = require('crypto')
   const key = crypto.randomBytes(20).toString('hex')
   return { KEY: `"${key}"` }
@@ -59,19 +59,18 @@ function swc(options, other) {
     }
   }
 
-  if (other.template) {
-    config.use.options.jsc.experimental = {
-      cacheRoot: path.posix.join(options.projectFolder, options.buildFolder, '.cache', '.swc'),
-      plugins: [
-        [
-          'C:/Repositories/experiments/nullstack/target/wasm32-wasi/release/nullstack.wasm',
-          {
-            development: options.environment === 'development',
-            client: options.target === 'client',
-          }
-        ]
+  config.use.options.jsc.experimental = {
+    cacheRoot: path.posix.join(options.projectFolder, options.buildFolder, '.cache', '.swc'),
+    plugins: [
+      [
+        'C:/Repositories/experiments/nullstack/target/wasm32-wasi/release/nullstack.wasm',
+        {
+          development: options.environment === 'development',
+          client: options.target === 'client',
+          template: !!other.template
+        }
       ]
-    }
+    ]
   }
 
   if (options.target === 'server') {

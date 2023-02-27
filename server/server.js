@@ -153,9 +153,9 @@ function createResponse(callback) {
   res.end =
     res.send =
     res.write =
-      function (data = '') {
-        if (callback) callback(code, data, headers)
-      }
+    function (data = '') {
+      if (callback) callback(code, data, headers)
+    }
   return res
 }
 
@@ -165,7 +165,7 @@ server.prerender = async function (originalUrl) {
     server._router.handle(
       createRequest(originalUrl),
       createResponse((code, data) => resolve(data)),
-      () => {},
+      () => { },
     )
   })
 }
@@ -185,22 +185,10 @@ server.start = function () {
       response.send(generateFile(`${request.params.number}.client.js`, server))
     })
 
-    server.get(`/:number.client.js.map`, (request, response) => {
-      response.setHeader('Cache-Control', 'max-age=31536000, immutable')
-      response.contentType('application/json')
-      response.send(generateFile(`${request.params.number}.client.js.map`, server))
-    })
-
     server.get(`/:number.client.css`, (request, response) => {
       response.setHeader('Cache-Control', 'max-age=31536000, immutable')
       response.contentType('text/css')
       response.send(generateFile(`${request.params.number}.client.css`, server))
-    })
-
-    server.get(`/:number.client.css.map`, (request, response) => {
-      response.setHeader('Cache-Control', 'max-age=31536000, immutable')
-      response.contentType('application/json')
-      response.send(generateFile(`${request.params.number}.client.css.map`, server))
     })
 
     server.get(`/client.css`, (request, response) => {
@@ -209,22 +197,37 @@ server.start = function () {
       response.send(generateFile('client.css', server))
     })
 
-    server.get(`/client.css.map`, (request, response) => {
-      response.setHeader('Cache-Control', 'max-age=31536000, immutable')
-      response.contentType('application/json')
-      response.send(generateFile('client.css.map', server))
-    })
-
     server.get(`/client.js`, (request, response) => {
       response.setHeader('Cache-Control', 'max-age=31536000, immutable')
       response.contentType('text/javascript')
       response.send(generateFile('client.js', server))
     })
 
+  }
+
+  if (environment.development) {
     server.get(`/client.js.map`, (request, response) => {
       response.setHeader('Cache-Control', 'max-age=31536000, immutable')
       response.contentType('application/json')
       response.send(generateFile('client.js.map', server))
+    })
+
+    server.get(`/:number.client.js.map`, (request, response) => {
+      response.setHeader('Cache-Control', 'max-age=31536000, immutable')
+      response.contentType('application/json')
+      response.send(generateFile(`${request.params.number}.client.js.map`, server))
+    })
+
+    server.get(`/client.css.map`, (request, response) => {
+      response.setHeader('Cache-Control', 'max-age=31536000, immutable')
+      response.contentType('application/json')
+      response.send(generateFile('client.css.map', server))
+    })
+
+    server.get(`/:number.client.css.map`, (request, response) => {
+      response.setHeader('Cache-Control', 'max-age=31536000, immutable')
+      response.contentType('application/json')
+      response.send(generateFile(`${request.params.number}.client.css.map`, server))
     })
   }
 
