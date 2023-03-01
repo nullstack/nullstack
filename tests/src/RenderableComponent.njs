@@ -28,6 +28,7 @@ class RenderableComponent extends Nullstack {
   render({ params }) {
     const list = params.shortList ? [1, 2, 3] : [1, 2, 3, 4, 5, 6]
     const html = '<a href="/"> Nullstack </a>'
+    const props = { disabled: true, 'aria-label': 'props' }
     return (
       <div class="RenderableComponent">
         <Falsy />
@@ -56,16 +57,17 @@ class RenderableComponent extends Nullstack {
         </head>
         {!!params.condition && <div class="condition"> conditionally rendered div </div>}
         <a params={{ shortList: true }} class="short-list">
-          {' '}
-          long list{' '}
+          long list
         </a>
         <a params={{ condition: true }} class="true-condition">
-          {' '}
-          long list{' '}
+          long list
         </a>
         <div data-condition={!!params.condition} />
         <div data-short-list={!!params.shortList} />
         <div data-name={this.name} />
+        <button {...props} onclick={() => {}}>
+          props
+        </button>
       </div>
     )
   }
