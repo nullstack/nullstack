@@ -8,6 +8,7 @@ function applyAliases(environments) {
   return environments.map((environment) => (...args) => {
     const config = environment(...args)
     config.resolve.alias._ = path.join(process.cwd(), '..', 'node_modules');
+    config.resolve.alias["terser"] = path.join(process.cwd(), '..', 'node_modules', '@swc/core');
     config.resolve.alias.webpack = path.join(process.cwd(), '..', 'node_modules', 'webpack');
     if (config.mode === 'production' && config.target === 'web') {
       config.plugins.push(

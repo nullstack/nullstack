@@ -32,7 +32,7 @@ class RenderableComponent extends Nullstack {
       <div class="RenderableComponent">
         <Falsy />
         <div data-object={{ a: 1 }} />
-        <div data-function={RenderableComponent} />
+        <div data-function={this.renderRenderableComponent} />
         <div> this is a normal tag </div>
         <label for="input"> label </label>
         <button disabled> disabled button </button>
@@ -42,7 +42,7 @@ class RenderableComponent extends Nullstack {
         <element class="element" tag={params.condition ? 'div' : 'span'}>
           element tag
         </element>
-        <InnerComponent reference={InnerReference}>
+        <InnerComponent reference={this.renderInnerReference}>
           <span class="children"> children </span>
         </InnerComponent>
         <ul>

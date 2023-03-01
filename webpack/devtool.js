@@ -1,6 +1,6 @@
 function devtool(options) {
   if (options.environment === 'development') {
-    return 'inline-cheap-module-source-map'
+    return 'hidden-cheap-module-source-map'
   } else {
     return 'source-map'
   }

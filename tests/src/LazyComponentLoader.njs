@@ -11,12 +11,15 @@ class LazyComponentLoader extends Nullstack {
   }
 
   async hydrate() {
-    LazyComponent = (await import('./LazyComponent')).default
+    this.LazyComponent = (await import('./LazyComponent')).default
+    console.log(LazyComponent)
+    this.should = true
   }
 
   render() {
-    if (!this.hydrated) return false
-    return <LazyComponent />
+    console.log("RENDER", this.LazyComponent)
+    if (!this.LazyComponent) return false
+    return <this.LazyComponent />
   }
 
 }

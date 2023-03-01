@@ -58,7 +58,7 @@ async function start({ port, env, disk, loader = 'swc' }) {
 
 function build({ output, cache, env, mode = 'ssr' }) {
   const environment = 'production'
-  const compiler = getCompiler({ environment, cache })
+  const compiler = getCompiler({ environment, cache, loader: 'swc' })
   if (env) {
     process.env.NULLSTACK_ENVIRONMENT_NAME = env
   }

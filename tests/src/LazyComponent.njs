@@ -14,8 +14,7 @@ class LazyComponent extends Nullstack {
   render() {
     return (
       <div data-lazy data-safelisted={this.safelisted}>
-        {' '}
-        LazyComponent{' '}
+        LazyComponent
       </div>
     )
   }

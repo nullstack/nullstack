@@ -1,8 +1,7 @@
 const TerserPlugin = require('terser-webpack-plugin')
-const swc = require('@swc/core')
 
 function terserMinimizer(file) {
-  return swc.minify(file, {
+  return require('@swc/core').minify(file, {
     mangle: false,
     compress: {
       unused: false,

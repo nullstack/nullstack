@@ -2,7 +2,7 @@ beforeAll(async () => {
   await page.goto('http://localhost:6969/element')
 })
 
-describe('FullStackLifecycle', () => {
+describe('Element', () => {
   test('elements can receive any tag b', async () => {
     const element = await page.$('b[data-tag="b"]')
     expect(element).toBeTruthy()

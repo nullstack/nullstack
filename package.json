@@ -46,5 +46,8 @@
     "webpack-dev-server": "4.11.1",
     "webpack-hot-middleware": "^2.25.3",
     "ws": "8.12.0"
+  },
+  "resolutions": {
+    "terser": "npm:@swc/core"
   }
 }

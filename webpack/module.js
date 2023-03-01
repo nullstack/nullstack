@@ -76,7 +76,7 @@ function swc(options, other) {
   if (options.target === 'server') {
     config.use.options.env.targets = { node: process.versions.node }
   } else if (options.environment === 'development') {
-    config.use.options.env.targets = 'last 1 version'
+    config.use.options.env.targets = 'es2022'
   } else {
     config.use.options.env.targets = 'defaults'
   }

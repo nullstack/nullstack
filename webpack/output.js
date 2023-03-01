@@ -9,6 +9,7 @@ function output(options) {
     hotUpdateChunkFilename: `nullstack-${options.target}-update-[id]-[fullhash].js`,
     hotUpdateMainFilename: `nullstack-${options.target}-update-[runtime]-[fullhash].json`,
     pathinfo: false,
+    libraryTarget: 'umd',
     clean: {
       keep(asset) {
         return options.environment === 'production' || !asset.includes(options.target)

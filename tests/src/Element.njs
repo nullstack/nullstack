@@ -29,7 +29,7 @@ class Element extends Nullstack {
             abbr
           </element>
         </element>
-        <element tag={InnerElement} prop />
+        <element tag={this.renderInnerElement} prop />
         <element tag={ClassElement} prop />
         <element tag={FunctionalElement} prop />
       </>
