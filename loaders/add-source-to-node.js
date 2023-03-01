@@ -13,7 +13,9 @@ module.exports = function (source) {
       if (path.parent.type === 'JSXAttribute') {
         if (path.node.name.startsWith('on')) {
           const element = path.findParent((p) => p.type === 'JSXOpeningElement' && p.node.attributes)
-          const hasSource = element.node.attributes.find((a) => a.name.name === 'source')
+          const hasSource = element.node.attributes.find((a) => {
+            return a.type === 'JSXAttribute' && a.name.name === 'source'
+          })
           if (!hasSource) {
             const start = element.node.attributes[0].start
             uniquePositions.add(start)
