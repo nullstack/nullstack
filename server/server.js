@@ -49,10 +49,15 @@ for (const method of ['get', 'post', 'put', 'patch', 'delete', 'all']) {
           params[key] = extractParamValue(request.query[key])
         }
         if (request.method !== 'GET') {
-          Object.assign(params, deserialize(request.body))
+          const payload = typeof request.body === 'object' ? JSON.stringify(request.body) : request.body
+          Object.assign(params, deserialize(payload))
         }
         try {
-          const subcontext = generateContext({ request, response, ...params })
+          const subcontext = generateContext({
+            request,
+            response,
+            ...params,
+          })
           const result = await args[1](subcontext)
           reqres.clear()
           response.json(result)
