@@ -63,6 +63,12 @@ describe('ServerFunctions', () => {
     expect(element).toBeTruthy()
   })
 
+  test('server functions starting with underline stay on server', async () => {
+    await page.waitForSelector('[data-underline-stay-on-server]')
+    const element = await page.$('[data-underline-stay-on-server]')
+    expect(element).toBeTruthy()
+  })
+
   test('static server functions receive the context on spa', async () => {
     await page.waitForSelector('[data-hydrated-original-url]')
     const element = await page.$('[data-hydrated-original-url]')
