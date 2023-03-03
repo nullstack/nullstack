@@ -9,6 +9,8 @@ function getOptions(target, options) {
   const projectFolder = process.cwd()
   const configFolder = __dirname
   const buildFolder = '.' + environment
+  const cache = !options.skipCache
+  const benchmark = !!options.benchmark
   return {
     target,
     disk,
@@ -16,6 +18,8 @@ function getOptions(target, options) {
     loader,
     entry,
     environment,
+    cache,
+    benchmark,
     projectFolder,
     configFolder
   }
@@ -23,7 +27,7 @@ function getOptions(target, options) {
 
 function config(platform, argv) {
   const options = getOptions(platform, argv);
-  return {
+  const config = {
     mode: require('./webpack/mode')(options),
     infrastructureLogging: require('./webpack/infrastructureLogging')(options),
     entry: require('./webpack/entry')(options),
@@ -39,6 +43,11 @@ function config(platform, argv) {
     module: require('./webpack/module')(options),
     plugins: require('./webpack/plugins')(options),
   }
+  if (options.benchmark && options.target === 'client') {
+    const { TimeAnalyticsPlugin } = require('time-analytics-webpack-plugin');
+    return TimeAnalyticsPlugin.wrap(config)
+  }
+  return config;
 }
 
 function server(_env, argv) {

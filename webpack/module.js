@@ -88,11 +88,8 @@ function swc(options, other) {
     config.use.options.jsc.parser[other.template] = true
   }
 
-  if (other.template) {
-    config.use.options.jsc.keepClassNames = true;
-  }
-
   config.use.options.jsc.transform = {
+    useDefineForClassFields: false,
     react: {
       pragma: '$runtime.element',
       pragmaFrag: '$runtime.fragment',

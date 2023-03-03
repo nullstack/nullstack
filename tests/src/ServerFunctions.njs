@@ -78,7 +78,7 @@ class ServerFunctions extends Nullstack {
   }
 
   async hydrate() {
-    this.underlineRemovedFromClient = true //!ServerFunctions._privateFunction
+    this.underlineRemovedFromClient = !ServerFunctions._privateFunction
     this.underlineStayOnServer = await ServerFunctions.getPrivateFunction()
     this.doublePlusOneClient = await ServerFunctions.getDoublePlusOne({ number: 34 })
     this.acceptsSpecialCharacters = await this.getEncodedString({ string: decodedString })

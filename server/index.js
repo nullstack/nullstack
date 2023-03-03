@@ -34,7 +34,7 @@ class Nullstack {
   static use = useServerPlugins
 
   static start(Starter) {
-    if (this.name.indexOf('Nullstack') > -1) {
+    if (this === Nullstack) {
       generator.starter = () => element(Starter)
       setTimeout(server.start, 0)
       return context

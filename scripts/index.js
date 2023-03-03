@@ -26,7 +26,7 @@ function loadEnv(env) {
   dotenv.config({ path: envPath })
 }
 
-async function start({ port, env, disk, loader = 'swc' }) {
+async function start({ port, env, disk, loader, skipCache }) {
   loadEnv(env)
   console.info(` 🚀️ Building your application in development mode...`)
   const environment = 'development'
@@ -42,7 +42,7 @@ async function start({ port, env, disk, loader = 'swc' }) {
   }
   if (!process.env.NULLSTACK_PROJECT_DOMAIN) process.env.NULLSTACK_PROJECT_DOMAIN = 'localhost'
   if (!process.env.NULLSTACK_WORKER_PROTOCOL) process.env.NULLSTACK_WORKER_PROTOCOL = 'http'
-  const settings = config[0](null, { environment, disk, loader })
+  const settings = config[0](null, { environment, disk, loader, skipCache })
   const compiler = webpack(settings)
   compiler.watch({ aggregateTimeout: 300, poll: 1000, hot: true, ignored: /node_modules/ }, (error, stats) => {
     if (error) {
@@ -56,9 +56,9 @@ async function start({ port, env, disk, loader = 'swc' }) {
   })
 }
 
-function build({ output, cache, env, mode = 'ssr' }) {
+function build({ mode = 'ssr', output, env, loader, skipCache, benchmark }) {
   const environment = 'production'
-  const compiler = getCompiler({ environment, cache, loader: 'swc' })
+  const compiler = getCompiler({ environment, loader, skipCache, benchmark })
   if (env) {
     process.env.NULLSTACK_ENVIRONMENT_NAME = env
   }
@@ -74,7 +74,7 @@ function build({ output, cache, env, mode = 'ssr' }) {
       process.exit(1)
     }
     if (stats.hasErrors()) process.exit(1)
-    require(`../builders/${mode}`)({ output, cache, environment })
+    require(`../builders/${mode}`)({ output, environment })
   })
 }
 
@@ -86,6 +86,7 @@ program
   .option('-e, --env <name>', 'Name of the environment file that should be loaded')
   .option('-d, --disk', 'Write files to disk')
   .addOption(new program.Option('-l, --loader <loader>', 'Use Babel or SWC loader').choices(['swc', 'babel']))
+  .option('-sc, --skip-cache', 'Skip loding and building cache in .development folder')
   .helpOption('-h, --help', 'Learn more about this command')
   .action(start)
 
@@ -95,8 +96,9 @@ program
   .description('Build application for production environment')
   .addOption(new program.Option('-m, --mode <mode>', 'Build production bundles').choices(['ssr', 'spa', 'ssg']))
   .option('-o, --output <output>', 'Path to build output folder')
-  .option('-c, --cache', 'Cache build results in .production folder')
   .option('-e, --env <name>', 'Name of the environment file that should be loaded')
+  .option('-sc, --skip-cache', 'Skip loding and building cache in .production folder')
+  .option('-b, --benchmark', 'Benchmark build process (experimental)')
   .helpOption('-h, --help', 'Learn more about this command')
   .action(build)
 

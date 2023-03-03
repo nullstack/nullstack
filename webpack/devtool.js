@@ -1,8 +1,8 @@
 function devtool(options) {
   if (options.environment === 'development') {
-    return 'hidden-cheap-module-source-map'
+    return 'eval-cheap-module-source-map'
   } else {
-    return 'source-map'
+    return 'hidden-source-map'
   }
 }
 

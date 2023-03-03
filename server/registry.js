@@ -2,6 +2,7 @@ const registry = {}
 export default registry
 import reqres from "./reqres"
 import { generateContext } from "./context"
+import Nullstack from '.'
 
 export function register(klass, functionName) {
   if (functionName) {
@@ -14,7 +15,7 @@ export function register(klass, functionName) {
 
 function bindStaticProps(klass) {
   let parent = klass
-  while (parent.name !== 'Nullstack') {
+  while (parent !== Nullstack) {
     const props = Object.getOwnPropertyNames(parent)
     for (const prop of props) {
       const underscored = prop.startsWith('_')
