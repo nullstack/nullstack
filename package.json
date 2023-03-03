@@ -2,7 +2,7 @@
   "name": "nullstack",
   "version": "0.17.4",
   "description": "Full Stack Javascript Components for one-dev armies",
-  "main": "nullstack.js",
+  "main": "./types/index.d.ts",
   "author": "Mortaro",
   "repository": "github:nullstack/nullstack",
   "homepage": "https://nullstack.app",
@@ -49,8 +49,5 @@
     "webpack-dev-server": "4.11.1",
     "webpack-hot-middleware": "^2.25.3",
     "ws": "8.12.0"
-  },
-  "resolutions": {
-    "terser": "npm:@swc/core"
   }
 }
