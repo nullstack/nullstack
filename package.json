@@ -43,6 +43,7 @@
     "sass-loader": "13.2.0",
     "style-loader": "^3.3.1",
     "swc-loader": "0.2.3",
+    "swc-plugin-nullstack": "github:nullstack/swc-plugin-nullstack",
     "terser-webpack-plugin": "5.3.6",
     "time-analytics-webpack-plugin": "^0.1.20",
     "webpack": "5.75.0",

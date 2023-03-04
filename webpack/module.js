@@ -63,7 +63,7 @@ function swc(options, other) {
     cacheRoot: path.posix.join(options.projectFolder, options.buildFolder, '.cache', '.swc'),
     plugins: [
       [
-        'C:/Repositories/experiments/nullstack/target/wasm32-wasi/release/nullstack.wasm',
+        require.resolve('swc-plugin-nullstack'),
         {
           development: options.environment === 'development',
           client: options.target === 'client',

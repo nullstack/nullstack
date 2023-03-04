@@ -87,6 +87,12 @@ describe('RenderableComponent', () => {
     const element = await page.$('[data-reference]')
     expect(element).toBeTruthy()
   })
+
+  test('inner components can be repeated', async () => {
+    const first = await page.$('[data-repeated="1"]')
+    const second = await page.$('[data-repeated="2"]')
+    expect(first && second).toBeTruthy()
+  })
 })
 
 describe('RenderableComponent ?condition=true', () => {

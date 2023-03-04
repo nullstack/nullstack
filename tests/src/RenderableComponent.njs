@@ -25,6 +25,10 @@ class RenderableComponent extends Nullstack {
     return false
   }
 
+  renderRepeated({ number }) {
+    return <div data-repeated={number} />
+  }
+
   render({ params }) {
     const list = params.shortList ? [1, 2, 3] : [1, 2, 3, 4, 5, 6]
     const html = '<a href="/"> Nullstack </a>'
@@ -65,9 +69,11 @@ class RenderableComponent extends Nullstack {
         <div data-condition={!!params.condition} />
         <div data-short-list={!!params.shortList} />
         <div data-name={this.name} />
-        <button {...props} onclick={() => {}}>
+        <button {...props} onclick={() => { }}>
           props
         </button>
+        <Repeated number={1} />
+        <Repeated number={2} />
       </div>
     )
   }
