@@ -12,7 +12,7 @@ function output(options) {
     libraryTarget: 'umd',
     clean: {
       keep(asset) {
-        return options.environment === 'production' || !asset.includes(options.target)
+        return asset.startsWith('.') || !asset.includes(options.target)
       },
     }
   }

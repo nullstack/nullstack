@@ -27,17 +27,18 @@ import FullStackLifecycle from './FullStackLifecycle'
 import Instanceable from './Instanceable'
 import InstanceKey from './InstanceKey'
 import InstanceSelf from './InstanceSelf'
-import IsomorphicImport from './IsomorphicImport.njs'
+import IsomorphicImport from './IsomorphicImport'
 import IsomorphicStartup from './IsomorphicStartup'
 import JavaScriptExtension from './JavaScriptExtension'
 import LazyComponentLoader from './LazyComponentLoader'
+import Logo from './Logo'
 import MetatagState from './MetatagState'
 import NestedProxy from './NestedProxy'
 import OptimizedEvents from './OptimizedEvents'
 import ParentComponent from './ParentComponent'
 import PersistentComponent from './PersistentComponent'
 import PluginAttributes from './PluginAttributes'
-import PublicServerFunctions from './PublicServerFunctions.njs'
+import PublicServerFunctions from './PublicServerFunctions'
 import PureComponents from './PureComponents'
 import Refs from './Refs'
 import RenderableComponent from './RenderableComponent'
@@ -141,6 +142,7 @@ class Application extends Nullstack {
         <ExposedServerFunctions route="/exposed-server-functions" />
         <CatchError route="/catch-error" />
         <ReqRes route="/reqres" />
+        <Logo route="/logo" />
         <ErrorPage route="*" />
       </body>
     )
