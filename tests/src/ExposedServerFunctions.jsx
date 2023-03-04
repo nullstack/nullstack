@@ -1,14 +1,14 @@
 import Nullstack from 'nullstack'
 
 async function api(method) {
-  const body = {
+  const payload = {
     number: 69,
     date: new Date(),
     string: 'nullstack',
   }
   const response = await fetch(`/data/${method}/param?query=query&truthy=true&falsy=false`, {
     method: method.toUpperCase(),
-    body: method === 'get' ? undefined : JSON.stringify(body),
+    ...(method !== 'get' && { body: JSON.stringify(payload) }),
   })
   const data = await response.json()
   return data.status
