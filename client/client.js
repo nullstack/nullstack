@@ -41,7 +41,11 @@ client.update = async function update() {
         client.processLifecycleQueues()
       } catch (e) {
         client.skipHotReplacement = true
-        console.error(e)
+        if (context.catch) {
+          context.catch(e)
+        } else {
+          throw error
+        }
       }
     }, 16)
   }

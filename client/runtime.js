@@ -12,8 +12,25 @@ const $runtime = {
 }
 
 if (module.hot) {
-  $runtime.accept = function accept(target, ...klasses) {
-    target.hot.accept();
+  $runtime.dependencies = new Map()
+
+  $runtime.accept = function accept(target, file, { klasses, dependencies }) {
+    target.hot.accept()
+    const old = $runtime.dependencies.get(file)
+    if (old) {
+      if (old.length !== dependencies.length) {
+        return window.location.reload()
+      }
+      for (const index in old) {
+        if (old[index] !== dependencies[index]) {
+          return window.location.reload()
+        }
+      }
+    }
+    $runtime.dependencies.set(file, dependencies)
+    if (client.skipHotReplacement) {
+      return window.location.reload()
+    }
     for (const klass of klasses) {
       for (const key in context.instances) {
         const instance = context.instances[key]
