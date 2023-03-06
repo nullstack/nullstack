@@ -8,7 +8,12 @@ async function api(method) {
   }
   const response = await fetch(`/data/${method}/param?query=query&truthy=true&falsy=false`, {
     method: method.toUpperCase(),
-    ...(method !== 'get' && { body: JSON.stringify(payload) }),
+    ...(method !== 'get' && {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    }),
   })
   const data = await response.json()
   return data.status
