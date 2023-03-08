@@ -1,7 +1,9 @@
 import context from './context'
 
 export default function (error) {
-  context.catch && context.catch(error)
+  if (context.catch) {
+    context.catch(error)
+  }
   const lines = error.stack.split(`\n`)
   let initiator = lines.find((line) => line.indexOf('Proxy') > -1)
   if (initiator) {

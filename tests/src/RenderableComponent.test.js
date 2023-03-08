@@ -115,6 +115,11 @@ describe('RenderableComponent ?condition=true', () => {
     const element = await page.$('div.element')
     expect(element).toBeTruthy()
   })
+
+  test('elements can spread props and have named attributes', async () => {
+    const element = await page.$('[disabled][aria-label="props"]')
+    expect(element).toBeTruthy()
+  })
 })
 
 describe('RenderableComponent ?shortList=true', () => {
