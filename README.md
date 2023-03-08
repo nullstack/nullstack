@@ -35,4 +35,4 @@ Get to know the [Nullstack Contributors](https://nullstack.app/contributors)
 
 ## License
 
-Nullstack is released under the [MIT License](https://opensource.org/licenses/MIT).
+Nullstack is released under the [MIT License](LICENSE).
