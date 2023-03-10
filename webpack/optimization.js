@@ -13,7 +13,8 @@ function js() {
   })
 }
 
-function css() {
+function css(options) {
+  if (options.target !== 'client') return false
   const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
   return new CssMinimizerPlugin({
     minify: CssMinimizerPlugin.lightningCssMinify,
@@ -23,7 +24,7 @@ function css() {
 function optimization(options) {
   return {
     minimize: options.environment === 'production',
-    minimizer: [js(), css()],
+    minimizer: [js(options), css(options)].filter(Boolean),
   }
 }
 
