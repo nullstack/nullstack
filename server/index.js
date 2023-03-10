@@ -13,8 +13,19 @@ import secrets from './secrets'
 import server from './server'
 import settings from './settings'
 import worker from './worker'
+import fetch from 'node-fetch'
 
 globalThis.window = {}
+
+if (!global.fetch) {
+  global.fetch = fetch
+}
+
+if (!global.location) {
+  global.location = {
+    href: '/',
+  }
+}
 
 context.server = server
 context.project = project
