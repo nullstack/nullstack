@@ -1,6 +1,6 @@
 import Nullstack from 'nullstack'
 
-async function api(method) {
+async function api(method, contentType = 'text/plain') {
   const payload = {
     number: 69,
     date: new Date(),
@@ -10,7 +10,7 @@ async function api(method) {
     method: method.toUpperCase(),
     ...(method !== 'get' && {
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': contentType,
       },
       body: JSON.stringify(payload),
     }),
@@ -43,22 +43,30 @@ class ExposedServerFunctions extends Nullstack {
   async hydrate() {
     this.chainableServerFunction = await chainable('server')
     this.chainableRegularFunction = await chainable('regular')
-    this.all = await api('get')
+    this.all = await api('get') // TODO we may remove this as it is the pretty much the same as get
     this.get = await api('get')
-    this.post = await api('post')
-    this.put = await api('put')
-    this.patch = await api('patch')
-    this.delete = await api('delete')
+    this.postTextPayload = await api('post')
+    this.postJsonPayload = await api('post', 'application/json')
+    this.putTextPayload = await api('put')
+    this.putJsonPayload = await api('put', 'application/json')
+    this.patchTextPayload = await api('patch')
+    this.patchJsonPayload = await api('patch', 'application/json')
+    this.deleteTextPayload = await api('delete')
+    this.deleteJsonPayload = await api('delete', 'application/json')
   }
 
   render() {
     return (
       <div
         data-get={this.get}
-        data-post={this.post}
-        data-put={this.put}
-        data-patch={this.patch}
-        data-delete={this.delete}
+        data-post={this.postTextPayload}
+        data-post-json={this.postJsonPayload}
+        data-put={this.putTextPayload}
+        data-put-json={this.putJsonPayload}
+        data-patch={this.patchTextPayload}
+        data-patch-json={this.patchJsonPayload}
+        data-delete={this.deleteTextPayload}
+        data-delete-json={this.deleteJsonPayload}
         data-all={this.all}
         data-chainable-server-function={this.chainableServerFunction}
         data-chainable-regular-function={this.chainableRegularFunction}
