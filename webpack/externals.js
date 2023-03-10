@@ -13,7 +13,7 @@ function server(options) {
     return {}
   }
   return {
-    'webpack/hot/poll': 'webpack/hot/poll?1000'
+    'webpack/hot/poll': 'webpack/hot/poll?100'
   }
 }
 

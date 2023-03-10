@@ -54,8 +54,7 @@ export default function hmr(server) {
     instance.waitUntilValid(() => {
       console.info(
         '\x1b[36m%s\x1b[0m',
-        ` ✅️ Your application is ready at http://${process.env.NULLSTACK_PROJECT_DOMAIN}:${
-          process.env.NULLSTACK_SERVER_PORT || process.env.PORT || 3000
+        ` ✅️ Your application is ready at http://${process.env.NULLSTACK_PROJECT_DOMAIN}:${process.env.NULLSTACK_SERVER_PORT || process.env.PORT || 3000
         }\n`,
       )
     })

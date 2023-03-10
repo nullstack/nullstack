@@ -39,10 +39,10 @@ client.update = async function update() {
         client.nextVirtualDom = await generateTree(client.initializer(), scope)
         rerender()
         client.processLifecycleQueues()
-      } catch (e) {
+      } catch (error) {
         client.skipHotReplacement = true
         if (context.catch) {
-          context.catch(e)
+          context.catch(error)
         } else {
           throw error
         }
