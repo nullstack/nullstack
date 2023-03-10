@@ -44,7 +44,7 @@ async function start({ port, env, disk, loader, skipCache }) {
   if (!process.env.NULLSTACK_WORKER_PROTOCOL) process.env.NULLSTACK_WORKER_PROTOCOL = 'http'
   const settings = config[0](null, { environment, disk, loader, skipCache })
   const compiler = webpack(settings)
-  compiler.watch({ aggregateTimeout: 200, ignored: /node_modules/ }, (error, stats) => {
+  compiler.watch({ aggregateTimeout: 200, hot: true, ignored: /node_modules/ }, (error, stats) => {
     if (error) {
       console.error(error.stack || error)
       if (error.details) {
