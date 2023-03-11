@@ -103,20 +103,3 @@ export default class Nullstack {
   }
 
 }
-
-// if (module.hot) {
-//   Nullstack.updateInstancesPrototypes = function updateInstancesPrototypes(klass, hash) {
-//     for (const key in context.instances) {
-//       const instance = context.instances[key]
-//       if (instance.constructor.hash === hash) {
-//         Object.setPrototypeOf(instance, klass.prototype)
-//       }
-//     }
-//     windowEvent('environment')
-//     client.update()
-//   }
-//   Nullstack.hotReload = function hotReload() {
-//     window.location.reload()
-//   }
-//   module.hot.decline()
-// }
