@@ -23,8 +23,8 @@
     "terser": "npm:@swc/core"
   },
   "scripts": {
-    "start": "node ../scripts/index.js start --port=6969 --env=test --disk",
-    "build": "node --enable-source-maps ../scripts/index.js  build --env=test",
+    "start": "node ../scripts/index.js start --port=6969 --name=test --disk",
+    "build": "node --enable-source-maps ../scripts/index.js  build --name=test",
     "clear": "rm -rf ../node_modules ../package-lock.json node_modules .development .production package-lock.json",
     "setup": "cd .. && npm install && cd tests && npm install",
     "test": "npm run build && jest --runInBand",

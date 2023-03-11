@@ -10,6 +10,7 @@ function getOptions(target, options) {
   const configFolder = __dirname
   const buildFolder = '.' + environment
   const cache = !options.skipCache
+  const name = options.name || ''
   const benchmark = !!options.benchmark
   return {
     target,
@@ -19,6 +20,7 @@ function getOptions(target, options) {
     entry,
     environment,
     cache,
+    name,
     benchmark,
     projectFolder,
     configFolder

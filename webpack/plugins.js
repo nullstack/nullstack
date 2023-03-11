@@ -31,9 +31,10 @@ function nodemon(options) {
   if (options.target !== 'server') return false
 
   const NodemonPlugin = require('nodemon-webpack-plugin')
+  const dotenv = options.name ? `.env.${options.name}` : '.env'
   return new NodemonPlugin({
     ext: '*',
-    watch: ['.env', '.env.*', './server.js'],
+    watch: [dotenv, './server.js'],
     script: './.development/server.js',
     nodeArgs: ['--enable-source-maps'],
     quiet: true,
