@@ -35,13 +35,14 @@ if (module.hot) {
       for (const key in context.instances) {
         const instance = context.instances[key]
         if (instance.constructor.hash === declaration.klass.hash) {
+          const shouldInitiate = instance.constructor.__initiator !== undefined && instance.constructor.__initiator !== declaration.initiate
           Object.setPrototypeOf(instance, declaration.klass.prototype)
-          if (instance.__initiator !== undefined && instance.__initiator !== declaration.initiate) {
+          if (shouldInitiate) {
             instance.initiate()
           }
-          instance.__initiator = declaration.initiate
         }
       }
+      declaration.klass.__initiator = declaration.initiate
     }
     windowEvent('environment')
     client.update()
