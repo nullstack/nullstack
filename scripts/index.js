@@ -26,6 +26,17 @@ function loadEnv(name) {
   dotenv.config({ path: envPath })
 }
 
+function clearDir() {
+  if (existsSync(path.join(process.cwd(), '.development'))) {
+    const tempFiles = readdirSync(path.join(process.cwd(), '.development'))
+    for (const file of tempFiles) {
+      if (file !== '.cache') {
+        unlinkSync(path.join(process.cwd(), '.development', file))
+      }
+    }
+  }
+}
+
 async function start({ port, name, disk, loader, skipCache }) {
   loadEnv(name)
   console.info(` 🚀️ Building your application in development mode...`)
@@ -44,12 +55,7 @@ async function start({ port, name, disk, loader, skipCache }) {
   if (!process.env.NULLSTACK_WORKER_PROTOCOL) process.env.NULLSTACK_WORKER_PROTOCOL = 'http'
   const settings = config[0](null, { environment, disk, loader, skipCache, name })
   const compiler = webpack(settings)
-  const tempFiles = readdirSync(path.join(process.cwd(), '.development'))
-  for (const file of tempFiles) {
-    if (file !== '.cache') {
-      unlinkSync(path.join(process.cwd(), '.development', file))
-    }
-  }
+  clearDir()
   compiler.watch({ aggregateTimeout: 200, hot: true, ignored: /node_modules/ }, (error, stats) => {
     if (error) {
       console.error(error.stack || error)
