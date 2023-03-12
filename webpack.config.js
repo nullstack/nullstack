@@ -4,7 +4,6 @@ const path = require('path')
 function getOptions(target, options) {
   const disk = !!options.disk;
   const environment = options.environment
-  const loader = options.loader || 'swc'
   const entry = existsSync(path.posix.join(process.cwd(), `${target}.ts`)) ? `./${target}.ts` : `./${target}.js`
   const projectFolder = process.cwd()
   const configFolder = __dirname
@@ -16,7 +15,6 @@ function getOptions(target, options) {
     target,
     disk,
     buildFolder,
-    loader,
     entry,
     environment,
     cache,

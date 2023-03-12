@@ -162,17 +162,8 @@ function runtime(options) {
   }
 }
 
-function debug(options) {
-  if (options.target === 'client') return
-  return {
-    test: /\.(nts|tsx|njs|jsx)$/,
-    loader: path.posix.join(options.configFolder, 'loaders', 'debug.js'),
-  }
-}
-
 function rules(options) {
   return [
-    debug(options),
     css(options),
     scss(options),
     js(options),

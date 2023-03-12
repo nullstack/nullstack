@@ -35,7 +35,6 @@ export default function hmr(server) {
       environment: process.env.__NULLSTACK_CLI_ENVIRONMENT,
       input: process.env.__NULLSTACK_CLI_INPUT,
       disk,
-      loader: process.env.__NULLSTACK_CLI_LOADER,
     })
     const compiler = webpack(webpackConfig)
 

@@ -37,7 +37,7 @@ function clearDir() {
   }
 }
 
-async function start({ port, name, disk, loader, skipCache }) {
+async function start({ port, name, disk, skipCache }) {
   loadEnv(name)
   console.info(` 🚀️ Building your application in development mode...`)
   const environment = 'development'
@@ -49,11 +49,10 @@ async function start({ port, name, disk, loader, skipCache }) {
   }
   if (port) {
     process.env.NULLSTACK_SERVER_PORT = port
-    process.env.__NULLSTACK_CLI_LOADER = environment
   }
   if (!process.env.NULLSTACK_PROJECT_DOMAIN) process.env.NULLSTACK_PROJECT_DOMAIN = 'localhost'
   if (!process.env.NULLSTACK_WORKER_PROTOCOL) process.env.NULLSTACK_WORKER_PROTOCOL = 'http'
-  const settings = config[0](null, { environment, disk, loader, skipCache, name })
+  const settings = config[0](null, { environment, disk, skipCache, name })
   const compiler = webpack(settings)
   clearDir()
   compiler.watch({ aggregateTimeout: 200, hot: true, ignored: /node_modules/ }, (error, stats) => {
@@ -68,9 +67,9 @@ async function start({ port, name, disk, loader, skipCache }) {
   })
 }
 
-function build({ mode = 'ssr', output, name, loader, skipCache, benchmark }) {
+function build({ mode = 'ssr', output, name, skipCache, benchmark }) {
   const environment = 'production'
-  const compiler = getCompiler({ environment, loader, skipCache, benchmark, name })
+  const compiler = getCompiler({ environment, skipCache, benchmark, name })
   if (name) {
     process.env.NULLSTACK_ENVIRONMENT_NAME = name
   }
@@ -97,7 +96,6 @@ program
   .option('-p, --port <port>', 'Port number to run the server')
   .option('-n, --name <name>', 'Name of the environment. Affects which .env file that will be loaded')
   .option('-d, --disk', 'Write files to disk')
-  .addOption(new program.Option('-l, --loader <loader>', 'Use Babel or SWC loader').choices(['swc', 'babel']))
   .option('-sc, --skip-cache', 'Skip loding and building cache in .development folder')
   .helpOption('-h, --help', 'Learn more about this command')
   .action(start)
