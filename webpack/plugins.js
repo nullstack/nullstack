@@ -41,12 +41,29 @@ function nodemon(options) {
   })
 }
 
+function wait(options) {
+  if (options.target !== 'server') return
+  if (options.environment !== 'development') return
+
+  const { writeFile } = require('fs')
+  const path = require('path')
+  class WaitCompilerPlugin {
+    apply(compiler) {
+      compiler.hooks.watchRun.tap('WaitCompilerPlugin', () => {
+        writeFile(path.join(options.buildFolder, '.compiling'), '', () => { })
+      });
+    }
+  }
+  return new WaitCompilerPlugin()
+}
+
 function plugins(options) {
   return [
     css(options),
     hmr(options),
     copy(options),
-    nodemon(options)
+    nodemon(options),
+    wait(options),
   ].filter(Boolean)
 }
 

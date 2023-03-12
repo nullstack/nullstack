@@ -1,6 +1,18 @@
 /* eslint-disable nullstack/no-undef */
-import { existsSync } from 'fs'
+import { existsSync, open } from 'fs'
 import path from 'path'
+
+function waitCompiler(next) {
+  open(path.join(__dirname, '.compiling'), (error, exists) => {
+    if (!exists) {
+      next()
+    } else {
+      setTimeout(() => {
+        waitCompiler(next)
+      }, 100)
+    }
+  })
+}
 
 export default function hmr(server) {
   if (module.hot) {
@@ -46,7 +58,7 @@ export default function hmr(server) {
           console.info(`  🕸️ [${request.method}] ${request.originalUrl}`)
         }
       }
-      next()
+      waitCompiler(next)
     })
 
     const instance = webpackDevMiddleware(compiler, webpackDevMiddlewareOptions)

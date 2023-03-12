@@ -26,7 +26,7 @@ client.nextHead = []
 client.head = document.head
 client.body = document.body
 
-client.update = async function update() {
+client.update = function update() {
   if (client.initialized) {
     clearInterval(client.renderQueue)
     client.renderQueue = setTimeout(async () => {

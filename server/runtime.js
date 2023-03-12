@@ -13,6 +13,7 @@ const $runtime = {
 if (module.hot) {
   $runtime.accept = function accept(target) {
     target.hot.accept();
+    require('fs').unlink(require('path').join(__dirname, '.compiling'), () => { })
   }
 
   $runtime.restart = function restart(target, path, klass) {

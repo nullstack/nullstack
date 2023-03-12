@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 const { program } = require('commander')
 const dotenv = require('dotenv')
-const { existsSync } = require('fs')
+const { existsSync, readdirSync, unlinkSync } = require('fs')
 const path = require('path')
 const webpack = require(`webpack`)
 
@@ -44,6 +44,12 @@ async function start({ port, name, disk, loader, skipCache }) {
   if (!process.env.NULLSTACK_WORKER_PROTOCOL) process.env.NULLSTACK_WORKER_PROTOCOL = 'http'
   const settings = config[0](null, { environment, disk, loader, skipCache, name })
   const compiler = webpack(settings)
+  const tempFiles = readdirSync(path.join(process.cwd(), '.development'))
+  for (const file of tempFiles) {
+    if (file !== '.cache') {
+      unlinkSync(path.join(process.cwd(), '.development', file))
+    }
+  }
   compiler.watch({ aggregateTimeout: 200, hot: true, ignored: /node_modules/ }, (error, stats) => {
     if (error) {
       console.error(error.stack || error)
