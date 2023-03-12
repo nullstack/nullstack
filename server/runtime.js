@@ -11,11 +11,11 @@ const $runtime = {
 }
 
 if (module.hot) {
-  $runtime.accept = function accept(target, ...klasses) {
+  $runtime.accept = function accept(target) {
     target.hot.accept();
   }
 
-  $runtime.restart = function restart(target, path) {
+  $runtime.restart = function restart(target, path, klass) {
     target.hot.accept()
     target.hot.accept(path, () => {
       Nullstack.start(klass)

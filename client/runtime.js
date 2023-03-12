@@ -14,7 +14,7 @@ const $runtime = {
 if (module.hot) {
   $runtime.dependencies = new Map()
 
-  $runtime.accept = function accept(target, file, { klasses, dependencies }) {
+  $runtime.accept = function accept(target, file, dependencies, declarations) {
     target.hot.accept()
     const old = $runtime.dependencies.get(file)
     if (old) {
@@ -31,11 +31,15 @@ if (module.hot) {
     if (client.skipHotReplacement) {
       return window.location.reload()
     }
-    for (const klass of klasses) {
+    for (const declaration of declarations) {
       for (const key in context.instances) {
         const instance = context.instances[key]
-        if (instance.constructor.hash === klass.hash) {
-          Object.setPrototypeOf(instance, klass.prototype)
+        if (instance.constructor.hash === declaration.klass.hash) {
+          Object.setPrototypeOf(instance, declaration.klass.prototype)
+          if (instance.__initiator !== undefined && instance.__initiator !== declaration.initiate) {
+            instance.initiate()
+          }
+          instance.__initiator = declaration.initiate
         }
       }
     }

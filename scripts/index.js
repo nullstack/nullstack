@@ -21,7 +21,7 @@ function getCompiler(options) {
 function loadEnv(name) {
   let envPath = '.env'
   if (name) {
-    envPath += `.${env}`
+    envPath += `.${name}`
   }
   dotenv.config({ path: envPath })
 }
@@ -33,7 +33,7 @@ async function start({ port, name, disk, loader, skipCache }) {
   process.env.NULLSTACK_ENVIRONMENT_MODE = 'spa'
   process.env.NULLSTACK_ENVIRONMENT_DISK = (!!disk).toString()
   process.env.__NULLSTACK_CLI_ENVIRONMENT = environment
-  if (env) {
+  if (name) {
     process.env.NULLSTACK_ENVIRONMENT_NAME = name
   }
   if (port) {
