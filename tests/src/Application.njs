@@ -30,7 +30,7 @@ import InstanceSelf from './InstanceSelf'
 import IsomorphicImport from './IsomorphicImport'
 import IsomorphicStartup from './IsomorphicStartup'
 import JavaScriptExtension from './JavaScriptExtension'
-import LazyComponentLoader from './LazyComponentLoader'
+// import LazyComponentLoader from './LazyComponentLoader'
 import Logo from './Logo'
 import MetatagState from './MetatagState'
 import NestedProxy from './NestedProxy'
@@ -59,11 +59,29 @@ import Vunerability from './Vunerability'
 import WebpackCustomPlugin from './WebpackCustomPlugin'
 import WindowDependency from './WindowDependency'
 import WorkerVerbs from './WorkerVerbs'
+import LazyComponent from './LazyComponent.njs'
+
+let CachedLazyComponent
+function LazyImporter() {
+  if (!CachedLazyComponent) {
+    CachedLazyComponent = import('./LazyComponent')
+    CachedLazyComponent.then((mod) => CachedLazyComponent = mod.default)
+    return false
+  }
+  if (CachedLazyComponent instanceof Promise) {
+    return false
+  }
+  return <CachedLazyComponent />
+}
 
 class Application extends Nullstack {
 
   async changeInstanceable({ instances }) {
     await instances.instanceable.customMethod()
+  }
+
+  static async safelist() {
+    console.log(LazyComponent)
   }
 
   prepare(context) {
@@ -77,6 +95,8 @@ class Application extends Nullstack {
         <h1> {project.name} </h1>
         {page.status !== 200 && <div route="*" data-page-status={page.status} />}
         <div route="/">
+          <a href="/lazy-component"> go lazy go home </a>
+          <a href="/lazy-importer"> import </a>
           <a href={`/nullstack/${environment.key}/offline`}> offline </a>
           <a href="/static-this"> static this </a>
           <a href="/routes-and-params/a"> router with params </a>
@@ -87,6 +107,7 @@ class Application extends Nullstack {
           <a href="/error-on-child-node?serialization=true"> error-on-child-node?serialization=true </a>
           <a href="/route-scroll/class?changed=1#bottom">#bottom</a>
         </div>
+        <LazyImporter route="/lazy-importer" />
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
         <FullStackLifecycle route="/full-stack-lifecycle" />
@@ -121,7 +142,7 @@ class Application extends Nullstack {
         <IsomorphicStartup route="/isomorphic-startup" />
         <WorkerVerbs route="/worker-verbs" />
         <TypeScript route="/typescript" />
-        <LazyComponentLoader route="/lazy-component" />
+        {/* <LazyComponentLoader route="/lazy-component" /> */}
         <PublicServerFunctions key="publicServerFunctions" />
         <ExternalServerFunctions route="/external-server-functions" />
         <UndefinedNodes route="/undefined-nodes" />

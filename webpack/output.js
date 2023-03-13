@@ -10,11 +10,12 @@ function output(options) {
     hotUpdateMainFilename: `nullstack-${options.target}-update-[runtime]-[fullhash].json`,
     pathinfo: false,
     libraryTarget: 'umd',
-    clean: {
-      keep(asset) {
-        return asset.startsWith('.') || !asset.includes(options.target)
-      },
-    }
+    clean: false,
+    //  {
+    //   keep(asset) {
+    //     return asset.startsWith('.') || !asset.includes(options.target)
+    //   },
+    // }
   }
 }
 

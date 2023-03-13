@@ -1,7 +1,6 @@
 import element from '../shared/element'
 import fragment from '../shared/fragment'
 import { register } from './registry'
-
 import Nullstack from './index'
 
 const $runtime = {
@@ -11,9 +10,11 @@ const $runtime = {
 }
 
 if (module.hot) {
-  $runtime.accept = function accept(target) {
+  $runtime.accept = function accept(target, _file, _dependencies, declarations) {
     target.hot.accept();
-    require('fs').unlink(require('path').join(__dirname, '.compiling'), () => { })
+    for (const declaration of declarations) {
+      declaration.klass.__hashes = declaration.hashes
+    }
   }
 
   $runtime.restart = function restart(target, path, klass) {

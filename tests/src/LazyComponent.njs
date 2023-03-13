@@ -4,7 +4,7 @@ import './LazyComponent.css'
 class LazyComponent extends Nullstack {
 
   static async serverFunctionWorks() {
-    return true
+    return 1
   }
 
   async initiate() {
@@ -14,7 +14,7 @@ class LazyComponent extends Nullstack {
   render() {
     return (
       <div data-lazy data-safelisted={this.safelisted}>
-        LazyComponent
+        LazyComponent: {this.safelisted}!!!
       </div>
     )
   }

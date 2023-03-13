@@ -150,6 +150,54 @@ server.start = function () {
     }
   })
 
+  if (environment.development) {
+    server.all(`/${prefix}/:version/:hash/:methodName.json`, async (request, response) => {
+      const payload = request.method === 'GET' ? request.query.payload : request.body
+      reqres.set(request, response)
+      const args = deserialize(payload)
+      const { version, hash, methodName } = request.params
+      const [invokerHash, boundHash] = hash.split('-')
+      const key = `${invokerHash}.${methodName}`
+      let invokerKlass;
+      async function reply() {
+        let boundKlass = invokerKlass
+        if (boundHash) {
+          boundKlass = registry[boundHash]
+          if (!(boundKlass.prototype instanceof invokerKlass)) {
+            return response.status(401).json({})
+          }
+        }
+        const method = registry[key]
+        if (method !== undefined) {
+          try {
+            const subcontext = generateContext({ request, response, ...args })
+            const result = await method.call(boundKlass, subcontext)
+            reqres.clear()
+            response.json({ result })
+          } catch (error) {
+            printError(error)
+            reqres.clear()
+            response.status(500).json({})
+          }
+        } else {
+          reqres.clear()
+          response.status(404).json({})
+        }
+      }
+      async function delay() {
+        invokerKlass = registry[invokerHash]
+        if (invokerKlass.__hashes[methodName] !== version) {
+          setTimeout(() => {
+            delay()
+          }, 200)
+        } else {
+          reply()
+        }
+      }
+      delay()
+    })
+  }
+
   server.get('*', async (request, response, next) => {
     if (request.originalUrl.split('?')[0].indexOf('.') > -1) {
       return next()
