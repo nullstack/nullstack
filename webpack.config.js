@@ -42,12 +42,7 @@ function config(platform, argv) {
     cache: require('./webpack/cache')(options),
     module: require('./webpack/module')(options),
     plugins: require('./webpack/plugins')(options),
-    experiments: {
-      lazyCompilation: {
-        entries: false,
-        imports: true
-      }
-    }
+    experiments: require('./webpack/experiments')(options),
   }
   if (options.benchmark && options.target === 'client') {
     const { TimeAnalyticsPlugin } = require('time-analytics-webpack-plugin');
