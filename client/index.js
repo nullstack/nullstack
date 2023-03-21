@@ -14,7 +14,6 @@ import rerender from './rerender'
 import router from './router'
 import settings from './settings'
 import state from './state'
-import windowEvent from './windowEvent'
 import worker from './worker'
 
 context.page = page

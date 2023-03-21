@@ -1,5 +1,5 @@
 function experiments(options) {
-  if (options.environment !== 'development') return false
+  if (options.environment !== 'development') return
   return {
     lazyCompilation: {
       entries: false,

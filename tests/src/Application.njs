@@ -1,7 +1,6 @@
 import Nullstack from 'nullstack'
 
 import AnchorModifiers from './AnchorModifiers'
-import './Application.css'
 import ArrayAttributes from './ArrayAttributes'
 import BodyFragment from './BodyFragment'
 import CatchError from './CatchError'
@@ -40,12 +39,12 @@ import PersistentComponent from './PersistentComponent'
 import PluginAttributes from './PluginAttributes'
 import PublicServerFunctions from './PublicServerFunctions'
 import PureComponents from './PureComponents'
-import Refs from './Refs'
+// import Refs from './Refs'
 import RenderableComponent from './RenderableComponent'
 import ReqRes from './ReqRes'
 import RoutesAndParams from './RoutesAndParams'
 import RouteScroll from './RouteScroll'
-import ServerFunctions from './ServerFunctions'
+// import ServerFunctions from './ServerFunctions'
 import ServerRequestAndResponse from './ServerRequestAndResponse'
 import StatefulComponent from './StatefulComponent'
 import StaticThis from './StaticThis'
@@ -57,31 +56,20 @@ import UndefinedNodes from './UndefinedNodes'
 import UnderscoredAttributes from './UnderscoredAttributes'
 import Vunerability from './Vunerability'
 import WebpackCustomPlugin from './WebpackCustomPlugin'
-import WindowDependency from './WindowDependency'
+// import WindowDependency from './WindowDependency'
 import WorkerVerbs from './WorkerVerbs'
-import LazyComponent from './LazyComponent.njs'
+import $runtime2 from 'nullstack/runtime'
+import './Application.css'
 
-let CachedLazyComponent
-function LazyImporter() {
-  if (!CachedLazyComponent) {
-    CachedLazyComponent = import('./LazyComponent')
-    CachedLazyComponent.then((mod) => CachedLazyComponent = mod.default)
-    return false
-  }
-  if (CachedLazyComponent instanceof Promise) {
-    return false
-  }
-  return <CachedLazyComponent />
-}
+
+// const LazyComponent = $runtime2.lazy(module.hot ? 'src__LazyComponent__njs' : 'ef60d95e', () => import('./LazyComponent'))
+const ServerFunctions = $runtime2.lazy('src__ServerFunctions__njs', () => import('./ServerFunctions'))
+const Refs = $runtime2.lazy('src__Refs__njs', () => import('./Refs'))
 
 class Application extends Nullstack {
 
   async changeInstanceable({ instances }) {
     await instances.instanceable.customMethod()
-  }
-
-  static async safelist() {
-    console.log(LazyComponent)
   }
 
   prepare(context) {
@@ -91,7 +79,7 @@ class Application extends Nullstack {
 
   render({ project, page, environment, refInstanceCount }) {
     return (
-      <body data-window={WindowDependency.key} data-application-hydrated={this.hydrated}>
+      <body data-application-hydrated={this.hydrated}>
         <h1> {project.name} </h1>
         {page.status !== 200 && <div route="*" data-page-status={page.status} />}
         <div route="/">
@@ -107,7 +95,7 @@ class Application extends Nullstack {
           <a href="/error-on-child-node?serialization=true"> error-on-child-node?serialization=true </a>
           <a href="/route-scroll/class?changed=1#bottom">#bottom</a>
         </div>
-        <LazyImporter route="/lazy-importer" />
+        {/* <LazyComponent route="/lazy-importer" prop="works" /> */}
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
         <FullStackLifecycle route="/full-stack-lifecycle" />

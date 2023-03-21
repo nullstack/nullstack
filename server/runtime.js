@@ -1,12 +1,14 @@
 import element from '../shared/element'
 import fragment from '../shared/fragment'
 import { register } from './registry'
+import lazy from './lazy'
 import Nullstack from './index'
 
 const $runtime = {
   element,
   fragment,
-  register
+  register,
+  lazy
 }
 
 if (module.hot) {

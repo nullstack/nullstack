@@ -17,6 +17,7 @@ import reqres from './reqres'
 import generateRobots from './robots'
 import template from './template'
 import { generateServiceWorker } from './worker'
+import { load } from './lazy'
 
 const server = express()
 
@@ -124,6 +125,7 @@ server.start = function () {
     const { hash, methodName } = request.params
     const [invokerHash, boundHash] = hash.split('-')
     const key = `${invokerHash}.${methodName}`
+    await load(boundHash || invokerHash)
     const invokerKlass = registry[invokerHash]
     let boundKlass = invokerKlass
     if (boundHash) {
@@ -159,6 +161,7 @@ server.start = function () {
       const [invokerHash, boundHash] = hash.split('-')
       const key = `${invokerHash}.${methodName}`
       let invokerKlass;
+      await load(boundHash || invokerHash)
       async function reply() {
         let boundKlass = invokerKlass
         if (boundHash) {
@@ -189,7 +192,7 @@ server.start = function () {
         if (invokerKlass.__hashes[methodName] !== version) {
           setTimeout(() => {
             delay()
-          }, 200)
+          }, 0)
         } else {
           reply()
         }

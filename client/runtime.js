@@ -4,11 +4,13 @@ import invoke from './invoke'
 import context from './context'
 import windowEvent from './windowEvent'
 import client from './client'
+import lazy from './lazy'
 
 const $runtime = {
   element,
   fragment,
   invoke,
+  lazy
 }
 
 if (module.hot) {
@@ -49,6 +51,7 @@ if (module.hot) {
           }
         }
       }
+      client.klasses[declaration.klass.hash] = declaration.klass
       declaration.klass.__hashes = declaration.hashes
     }
     windowEvent('environment')
