@@ -29,7 +29,6 @@ import InstanceSelf from './InstanceSelf'
 import IsomorphicImport from './IsomorphicImport'
 import IsomorphicStartup from './IsomorphicStartup'
 import JavaScriptExtension from './JavaScriptExtension'
-// import LazyComponentLoader from './LazyComponentLoader'
 import Logo from './Logo'
 import MetatagState from './MetatagState'
 import NestedProxy from './NestedProxy'
@@ -39,12 +38,12 @@ import PersistentComponent from './PersistentComponent'
 import PluginAttributes from './PluginAttributes'
 import PublicServerFunctions from './PublicServerFunctions'
 import PureComponents from './PureComponents'
-// import Refs from './Refs'
+import Refs from './Refs'
 import RenderableComponent from './RenderableComponent'
 import ReqRes from './ReqRes'
 import RoutesAndParams from './RoutesAndParams'
 import RouteScroll from './RouteScroll'
-// import ServerFunctions from './ServerFunctions'
+import ServerFunctions from './ServerFunctions'
 import ServerRequestAndResponse from './ServerRequestAndResponse'
 import StatefulComponent from './StatefulComponent'
 import StaticThis from './StaticThis'
@@ -56,15 +55,8 @@ import UndefinedNodes from './UndefinedNodes'
 import UnderscoredAttributes from './UnderscoredAttributes'
 import Vunerability from './Vunerability'
 import WebpackCustomPlugin from './WebpackCustomPlugin'
-// import WindowDependency from './WindowDependency'
 import WorkerVerbs from './WorkerVerbs'
-import $runtime2 from 'nullstack/runtime'
 import './Application.css'
-
-
-// const LazyComponent = $runtime2.lazy(module.hot ? 'src__LazyComponent__njs' : 'ef60d95e', () => import('./LazyComponent'))
-const ServerFunctions = $runtime2.lazy('src__ServerFunctions__njs', () => import('./ServerFunctions'))
-const Refs = $runtime2.lazy('src__Refs__njs', () => import('./Refs'))
 
 class Application extends Nullstack {
 
@@ -95,7 +87,7 @@ class Application extends Nullstack {
           <a href="/error-on-child-node?serialization=true"> error-on-child-node?serialization=true </a>
           <a href="/route-scroll/class?changed=1#bottom">#bottom</a>
         </div>
-        {/* <LazyComponent route="/lazy-importer" prop="works" /> */}
+        <LazyComponent route="/lazy-importer" prop="works" />
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
         <FullStackLifecycle route="/full-stack-lifecycle" />

@@ -163,7 +163,7 @@ function runtime(options) {
 }
 
 function debug(options) {
-  if (options.environment !== 'server') return
+  if (options.target !== 'server') return
   return {
     test: /\.(nts|tsx|njs|jsx)$/,
     loader: path.posix.join(options.configFolder, 'loaders', 'debug.js'),
