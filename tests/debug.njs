@@ -1,63 +1,66 @@
 import $runtime from "nullstack/runtime";
 import Nullstack from "nullstack";
-const AnchorModifiers = $runtime.lazy("src__AnchorModifiers", ()=>import("./AnchorModifiers"));
-const ArrayAttributes = $runtime.lazy("src__ArrayAttributes", ()=>import("./ArrayAttributes"));
-const BodyFragment = $runtime.lazy("src__BodyFragment", ()=>import("./BodyFragment"));
-const CatchError = $runtime.lazy("src__CatchError", ()=>import("./CatchError"));
-const ChildComponent = $runtime.lazy("src__ChildComponent", ()=>import("./ChildComponent"));
-const ComponentTernary = $runtime.lazy("src__ComponentTernary", ()=>import("./ComponentTernary"));
-const Context = $runtime.lazy("src__Context", ()=>import("./Context"));
-const ContextData = $runtime.lazy("src__ContextData", ()=>import("./ContextData"));
-const ContextEnvironment = $runtime.lazy("src__ContextEnvironment", ()=>import("./ContextEnvironment"));
-const ContextPage = $runtime.lazy("src__ContextPage", ()=>import("./ContextPage"));
-const ContextProject = $runtime.lazy("src__ContextProject", ()=>import("./ContextProject"));
-const ContextSecrets = $runtime.lazy("src__ContextSecrets", ()=>import("./ContextSecrets"));
-const ContextSettings = $runtime.lazy("src__ContextSettings", ()=>import("./ContextSettings"));
-const ContextWorker = $runtime.lazy("src__ContextWorker", ()=>import("./ContextWorker"));
-const DateParser = $runtime.lazy("src__DateParser", ()=>import("./DateParser"));
-const DynamicHead = $runtime.lazy("src__DynamicHead", ()=>import("./DynamicHead"));
-const Element = $runtime.lazy("src__Element", ()=>import("./Element"));
-const ErrorOnChildNode = $runtime.lazy("src__ErrorOnChildNode", ()=>import("./ErrorOnChildNode"));
-const ErrorPage = $runtime.lazy("src__ErrorPage", ()=>import("./ErrorPage"));
-const ExposedServerFunctions = $runtime.lazy("src__ExposedServerFunctions", ()=>import("./ExposedServerFunctions"));
-const ExternalServerFunctions = $runtime.lazy("src__ExternalServerFunctions", ()=>import("./ExternalServerFunctions"));
-const FalsyNodes = $runtime.lazy("src__FalsyNodes", ()=>import("./FalsyNodes"));
-const FullStackLifecycle = $runtime.lazy("src__FullStackLifecycle", ()=>import("./FullStackLifecycle"));
-const Instanceable = $runtime.lazy("src__Instanceable", ()=>import("./Instanceable"));
-const InstanceKey = $runtime.lazy("src__InstanceKey", ()=>import("./InstanceKey"));
-const InstanceSelf = $runtime.lazy("src__InstanceSelf", ()=>import("./InstanceSelf"));
-const IsomorphicImport = $runtime.lazy("src__IsomorphicImport", ()=>import("./IsomorphicImport"));
-const IsomorphicStartup = $runtime.lazy("src__IsomorphicStartup", ()=>import("./IsomorphicStartup"));
-const JavaScriptExtension = $runtime.lazy("src__JavaScriptExtension", ()=>import("./JavaScriptExtension"));
-const Logo = $runtime.lazy("src__Logo", ()=>import("./Logo"));
-const MetatagState = $runtime.lazy("src__MetatagState", ()=>import("./MetatagState"));
-const NestedProxy = $runtime.lazy("src__NestedProxy", ()=>import("./NestedProxy"));
-const OptimizedEvents = $runtime.lazy("src__OptimizedEvents", ()=>import("./OptimizedEvents"));
-const ParentComponent = $runtime.lazy("src__ParentComponent", ()=>import("./ParentComponent"));
-const PersistentComponent = $runtime.lazy("src__PersistentComponent", ()=>import("./PersistentComponent"));
-const PluginAttributes = $runtime.lazy("src__PluginAttributes", ()=>import("./PluginAttributes"));
-const PublicServerFunctions = $runtime.lazy("src__PublicServerFunctions", ()=>import("./PublicServerFunctions"));
-const PureComponents = $runtime.lazy("src__PureComponents", ()=>import("./PureComponents"));
-const Refs = $runtime.lazy("src__Refs", ()=>import("./Refs"));
-const RenderableComponent = $runtime.lazy("src__RenderableComponent", ()=>import("./RenderableComponent"));
-const ReqRes = $runtime.lazy("src__ReqRes", ()=>import("./ReqRes"));
-const RoutesAndParams = $runtime.lazy("src__RoutesAndParams", ()=>import("./RoutesAndParams"));
-const RouteScroll = $runtime.lazy("src__RouteScroll", ()=>import("./RouteScroll"));
-const ServerFunctions = $runtime.lazy("src__ServerFunctions", ()=>import("./ServerFunctions"));
-const ServerRequestAndResponse = $runtime.lazy("src__ServerRequestAndResponse", ()=>import("./ServerRequestAndResponse"));
-const StatefulComponent = $runtime.lazy("src__StatefulComponent", ()=>import("./StatefulComponent"));
-const StaticThis = $runtime.lazy("src__StaticThis", ()=>import("./StaticThis"));
-const TextObserver = $runtime.lazy("src__TextObserver", ()=>import("./TextObserver"));
-const TwoWayBindings = $runtime.lazy("src__TwoWayBindings", ()=>import("./TwoWayBindings"));
-const TypeScript = $runtime.lazy("src__TypeScript", ()=>import("./TypeScript"));
-const TypeScriptExtension = $runtime.lazy("src__TypeScriptExtension", ()=>import("./TypeScriptExtension"));
-const UndefinedNodes = $runtime.lazy("src__UndefinedNodes", ()=>import("./UndefinedNodes"));
-const UnderscoredAttributes = $runtime.lazy("src__UnderscoredAttributes", ()=>import("./UnderscoredAttributes"));
-const Vunerability = $runtime.lazy("src__Vunerability", ()=>import("./Vunerability"));
-const WebpackCustomPlugin = $runtime.lazy("src__WebpackCustomPlugin", ()=>import("./WebpackCustomPlugin"));
-const WorkerVerbs = $runtime.lazy("src__WorkerVerbs", ()=>import("./WorkerVerbs"));
+import AnchorModifiers from "./AnchorModifiers";
+import ArrayAttributes from "./ArrayAttributes";
+import BodyFragment from "./BodyFragment";
+import CatchError from "./CatchError";
+import ChildComponent from "./ChildComponent";
+import ComponentTernary from "./ComponentTernary";
+import Context from "./Context";
+import ContextData from "./ContextData";
+import ContextEnvironment from "./ContextEnvironment";
+import ContextPage from "./ContextPage";
+import ContextProject from "./ContextProject";
+import ContextSecrets from "./ContextSecrets";
+import ContextSettings from "./ContextSettings";
+import ContextWorker from "./ContextWorker";
+import DateParser from "./DateParser";
+import DynamicHead from "./DynamicHead";
+import Element from "./Element";
+import ErrorOnChildNode from "./ErrorOnChildNode";
+import ErrorPage from "./ErrorPage";
+import ExposedServerFunctions from "./ExposedServerFunctions";
+import ExternalServerFunctions from "./ExternalServerFunctions";
+import FalsyNodes from "./FalsyNodes";
+import FullStackLifecycle from "./FullStackLifecycle";
+import Instanceable from "./Instanceable";
+import InstanceKey from "./InstanceKey";
+import InstanceSelf from "./InstanceSelf";
+import IsomorphicImport from "./IsomorphicImport";
+import IsomorphicStartup from "./IsomorphicStartup";
+import JavaScriptExtension from "./JavaScriptExtension";
+import Logo from "./Logo";
+import MetatagState from "./MetatagState";
+import NestedProxy from "./NestedProxy";
+import OptimizedEvents from "./OptimizedEvents";
+import ParentComponent from "./ParentComponent";
+import PersistentComponent from "./PersistentComponent";
+import PluginAttributes from "./PluginAttributes";
+import PublicServerFunctions from "./PublicServerFunctions";
+import PureComponents from "./PureComponents";
+import Refs from "./Refs";
+import RenderableComponent from "./RenderableComponent";
+import ReqRes from "./ReqRes";
+import RoutesAndParams from "./RoutesAndParams";
+import RouteScroll from "./RouteScroll";
+import ServerFunctions from "./ServerFunctions";
+import ServerRequestAndResponse from "./ServerRequestAndResponse";
+import StatefulComponent from "./StatefulComponent";
+import StaticThis from "./StaticThis";
+import TextObserver from "./TextObserver";
+import TwoWayBindings from "./TwoWayBindings";
+import TypeScript from "./TypeScript";
+import TypeScriptExtension from "./TypeScriptExtension";
+import UndefinedNodes from "./UndefinedNodes";
+import UnderscoredAttributes from "./UnderscoredAttributes";
+import Vunerability from "./Vunerability";
+import WebpackCustomPlugin from "./WebpackCustomPlugin";
+import WorkerVerbs from "./WorkerVerbs";
+import LazyComponent from "./LazyComponent";
+import LazyComponentLoader from "./LazyComponentLoader";
+import NestedFolder from "./nested/NestedFolder.njs";
 class Application extends Nullstack {
-    static hash = "src__Application___Application";
+    static hash = "6b94b59a22c75216";
     async changeInstanceable({ instances  }) {
         await instances.instanceable.customMethod();
     }
@@ -66,658 +69,161 @@ class Application extends Nullstack {
         context.refInstanceCount = 0;
     }
     render({ project , page , environment , refInstanceCount  }) {
-        const LazyComponent = this/*#__PURE__*/ .renderLazyComponent;
         return /*#__PURE__*/ $runtime.element("body", {
-            "data-application-hydrated": this.hydrated,
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 74,
-                columnNumber: 7
-            },
-            __self: this
-        }, /*#__PURE__*/ $runtime.element("h1", {
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 75,
-                columnNumber: 9
-            },
-            __self: this
-        }, " ", project.name, " "), page.status !== 200 && /*#__PURE__*/ $runtime.element("div", {
+            "data-application-hydrated": this.hydrated
+        }, /*#__PURE__*/ $runtime.element("h1", null, " ", project.name, " "), page.status !== 200 && /*#__PURE__*/ $runtime.element("div", {
             route: "*",
-            "data-page-status": page.status,
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 76,
-                columnNumber: 33
-            },
-            __self: this
+            "data-page-status": page.status
         }), /*#__PURE__*/ $runtime.element("div", {
-            route: "/",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 77,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/"
         }, /*#__PURE__*/ $runtime.element("a", {
-            href: "/lazy-component",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 78,
-                columnNumber: 11
-            },
-            __self: this
+            href: "/lazy-component"
         }, " go lazy go home "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/lazy-importer",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 79,
-                columnNumber: 11
-            },
-            __self: this
+            href: "/lazy-importer"
         }, " import "), /*#__PURE__*/ $runtime.element("a", {
-            href: `/nullstack/${environment.key}/offline`,
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 80,
-                columnNumber: 11
-            },
-            __self: this
+            href: `/nullstack/${environment.key}/offline`
         }, " offline "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/static-this",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 81,
-                columnNumber: 11
-            },
-            __self: this
+            href: "/static-this"
         }, " static this "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/routes-and-params/a",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 82,
-                columnNumber: 11
-            },
-            __self: this
+            href: "/routes-and-params/a"
         }, " router with params "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/undefined-nodes",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 83,
-                columnNumber: 11
-            },
-            __self: this
+            href: "/undefined-nodes"
         }, " undefined nodes "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/full-stack-lifecycle",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 84,
-                columnNumber: 11
-            },
-            __self: this
+            href: "/full-stack-lifecycle"
         }, " lifecycle "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/refs",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 85,
-                columnNumber: 11
-            },
-            __self: this
+            href: "/refs"
         }, " refs "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/error-on-child-node?dom=true",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 86,
-                columnNumber: 11
-            },
-            __self: this
+            href: "/error-on-child-node?dom=true"
         }, " error-on-child-node?dom=true "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/error-on-child-node?serialization=true",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 87,
-                columnNumber: 11
-            },
-            __self: this
+            href: "/error-on-child-node?serialization=true"
         }, " error-on-child-node?serialization=true "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/route-scroll/class?changed=1#bottom",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 88,
-                columnNumber: 11
-            },
-            __self: this
-        }, "#bottom")), $runtime.element(LazyComponent, {
-            route: "/lazy-importer",
-            prop: "works",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 90,
-                columnNumber: 9
-            },
-            __self: this
-        }), /*#__PURE__*/ $runtime.element(RenderableComponent, {
-            route: "/renderable-component",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 91,
-                columnNumber: 9
-            },
-            __self: this
+            href: "/route-scroll/class?changed=1#bottom"
+        }, "#bottom")), /*#__PURE__*/ $runtime.element(RenderableComponent, {
+            route: "/renderable-component"
         }), /*#__PURE__*/ $runtime.element(StatefulComponent, {
-            route: "/stateful-component",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 92,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/stateful-component"
         }), /*#__PURE__*/ $runtime.element(FullStackLifecycle, {
-            route: "/full-stack-lifecycle",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 93,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/full-stack-lifecycle"
         }), /*#__PURE__*/ $runtime.element(InstanceSelf, {
-            route: "/instance-self",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 94,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/instance-self"
         }), /*#__PURE__*/ $runtime.element(ContextProject, {
-            route: "/context-project",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 95,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/context-project"
         }), /*#__PURE__*/ $runtime.element(ServerFunctions, {
-            route: "/server-functions",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 96,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/server-functions"
         }), /*#__PURE__*/ $runtime.element(Context, {
-            route: "/context",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 97,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/context"
         }), /*#__PURE__*/ $runtime.element(ContextSecrets, {
-            route: "/context-secrets",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 98,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/context-secrets"
         }), /*#__PURE__*/ $runtime.element(ContextSettings, {
-            route: "/context-settings",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 99,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/context-settings"
         }), /*#__PURE__*/ $runtime.element(ContextEnvironment, {
-            route: "/context-environment",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 100,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/context-environment"
         }), /*#__PURE__*/ $runtime.element(ContextWorker, {
-            route: "/context-worker",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 101,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/context-worker"
         }), /*#__PURE__*/ $runtime.element(InstanceKey, {
-            route: "/instance-key",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 102,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/instance-key"
         }), /*#__PURE__*/ $runtime.element(RoutesAndParams, {
-            route: "/routes-and-params/*",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 103,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/routes-and-params/*"
         }), /*#__PURE__*/ $runtime.element(ContextPage, {
-            route: "/context-page",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 104,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/context-page"
         }), /*#__PURE__*/ $runtime.element(TwoWayBindings, {
-            route: "/two-way-bindings",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 105,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/two-way-bindings"
         }), /*#__PURE__*/ $runtime.element(ServerRequestAndResponse, {
-            route: "/server-request-and-response",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 106,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/server-request-and-response"
         }), /*#__PURE__*/ $runtime.element(ContextData, {
-            route: "/context-data",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 107,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/context-data"
         }), /*#__PURE__*/ $runtime.element(DateParser, {
-            route: "/date-parser",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 108,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/date-parser"
         }), /*#__PURE__*/ $runtime.element(StaticThis, {
-            route: "/static-this",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 109,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/static-this"
         }), /*#__PURE__*/ $runtime.element(ChildComponent, {
-            route: "/child-component",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 110,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/child-component"
         }), /*#__PURE__*/ $runtime.element(ParentComponent, {
-            route: "/parent-component",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 111,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/parent-component"
         }), /*#__PURE__*/ $runtime.element(Element, {
-            route: "/element",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 112,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/element"
         }), /*#__PURE__*/ $runtime.element(PluginAttributes, {
-            route: "/plugin-attributes",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 113,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/plugin-attributes"
         }), /*#__PURE__*/ $runtime.element(PureComponents, {
-            route: "/pure-components",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 114,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/pure-components"
         }), /*#__PURE__*/ $runtime.element(Instanceable, {
             route: "/instanceable",
-            key: "instanceable",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 115,
-                columnNumber: 9
-            },
-            __self: this
+            key: "instanceable"
         }), /*#__PURE__*/ $runtime.element(NestedProxy, {
-            route: "/nested-proxy",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 116,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/nested-proxy"
         }), /*#__PURE__*/ $runtime.element(FalsyNodes, {
-            route: "/falsy-nodes",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 117,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/falsy-nodes"
         }), /*#__PURE__*/ $runtime.element(ErrorOnChildNode, {
-            route: "/error-on-child-node",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 118,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/error-on-child-node"
         }), /*#__PURE__*/ $runtime.element(Vunerability, {
-            route: "/vunerability",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 119,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/vunerability"
         }), /*#__PURE__*/ $runtime.element(UnderscoredAttributes, {
-            route: "/underscored-attributes",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 120,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/underscored-attributes"
         }), /*#__PURE__*/ $runtime.element(PersistentComponent, {
             route: "/persistent-component/:id",
-            persistent: true,
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 121,
-                columnNumber: 9
-            },
-            __self: this
+            persistent: true
         }), /*#__PURE__*/ $runtime.element(IsomorphicStartup, {
-            route: "/isomorphic-startup",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 122,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/isomorphic-startup"
         }), /*#__PURE__*/ $runtime.element(WorkerVerbs, {
-            route: "/worker-verbs",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 123,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/worker-verbs"
         }), /*#__PURE__*/ $runtime.element(TypeScript, {
-            route: "/typescript",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 124,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/typescript"
+        }), /*#__PURE__*/ $runtime.element(LazyComponentLoader, {
+            route: "/lazy-component"
         }), /*#__PURE__*/ $runtime.element(PublicServerFunctions, {
-            key: "publicServerFunctions",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 126,
-                columnNumber: 9
-            },
-            __self: this
+            key: "publicServerFunctions"
         }), /*#__PURE__*/ $runtime.element(ExternalServerFunctions, {
-            route: "/external-server-functions",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 127,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/external-server-functions"
         }), /*#__PURE__*/ $runtime.element(UndefinedNodes, {
-            route: "/undefined-nodes",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 128,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/undefined-nodes"
         }), /*#__PURE__*/ $runtime.element(WebpackCustomPlugin, {
-            route: "/webpack-custom-plugin",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 129,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/webpack-custom-plugin"
         }), /*#__PURE__*/ $runtime.element(ComponentTernary, {
-            route: "/component-ternary",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 130,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/component-ternary"
         }), /*#__PURE__*/ $runtime.element(AnchorModifiers, {
             route: "/anchor-modifiers",
-            key: "anchorModifiers",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 131,
-                columnNumber: 9
-            },
-            __self: this
+            key: "anchorModifiers"
         }), /*#__PURE__*/ $runtime.element(MetatagState, {
-            route: "/metatag-state",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 132,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/metatag-state"
         }), /*#__PURE__*/ $runtime.element(JavaScriptExtension, {
-            route: "/javascript-extension",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 133,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/javascript-extension"
         }), /*#__PURE__*/ $runtime.element(TypeScriptExtension, {
             route: "/typescript-extension",
-            generic: true,
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 134,
-                columnNumber: 9
-            },
-            __self: this
+            generic: true
         }), /*#__PURE__*/ $runtime.element(Refs, {
             route: "/refs",
-            key: `refs${refInstanceCount}`,
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 135,
-                columnNumber: 9
-            },
-            __self: this
+            key: `refs${refInstanceCount}`
         }), /*#__PURE__*/ $runtime.element(OptimizedEvents, {
-            route: "/optimized-events",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 136,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/optimized-events"
         }), /*#__PURE__*/ $runtime.element(DynamicHead, {
-            route: "/dynamic-head",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 137,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/dynamic-head"
         }), /*#__PURE__*/ $runtime.element(TextObserver, {
-            route: "/text-observer",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 138,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/text-observer"
         }), /*#__PURE__*/ $runtime.element(BodyFragment, {
-            route: "/body-fragment",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 139,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/body-fragment"
         }), /*#__PURE__*/ $runtime.element(ArrayAttributes, {
-            route: "/array-attributes",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 140,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/array-attributes"
         }), /*#__PURE__*/ $runtime.element(RouteScroll, {
             route: "/route-scroll/*",
-            key: "routeScroll",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 141,
-                columnNumber: 9
-            },
-            __self: this
+            key: "routeScroll"
         }), /*#__PURE__*/ $runtime.element(IsomorphicImport, {
-            route: "/isomorphic-import",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 142,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/isomorphic-import"
         }), /*#__PURE__*/ $runtime.element(ExposedServerFunctions, {
-            route: "/exposed-server-functions",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 143,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/exposed-server-functions"
         }), /*#__PURE__*/ $runtime.element(CatchError, {
-            route: "/catch-error",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 144,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/catch-error"
         }), /*#__PURE__*/ $runtime.element(ReqRes, {
-            route: "/reqres",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 145,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/reqres"
         }), /*#__PURE__*/ $runtime.element(Logo, {
-            route: "/logo",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 146,
-                columnNumber: 9
-            },
-            __self: this
+            route: "/logo"
+        }), /*#__PURE__*/ $runtime.element(NestedFolder, {
+            route: "/nested/folder"
+        }), /*#__PURE__*/ $runtime.element(LazyComponent, {
+            route: "/lazy-importer",
+            prop: "works"
         }), /*#__PURE__*/ $runtime.element(ErrorPage, {
-            route: "*",
-            __source: {
-                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\Application.njs",
-                lineNumber: 147,
-                columnNumber: 9
-            },
-            __self: this
+            route: "*"
         }));
     }
 }
 export default Application;
-$runtime.accept(module, "src\\Application.njs", [
-    "nullstack/runtime",
-    "nullstack",
-    "./AnchorModifiers",
-    "./ArrayAttributes",
-    "./BodyFragment",
-    "./CatchError",
-    "./ChildComponent",
-    "./ComponentTernary",
-    "./Context",
-    "./ContextData",
-    "./ContextEnvironment",
-    "./ContextPage",
-    "./ContextProject",
-    "./ContextSecrets",
-    "./ContextSettings",
-    "./ContextWorker",
-    "./DateParser",
-    "./DynamicHead",
-    "./Element",
-    "./ErrorOnChildNode",
-    "./ErrorPage",
-    "./ExposedServerFunctions",
-    "./ExternalServerFunctions",
-    "./FalsyNodes",
-    "./FullStackLifecycle",
-    "./Instanceable",
-    "./InstanceKey",
-    "./InstanceSelf",
-    "./IsomorphicImport",
-    "./IsomorphicStartup",
-    "./JavaScriptExtension",
-    "./Logo",
-    "./MetatagState",
-    "./NestedProxy",
-    "./OptimizedEvents",
-    "./ParentComponent",
-    "./PersistentComponent",
-    "./PluginAttributes",
-    "./PublicServerFunctions",
-    "./PureComponents",
-    "./Refs",
-    "./RenderableComponent",
-    "./ReqRes",
-    "./RoutesAndParams",
-    "./RouteScroll",
-    "./ServerFunctions",
-    "./ServerRequestAndResponse",
-    "./StatefulComponent",
-    "./StaticThis",
-    "./TextObserver",
-    "./TwoWayBindings",
-    "./TypeScript",
-    "./TypeScriptExtension",
-    "./UndefinedNodes",
-    "./UnderscoredAttributes",
-    "./Vunerability",
-    "./WebpackCustomPlugin",
-    "./WorkerVerbs",
-    "./Application.css"
-], [
-    {
-        klass: Application,
-        initiate: [],
-        hashes: {}
-    }
-]);

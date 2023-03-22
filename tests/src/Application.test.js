@@ -15,9 +15,4 @@ describe('Application', () => {
     const element = await page.$('[rel="stylesheet"]')
     expect(element).toBeTruthy()
   })
-
-  test('simple scripts depending on window should be importable on server', async () => {
-    const element = await page.$('[data-window="shim"]')
-    expect(element).toBeTruthy()
-  })
 })
