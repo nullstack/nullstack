@@ -189,7 +189,7 @@ server.start = function () {
       }
       async function delay() {
         invokerKlass = registry[invokerHash]
-        if (invokerKlass.__hashes[methodName] !== version) {
+        if (invokerKlass && invokerKlass.__hashes[methodName] !== version) {
           setTimeout(() => {
             delay()
           }, 0)

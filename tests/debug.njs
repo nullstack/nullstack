@@ -1,229 +1,246 @@
-import $runtime from "nullstack/runtime";
+import $runtime from "nullstack/runtime"; // server function works
 import Nullstack from "nullstack";
-import AnchorModifiers from "./AnchorModifiers";
-import ArrayAttributes from "./ArrayAttributes";
-import BodyFragment from "./BodyFragment";
-import CatchError from "./CatchError";
-import ChildComponent from "./ChildComponent";
-import ComponentTernary from "./ComponentTernary";
-import Context from "./Context";
-import ContextData from "./ContextData";
-import ContextEnvironment from "./ContextEnvironment";
-import ContextPage from "./ContextPage";
-import ContextProject from "./ContextProject";
-import ContextSecrets from "./ContextSecrets";
-import ContextSettings from "./ContextSettings";
-import ContextWorker from "./ContextWorker";
-import DateParser from "./DateParser";
-import DynamicHead from "./DynamicHead";
-import Element from "./Element";
-import ErrorOnChildNode from "./ErrorOnChildNode";
-import ErrorPage from "./ErrorPage";
-import ExposedServerFunctions from "./ExposedServerFunctions";
-import ExternalServerFunctions from "./ExternalServerFunctions";
-import FalsyNodes from "./FalsyNodes";
-import FullStackLifecycle from "./FullStackLifecycle";
-import Instanceable from "./Instanceable";
-import InstanceKey from "./InstanceKey";
-import InstanceSelf from "./InstanceSelf";
-import IsomorphicImport from "./IsomorphicImport";
-import IsomorphicStartup from "./IsomorphicStartup";
-import JavaScriptExtension from "./JavaScriptExtension";
-import Logo from "./Logo";
-import MetatagState from "./MetatagState";
-import NestedProxy from "./NestedProxy";
-import OptimizedEvents from "./OptimizedEvents";
-import ParentComponent from "./ParentComponent";
-import PersistentComponent from "./PersistentComponent";
-import PluginAttributes from "./PluginAttributes";
-import PublicServerFunctions from "./PublicServerFunctions";
-import PureComponents from "./PureComponents";
-import Refs from "./Refs";
-import RenderableComponent from "./RenderableComponent";
-import ReqRes from "./ReqRes";
-import RoutesAndParams from "./RoutesAndParams";
-import RouteScroll from "./RouteScroll";
-import ServerFunctions from "./ServerFunctions";
-import ServerRequestAndResponse from "./ServerRequestAndResponse";
-import StatefulComponent from "./StatefulComponent";
-import StaticThis from "./StaticThis";
-import TextObserver from "./TextObserver";
-import TwoWayBindings from "./TwoWayBindings";
-import TypeScript from "./TypeScript";
-import TypeScriptExtension from "./TypeScriptExtension";
-import UndefinedNodes from "./UndefinedNodes";
-import UnderscoredAttributes from "./UnderscoredAttributes";
-import Vunerability from "./Vunerability";
-import WebpackCustomPlugin from "./WebpackCustomPlugin";
-import WorkerVerbs from "./WorkerVerbs";
-import LazyComponent from "./LazyComponent";
-import LazyComponentLoader from "./LazyComponentLoader";
-import NestedFolder from "./nested/NestedFolder.njs";
-class Application extends Nullstack {
-    static hash = "6b94b59a22c75216";
-    async changeInstanceable({ instances  }) {
-        await instances.instanceable.customMethod();
+import { readFileSync } from "fs";
+const decodedString = "! * ' ( ) ; : @ & = + $ , / ? % # [ ]";
+class ServerFunctions extends Nullstack {
+    static hash = "src__ServerFunctions___ServerFunctions";
+    count = 0;
+    year = null;
+    statement = "";
+    response = "";
+    clientOnly = "";
+    static async getCountAsOne() {
+        return 1;
     }
-    prepare(context) {
-        context.string = "nullstack";
-        context.refInstanceCount = 0;
+    async setCountToOne() {
+        this.count = await this.getCountAsOne();
     }
-    render({ project , page , environment , refInstanceCount  }) {
-        return /*#__PURE__*/ $runtime.element("body", {
-            "data-application-hydrated": this.hydrated
-        }, /*#__PURE__*/ $runtime.element("h1", null, " ", project.name, " "), page.status !== 200 && /*#__PURE__*/ $runtime.element("div", {
-            route: "*",
-            "data-page-status": page.status
+    static async getCount({ to  }) {
+        return to;
+    }
+    async setCountToTwo() {
+        this.count = await this.getCount({
+            to: 2
+        });
+    }
+    static async getDate({ input  }) {
+        return input;
+    }
+    async setDate() {
+        const input = new Date("1992-10-16");
+        const output = await this.getDate({
+            input
+        });
+        this.year = output.getFullYear();
+    }
+    static async useNodeFileSystem() {
+        const text = readFileSync("src/ServerFunctions.njs", "utf-8");
+        return text.split(`\n`)[0].trim();
+    }
+    static async useFetchInNode() {
+        const response = await fetch("http://localhost:6969/robots.txt");
+        const text = await response.text();
+        return text.split(`\n`)[0].trim();
+    }
+    static async getDoublePlusOne({ number  }) {
+        return number * 2 + 1;
+    }
+    static async getEncodedString({ string  }) {
+        return string === decodedString;
+    }
+    static async _privateFunction() {
+        return true;
+    }
+    static async getPrivateFunction({ request  }) {
+        return this._privateFunction();
+    }
+    static async getRequestUrl({ request  }) {
+        return request.originalUrl.startsWith("/");
+    }
+    async initiate() {
+        this.statement = await this.useNodeFileSystem();
+        this.response = await this.useFetchInNode();
+        this.doublePlusOneServer = await ServerFunctions.getDoublePlusOne({
+            number: 34
+        });
+        this.originalUrl = await ServerFunctions.getRequestUrl();
+    }
+    async hydrate() {
+        this.underlineRemovedFromClient = !ServerFunctions._privateFunction;
+        this.underlineStayOnServer = await ServerFunctions.getPrivateFunction();
+        this.doublePlusOneClient = await ServerFunctions.getDoublePlusOne({
+            number: 34
+        });
+        this.acceptsSpecialCharacters = await this.getEncodedString({
+            string: decodedString
+        });
+        this.hydratedOriginalUrl = await ServerFunctions.getRequestUrl();
+    }
+    render() {
+        return /*#__PURE__*/ $runtime.element("div", {
+            "data-hydrated": this.hydrated,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 90,
+                columnNumber: 7
+            },
+            __self: this
+        }, /*#__PURE__*/ $runtime.element("button", {
+            class: "set-count-to-one",
+            onclick: this.setCountToOne,
+            source: this,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 91,
+                columnNumber: 9
+            },
+            __self: this
+        }, "1"), /*#__PURE__*/ $runtime.element("button", {
+            class: "set-count-to-two",
+            onclick: this.setCountToTwo,
+            source: this,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 94,
+                columnNumber: 9
+            },
+            __self: this
+        }, "2"), /*#__PURE__*/ $runtime.element("button", {
+            class: "set-date",
+            onclick: this.setDate,
+            source: this,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 97,
+                columnNumber: 9
+            },
+            __self: this
+        }, "1992"), /*#__PURE__*/ $runtime.element("div", {
+            "data-count": this.count,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 100,
+                columnNumber: 9
+            },
+            __self: this
         }), /*#__PURE__*/ $runtime.element("div", {
-            route: "/"
-        }, /*#__PURE__*/ $runtime.element("a", {
-            href: "/lazy-component"
-        }, " go lazy go home "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/lazy-importer"
-        }, " import "), /*#__PURE__*/ $runtime.element("a", {
-            href: `/nullstack/${environment.key}/offline`
-        }, " offline "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/static-this"
-        }, " static this "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/routes-and-params/a"
-        }, " router with params "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/undefined-nodes"
-        }, " undefined nodes "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/full-stack-lifecycle"
-        }, " lifecycle "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/refs"
-        }, " refs "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/error-on-child-node?dom=true"
-        }, " error-on-child-node?dom=true "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/error-on-child-node?serialization=true"
-        }, " error-on-child-node?serialization=true "), /*#__PURE__*/ $runtime.element("a", {
-            href: "/route-scroll/class?changed=1#bottom"
-        }, "#bottom")), /*#__PURE__*/ $runtime.element(RenderableComponent, {
-            route: "/renderable-component"
-        }), /*#__PURE__*/ $runtime.element(StatefulComponent, {
-            route: "/stateful-component"
-        }), /*#__PURE__*/ $runtime.element(FullStackLifecycle, {
-            route: "/full-stack-lifecycle"
-        }), /*#__PURE__*/ $runtime.element(InstanceSelf, {
-            route: "/instance-self"
-        }), /*#__PURE__*/ $runtime.element(ContextProject, {
-            route: "/context-project"
-        }), /*#__PURE__*/ $runtime.element(ServerFunctions, {
-            route: "/server-functions"
-        }), /*#__PURE__*/ $runtime.element(Context, {
-            route: "/context"
-        }), /*#__PURE__*/ $runtime.element(ContextSecrets, {
-            route: "/context-secrets"
-        }), /*#__PURE__*/ $runtime.element(ContextSettings, {
-            route: "/context-settings"
-        }), /*#__PURE__*/ $runtime.element(ContextEnvironment, {
-            route: "/context-environment"
-        }), /*#__PURE__*/ $runtime.element(ContextWorker, {
-            route: "/context-worker"
-        }), /*#__PURE__*/ $runtime.element(InstanceKey, {
-            route: "/instance-key"
-        }), /*#__PURE__*/ $runtime.element(RoutesAndParams, {
-            route: "/routes-and-params/*"
-        }), /*#__PURE__*/ $runtime.element(ContextPage, {
-            route: "/context-page"
-        }), /*#__PURE__*/ $runtime.element(TwoWayBindings, {
-            route: "/two-way-bindings"
-        }), /*#__PURE__*/ $runtime.element(ServerRequestAndResponse, {
-            route: "/server-request-and-response"
-        }), /*#__PURE__*/ $runtime.element(ContextData, {
-            route: "/context-data"
-        }), /*#__PURE__*/ $runtime.element(DateParser, {
-            route: "/date-parser"
-        }), /*#__PURE__*/ $runtime.element(StaticThis, {
-            route: "/static-this"
-        }), /*#__PURE__*/ $runtime.element(ChildComponent, {
-            route: "/child-component"
-        }), /*#__PURE__*/ $runtime.element(ParentComponent, {
-            route: "/parent-component"
-        }), /*#__PURE__*/ $runtime.element(Element, {
-            route: "/element"
-        }), /*#__PURE__*/ $runtime.element(PluginAttributes, {
-            route: "/plugin-attributes"
-        }), /*#__PURE__*/ $runtime.element(PureComponents, {
-            route: "/pure-components"
-        }), /*#__PURE__*/ $runtime.element(Instanceable, {
-            route: "/instanceable",
-            key: "instanceable"
-        }), /*#__PURE__*/ $runtime.element(NestedProxy, {
-            route: "/nested-proxy"
-        }), /*#__PURE__*/ $runtime.element(FalsyNodes, {
-            route: "/falsy-nodes"
-        }), /*#__PURE__*/ $runtime.element(ErrorOnChildNode, {
-            route: "/error-on-child-node"
-        }), /*#__PURE__*/ $runtime.element(Vunerability, {
-            route: "/vunerability"
-        }), /*#__PURE__*/ $runtime.element(UnderscoredAttributes, {
-            route: "/underscored-attributes"
-        }), /*#__PURE__*/ $runtime.element(PersistentComponent, {
-            route: "/persistent-component/:id",
-            persistent: true
-        }), /*#__PURE__*/ $runtime.element(IsomorphicStartup, {
-            route: "/isomorphic-startup"
-        }), /*#__PURE__*/ $runtime.element(WorkerVerbs, {
-            route: "/worker-verbs"
-        }), /*#__PURE__*/ $runtime.element(TypeScript, {
-            route: "/typescript"
-        }), /*#__PURE__*/ $runtime.element(LazyComponentLoader, {
-            route: "/lazy-component"
-        }), /*#__PURE__*/ $runtime.element(PublicServerFunctions, {
-            key: "publicServerFunctions"
-        }), /*#__PURE__*/ $runtime.element(ExternalServerFunctions, {
-            route: "/external-server-functions"
-        }), /*#__PURE__*/ $runtime.element(UndefinedNodes, {
-            route: "/undefined-nodes"
-        }), /*#__PURE__*/ $runtime.element(WebpackCustomPlugin, {
-            route: "/webpack-custom-plugin"
-        }), /*#__PURE__*/ $runtime.element(ComponentTernary, {
-            route: "/component-ternary"
-        }), /*#__PURE__*/ $runtime.element(AnchorModifiers, {
-            route: "/anchor-modifiers",
-            key: "anchorModifiers"
-        }), /*#__PURE__*/ $runtime.element(MetatagState, {
-            route: "/metatag-state"
-        }), /*#__PURE__*/ $runtime.element(JavaScriptExtension, {
-            route: "/javascript-extension"
-        }), /*#__PURE__*/ $runtime.element(TypeScriptExtension, {
-            route: "/typescript-extension",
-            generic: true
-        }), /*#__PURE__*/ $runtime.element(Refs, {
-            route: "/refs",
-            key: `refs${refInstanceCount}`
-        }), /*#__PURE__*/ $runtime.element(OptimizedEvents, {
-            route: "/optimized-events"
-        }), /*#__PURE__*/ $runtime.element(DynamicHead, {
-            route: "/dynamic-head"
-        }), /*#__PURE__*/ $runtime.element(TextObserver, {
-            route: "/text-observer"
-        }), /*#__PURE__*/ $runtime.element(BodyFragment, {
-            route: "/body-fragment"
-        }), /*#__PURE__*/ $runtime.element(ArrayAttributes, {
-            route: "/array-attributes"
-        }), /*#__PURE__*/ $runtime.element(RouteScroll, {
-            route: "/route-scroll/*",
-            key: "routeScroll"
-        }), /*#__PURE__*/ $runtime.element(IsomorphicImport, {
-            route: "/isomorphic-import"
-        }), /*#__PURE__*/ $runtime.element(ExposedServerFunctions, {
-            route: "/exposed-server-functions"
-        }), /*#__PURE__*/ $runtime.element(CatchError, {
-            route: "/catch-error"
-        }), /*#__PURE__*/ $runtime.element(ReqRes, {
-            route: "/reqres"
-        }), /*#__PURE__*/ $runtime.element(Logo, {
-            route: "/logo"
-        }), /*#__PURE__*/ $runtime.element(NestedFolder, {
-            route: "/nested/folder"
-        }), /*#__PURE__*/ $runtime.element(LazyComponent, {
-            route: "/lazy-importer",
-            prop: "works"
-        }), /*#__PURE__*/ $runtime.element(ErrorPage, {
-            route: "*"
+            "data-year": this.year,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 101,
+                columnNumber: 9
+            },
+            __self: this
+        }), /*#__PURE__*/ $runtime.element("div", {
+            "data-statement": this.statement,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 102,
+                columnNumber: 9
+            },
+            __self: this
+        }), /*#__PURE__*/ $runtime.element("div", {
+            "data-response": this.response,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 103,
+                columnNumber: 9
+            },
+            __self: this
+        }), /*#__PURE__*/ $runtime.element("div", {
+            "data-double-plus-one-server": this.doublePlusOneServer === 69,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 104,
+                columnNumber: 9
+            },
+            __self: this
+        }), /*#__PURE__*/ $runtime.element("div", {
+            "data-double-plus-one-client": this.doublePlusOneClient === 69,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 105,
+                columnNumber: 9
+            },
+            __self: this
+        }), /*#__PURE__*/ $runtime.element("div", {
+            "data-accepts-special-characters": this.acceptsSpecialCharacters,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 106,
+                columnNumber: 9
+            },
+            __self: this
+        }), /*#__PURE__*/ $runtime.element("div", {
+            "data-underline-removed-from-client": this.underlineRemovedFromClient,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 107,
+                columnNumber: 9
+            },
+            __self: this
+        }), /*#__PURE__*/ $runtime.element("div", {
+            "data-underline-stay-on-server": this.underlineStayOnServer,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 108,
+                columnNumber: 9
+            },
+            __self: this
+        }), /*#__PURE__*/ $runtime.element("div", {
+            "data-hydrated-original-url": this.hydratedOriginalUrl,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 109,
+                columnNumber: 9
+            },
+            __self: this
+        }), /*#__PURE__*/ $runtime.element("div", {
+            "data-original-url": this.originalUrl,
+            __source: {
+                fileName: "C:\\Repositories\\nullstack\\nullstack\\tests\\src\\ServerFunctions.njs",
+                lineNumber: 110,
+                columnNumber: 9
+            },
+            __self: this
         }));
     }
 }
-export default Application;
+export default ServerFunctions;
+$runtime.accept(module, "src\\ServerFunctions.njs", [
+    "nullstack/runtime",
+    "nullstack",
+    "fs"
+], [
+    {
+        klass: ServerFunctions,
+        initiate: [
+            "useNodeFileSystem",
+            "useFetchInNode",
+            "getDoublePlusOne",
+            "getRequestUrl"
+        ],
+        hashes: {
+            getCount: "64ef23a80103627bea3edaeb8f533934",
+            useFetchInNode: "3b93e3a8e5dc19945360e9523e0ded32",
+            getCountAsOne: "771a1b57771dd29a59b9c155a8d8db56",
+            getPrivateFunction: "f0f780a14ce2ed58903e2b33ccf0c955",
+            getDate: "4f8e7ea6c02ae89b19432d3e3a73da8e",
+            getDoublePlusOne: "1dd6a327579482f27a02eaf5a4bf8ac0",
+            useNodeFileSystem: "243b666d0b221adf5809bf54d21829d5",
+            getEncodedString: "88a0ffa79f8ec5a5d9aa928d61f79e68",
+            _privateFunction: "c0990f04929c14e0294dcefcfc80fab4",
+            getRequestUrl: "7ee4471ded1f135c3cfce3544a56c3a2"
+        }
+    }
+]);
+$runtime.register(ServerFunctions, "getCountAsOne");
+$runtime.register(ServerFunctions, "getCount");
+$runtime.register(ServerFunctions, "getDate");
+$runtime.register(ServerFunctions, "useNodeFileSystem");
+$runtime.register(ServerFunctions, "useFetchInNode");
+$runtime.register(ServerFunctions, "getDoublePlusOne");
+$runtime.register(ServerFunctions, "getEncodedString");
+$runtime.register(ServerFunctions, "getPrivateFunction");
+$runtime.register(ServerFunctions, "getRequestUrl");
+$runtime.register(ServerFunctions);
