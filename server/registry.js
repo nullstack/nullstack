@@ -3,6 +3,7 @@ export default registry
 import reqres from "./reqres"
 import { generateContext } from "./context"
 import Nullstack from '.'
+import { load } from "./lazy"
 
 export function register(klass, functionName) {
   if (functionName) {
@@ -27,13 +28,14 @@ function bindStaticProps(klass) {
         if (!klass[propName]) {
           klass[propName] = klass[prop]
         }
-        function _invoke(...args) {
+        async function _invoke(...args) {
           if (underscored) {
             return klass[propName].call(klass, ...args)
           }
           const params = args[0] || {}
           const { request, response } = reqres
           const subcontext = generateContext({ request, response, ...params })
+          await load(klass.hash)
           return klass[propName].call(klass, subcontext)
         }
         if (module.hot) {

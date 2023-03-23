@@ -101,4 +101,8 @@ client.processLifecycleQueues = async function processLifecycleQueues() {
   router._changed = false
 }
 
+if (module.hot) {
+  client.klasses = {}
+}
+
 export default client

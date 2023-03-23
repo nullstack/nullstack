@@ -27,7 +27,14 @@ async function generateBranch(siblings, node, depth, scope) {
 
   if (isClass(node)) {
     const key = generateKey(scope, node, depth)
-    const instance = scope.instances[key] || new node.type(scope)
+    let instance = scope.instances[key]
+    if (!instance) {
+      if (module.hot && node.type.hash) {
+        instance = new scope.klasses[node.type.hash](scope)
+      } else {
+        instance = new node.type(scope)
+      }
+    }
     instance.persistent = !!node.attributes.persistent
     instance.key = key
     instance._attributes = node.attributes

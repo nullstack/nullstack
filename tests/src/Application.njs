@@ -1,7 +1,6 @@
 import Nullstack from 'nullstack'
 
 import AnchorModifiers from './AnchorModifiers'
-import './Application.css'
 import ArrayAttributes from './ArrayAttributes'
 import BodyFragment from './BodyFragment'
 import CatchError from './CatchError'
@@ -30,7 +29,6 @@ import InstanceSelf from './InstanceSelf'
 import IsomorphicImport from './IsomorphicImport'
 import IsomorphicStartup from './IsomorphicStartup'
 import JavaScriptExtension from './JavaScriptExtension'
-// import LazyComponentLoader from './LazyComponentLoader'
 import Logo from './Logo'
 import MetatagState from './MetatagState'
 import NestedProxy from './NestedProxy'
@@ -57,31 +55,16 @@ import UndefinedNodes from './UndefinedNodes'
 import UnderscoredAttributes from './UnderscoredAttributes'
 import Vunerability from './Vunerability'
 import WebpackCustomPlugin from './WebpackCustomPlugin'
-import WindowDependency from './WindowDependency'
 import WorkerVerbs from './WorkerVerbs'
-import LazyComponent from './LazyComponent.njs'
-
-let CachedLazyComponent
-function LazyImporter() {
-  if (!CachedLazyComponent) {
-    CachedLazyComponent = import('./LazyComponent')
-    CachedLazyComponent.then((mod) => CachedLazyComponent = mod.default)
-    return false
-  }
-  if (CachedLazyComponent instanceof Promise) {
-    return false
-  }
-  return <CachedLazyComponent />
-}
+import LazyComponent from './LazyComponent'
+import LazyComponentLoader from './LazyComponentLoader'
+import './Application.css'
+import NestedFolder from './nested/NestedFolder.njs'
 
 class Application extends Nullstack {
 
   async changeInstanceable({ instances }) {
     await instances.instanceable.customMethod()
-  }
-
-  static async safelist() {
-    console.log(LazyComponent)
   }
 
   prepare(context) {
@@ -91,7 +74,7 @@ class Application extends Nullstack {
 
   render({ project, page, environment, refInstanceCount }) {
     return (
-      <body data-window={WindowDependency.key} data-application-hydrated={this.hydrated}>
+      <body data-application-hydrated={this.hydrated}>
         <h1> {project.name} </h1>
         {page.status !== 200 && <div route="*" data-page-status={page.status} />}
         <div route="/">
@@ -107,7 +90,6 @@ class Application extends Nullstack {
           <a href="/error-on-child-node?serialization=true"> error-on-child-node?serialization=true </a>
           <a href="/route-scroll/class?changed=1#bottom">#bottom</a>
         </div>
-        <LazyImporter route="/lazy-importer" />
         <RenderableComponent route="/renderable-component" />
         <StatefulComponent route="/stateful-component" />
         <FullStackLifecycle route="/full-stack-lifecycle" />
@@ -142,7 +124,7 @@ class Application extends Nullstack {
         <IsomorphicStartup route="/isomorphic-startup" />
         <WorkerVerbs route="/worker-verbs" />
         <TypeScript route="/typescript" />
-        {/* <LazyComponentLoader route="/lazy-component" /> */}
+        <LazyComponentLoader route="/lazy-component" />
         <PublicServerFunctions key="publicServerFunctions" />
         <ExternalServerFunctions route="/external-server-functions" />
         <UndefinedNodes route="/undefined-nodes" />
@@ -164,6 +146,8 @@ class Application extends Nullstack {
         <CatchError route="/catch-error" />
         <ReqRes route="/reqres" />
         <Logo route="/logo" />
+        <NestedFolder route="/nested/folder" />
+        <LazyComponent route="/lazy-importer" prop="works" />
         <ErrorPage route="*" />
       </body>
     )
