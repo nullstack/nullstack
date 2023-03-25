@@ -5,8 +5,12 @@ const queue = []
 
 async function preload() {
   let importer = queue.pop()
-  await importer()
-  requestIdleCallback(preload)
+  if (importer) {
+    await importer()
+    if (importer.length) {
+      requestIdleCallback(preload)
+    }
+  }
 }
 
 export default function lazy(_hash, importer) {
