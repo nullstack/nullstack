@@ -162,19 +162,19 @@ function runtime(options) {
   }
 }
 
-function debug(options) {
-  if (options.target !== 'server') return
+function trace(options) {
+  if (!options.trace) return
+  process.env.__NULLSTACK_TARGET = options.target
   return {
-    test: /\.(nts|tsx|njs|jsx)$/,
-    loader: path.posix.join(options.configFolder, 'loaders', 'debug.js'),
+    loader: path.posix.join(options.configFolder, 'loaders', 'trace.js'),
   }
 }
 
 function rules(options) {
   return [
+    trace(options),
     css(options),
     scss(options),
-    debug(options),
     js(options),
     ts(options),
     njs(options),

@@ -1,23 +1,37 @@
-import LazyComponent from "../shared/lazyComponent"
+import client from './client'
 
+const queue = {}
 let next = null
-const queue = []
 
 async function preload() {
-  let importer = queue.pop()
-  if (importer) {
-    await importer()
-    if (importer.length) {
-      requestIdleCallback(preload)
-    }
-  }
+  cancelIdleCallback(next)
+  let entry = Object.entries(queue)[0]
+  if (!entry) return
+  let loader = entry[1]
+  if (!loader) return
+  await loader.load()
+  next = requestIdleCallback(preload)
 }
 
-export default function lazy(_hash, importer) {
-  queue.push(importer)
-  cancelIdleCallback(next)
+window.addEventListener('blur', () => {
   preload()
-  return class extends LazyComponent {
-    importer = importer
+})
+
+window.addEventListener('focus', () => {
+  cancelIdleCallback(next)
+})
+
+export default function lazy(hash, importer) {
+  const loader = {
+    load: async () => {
+      const mod = await importer()
+      loader.component = mod.default
+      delete queue[hash]
+      client.update()
+    },
+    component: null,
+    __nullstack_lazy: true
   }
+  queue[hash] = loader
+  return loader
 }

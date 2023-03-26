@@ -25,6 +25,19 @@ async function generateBranch(siblings, node, depth, scope) {
     return
   }
 
+  if (module.hot && node.type?.__nullstack_lazy !== undefined) {
+    if (node.type.component) {
+      node.type = node.type.component
+    } else {
+      node.type.load();
+      siblings.push({
+        type: false,
+        attributes: {},
+      })
+      return
+    }
+  }
+
   if (isClass(node)) {
     const key = generateKey(scope, node, depth)
     let instance = scope.instances[key]

@@ -37,12 +37,13 @@ function clearDir() {
   }
 }
 
-async function start({ port, name, disk, skipCache }) {
+async function start({ port, name, disk, skipCache, trace }) {
   loadEnv(name)
   console.info(` 🚀️ Building your application in development mode...`)
   const environment = 'development'
   process.env.NULLSTACK_ENVIRONMENT_MODE = 'spa'
   process.env.NULLSTACK_ENVIRONMENT_DISK = (!!disk).toString()
+  process.env.__NULLSTACK_TRACE = (!!trace).toString()
   process.env.__NULLSTACK_CLI_ENVIRONMENT = environment
   if (name) {
     process.env.NULLSTACK_ENVIRONMENT_NAME = name
@@ -52,7 +53,7 @@ async function start({ port, name, disk, skipCache }) {
   }
   if (!process.env.NULLSTACK_PROJECT_DOMAIN) process.env.NULLSTACK_PROJECT_DOMAIN = 'localhost'
   if (!process.env.NULLSTACK_WORKER_PROTOCOL) process.env.NULLSTACK_WORKER_PROTOCOL = 'http'
-  const settings = config[0](null, { environment, disk, skipCache, name })
+  const settings = config[0](null, { environment, disk, skipCache, name, trace })
   const compiler = webpack(settings)
   clearDir()
   compiler.watch({ aggregateTimeout: 200, hot: true, ignored: /node_modules/ }, (error, stats) => {
@@ -67,9 +68,9 @@ async function start({ port, name, disk, skipCache }) {
   })
 }
 
-function build({ mode = 'ssr', output, name, skipCache, benchmark }) {
+function build({ mode = 'ssr', output, name, skipCache }) {
   const environment = 'production'
-  const compiler = getCompiler({ environment, skipCache, benchmark, name })
+  const compiler = getCompiler({ environment, skipCache, name })
   if (name) {
     process.env.NULLSTACK_ENVIRONMENT_NAME = name
   }
@@ -97,6 +98,7 @@ program
   .option('-n, --name <name>', 'Name of the environment. Affects which .env file that will be loaded')
   .option('-d, --disk', 'Write files to disk')
   .option('-sc, --skip-cache', 'Skip loding and building cache in .development folder')
+  .option('-t, --trace', 'Trace file compilation')
   .helpOption('-h, --help', 'Learn more about this command')
   .action(start)
 
@@ -108,7 +110,6 @@ program
   .option('-o, --output <output>', 'Path to build output folder')
   .option('-n, --name <name>', 'Name of the environment. Affects which .env file that will be loaded')
   .option('-sc, --skip-cache', 'Skip loding and building cache in .production folder')
-  .option('-b, --benchmark', 'Benchmark build process (experimental)')
   .helpOption('-h, --help', 'Learn more about this command')
   .action(build)
 

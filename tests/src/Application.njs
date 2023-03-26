@@ -58,8 +58,8 @@ import WebpackCustomPlugin from './WebpackCustomPlugin'
 import WorkerVerbs from './WorkerVerbs'
 import LazyComponent from './LazyComponent'
 import LazyComponentLoader from './LazyComponentLoader'
+import NestedFolder from './nested/NestedFolder'
 import './Application.css'
-import NestedFolder from './nested/NestedFolder.njs'
 
 class Application extends Nullstack {
 

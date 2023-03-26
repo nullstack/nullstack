@@ -31,10 +31,12 @@ export default function hmr(server) {
     const webpack = __non_webpack_require__(resolve(`webpack`))
     const webpackDevMiddleware = __non_webpack_require__(resolve(`webpack-dev-middleware`))
     const disk = process.env.NULLSTACK_ENVIRONMENT_DISK === 'true'
+    const trace = process.env.__NULLSTACK_TRACE === 'true'
     const webpackConfig = webpackConfigs[1](null, {
       environment: process.env.__NULLSTACK_CLI_ENVIRONMENT,
       input: process.env.__NULLSTACK_CLI_INPUT,
       disk,
+      trace,
     })
     const compiler = webpack(webpackConfig)
 
