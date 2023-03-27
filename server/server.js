@@ -152,13 +152,18 @@ server.start = function () {
     }
   })
 
-  if (environment.development) {
+  if (module.hot) {
     server.all(`/${prefix}/:version/:hash/:methodName.json`, async (request, response) => {
       const payload = request.method === 'GET' ? request.query.payload : request.body
       reqres.set(request, response)
       const args = deserialize(payload)
       const { version, hash, methodName } = request.params
       const [invokerHash, boundHash] = hash.split('-')
+      let [filePath, klassName] = (invokerHash || boundHash).split("___")
+      const file = path.resolve('..', filePath.replaceAll('__', '/'))
+      console.info('\x1b[1;37m%s\x1b[0m', ` [${request.method}] ${request.path}`)
+      console.info('\x1b[2;37m%s\x1b[0m', `  - ${file}`)
+      console.info('\x1b[2;37m%s\x1b[0m', `  - ${klassName}.${methodName}(${JSON.stringify(args)})\n`)
       const key = `${invokerHash}.${methodName}`
       let invokerKlass;
       await load(boundHash || invokerHash)

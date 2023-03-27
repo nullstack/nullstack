@@ -38,12 +38,12 @@ function clearDir() {
 }
 
 async function start({ port, name, disk, skipCache, trace }) {
+  process.env.__NULLSTACK_TRACE = (!!trace).toString()
+  const progress = require('../builders/logger')('server', 'development')
   loadEnv(name)
-  console.info(` 🚀️ Building your application in development mode...`)
   const environment = 'development'
   process.env.NULLSTACK_ENVIRONMENT_MODE = 'spa'
   process.env.NULLSTACK_ENVIRONMENT_DISK = (!!disk).toString()
-  process.env.__NULLSTACK_TRACE = (!!trace).toString()
   process.env.__NULLSTACK_CLI_ENVIRONMENT = environment
   if (name) {
     process.env.NULLSTACK_ENVIRONMENT_NAME = name
@@ -57,6 +57,7 @@ async function start({ port, name, disk, skipCache, trace }) {
   const compiler = webpack(settings)
   clearDir()
   compiler.watch({ aggregateTimeout: 200, hot: true, ignored: /node_modules/ }, (error, stats) => {
+    progress.stop()
     if (error) {
       console.error(error.stack || error)
       if (error.details) {
@@ -70,11 +71,11 @@ async function start({ port, name, disk, skipCache, trace }) {
 
 function build({ mode = 'ssr', output, name, skipCache }) {
   const environment = 'production'
+  const progress = require('../builders/logger')('application', environment)
   const compiler = getCompiler({ environment, skipCache, name })
   if (name) {
     process.env.NULLSTACK_ENVIRONMENT_NAME = name
   }
-  console.info(` 🚀️ Building your application in ${mode} mode...`)
   compiler.run((error, stats) => {
     if (error) {
       console.error(error.stack || error)
@@ -86,6 +87,7 @@ function build({ mode = 'ssr', output, name, skipCache }) {
       process.exit(1)
     }
     if (stats.hasErrors()) process.exit(1)
+    progress.stop()
     require(`../builders/${mode}`)({ output, environment })
   })
 }

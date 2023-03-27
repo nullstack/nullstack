@@ -1,6 +1,7 @@
 /* eslint-disable nullstack/no-undef */
 import { existsSync, open } from 'fs'
 import path from 'path'
+import logger from '../builders/logger'
 
 function waitCompiler(next) {
   open(path.join(__dirname, '.compiling'), (error, exists) => {
@@ -15,6 +16,8 @@ function waitCompiler(next) {
 }
 
 export default function hmr(server) {
+  const progress = logger('client', 'development')
+
   if (module.hot) {
     const customConfig = path.resolve(process.cwd(), 'webpack.config.js')
     const webpackConfigs = existsSync(customConfig)
@@ -45,30 +48,17 @@ export default function hmr(server) {
       writeToDisk: disk,
     }
 
-    server.use(async (request, _response, next) => {
-      if (
-        request.originalUrl.indexOf('/nullstack/hmr') === -1 &&
-        request.originalUrl.indexOf('/nullstack-client-update') === -1 &&
-        request.originalUrl.indexOf('/nullstack-server-update') === -1 &&
-        (request.originalUrl.split('?')[0].indexOf('.json') > -1 ||
-          request.originalUrl.split('?')[0].indexOf('.') === -1)
-      ) {
-        if (request.originalUrl.startsWith('/nullstack/')) {
-          console.info(`  ⚙️ [${request.method}] ${request.originalUrl}`)
-        } else {
-          console.info(`  🕸️ [${request.method}] ${request.originalUrl}`)
-        }
-      }
+    server.use(async (_request, _response, next) => {
       waitCompiler(next)
     })
 
     const instance = webpackDevMiddleware(compiler, webpackDevMiddlewareOptions)
 
     instance.waitUntilValid(() => {
+      progress.stop()
       console.info(
         '\x1b[36m%s\x1b[0m',
-        ` ✅️ Your application is ready at http://${process.env.NULLSTACK_PROJECT_DOMAIN}:${process.env.NULLSTACK_SERVER_PORT || process.env.PORT || 3000
-        }\n`,
+        `\n 🚀 Your application is ready at http://${process.env.NULLSTACK_PROJECT_DOMAIN}:${process.env.NULLSTACK_SERVER_PORT || process.env.PORT || 3000}\n`,
       )
     })
 
