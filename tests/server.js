@@ -1,6 +1,7 @@
 import Nullstack from 'nullstack'
 
 import cors from 'cors'
+import express from 'express'
 
 import Application from './src/Application'
 import CatchError from './src/CatchError'
@@ -24,6 +25,7 @@ context.server.use(
     optionsSuccessStatus: 200,
   }),
 )
+context.server.use(express.json())
 
 context.worker.staleWhileRevalidate = [/[0-9]/]
 context.worker.cacheFirst = [/[0-9]/]
