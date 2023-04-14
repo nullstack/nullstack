@@ -23,7 +23,8 @@ export default function exposeServerFunctions(server) {
             params[key] = extractParamValue(request.query[key])
           }
           if (request.method !== 'GET') {
-            Object.assign(params, deserialize(request.body))
+            const payload = typeof request.body === 'object' ? JSON.stringify(request.body) : request.body
+            Object.assign(params, deserialize(payload))
           }
           try {
             const subcontext = generateContext({ request, response, ...params })

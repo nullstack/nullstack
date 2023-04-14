@@ -21,27 +21,51 @@ describe('ExposedServerFunctions', () => {
     expect(element).toBeTruthy()
   })
 
-  test('server functions can be exposed to POST and serialize params and query and body', async () => {
+  test('server functions can be exposed to POST and serialize params and query and body as text', async () => {
     await page.waitForSelector('[data-post]')
     const element = await page.$('[data-post]')
     expect(element).toBeTruthy()
   })
 
-  test('server functions can be exposed to PUT and serialize params and query and body', async () => {
+  test('server functions can be exposed to POST and serialize params and query and body as json', async () => {
+    await page.waitForSelector('[data-post-json]')
+    const element = await page.$('[data-post-json]')
+    expect(element).toBeTruthy()
+  })
+
+  test('server functions can be exposed to PUT and serialize params and query and body as text', async () => {
     await page.waitForSelector('[data-put]')
     const element = await page.$('[data-put]')
     expect(element).toBeTruthy()
   })
 
-  test('server functions can be exposed to PATCH and serialize params and query and body', async () => {
+  test('server functions can be exposed to PUT and serialize params and query and body as json', async () => {
+    await page.waitForSelector('[data-put-json]')
+    const element = await page.$('[data-put-json]')
+    expect(element).toBeTruthy()
+  })
+
+  test('server functions can be exposed to PATCH and serialize params and query and body as text', async () => {
     await page.waitForSelector('[data-patch]')
     const element = await page.$('[data-patch]')
     expect(element).toBeTruthy()
   })
 
-  test('server functions can be exposed to DELETE and serialize params and query and body', async () => {
+  test('server functions can be exposed to PATCH and serialize params and query and body as json', async () => {
+    await page.waitForSelector('[data-patch-json]')
+    const element = await page.$('[data-patch-json]')
+    expect(element).toBeTruthy()
+  })
+
+  test('server functions can be exposed to DELETE and serialize params and query and body as text', async () => {
     await page.waitForSelector('[data-delete]')
     const element = await page.$('[data-delete]')
+    expect(element).toBeTruthy()
+  })
+
+  test('server functions can be exposed to DELETE and serialize params and query and body as json', async () => {
+    await page.waitForSelector('[data-delete-json]')
+    const element = await page.$('[data-delete-json]')
     expect(element).toBeTruthy()
   })
 
