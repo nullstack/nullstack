@@ -1,4 +1,5 @@
 function experiments(options) {
+  return // temporarily disabled
   if (options.environment !== 'development') return
   return {
     lazyCompilation: {

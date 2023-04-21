@@ -1,6 +1,6 @@
 {
   "name": "nullstack",
-  "version": "0.17.4",
+  "version": "0.17.5",
   "description": "Full Stack Javascript Components for one-dev armies",
   "main": "./types/index.d.ts",
   "author": "Mortaro",
@@ -43,7 +43,7 @@
     "sass-loader": "13.2.0",
     "style-loader": "^3.3.1",
     "swc-loader": "0.2.3",
-    "swc-plugin-nullstack": "github:nullstack/swc-plugin-nullstack",
+    "swc-plugin-nullstack": "0.1.0",
     "terser-webpack-plugin": "5.3.6",
     "time-analytics-webpack-plugin": "^0.1.20",
     "webpack": "5.76.3",
