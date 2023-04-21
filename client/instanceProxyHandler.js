@@ -1,5 +1,5 @@
 import client from './client'
-import { generateContext } from './context'
+import context, { generateContext } from './context'
 import { generateObjectProxy } from './objectProxyHandler'
 
 export const instanceProxies = new WeakMap()
@@ -15,8 +15,26 @@ const instanceProxyHandler = {
       }
       const { [name]: named } = {
         [name]: (args) => {
-          const context = generateContext({ ...target._attributes, ...args })
-          return target[name].call(proxy, context)
+          const scopedContext = generateContext({ ...target._attributes, ...args })
+          let result
+          try {
+            result = target[name].call(proxy, scopedContext)
+          } catch (error) {
+            if (context.catch) {
+              context.catch(error)
+            } else {
+              throw error
+            }
+            return null
+          }
+          if (result instanceof Promise) {
+            return new Promise((resolve, reject) => {
+              result.then(resolve).catch((error) => {
+                context.catch ? context.catch(error) : reject(error)
+              })
+            })
+          }
+          return result
         },
       }
       return named

@@ -1,14 +1,17 @@
 import Nullstack from 'nullstack'
 
 import cors from 'cors'
+import express from 'express'
 
 import Application from './src/Application'
+import CatchError from './src/CatchError'
 import ContextProject from './src/ContextProject'
 import ContextSecrets from './src/ContextSecrets'
 import ContextSettings from './src/ContextSettings'
 import ContextWorker from './src/ContextWorker'
 import ExposedServerFunctions from './src/ExposedServerFunctions'
 import vueable from './src/plugins/vueable'
+import ReqRes from './src/ReqRes'
 
 Nullstack.use(vueable)
 
@@ -22,6 +25,7 @@ context.server.use(
     optionsSuccessStatus: 200,
   }),
 )
+context.server.use(express.json())
 
 context.worker.staleWhileRevalidate = [/[0-9]/]
 context.worker.cacheFirst = [/[0-9]/]
@@ -40,6 +44,9 @@ context.server.put('/data/put/:param', ExposedServerFunctions.getData)
 context.server.patch('/data/patch/:param', ExposedServerFunctions.getData)
 context.server.delete('/data/delete/:param', ExposedServerFunctions.getData)
 
+context.server.get('/exposed-server-function-url.json', ReqRes.exposedServerFunction)
+context.server.get('/nested-exposed-server-function-url.json', ReqRes.nestedExposedServerFunction)
+
 context.server.get('/custom-api-before-start', (request, response) => {
   response.json({ startValue: context.startValue })
 })
@@ -57,6 +64,10 @@ for (const method of methods) {
   })
 }
 
+context.server.get('/vaidamerdanaapi.json', (_request, response) => {
+  response.vaidamerdanaapi()
+})
+
 context.startIncrementalValue = 0
 
 context.start = async function () {
@@ -66,6 +77,13 @@ context.start = async function () {
   await ContextWorker.start(context)
   context.startValue = true
   context.startIncrementalValue++
+}
+
+context.catch = async function (error) {
+  CatchError.logError({ message: error.message })
+  if (context.environment.development) {
+    console.error(error)
+  }
 }
 
 export default context

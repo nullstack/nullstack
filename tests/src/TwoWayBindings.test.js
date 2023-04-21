@@ -69,8 +69,13 @@ describe('TwoWayBindings', () => {
     expect(value).toMatch('a')
   })
 
-  test('binding to undefined sets the value to an empty string', async () => {
-    const value = await page.$eval('[data-undeclared]', (element) => element.value)
+  test('binding inputs to undefined sets the value to an empty string', async () => {
+    const value = await page.$eval('input[data-undeclared]', (element) => element.value)
+    expect(value).toMatch('')
+  })
+
+  test('binding textarea to undefined sets the value to an empty string', async () => {
+    const value = await page.$eval('textarea[data-undeclared]', (element) => element.value)
     expect(value).toMatch('')
   })
 
@@ -225,8 +230,13 @@ describe('TwoWayBindings', () => {
     expect(element).toBeTruthy()
   })
 
-  test('binding to nested undefined sets the value to an empty string', async () => {
-    const value = await page.$eval('[data-undeclared-nested]', (element) => element.value)
+  test('binding inputs to nested undefined sets the value to an empty string', async () => {
+    const value = await page.$eval('input[data-undeclared-nested]', (element) => element.value)
+    expect(value).toMatch('')
+  })
+
+  test('binding textareas to nested undefined sets the value to an empty string', async () => {
+    const value = await page.$eval('textarea[data-undeclared-nested]', (element) => element.value)
     expect(value).toMatch('')
   })
 
