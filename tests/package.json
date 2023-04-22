@@ -16,7 +16,7 @@
   },
   "types": "../../types/index.d.ts",
   "overrides": {
-    "webpack": "5.76.3",
+    "webpack": "^5.0.0",
     "terser": "npm:@swc/core"
   },
   "resolutions": {

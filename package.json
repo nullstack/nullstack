@@ -46,7 +46,7 @@
     "swc-plugin-nullstack": "0.1.0",
     "terser-webpack-plugin": "5.3.6",
     "time-analytics-webpack-plugin": "^0.1.20",
-    "webpack": "5.76.3",
+    "webpack": "^5.0.0",
     "webpack-dev-server": "4.11.1",
     "webpack-dev-middleware": "github:Mortaro/webpack-dev-middleware#fix-write-to-disk-cleanup",
     "webpack-hot-middleware": "^2.25.3",
