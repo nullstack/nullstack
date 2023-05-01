@@ -83,8 +83,8 @@ describe('ContextPage', () => {
 
 describe('ContextPage updated', () => {
   beforeAll(async () => {
-    await page.waitForSelector('[data-application-hydrated]')
     await page.goto('http://localhost:6969/context-page')
+    await page.waitForSelector('[data-application-hydrated]')
     await page.click('[data-update-head]')
   })
 

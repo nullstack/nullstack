@@ -52,7 +52,7 @@ class ContextPage extends Nullstack {
         <button onclick={this.requestStatus} data-request-status>
           401
         </button>
-        <button source={page} onclick={this.updateHead} data-update-head>
+        <button onclick={this.updateHead} data-update-head>
           title
         </button>
       </div>
