@@ -19,6 +19,7 @@ function bindStaticProps(klass) {
   while (parent !== Nullstack) {
     const props = Object.getOwnPropertyNames(parent)
     for (const prop of props) {
+      if (prop === 'caller' || prop === 'callee' || prop === 'arguments') continue
       const underscored = prop.startsWith('_')
       if (typeof klass[prop] === 'function') {
         if (!underscored && !registry[`${parent.hash}.${prop}`]) {

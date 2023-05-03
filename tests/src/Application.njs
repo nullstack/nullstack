@@ -59,6 +59,7 @@ import WorkerVerbs from './WorkerVerbs'
 import LazyComponent from './LazyComponent'
 import LazyComponentLoader from './LazyComponentLoader'
 import NestedFolder from './nested/NestedFolder'
+import ChildComponentWithoutServerFunctions from './ChildComponentWithoutServerFunctions'
 import './Application.css'
 
 class Application extends Nullstack {
@@ -148,6 +149,7 @@ class Application extends Nullstack {
         <Logo route="/logo" />
         <NestedFolder route="/nested/folder" />
         <LazyComponent route="/lazy-importer" prop="works" />
+        <ChildComponentWithoutServerFunctions route="/child-component-without-server-functions" />
         <ErrorPage route="*" />
       </body>
     )
