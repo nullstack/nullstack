@@ -6,6 +6,7 @@ import { updateParams } from './params'
 import segments from './segments'
 import windowEvent from './windowEvent'
 import worker from './worker'
+import deserialize from '../shared/deserialize'
 
 let redirectTimer = null
 
@@ -40,7 +41,8 @@ class Router {
         const endpoint = path === '/' ? api : path + api
         try {
           const response = await fetch(endpoint)
-          const payload = await response.json(url)
+          const meta = await response.text()
+          const payload = deserialize(meta)
           client.memory = payload.instances
           for (const key in payload.page) {
             page[key] = payload.page[key]
