@@ -63,17 +63,15 @@ function createResponse(callback) {
   return res
 }
 
-async function prerender(originalUrl) {
-  server.start()
-  return new Promise((resolve) => {
-    server._router.handle(
-      createRequest(originalUrl),
-      createResponse((code, data) => resolve(data)),
-      () => { },
-    )
-  })
-}
-
 export default function emulatePrerender(server) {
-  server.prerender = prerender
+  server.prerender = async function prerender(originalUrl) {
+    server.start()
+    return new Promise((resolve) => {
+      server._router.handle(
+        createRequest(originalUrl),
+        createResponse((code, data) => resolve(data)),
+        () => { },
+      )
+    })
+  }
 }
