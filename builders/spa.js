@@ -34,7 +34,7 @@ module.exports = async function spa({ output, cache, environment }) {
   await copy('/robots.txt')
   console.info()
 
-  console.info('\x1b[36m%s\x1b[0m', ` ✅️ ${projectName} is ready at ${folder}\n`)
+  console.info('\x1b[36m%s\x1b[0m', ` 🚀 ${projectName} is ready at ${folder}\n`)
 
   if (cache) {
     console.info('Storing cache...')

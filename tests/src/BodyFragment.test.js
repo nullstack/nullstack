@@ -52,9 +52,9 @@ describe('BodyFragment', () => {
   test('the body removes events when the fragment leaves the tree', async () => {
     await page.waitForSelector('body[data-hydrated]')
     await page.click('[href="/"]')
-    await page.waitForSelector('[data-window="shim"]:not([data-count])')
+    await page.waitForSelector('[data-application-hydrated]:not([data-count])')
     await page.click('body')
-    const element = await page.$('[data-window="shim"]:not([data-count])')
+    const element = await page.$('[data-application-hydrated]:not([data-count])')
     expect(element).toBeTruthy()
   })
 })

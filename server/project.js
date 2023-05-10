@@ -1,3 +1,4 @@
+import { ICONS } from 'nullstack/project'
 import environment from './environment'
 import reqres from './reqres'
 import worker from './worker'
@@ -17,7 +18,7 @@ project.root = '/'
 project.sitemap = environment.mode === 'ssg'
 project.favicon = '/favicon-96x96.png'
 project.disallow = []
-project.icons = JSON.parse(`{{NULLSTACK_PROJECT_ICONS}}`)
+project.icons = ICONS
 
 function getHost() {
   if (reqres.request?.headers?.host) {

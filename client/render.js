@@ -1,3 +1,4 @@
+import { sanitizeInnerHtml } from '../shared/sanitizeString'
 import generateTruthyString from '../shared/generateTruthyString'
 import { isFalse, isText } from '../shared/nodes'
 import { anchorableElement } from './anchorableNode'
@@ -28,7 +29,7 @@ export default function render(node, options) {
   for (const name in node.attributes) {
     if (name === 'debounce') continue
     if (name === 'html') {
-      node.element.innerHTML = node.attributes[name]
+      node.element.innerHTML = sanitizeInnerHtml(node.attributes[name])
       node.head || anchorableElement(node.element)
     } else if (name.startsWith('on')) {
       if (node.attributes[name] !== undefined) {

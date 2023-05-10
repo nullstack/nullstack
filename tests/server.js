@@ -10,6 +10,7 @@ import ContextSecrets from './src/ContextSecrets'
 import ContextSettings from './src/ContextSettings'
 import ContextWorker from './src/ContextWorker'
 import ExposedServerFunctions from './src/ExposedServerFunctions'
+import setExternalRoute from './src/externalRoute'
 import vueable from './src/plugins/vueable'
 import ReqRes from './src/ReqRes'
 
@@ -69,6 +70,8 @@ context.server.get('/vaidamerdanaapi.json', (_request, response) => {
 })
 
 context.startIncrementalValue = 0
+
+setExternalRoute(context.server)
 
 context.start = async function () {
   await ContextProject.start(context)

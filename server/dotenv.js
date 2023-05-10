@@ -6,4 +6,8 @@ if (process.env.NULLSTACK_ENVIRONMENT_NAME) {
   path += `.${process.env.NULLSTACK_ENVIRONMENT_NAME}`
 }
 
-dotenv.config({ path })
+if (module.hot) {
+  dotenv.config({ path, override: true })
+} else {
+  dotenv.config({ path })
+}

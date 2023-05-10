@@ -26,7 +26,7 @@ client.nextHead = []
 client.head = document.head
 client.body = document.body
 
-client.update = async function update() {
+client.update = function update() {
   if (client.initialized) {
     clearInterval(client.renderQueue)
     client.renderQueue = setTimeout(async () => {
@@ -39,9 +39,13 @@ client.update = async function update() {
         client.nextVirtualDom = await generateTree(client.initializer(), scope)
         rerender()
         client.processLifecycleQueues()
-      } catch (e) {
+      } catch (error) {
         client.skipHotReplacement = true
-        console.error(e)
+        if (context.catch) {
+          context.catch(error)
+        } else {
+          throw error
+        }
       }
     }, 16)
   }
@@ -95,6 +99,10 @@ client.processLifecycleQueues = async function processLifecycleQueues() {
     }
   }
   router._changed = false
+}
+
+if (module.hot) {
+  client.klasses = {}
 }
 
 export default client

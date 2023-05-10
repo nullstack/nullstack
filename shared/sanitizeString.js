@@ -6,3 +6,8 @@ export function sanitizeHtml(unsafe) {
 export function sanitizeString(unsafe) {
   return unsafe.replace(/<\//g, `<\\\/`)
 }
+
+export function sanitizeInnerHtml(unsafe) {
+  if (unsafe === undefined || typeof(unsafe) !== 'string') return ''
+  return unsafe.replaceAll('<\\', '<')
+}

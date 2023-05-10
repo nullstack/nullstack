@@ -1,16 +1,14 @@
 import bodyParser from 'body-parser'
 import express from 'express'
-import { writeFileSync } from 'fs'
-import fetch from 'node-fetch'
 import path from 'path'
-import WebSocket from 'ws'
-
 import deserialize from '../shared/deserialize'
-import extractParamValue from '../shared/extractParamValue'
 import prefix from '../shared/prefix'
 import context, { generateContext } from './context'
+import emulatePrerender from './emulatePrerender'
 import environment from './environment'
+import exposeServerFunctions from './exposeServerFunctions'
 import { generateFile } from './files'
+import hmr from './hmr'
 import generateManifest from './manifest'
 import { prerender } from './prerender'
 import printError from './printError'
@@ -19,54 +17,14 @@ import reqres from './reqres'
 import generateRobots from './robots'
 import template from './template'
 import { generateServiceWorker } from './worker'
-
-if (!global.fetch) {
-  global.fetch = fetch
-}
+import { load } from './lazy'
 
 const server = express()
 
-server.port =
-  process.env.NULSTACK_SERVER_PORT_YOU_SHOULD_NOT_CARE_ABOUT ||
-  process.env.NULLSTACK_SERVER_PORT ||
-  process.env.PORT ||
-  3000
+server.port = process.env.NULLSTACK_SERVER_PORT || process.env.PORT || 3000
 
 let contextStarted = false
 let serverStarted = false
-
-for (const method of ['get', 'post', 'put', 'patch', 'delete', 'all']) {
-  const original = server[method].bind(server)
-  server[method] = function (...args) {
-    if (typeof args[1] === 'function' && args[1].name === '_invoke') {
-      return original(args[0], bodyParser.text({ limit: server.maximumPayloadSize }), async (request, response) => {
-        reqres.set(request, response)
-        const params = {}
-        for (const key of Object.keys(request.params)) {
-          params[key] = extractParamValue(request.params[key])
-        }
-        for (const key of Object.keys(request.query)) {
-          params[key] = extractParamValue(request.query[key])
-        }
-        if (request.method !== 'GET') {
-          const payload = typeof request.body === 'object' ? JSON.stringify(request.body) : request.body
-          Object.assign(params, deserialize(payload))
-        }
-        try {
-          const subcontext = generateContext({ request, response, ...params })
-          const result = await args[1](subcontext)
-          reqres.clear()
-          response.json(result)
-        } catch (error) {
-          printError(error)
-          reqres.clear()
-          response.status(500).json({})
-        }
-      })
-    }
-    return original(...args)
-  }
-}
 
 server.use(async (request, response, next) => {
   if (!contextStarted) {
@@ -76,87 +34,18 @@ server.use(async (request, response, next) => {
   next()
 })
 
-function createRequest(url) {
-  return {
-    method: 'GET',
-    host: '',
-    cookies: {},
-    query: {},
-    url,
-    headers: {},
-  }
-}
+emulatePrerender(server)
+exposeServerFunctions(server)
 
-function createResponse(callback) {
-  const res = {
-    _removedHeader: {},
-    _statusCode: 200,
-    statusMessage: 'OK',
-    get statusCode() {
-      return this._statusCode
-    },
-    set statusCode(status) {
-      this._statusCode = status
-      this.status(status)
-    },
-  }
-  const headers = {}
-  let code = 200
-  res.set = res.header = (x, y) => {
-    if (arguments.length === 2) {
-      res.setHeader(x, y)
-    } else {
-      for (const key in x) {
-        res.setHeader(key, x[key])
-      }
-    }
-    return res
-  }
-  res.setHeader = (x, y) => {
-    headers[x] = y
-    headers[x.toLowerCase()] = y
-    return res
-  }
-  res.getHeader = (x) => headers[x]
-  res.redirect = function (_code, url) {
-    if (typeof _code !== 'number') {
-      code = 301
-      url = _code
-    } else {
-      code = _code
-    }
-    res.setHeader('Location', url)
-    res.end()
-  }
-  res.status = res.sendStatus = function (number) {
-    code = number
-    return res
-  }
-  res.end =
-    res.send =
-    res.write =
-      function (data = '') {
-        if (callback) callback(code, data, headers)
-      }
-  return res
-}
-
-server.prerender = async function (originalUrl) {
-  server.start()
-  return new Promise((resolve) => {
-    server._router.handle(
-      createRequest(originalUrl),
-      createResponse((code, data) => resolve(data)),
-      () => {},
-    )
-  })
+if (module.hot) {
+  hmr(server)
 }
 
 server.start = function () {
   if (serverStarted) return
   serverStarted = true
 
-  server.use(express.static(path.join(__dirname, '..', 'public')))
+  server.use(express.static(path.join(process.cwd(), 'public')))
 
   server.use(bodyParser.text({ limit: server.maximumPayloadSize }))
 
@@ -167,22 +56,10 @@ server.start = function () {
       response.send(generateFile(`${request.params.number}.client.js`, server))
     })
 
-    server.get(`/:number.client.js.map`, (request, response) => {
-      response.setHeader('Cache-Control', 'max-age=31536000, immutable')
-      response.contentType('application/json')
-      response.send(generateFile(`${request.params.number}.client.js.map`, server))
-    })
-
     server.get(`/:number.client.css`, (request, response) => {
       response.setHeader('Cache-Control', 'max-age=31536000, immutable')
       response.contentType('text/css')
       response.send(generateFile(`${request.params.number}.client.css`, server))
-    })
-
-    server.get(`/:number.client.css.map`, (request, response) => {
-      response.setHeader('Cache-Control', 'max-age=31536000, immutable')
-      response.contentType('application/json')
-      response.send(generateFile(`${request.params.number}.client.css.map`, server))
     })
 
     server.get(`/client.css`, (request, response) => {
@@ -191,22 +68,37 @@ server.start = function () {
       response.send(generateFile('client.css', server))
     })
 
-    server.get(`/client.css.map`, (request, response) => {
-      response.setHeader('Cache-Control', 'max-age=31536000, immutable')
-      response.contentType('application/json')
-      response.send(generateFile('client.css.map', server))
-    })
-
     server.get(`/client.js`, (request, response) => {
       response.setHeader('Cache-Control', 'max-age=31536000, immutable')
       response.contentType('text/javascript')
       response.send(generateFile('client.js', server))
     })
 
+  }
+
+  if (environment.development) {
     server.get(`/client.js.map`, (request, response) => {
       response.setHeader('Cache-Control', 'max-age=31536000, immutable')
       response.contentType('application/json')
       response.send(generateFile('client.js.map', server))
+    })
+
+    server.get(`/:number.client.js.map`, (request, response) => {
+      response.setHeader('Cache-Control', 'max-age=31536000, immutable')
+      response.contentType('application/json')
+      response.send(generateFile(`${request.params.number}.client.js.map`, server))
+    })
+
+    server.get(`/client.css.map`, (request, response) => {
+      response.setHeader('Cache-Control', 'max-age=31536000, immutable')
+      response.contentType('application/json')
+      response.send(generateFile('client.css.map', server))
+    })
+
+    server.get(`/:number.client.css.map`, (request, response) => {
+      response.setHeader('Cache-Control', 'max-age=31536000, immutable')
+      response.contentType('application/json')
+      response.send(generateFile(`${request.params.number}.client.css.map`, server))
     })
   }
 
@@ -233,6 +125,7 @@ server.start = function () {
     const { hash, methodName } = request.params
     const [invokerHash, boundHash] = hash.split('-')
     const key = `${invokerHash}.${methodName}`
+    await load(boundHash || invokerHash)
     const invokerKlass = registry[invokerHash]
     let boundKlass = invokerKlass
     if (boundHash) {
@@ -259,6 +152,60 @@ server.start = function () {
     }
   })
 
+  if (module.hot) {
+    server.all(`/${prefix}/:version/:hash/:methodName.json`, async (request, response) => {
+      const payload = request.method === 'GET' ? request.query.payload : request.body
+      reqres.set(request, response)
+      const args = deserialize(payload)
+      const { version, hash, methodName } = request.params
+      const [invokerHash, boundHash] = hash.split('-')
+      let [filePath, klassName] = (invokerHash || boundHash).split("___")
+      const file = path.resolve('..', filePath.replaceAll('__', '/'))
+      console.info('\x1b[1;37m%s\x1b[0m', ` [${request.method}] ${request.path}`)
+      console.info('\x1b[2;37m%s\x1b[0m', `  - ${file}`)
+      console.info('\x1b[2;37m%s\x1b[0m', `  - ${klassName}.${methodName}(${JSON.stringify(args)})\n`)
+      const key = `${invokerHash}.${methodName}`
+      let invokerKlass;
+      await load(boundHash || invokerHash)
+      async function reply() {
+        let boundKlass = invokerKlass
+        if (boundHash) {
+          boundKlass = registry[boundHash]
+          if (!(boundKlass.prototype instanceof invokerKlass)) {
+            return response.status(401).json({})
+          }
+        }
+        const method = registry[key]
+        if (method !== undefined) {
+          try {
+            const subcontext = generateContext({ request, response, ...args })
+            const result = await method.call(boundKlass, subcontext)
+            reqres.clear()
+            response.json({ result })
+          } catch (error) {
+            printError(error)
+            reqres.clear()
+            response.status(500).json({})
+          }
+        } else {
+          reqres.clear()
+          response.status(404).json({})
+        }
+      }
+      async function delay() {
+        invokerKlass = registry[invokerHash]
+        if (invokerKlass && invokerKlass.__hashes[methodName] !== version) {
+          setTimeout(() => {
+            delay()
+          }, 0)
+        } else {
+          reply()
+        }
+      }
+      delay()
+    })
+  }
+
   server.get('*', async (request, response, next) => {
     if (request.originalUrl.split('?')[0].indexOf('.') > -1) {
       return next()
@@ -280,24 +227,13 @@ server.start = function () {
     response.status(500).json({})
   })
 
-  if (!server.less) {
-    if (!server.port) {
-      console.info('\x1b[31mServer port is not defined!\x1b[0m')
-      process.exit()
-    }
+  if (module.hot) {
+    process.env.__NULLSTACK_FIRST_LOAD_COMPLETE = true
+  }
 
+  if (!server.less) {
     server.listen(server.port, async () => {
-      if (environment.development) {
-        if (process.env.NULLSTACK_ENVIRONMENT_DISK === 'true') {
-          const content = await server.prerender('/')
-          const target = `${process.cwd()}/.development/index.html`
-          writeFileSync(target, content)
-        }
-        const socket = new WebSocket(`ws://localhost:${process.env.NULLSTACK_SERVER_PORT}/ws`)
-        socket.onopen = async function () {
-          socket.send('{"type":"NULLSTACK_SERVER_STARTED"}')
-        }
-      } else {
+      if (environment.production) {
         console.info(
           '\x1b[36m%s\x1b[0m',
           ` ✅️ Your application is ready at http://${process.env.NULLSTACK_PROJECT_DOMAIN}:${process.env.NULLSTACK_SERVER_PORT}\n`,

@@ -1,5 +1,4 @@
 import element from '../shared/element'
-import fragment from '../shared/fragment'
 import generateTree from '../shared/generateTree'
 import { loadPlugins, useClientPlugins } from '../shared/plugins'
 import client from './client'
@@ -7,7 +6,6 @@ import context, { generateContext } from './context'
 import environment from './environment'
 import hydrate from './hydrate'
 import instanceProxyHandler, { instanceProxies } from './instanceProxyHandler'
-import invoke from './invoke'
 import page from './page'
 import params, { updateParams } from './params'
 import project from './project'
@@ -16,7 +14,6 @@ import rerender from './rerender'
 import router from './router'
 import settings from './settings'
 import state from './state'
-import windowEvent from './windowEvent'
 import worker from './worker'
 
 context.page = page
@@ -35,11 +32,12 @@ scope.context = context
 
 client.plugins = loadPlugins(scope)
 
+if (environment.development) {
+  globalThis.$nullstack = context
+}
+
 export default class Nullstack {
 
-  static element = element
-  static invoke = invoke
-  static fragment = fragment
   static use = useClientPlugins
   static context = generateContext({})
 
@@ -103,49 +101,4 @@ export default class Nullstack {
     return false
   }
 
-}
-
-if (module.hot) {
-  Nullstack.serverHashes ??= {}
-  Nullstack.serverPings = 0
-  Nullstack.clientPings = 0
-  const socket = new WebSocket(`ws${router.base.slice(4)}/ws`)
-  socket.onmessage = async function (e) {
-    const data = JSON.parse(e.data)
-    if (data.type === 'NULLSTACK_SERVER_STARTED') {
-      Nullstack.serverPings++
-      if (Nullstack.needsReload || !environment.hot) {
-        window.location.reload()
-      }
-    }
-  }
-  Nullstack.updateInstancesPrototypes = function updateInstancesPrototypes(klass, hash, serverHash) {
-    for (const key in context.instances) {
-      const instance = context.instances[key]
-      if (instance.constructor.hash === hash) {
-        Object.setPrototypeOf(instance, klass.prototype)
-      }
-    }
-    if (Nullstack.serverHashes[hash]) {
-      if (Nullstack.serverHashes[hash] !== serverHash) {
-        if (Nullstack.clientPings < Nullstack.serverPings) {
-          window.location.reload()
-        } else {
-          Nullstack.needsReload = true
-        }
-      }
-      Nullstack.clientPings++
-    }
-    Nullstack.serverHashes[hash] = serverHash
-    client.update()
-  }
-  Nullstack.hotReload = function hotReload(klass) {
-    if (client.skipHotReplacement) {
-      window.location.reload()
-    } else {
-      Nullstack.start(klass)
-      windowEvent('environment')
-    }
-  }
-  module.hot.decline()
 }

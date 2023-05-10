@@ -1,8 +1,8 @@
-beforeAll(async () => {
-  await page.goto('http://localhost:6969/context-page')
-})
-
 describe('ContextPage', () => {
+  beforeAll(async () => {
+    await page.goto('http://localhost:6969/context-page')
+  })
+
   test('is part of the client context', async () => {
     const element = await page.$('[data-page]')
     expect(element).toBeTruthy()
@@ -73,17 +73,42 @@ describe('ContextPage', () => {
     expect(element).toBeTruthy()
   })
 
-  test('a custom event is triggered when the title changes', async () => {
-    await page.click('button')
-    await page.waitForSelector('[data-event-triggered]')
-    const element = await page.$('[data-event-triggered]')
+  test('the page reacts to a server function status', async () => {
+    await page.click('[data-request-status]')
+    await page.waitForSelector('[data-page-status="401"]')
+    const element = await page.$('[data-page-status="401"]')
+    expect(element).toBeTruthy()
+  })
+})
+
+describe('ContextPage updated', () => {
+  beforeAll(async () => {
+    await page.goto('http://localhost:6969/context-page')
+    await page.waitForSelector('[data-application-hydrated]')
+    await page.click('[data-update-head]')
+  })
+
+  test('updates meta og:title', async () => {
+    await page.waitForSelector('meta[property="og:title"][content="Nullstack Tests Updated"]')
+    const element = await page.$('meta[property="og:title"][content="Nullstack Tests Updated"]')
     expect(element).toBeTruthy()
   })
 
-  test('the page reacts to a server function status', async () => {
-    await page.click('[status="401"]')
-    await page.waitForSelector('[data-page-status="401"]')
-    const element = await page.$('[data-page-status="401"]')
+  test('updates meta og:description', async () => {
+    await page.waitForSelector('meta[property="og:description"][content="Nullstack tests page that tests the context page updated"]')
+    const element = await page.$('meta[property="og:description"][content="Nullstack tests page that tests the context page updated"]')
+    expect(element).toBeTruthy()
+  })
+
+  test('updates meta description', async () => {
+    await page.waitForSelector('meta[name="description"][content="Nullstack tests page that tests the context page updated"]')
+    const element = await page.$('meta[name="description"][content="Nullstack tests page that tests the context page updated"]')
+    expect(element).toBeTruthy()
+  })
+
+  test('a custom event is triggered when the title changes', async () => {
+    await page.waitForSelector('[data-event-triggered]')
+    const element = await page.$('[data-event-triggered]')
     expect(element).toBeTruthy()
   })
 })

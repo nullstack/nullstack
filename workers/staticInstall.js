@@ -5,7 +5,7 @@ function install(event) {
     '/manifest.webmanifest',
     `/client.js?fingerprint=${self.context.environment.key}`,
     `/client.css?fingerprint=${self.context.environment.key}`,
-    '{{BUNDLE}}',
+    globalThis.__NULLSTACK_BUNDLE,
     `/nullstack/${self.context.environment.key}/offline/index.html`,
   ].flat()
   event.waitUntil(

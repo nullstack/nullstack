@@ -35,6 +35,13 @@ class ContextPage extends Nullstack {
     await this.raiseStatus({ status })
   }
 
+  updateHead({ page }) {
+    page.title = 'Nullstack Tests Updated'
+    page.image = '/image-updated.jpg'
+    page.description = 'Nullstack tests page that tests the context page updated'
+    page.locale = 'en-US'
+  }
+
   render({ page }) {
     return (
       <div>
@@ -42,13 +49,11 @@ class ContextPage extends Nullstack {
         <div data-page={!!page} />
         <div data-changes={page.changes} />
         <div data-priority={page.priority} />
-        <button source={page} onclick={{ title: 'Nullstack Tested' }}>
-          {' '}
-          title{' '}
+        <button onclick={this.requestStatus} data-request-status>
+          401
         </button>
-        <button onclick={this.requestStatus} status={401}>
-          {' '}
-          401{' '}
+        <button onclick={this.updateHead} data-update-head>
+          title
         </button>
       </div>
     )

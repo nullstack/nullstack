@@ -24,7 +24,5 @@ export type NullstackEnvironment = {
    */
   event: string
 
-  hot?: boolean
-
   disk?: boolean
 }
