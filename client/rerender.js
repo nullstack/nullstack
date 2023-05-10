@@ -1,3 +1,4 @@
+import { sanitizeInnerHtml } from '../shared/sanitizeString'
 import generateTruthyString from '../shared/generateTruthyString'
 import { isFalse, isText, isUndefined } from '../shared/nodes'
 import { anchorableElement } from './anchorableNode'
@@ -14,7 +15,7 @@ function updateAttributes(selector, currentAttributes, nextAttributes) {
       reref(nextAttributes, selector)
     } else if (name === 'html') {
       if (nextAttributes[name] !== currentAttributes[name]) {
-        selector.innerHTML = nextAttributes[name]
+        selector.innerHTML = sanitizeInnerHtml(nextAttributes[name])
         anchorableElement(selector)
       }
     } else if (name === 'checked' || name === 'value') {
