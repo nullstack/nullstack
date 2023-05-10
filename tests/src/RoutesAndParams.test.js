@@ -258,22 +258,26 @@ describe('RoutesAndParams /routes-and-params/inner-html', () => {
 describe('RoutesAndParams /routes-and-params/hrefs spa', () => {
   beforeEach(async () => {
     await page.goto('http://localhost:6969/routes-and-params/hrefs')
+    await page.waitForSelector(`[data-application-hydrated]`)
   })
 
   test('https urls do a full redirect', async () => {
-    await Promise.all([page.click('[href="https://nullstack.app/"]'), page.waitForNavigation()])
+    await page.click('[href="https://nullstack.app/"]')
+    await page.waitForSelector('link[rel="canonical"][href="https://nullstack.app/"]')
     const url = await page.url()
     expect(url).toMatch('://nullstack.app')
   })
 
   test('http urls do a full redirect', async () => {
-    await Promise.all([page.click('[href="http://nullstack.app/"]'), page.waitForNavigation()])
+    await page.click('[href="http://nullstack.app/"]')
+    await page.waitForSelector('link[rel="canonical"][href="https://nullstack.app/"]')
     const url = await page.url()
     expect(url).toMatch('://nullstack.app')
   })
 
   test('// urls do a full redirect', async () => {
-    await Promise.all([page.click('[href="//nullstack.app/"]'), page.waitForNavigation()])
+    await page.click('[href="//nullstack.app/"]')
+    await page.waitForSelector('link[rel="canonical"][href="https://nullstack.app/"]')
     const url = await page.url()
     expect(url).toMatch('://nullstack.app')
   })
