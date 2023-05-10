@@ -53,13 +53,13 @@ export function generateServiceWorker() {
   const sources = []
   const context = { environment, project, settings, worker }
   let original = ''
-  const file = path.join(__dirname, '../', 'public', 'service-worker.js')
+  const file = path.join(process.cwd(), 'public', 'service-worker.js')
   if (existsSync(file)) {
     original = readFileSync(file, 'utf-8')
   }
-  const bundleFolder = path.join(__dirname, '../', environment.production ? '.production' : '.development')
+  const bundleFolder = path.join(process.cwd(), environment.production ? '.production' : '.development')
   const scripts = readdirSync(bundleFolder)
-    .filter((filename) => filename.includes('.client.'))
+    .filter((filename) => filename.includes('.client.') && !filename.endsWith('.map'))
     .map((filename) => `'/${filename}'`)
   sources.push(`self.context = ${JSON.stringify(context, replacer, 2)};`)
   sources.push(load)
@@ -87,7 +87,7 @@ export function generateServiceWorker() {
   if (original) {
     sources.push(original)
   }
-  files['service-worker.js'] = sources.join(`\n\n`).replace(`"{{BUNDLE}}",`, scripts.join(', \n'))
+  files['service-worker.js'] = sources.join(`\n\n`).replace(`globalThis.__NULLSTACK_BUNDLE`, scripts.join(', \n'))
   return files['service-worker.js']
 }
 

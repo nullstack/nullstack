@@ -8,7 +8,7 @@ import project from './project'
 
 export default function generateManifest(server) {
   if (files['manifest.webmanifest']) return files['manifest.webmanifest']
-  const file = path.join(__dirname, '../', 'public', 'manifest.webmanifest')
+  const file = path.join(process.cwd(), 'public', 'manifest.webmanifest')
   if (existsSync(file)) {
     return readFileSync(file, 'utf-8')
   }

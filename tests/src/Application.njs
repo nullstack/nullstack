@@ -1,7 +1,6 @@
 import Nullstack from 'nullstack'
 
 import AnchorModifiers from './AnchorModifiers'
-import './Application.css'
 import ArrayAttributes from './ArrayAttributes'
 import BodyFragment from './BodyFragment'
 import CatchError from './CatchError'
@@ -27,17 +26,17 @@ import FullStackLifecycle from './FullStackLifecycle'
 import Instanceable from './Instanceable'
 import InstanceKey from './InstanceKey'
 import InstanceSelf from './InstanceSelf'
-import IsomorphicImport from './IsomorphicImport.njs'
+import IsomorphicImport from './IsomorphicImport'
 import IsomorphicStartup from './IsomorphicStartup'
 import JavaScriptExtension from './JavaScriptExtension'
-import LazyComponentLoader from './LazyComponentLoader'
+import Logo from './Logo'
 import MetatagState from './MetatagState'
 import NestedProxy from './NestedProxy'
 import OptimizedEvents from './OptimizedEvents'
 import ParentComponent from './ParentComponent'
 import PersistentComponent from './PersistentComponent'
 import PluginAttributes from './PluginAttributes'
-import PublicServerFunctions from './PublicServerFunctions.njs'
+import PublicServerFunctions from './PublicServerFunctions'
 import PureComponents from './PureComponents'
 import Refs from './Refs'
 import RenderableComponent from './RenderableComponent'
@@ -56,8 +55,12 @@ import UndefinedNodes from './UndefinedNodes'
 import UnderscoredAttributes from './UnderscoredAttributes'
 import Vunerability from './Vunerability'
 import WebpackCustomPlugin from './WebpackCustomPlugin'
-import WindowDependency from './WindowDependency'
 import WorkerVerbs from './WorkerVerbs'
+import LazyComponent from './LazyComponent'
+import LazyComponentLoader from './LazyComponentLoader'
+import NestedFolder from './nested/NestedFolder'
+import ChildComponentWithoutServerFunctions from './ChildComponentWithoutServerFunctions'
+import './Application.css'
 
 class Application extends Nullstack {
 
@@ -72,10 +75,12 @@ class Application extends Nullstack {
 
   render({ project, page, environment, refInstanceCount }) {
     return (
-      <body data-window={WindowDependency.key}>
+      <body data-application-hydrated={this.hydrated}>
         <h1> {project.name} </h1>
         {page.status !== 200 && <div route="*" data-page-status={page.status} />}
         <div route="/">
+          <a href="/lazy-component"> go lazy go home </a>
+          <a href="/lazy-importer"> import </a>
           <a href={`/nullstack/${environment.key}/offline`}> offline </a>
           <a href="/static-this"> static this </a>
           <a href="/routes-and-params/a"> router with params </a>
@@ -141,6 +146,10 @@ class Application extends Nullstack {
         <ExposedServerFunctions route="/exposed-server-functions" />
         <CatchError route="/catch-error" />
         <ReqRes route="/reqres" />
+        <Logo route="/logo" />
+        <NestedFolder route="/nested/folder" />
+        <LazyComponent route="/lazy-importer" prop="works" />
+        <ChildComponentWithoutServerFunctions route="/child-component-without-server-functions" />
         <ErrorPage route="*" />
       </body>
     )

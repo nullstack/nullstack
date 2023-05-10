@@ -62,7 +62,9 @@ describe('FullStackLifecycle ssr', () => {
 describe('FullStackLifecycle spa', () => {
   beforeAll(async () => {
     await page.goto('http://localhost:6969/')
+    await page.waitForSelector('[data-application-hydrated]')
     await page.click('a[href="/full-stack-lifecycle"]')
+    await page.waitForSelector('[data-hydrated]')
   })
 
   test('prepare should run', async () => {

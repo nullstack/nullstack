@@ -11,11 +11,12 @@ class LazyComponent extends Nullstack {
     this.safelisted = await this.serverFunctionWorks()
   }
 
-  render() {
+  render({ prop }) {
     return (
-      <div data-lazy data-safelisted={this.safelisted}>
-        {' '}
-        LazyComponent{' '}
+      <div data-lazy data-safelisted={this.safelisted} data-prop={prop}>
+        <p>safelisted: {this.safelisted}</p>
+        <p>prop: {prop}</p>
+        <a href="/"> home </a>
       </div>
     )
   }

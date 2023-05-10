@@ -3,7 +3,7 @@ module.exports = async function ssr({ cache }) {
   const application = require(`${dir}/.production/server`).default
   const projectName = application.project.name || 'The Nullstack application'
 
-  console.info('\x1b[36m%s\x1b[0m', `\n ✅️ ${projectName} is ready for production\n`)
+  console.info('\x1b[36m%s\x1b[0m', `\n 🚀 ${projectName} is ready for production\n`)
 
   if (cache) {
     console.info('Storing cache...')

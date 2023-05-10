@@ -39,20 +39,20 @@ export default function ({ head, body, nextBody, context, instances }) {
     context: environment.mode === 'spa' ? {} : serializableContext,
   }
   return `<!DOCTYPE html>
-<html${page.locale ? ` lang="${page.locale}"` : ''}>
+<html lang="${page.locale || ''}">
   <head>
     <meta charset="utf-8">
     <meta name="generator" content="Created with Nullstack - https://nullstack.app" />
-    ${page.title ? `<title>${page.title}</title>` : ''}
+    <title>${page.title || ''}</title>
     <meta property="og:image" content="${image}">
-    ${page.description ? `<meta property="og:description" content="${page.description}">` : ''}
-    ${page.description ? `<meta name="description" content="${page.description}">` : ''}
-    ${page.title ? `<meta property="og:title" content="${page.title}">` : ''}
+    <meta property="og:description" content="${page.description || ''}">
+    <meta name="description" content="${page.description || ''}">
+    <meta property="og:title" content="${page.title || ''}">
     ${project.type ? `<meta property="og:type" content="${project.type}">` : ''}
     ${project.name ? `<meta property="og:site_name" content="${project.name}">` : ''}
     <meta property="og:url" content="${canonical}">
     <link rel="canonical" href="${canonical}">
-    ${page.locale ? `<meta property="og:locale" content="${page.locale}">` : ''}
+    <meta property="og:locale" content="${page.locale || ''}">
     <link rel="shortcut icon" href="${cdn(project.favicon)}" type="image/png">
     <link rel="icon" href="${cdn(project.favicon)}" type="image/png">
     <link rel="manifest" href="/manifest.webmanifest" integrity="${integrities['manifest.webmanifest'] || ''}">

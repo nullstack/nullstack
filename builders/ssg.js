@@ -79,9 +79,8 @@ module.exports = async function ssg({ output, cache, environment }) {
     const urls = Object.keys(pages).map((p) => {
       const page = pages[p]
       const canonical = `https://${application.project.domain}${p}`
-      return `<url><loc>${canonical}</loc><lastmod>${timestamp}</lastmod>${
-        page.changes ? `<changefreq>${page.changes}</changefreq>` : ''
-      }${page.priority ? `<priority>${page.priority.toFixed(1)}</priority>` : ''}</url>`
+      return `<url><loc>${canonical}</loc><lastmod>${timestamp}</lastmod>${page.changes ? `<changefreq>${page.changes}</changefreq>` : ''
+        }${page.priority ? `<priority>${page.priority.toFixed(1)}</priority>` : ''}</url>`
     })
     const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.join(
       '',
@@ -111,7 +110,7 @@ module.exports = async function ssg({ output, cache, environment }) {
   await createSitemap()
   console.info()
 
-  console.info('\x1b[36m%s\x1b[0m', ` ✅️ ${projectName} is ready at ${folder}\n`)
+  console.info('\x1b[36m%s\x1b[0m', ` 🚀 ${projectName} is ready at ${folder}\n`)
 
   if (cache) {
     console.info('Storing cache...')

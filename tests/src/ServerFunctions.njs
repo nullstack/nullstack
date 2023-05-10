@@ -62,6 +62,10 @@ class ServerFunctions extends Nullstack {
     return true
   }
 
+  static async getPrivateFunction({ request }) {
+    return this._privateFunction()
+  }
+
   static async getRequestUrl({ request }) {
     return request.originalUrl.startsWith('/')
   }
@@ -75,6 +79,7 @@ class ServerFunctions extends Nullstack {
 
   async hydrate() {
     this.underlineRemovedFromClient = !ServerFunctions._privateFunction
+    this.underlineStayOnServer = await ServerFunctions.getPrivateFunction()
     this.doublePlusOneClient = await ServerFunctions.getDoublePlusOne({ number: 34 })
     this.acceptsSpecialCharacters = await this.getEncodedString({ string: decodedString })
     this.hydratedOriginalUrl = await ServerFunctions.getRequestUrl()
@@ -100,6 +105,7 @@ class ServerFunctions extends Nullstack {
         <div data-double-plus-one-client={this.doublePlusOneClient === 69} />
         <div data-accepts-special-characters={this.acceptsSpecialCharacters} />
         <div data-underline-removed-from-client={this.underlineRemovedFromClient} />
+        <div data-underline-stay-on-server={this.underlineStayOnServer} />
         <div data-hydrated-original-url={this.hydratedOriginalUrl} />
         <div data-original-url={this.originalUrl} />
       </div>

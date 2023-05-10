@@ -38,6 +38,9 @@ async function register() {
     const request = `/service-worker.js`
     try {
       proxy.registration = await navigator.serviceWorker.register(request, { scope: '/' })
+      if (environment.development) {
+        proxy.registration.unregister()
+      }
     } catch (error) {
       console.error(error)
     }

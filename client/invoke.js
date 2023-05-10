@@ -2,6 +2,7 @@ import deserialize from '../shared/deserialize'
 import prefix from '../shared/prefix'
 import page from './page'
 import worker from './worker'
+import client from './client'
 
 export default function invoke(name, hash) {
   return async function _invoke(params = {}) {
@@ -12,8 +13,12 @@ export default function invoke(name, hash) {
     } else {
       worker.queues[name] = [...worker.queues[name], params]
     }
-    const finalHash = hash === this.hash ? hash : `${hash}-${this.hash}`
+    let finalHash = hash === this.hash ? hash : `${hash}-${this.hash}`
     let url = `${worker.api}/${prefix}/${finalHash}/${name}.json`
+    if (module.hot) {
+      const version = client.klasses[hash].__hashes[name]
+      url = `${worker.api}/${prefix}/${version}/${finalHash}/${name}.json`
+    }
     const body = JSON.stringify(params || {})
     const options = {
       headers: worker.headers,

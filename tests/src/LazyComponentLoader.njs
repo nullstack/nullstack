@@ -15,7 +15,7 @@ class LazyComponentLoader extends Nullstack {
   }
 
   render() {
-    if (!this.hydrated) return false
+    if (!LazyComponent) return false
     return <LazyComponent />
   }
 
