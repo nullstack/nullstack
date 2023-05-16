@@ -16,7 +16,7 @@ function server(options) {
     return options.entry
   }
   return [
-    'webpack/hot/poll?100',
+    `${require.resolve('webpack/hot/poll')}?100`,
     path.posix.join(options.configFolder, 'shared', 'accept.js'),
     options.entry
   ]
