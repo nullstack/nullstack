@@ -21,13 +21,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 7
       # cache the dependencies from any node_modules directory
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
           path: |
             **/node_modules
-            **/package-lock.json
+            **/pnpm-lock.yaml
           key: node_modules-${{ matrix.node-version }}-${{ hashFiles('**/package.json') }}
 
       - name: Use Node.js ${{ matrix.node-version }}
@@ -37,15 +40,15 @@ jobs:
 
       - name: Install and link main deps
         run: |
-          npm install
-          npm link
+          pnpm install
+          pnpm link --global
 
       - name: Install deps at tests folder
         working-directory: ./tests
         run: |
-          npm link nullstack
-          npm install
+          pnpm link nullstack --global
+          pnpm install
 
       - name: Run tests
         working-directory: ./tests
-        run: npm test
+        run: pnpm test
