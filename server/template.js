@@ -6,7 +6,7 @@ import project from './project'
 import renderAttributes from './renderAttributes'
 import settings from './settings'
 
-export default function ({ head, body, nextBody, context, instances }) {
+export default function ({ head, body, nextMeta, context, instances }) {
   const { page, router, worker, params } = context
   const canonical = absolute(page.canonical || router.url)
   const image = cdnOrAbsolute(page.image)
@@ -39,7 +39,7 @@ export default function ({ head, body, nextBody, context, instances }) {
     context: environment.mode === 'spa' ? {} : serializableContext,
   }
   return `<!DOCTYPE html>
-<html lang="${page.locale || ''}">
+<html lang="${page.locale || ''}" ${renderAttributes(nextMeta.html)}>
   <head>
     <meta charset="utf-8">
     <meta name="generator" content="Created with Nullstack - https://nullstack.app" />
@@ -75,7 +75,7 @@ export default function ({ head, body, nextBody, context, instances }) {
     integrities['client.js'] || ''
   }" defer crossorigin="anonymous"></script>
   </head>
-  <body ${renderAttributes(nextBody)}>
+  <body ${renderAttributes(nextMeta.body)}>
     ${environment.mode === 'spa' ? '<div id="application"></div>' : body}
   </body>
 </html>`

@@ -105,27 +105,36 @@ async function generateBranch(siblings, node, depth, scope) {
     return
   }
 
-  if (node.type === 'body') {
+  if (node.type === 'body' || node.type === 'html' || node.type === 'window') {
+    const tagName = node.type
     node.type = fragment
     for (const attribute in node.attributes) {
       if (attribute === 'children' || attribute.startsWith('_')) continue
-      if (attribute === 'class' || attribute === 'style') {
-        if (!scope.nextBody[attribute]) {
-          scope.nextBody[attribute] = []
-        }
-        scope.nextBody[attribute].push(node.attributes[attribute])
-      } else if (attribute.startsWith('on')) {
+      if (attribute.startsWith('on')) {
         if (scope.context.environment.server) continue
-        if (!scope.nextBody[attribute]) {
-          scope.nextBody[attribute] = []
+        if (!scope.nextMeta[tagName][attribute]) {
+          scope.nextMeta[tagName][attribute] = []
         }
         if (Array.isArray(node.attributes[attribute])) {
-          scope.nextBody[attribute].push(...node.attributes[attribute])
+          for(const callback of node.attributes[attribute]) {
+            if (typeof callback === 'object') {
+              scope.nextMeta[tagName][attribute].push(() => Object.assign(node.attributes.source, callback))
+            } else {
+              scope.nextMeta[tagName][attribute].push(callback)
+            }
+          }
         } else {
-          scope.nextBody[attribute].push(node.attributes[attribute])
+          scope.nextMeta[tagName][attribute].push(node.attributes[attribute])
         }
-      } else {
-        scope.nextBody[attribute] = node.attributes[attribute]
+      } else if (tagName !== 'window') {
+        if (attribute === 'class' || attribute === 'style') {
+          if (!scope.nextMeta[tagName][attribute]) {
+            scope.nextMeta[tagName][attribute] = []
+          }
+          scope.nextMeta[tagName][attribute].push(node.attributes[attribute])
+        } else {
+          scope.nextMeta[tagName][attribute] = node.attributes[attribute]
+        }
       }
     }
   }
