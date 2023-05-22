@@ -1,4 +1,4 @@
-export type NullstackRouter = {
+export interface NullstackRouter {
   /**
    * The router path including query params.
    * Does not contain the domain and port.
