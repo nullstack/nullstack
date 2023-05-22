@@ -1,1 +1,1 @@
-export type NullstackSettings = Record<string, string | boolean>
+export interface NullstackSettings extends Record<string, string | boolean> {}

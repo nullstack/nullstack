@@ -1,4 +1,4 @@
-export type NullstackPage = {
+export interface NullstackPage {
   /**
    * Current page title
    *

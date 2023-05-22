@@ -1,4 +1,4 @@
-export type NullstackEnvironment = {
+export interface NullstackEnvironment {
   client: boolean
 
   server: boolean
