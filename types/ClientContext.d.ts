@@ -1,5 +1,5 @@
 import { NullstackEnvironment } from './Environment'
-import { NullstackNode } from './JSX'
+import { NullstackFragment } from './JSX'
 import { NullstackPage } from './Page'
 import { NullstackParams } from './Params'
 import { NullstackProject } from './Project'
@@ -98,7 +98,7 @@ export type NullstackClientContext<TProps = unknown> = TProps & {
    *
    * @see https://nullstack.app/renderable-components#components-with-children
    */
-  children: NullstackNode
+  children: NullstackFragment
 
   /**
    * Bind object.
