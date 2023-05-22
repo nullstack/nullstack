@@ -31,7 +31,7 @@ export async function prerender(request, response) {
   scope.body = ''
   scope.context = context
   scope.generateContext = generateContext(context)
-  scope.nextBody = {}
+  scope.nextMeta = { body: {}, html: {}, window: {} }
   scope.nextHead = []
   scope.plugins = loadPlugins(scope)
 
@@ -48,7 +48,7 @@ export async function prerender(request, response) {
     context.page.status = 500
   } finally {
     if (context.page.status !== 200) {
-      scope.nextBody = {}
+      scope.nextMeta = {body: {}, html: {}, window: {}}
       scope.nextHead = []
       for (const key in context.router._routes) {
         delete context.router._routes[key]

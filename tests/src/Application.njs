@@ -3,6 +3,8 @@ import Nullstack from 'nullstack'
 import AnchorModifiers from './AnchorModifiers'
 import ArrayAttributes from './ArrayAttributes'
 import BodyFragment from './BodyFragment'
+import HtmlFragment from './HtmlFragment'
+import WindowFragment from './WindowFragment'
 import CatchError from './CatchError'
 import ChildComponent from './ChildComponent'
 import ComponentTernary from './ComponentTernary'
@@ -60,6 +62,7 @@ import LazyComponent from './LazyComponent'
 import LazyComponentLoader from './LazyComponentLoader'
 import NestedFolder from './nested/NestedFolder'
 import ChildComponentWithoutServerFunctions from './ChildComponentWithoutServerFunctions'
+import ObjectEventScope from './ObjectEventScope'
 import './Application.css'
 
 class Application extends Nullstack {
@@ -140,6 +143,8 @@ class Application extends Nullstack {
         <DynamicHead route="/dynamic-head" />
         <TextObserver route="/text-observer" />
         <BodyFragment route="/body-fragment" />
+        <HtmlFragment route="/html-fragment" />
+        <WindowFragment route="/window-fragment" />
         <ArrayAttributes route="/array-attributes" />
         <RouteScroll route="/route-scroll/*" key="routeScroll" />
         <IsomorphicImport route="/isomorphic-import" />
@@ -150,6 +155,7 @@ class Application extends Nullstack {
         <NestedFolder route="/nested/folder" />
         <LazyComponent route="/lazy-importer" prop="works" />
         <ChildComponentWithoutServerFunctions route="/child-component-without-server-functions" />
+        <ObjectEventScope route="/object-event-scope" />
         <ErrorPage route="*" />
       </body>
     )
