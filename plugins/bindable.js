@@ -12,6 +12,11 @@ function transform({ node, environment }) {
     node.children = [object[property] ?? '']
   } else if (node.type === 'input' && node.attributes.type === 'checkbox') {
     node.attributes.checked = object[property]
+  } else if (node.type === 'input' && node.attributes.type === 'date' && object[property] instanceof Date) {
+    const yyyy = object[property].getFullYear()
+    const mm = (object[property].getMonth() + 1).toString().padStart(2, '0')
+    const dd = object[property].getDate().toString().padStart(2, '0')
+    node.attributes.value = `${yyyy}-${mm}-${dd}`
   } else {
     node.attributes.value = object[property] ?? ''
   }
