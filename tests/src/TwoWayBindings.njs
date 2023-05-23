@@ -9,6 +9,7 @@ class TwoWayBindings extends Nullstack {
   boolean = true
   character = 'a'
   text = 'aaaa'
+  date = new Date()
 
   object = { count: 1 }
   array = ['a', 'b', 'c']
@@ -143,6 +144,14 @@ class TwoWayBindings extends Nullstack {
         >
           rebounce
         </button>
+        <input 
+          type="date" 
+          bind={this.date} 
+          data-instanceof-date={this.date instanceof Date} 
+          data-date={this.date.getDate()} 
+          data-month={this.date.getMonth() + 1} 
+          data-year={this.date.getFullYear()} 
+        />
       </div>
     )
   }

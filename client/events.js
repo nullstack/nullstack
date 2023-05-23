@@ -67,6 +67,12 @@ export function generateCallback(selector, name) {
           object[property] = event.target[valueName] === 'true'
         } else if (typeof object[property] === 'number') {
           object[property] = +event.target[valueName] || 0
+        } else if (object[property] instanceof Date) {
+          const [yyyy, mm, dd] = event.target[valueName].split('-')
+          object[property].setFullYear(yyyy)
+          object[property].setMonth(+mm - 1)
+          object[property].setDate(dd)
+          object[property] = object[property]
         } else {
           object[property] = event.target[valueName]
         }

@@ -257,4 +257,19 @@ describe('TwoWayBindings', () => {
     const element = await page.$('[data-render-clicked-and-inputed]')
     expect(element).toBeTruthy()
   })
+
+  test('dates can be bound to date inputs', async () => {
+    await page.$eval('[data-instanceof-date]', (element) => {
+      element.focus()
+      element.value = '1992-10-16'
+      element.blur()
+      const event = new Event('input')
+      element.dispatchEvent(event)
+    })
+    await page.waitForSelector('[data-date="16"]')
+    await page.waitForSelector('[data-month="10"]')
+    await page.waitForSelector('[data-year="1992"]')
+    const element = await page.$('[data-date="16"]')
+    expect(element).toBeTruthy()
+  })
 })
