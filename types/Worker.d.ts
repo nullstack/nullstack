@@ -1,4 +1,4 @@
-export type NullstackWorker = {
+export interface NullstackWorker {
   /**
    * - keys: server functions names
    * - values: array of these functions arguments

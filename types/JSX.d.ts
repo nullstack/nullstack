@@ -577,10 +577,14 @@ type AriaRole =
   | 'treeitem'
   | (string & {})
 
+type Falsy = false | 0 | '' | null | undefined
+type CssClass = string | Falsy | Array<string | Falsy>
+type CssStyle = string | Falsy | Array<string | Falsy>
+
 export interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
   // Standard HTML Attributes
   accesskey?: string
-  class?: string | string[]
+  class?: CssClass
   contenteditable?: Booleanish | 'inherit'
   contextmenu?: string
   dir?: string
@@ -591,7 +595,7 @@ export interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
   placeholder?: string
   slot?: string
   spellcheck?: Booleanish
-  style?: string
+  style?: CssStyle
   tabindex?: number | string
   title?: string
   translate?: 'yes' | 'no'
@@ -1188,7 +1192,7 @@ export interface VideoHTMLAttributes<T> extends MediaHTMLAttributes<T> {
 //   - union of string literals
 export interface SVGAttributes<T> extends AriaAttributes, DOMAttributes<T> {
   // Attributes which also defined in HTMLAttributes
-  class?: string | string[]
+  class?: CssClass
   color?: string
   height?: number | string
   id?: string
@@ -1198,7 +1202,7 @@ export interface SVGAttributes<T> extends AriaAttributes, DOMAttributes<T> {
   method?: string
   min?: number | string
   name?: string
-  style?: string
+  style?: CssStyle
   target?: string
   type?: string
   width?: number | string
@@ -1426,5 +1430,9 @@ declare global {
     }
 
     interface IntrinsicElements extends ExoticElements, AllElements {}
+
+    interface ElementChildrenAttribute {
+      children: NullstackNode
+    }
   }
 }

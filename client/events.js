@@ -6,12 +6,19 @@ export const eventCallbacks = new WeakMap()
 export const eventSubjects = new WeakMap()
 export const eventDebouncer = new WeakMap()
 
-function executeEvent(callback, subject, event, data) {
-  if (typeof callback === 'object') {
-    Object.assign(subject.source, callback)
-  } else {
-    callback({ ...subject, event, data })
+export function generateSubject(selector, attributes, name) {
+  if (Array.isArray(attributes[name])) {
+    for (let i = 0; i < attributes[name].length; i++) {
+      if (typeof attributes[name][i] === 'object') {
+        let changeset = attributes[name][i]
+        attributes[name][i] = () => Object.assign(attributes.source, changeset)
+      }
+    }
+  } else if (typeof attributes[name] === 'object') {
+    let changeset = attributes[name]
+    attributes[name] = () => Object.assign(attributes.source, changeset)
   }
+  eventSubjects.set(selector, attributes)
 }
 
 function debounce(selector, name, time, callback) {
@@ -60,6 +67,12 @@ export function generateCallback(selector, name) {
           object[property] = event.target[valueName] === 'true'
         } else if (typeof object[property] === 'number') {
           object[property] = +event.target[valueName] || 0
+        } else if (object[property] instanceof Date) {
+          const [yyyy, mm, dd] = event.target[valueName].split('-')
+          object[property].setFullYear(yyyy)
+          object[property].setMonth(+mm - 1)
+          object[property].setDate(dd)
+          object[property] = object[property]
         } else {
           object[property] = event.target[valueName]
         }
@@ -67,10 +80,10 @@ export function generateCallback(selector, name) {
       if (subject[name] === noop) return
       if (Array.isArray(subject[name])) {
         for (const subcallback of subject[name]) {
-          executeEvent(subcallback, subject, event, data)
+          subcallback({ ...subject, event, data })
         }
       } else {
-        executeEvent(subject[name], subject, event, data)
+        subject[name]({ ...subject, event, data })
       }
     })
   }

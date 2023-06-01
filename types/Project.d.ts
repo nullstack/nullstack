@@ -1,4 +1,4 @@
-export type NullstackProject = {
+export interface NullstackProject {
   domain: string
 
   /**

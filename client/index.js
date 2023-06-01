@@ -68,9 +68,9 @@ export default class Nullstack {
       } else {
         client.virtualDom = await generateTree(client.initializer(), scope)
         hydrate(client.selector, client.virtualDom)
-        client.currentBody = client.nextBody
+        client.currentMeta = client.nextMeta
         client.currentHead = client.nextHead
-        client.nextBody = {}
+        client.nextMeta = { body: {}, html: {}, window: {} }
         client.nextHead = []
         context.environment = environment
         scope.plugins = loadPlugins(scope)

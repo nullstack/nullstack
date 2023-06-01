@@ -1,4 +1,4 @@
-export type NullstackServer = {
+export interface NullstackServer {
   get(...args)
 
   post(...args)

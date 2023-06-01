@@ -2,7 +2,7 @@ import { sanitizeInnerHtml } from '../shared/sanitizeString'
 import generateTruthyString from '../shared/generateTruthyString'
 import { isFalse, isText } from '../shared/nodes'
 import { anchorableElement } from './anchorableNode'
-import { eventSubjects, generateCallback } from './events'
+import { generateCallback, generateSubject } from './events'
 import { ref } from './ref'
 
 export default function render(node, options) {
@@ -36,7 +36,7 @@ export default function render(node, options) {
         const eventName = name.substring(2)
         const callback = generateCallback(node.element, name)
         node.element.addEventListener(eventName, callback)
-        eventSubjects.set(node.element, node.attributes)
+        generateSubject(node.element, node.attributes, name)
       }
     } else {
       let nodeValue

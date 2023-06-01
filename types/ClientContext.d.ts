@@ -1,5 +1,6 @@
 import { NullstackEnvironment } from './Environment'
-import { NullstackNode } from './JSX'
+import { NullstackInstances } from './Instances'
+import { NullstackFragment } from './JSX'
 import { NullstackPage } from './Page'
 import { NullstackParams } from './Params'
 import { NullstackProject } from './Project'
@@ -10,7 +11,7 @@ import { NullstackWorker } from './Worker'
 /**
  * @see https://nullstack.app/context
  */
-export type NullstackClientContext<TProps = unknown> = TProps & {
+interface BaseNullstackClientContext {
   /**
    * Callback function that bootstrap the context for the application.
    */
@@ -53,7 +54,7 @@ export type NullstackClientContext<TProps = unknown> = TProps & {
    * @scope client
    * @see https://nullstack.app/context-instances
    */
-  instances: Record<string, unknown>
+  instances: NullstackInstances
 
   /**
    * It gives you information about the current environment.
@@ -98,7 +99,7 @@ export type NullstackClientContext<TProps = unknown> = TProps & {
    *
    * @see https://nullstack.app/renderable-components#components-with-children
    */
-  children: NullstackNode
+  children: NullstackFragment
 
   /**
    * Bind object.
@@ -129,3 +130,5 @@ export type NullstackClientContext<TProps = unknown> = TProps & {
 
   element?: HTMLElement
 }
+
+export type NullstackClientContext<TProps = unknown> = BaseNullstackClientContext & TProps

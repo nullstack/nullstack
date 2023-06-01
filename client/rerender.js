@@ -3,7 +3,7 @@ import generateTruthyString from '../shared/generateTruthyString'
 import { isFalse, isText, isUndefined } from '../shared/nodes'
 import { anchorableElement } from './anchorableNode'
 import client from './client'
-import { eventCallbacks, eventSubjects, generateCallback } from './events'
+import { eventCallbacks, eventSubjects, generateCallback, generateSubject } from './events'
 import { reref } from './ref'
 import render from './render'
 
@@ -36,6 +36,7 @@ function updateAttributes(selector, currentAttributes, nextAttributes) {
           if (!callback) {
             selector.addEventListener(eventName, generateCallback(selector, name))
           }
+          generateSubject(selector, nextAttributes, name)
           eventSubjects.set(selector, nextAttributes)
         }
       }
@@ -156,12 +157,14 @@ function _rerender(current, next) {
 
 export default function rerender() {
   _rerender(client.virtualDom, client.nextVirtualDom)
-  updateAttributes(client.body, client.currentBody, client.nextBody)
+  updateAttributes(client.body, client.currentMeta.body, client.nextMeta.body)
+  updateAttributes(window, client.currentMeta.window, client.nextMeta.window)
+  updateAttributes(client.body.parentElement, client.currentMeta.html, client.nextMeta.html)
   updateHeadChildren(client.currentHead, client.nextHead)
   client.virtualDom = client.nextVirtualDom
   client.nextVirtualDom = null
-  client.currentBody = client.nextBody
-  client.nextBody = {}
+  client.currentMeta = client.nextMeta
+  client.nextMeta = { body: {}, html: {}, window: {} }
   client.currentHead = client.nextHead
   client.nextHead = []
 }

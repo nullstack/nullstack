@@ -1,7 +1,7 @@
 import { NullstackClientContext } from './ClientContext'
 import { AllHTMLAttributes, NullstackAttributes } from './JSX'
 
-type NullstackPluginNode = {
+interface NullstackPluginNode {
   type: string | boolean
   attributes: AllHTMLAttributes<HTMLElement> & NullstackAttributes
   children: NullstackClientContext['children']
@@ -11,7 +11,7 @@ interface NullstackNodeContext extends NullstackClientContext {
   node: NullstackPluginNode
 }
 
-export type NullstackPlugin = {
+export interface NullstackPlugin {
   /**
    * Runs transformation to node element
    * @param context Context with node attributes

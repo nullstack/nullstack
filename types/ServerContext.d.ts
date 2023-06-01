@@ -1,5 +1,7 @@
 import { NullstackEnvironment } from './Environment'
 import { NullstackProject } from './Project'
+import { NullstackRequest } from './Request'
+import { NullstackResponse } from './Response'
 import { NullstackSecrets } from './Secrets'
 import { NullstackServer } from './Server'
 import { NullstackSettings } from './Settings'
@@ -8,7 +10,7 @@ import { NullstackWorker } from './Worker'
 /**
  * @see https://nullstack.app/context
  */
-export type NullstackServerContext<TProps = unknown> = TProps & {
+interface BaseNullstackServerContext {
   /**
    * Callback function that bootstrap the context for the application.
    */
@@ -49,7 +51,7 @@ export type NullstackServerContext<TProps = unknown> = TProps & {
    * @scope server
    * @see https://nullstack.app/server-request-and-response
    */
-  request?: Record<string, any>
+  request?: NullstackRequest
 
   /**
    * Original `response` object from [Express](https://expressjs.com/)
@@ -57,7 +59,7 @@ export type NullstackServerContext<TProps = unknown> = TProps & {
    * @scope server
    * @see https://nullstack.app/server-request-and-response
    */
-  response?: Record<string, any>
+  response?: NullstackResponse
 
   /**
    * You can assign any key with any type of public information.
@@ -83,3 +85,5 @@ export type NullstackServerContext<TProps = unknown> = TProps & {
    */
   secrets: NullstackSecrets
 }
+
+export type NullstackServerContext<TProps = unknown> = BaseNullstackServerContext & TProps

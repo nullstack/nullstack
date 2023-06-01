@@ -1,0 +1,1 @@
+export interface NullstackInstances extends Record<string, unknown> {}
