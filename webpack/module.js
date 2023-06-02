@@ -35,8 +35,12 @@ function scss(options) {
 }
 
 function css(options) {
-  if (options.target !== 'client') return
-
+  if (options.target !== 'client') {
+    return {
+      test: /\.s?[ac]ss$/,
+      loader: path.posix.join(options.configFolder, 'loaders', 'skip-loader.js'),
+    }
+  }
   const { loader } = require('mini-css-extract-plugin')
   return {
     test: /\.s?[ac]ss$/,
