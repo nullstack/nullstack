@@ -1,7 +1,7 @@
 import { ICONS } from 'nullstack/project'
 import environment from './environment'
-import reqres from './reqres'
 import worker from './worker'
+import { getCurrentContext } from './context'
 
 const project = {}
 
@@ -21,8 +21,9 @@ project.disallow = []
 project.icons = ICONS
 
 function getHost() {
-  if (reqres.request?.headers?.host) {
-    return reqres.request.headers.host
+  const currentContext = getCurrentContext()
+  if (currentContext.request?.headers?.host) {
+    return currentContext.request.headers.host
   }
   if (project.domain === 'localhost') {
     return `localhost:${process.env.NULLSTACK_SERVER_PORT}`

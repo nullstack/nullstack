@@ -1,7 +1,6 @@
 const registry = {}
 export default registry
-import reqres from "./reqres"
-import { generateContext } from "./context"
+import { getCurrentContext } from "./context"
 import Nullstack from '.'
 import { load } from "./lazy"
 
@@ -34,10 +33,9 @@ function bindStaticProps(klass) {
             return klass[propName].call(klass, ...args)
           }
           const params = args[0] || {}
-          const { request, response } = reqres
-          const subcontext = generateContext({ request, response, ...params })
+          const currentContext = getCurrentContext(params)
           await load(klass.hash)
-          return klass[propName].call(klass, subcontext)
+          return klass[propName].call(klass, currentContext)
         }
         if (module.hot) {
           _invoke.hash = klass[prop].hash
