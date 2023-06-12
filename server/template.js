@@ -65,7 +65,7 @@ export default function ({ head, body, nextMeta, context, instances }) {
     ${project.viewport ? `<meta name="viewport" content="${project.viewport}">` : ''}
     <link rel="stylesheet" href="${cdn(`/client.css?fingerprint=${environment.key}`)}" integrity="${
     integrities['client.css'] || ''
-  }" crossorigin="anonymous">
+  }">
     ${page.schema ? `<script type="application/ld+json">${JSON.stringify(page.schema)}</script>` : ''}
     ${project.icons['180'] ? `<link rel="apple-touch-icon" sizes="180x180" href="${cdn(project.icons['180'])}">` : ''}
     <meta name="msapplication-TileColor" content="${project.backgroundColor || project.color}">
@@ -73,7 +73,7 @@ export default function ({ head, body, nextMeta, context, instances }) {
     ${head.split('<!--#-->').join('')}
     <script src="${cdn(`/client.js?fingerprint=${environment.key}`)}" integrity="${
     integrities['client.js'] || ''
-  }" defer crossorigin="anonymous"></script>
+  }" defer></script>
   </head>
   <body ${renderAttributes(nextMeta.body)}>
     ${environment.mode === 'spa' ? '<div id="application"></div>' : body}
