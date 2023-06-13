@@ -34,25 +34,34 @@ const workerProxyHandler = {
 const proxy = new Proxy(worker, workerProxyHandler)
 
 async function register() {
-  if ('serviceWorker' in navigator) {
-    const request = `/service-worker.js`
-    try {
-      proxy.registration = await navigator.serviceWorker.register(request, { scope: '/' })
-      if (environment.development) {
-        proxy.registration.unregister()
-      }
-    } catch (error) {
-      console.error(error)
-    }
+  if (!environment.production) return
+  const request = `/service-worker.js`
+  try {
+    proxy.registration = await navigator.serviceWorker.register(request, { scope: '/' })
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+async function unregister() {
+  if (!environment.development) return
+  const registrations = await navigator.serviceWorker.getRegistrations()
+  for (let registration of registrations) {
+    window.location.reload()
+    console.log("SW FOUND", { registration })
+    registration.unregister();
   }
 }
 
 if (worker.enabled) {
-  window.addEventListener('beforeinstallprompt', function (event) {
-    event.preventDefault()
-    proxy.installation = event
-  })
-  register()
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('beforeinstallprompt', async function (event) {
+      event.preventDefault()
+      proxy.installation = event
+      unregister()
+    })
+    register()
+  }
 }
 
 window.addEventListener('online', () => {

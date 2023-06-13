@@ -21,7 +21,7 @@ import settings from './settings'
 
 const worker = {}
 
-worker.enabled = environment.production
+worker.enabled = true
 worker.fetching = false
 worker.preload = []
 worker.staleWhileRevalidate = []

@@ -1,5 +1,5 @@
 /* eslint-disable nullstack/no-undef */
-import { existsSync, open } from 'fs'
+import { existsSync, open, writeFileSync } from 'fs'
 import path from 'path'
 import logger from '../builders/logger'
 
@@ -54,12 +54,17 @@ export default function hmr(server) {
 
     const instance = webpackDevMiddleware(compiler, webpackDevMiddlewareOptions)
 
-    instance.waitUntilValid(() => {
+    instance.waitUntilValid(async () => {
       progress.stop()
       console.info(
         '\x1b[36m%s\x1b[0m',
         `\n 🚀 Your application is ready at http://${process.env.NULLSTACK_PROJECT_DOMAIN}:${process.env.NULLSTACK_SERVER_PORT || process.env.PORT || 3000}\n`,
       )
+      if (disk) {
+        const content = await server.prerender('/')
+        const target = `${process.cwd()}/.development/index.html`
+        writeFileSync(target, content)
+      }
     })
 
     server.use(instance)
