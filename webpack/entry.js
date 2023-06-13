@@ -5,7 +5,7 @@ function client(options) {
     return options.entry
   }
   return [
-    'webpack-hot-middleware/client?log=false&path=/nullstack/hmr&noInfo=true&quiet=true&timeout=1000&reload=true',
+    `${require.resolve('webpack-hot-middleware/client')}?log=false&path=/nullstack/hmr&noInfo=true&quiet=true&timeout=1000&reload=true`,
     path.posix.join(options.configFolder, 'shared', 'accept.js'),
     options.entry
   ]
