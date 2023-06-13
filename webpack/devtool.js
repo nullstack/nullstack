@@ -1,6 +1,6 @@
 function devtool(options) {
   if (options.environment === 'development') {
-    if (disk) {
+    if (options.disk) {
       return 'inline-cheap-module-source-map'
     } 
     return 'eval-cheap-module-source-map'
