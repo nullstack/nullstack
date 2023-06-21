@@ -44,12 +44,12 @@ type Booleanish = boolean | 'true' | 'false'
 // Nullstack Elements
 // ----------------------------------------------------------------------
 
-export interface Attributes<NodeType> {
+export interface Attributes<HTMLElementType> {
   html?: string
   source?: object
   bind?: any
   debounce?: number
-  ref?: NodeType
+  ref?: HTMLElementType
   'data-'?: any
   children?: NullstackNode
   route?: string
