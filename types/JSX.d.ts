@@ -44,12 +44,12 @@ type Booleanish = boolean | 'true' | 'false'
 // Nullstack Elements
 // ----------------------------------------------------------------------
 
-export interface Attributes {
+export interface Attributes<NodeType> {
   html?: string
   source?: object
   bind?: any
   debounce?: number
-  ref?: any
+  ref?: NodeType
   'data-'?: any
   children?: NullstackNode
   route?: string
@@ -57,9 +57,9 @@ export interface Attributes {
   [key: string]: any
 }
 
-export interface NullstackAttributes extends Attributes {}
+export interface NullstackAttributes<T> extends Attributes<T> {}
 
-export interface ClassAttributes extends Attributes {
+export interface ClassAttributes<T> extends Attributes<T> {
   key?: string
 }
 
@@ -218,9 +218,9 @@ type WheelEventHandler<T = Element> = EventHandler<WheelEvent<T>>
 
 type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = E
 
-export interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes {}
+export interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes<T> {}
 
-export interface DOMAttributes<T> extends Attributes {
+export interface DOMAttributes<T> extends Attributes<T> {
   // Focus Events
   onfocus?: FocusEventHandler<T>
   onblur?: FocusEventHandler<T>
@@ -1243,8 +1243,8 @@ declare global {
   namespace JSX {
     type Element = NullstackNode
 
-    type IntrinsicAttributes = NullstackAttributes
-    type IntrinsicClassAttributes = ClassAttributes
+    type IntrinsicAttributes = NullstackAttributes<unknown>
+    type IntrinsicClassAttributes = ClassAttributes<unknown>
 
     interface AllElements {
       // HTML
@@ -1429,7 +1429,7 @@ declare global {
       element: ElementTagHTMLAttributes
     }
 
-    interface IntrinsicElements extends ExoticElements, AllElements {}
+    interface IntrinsicElements extends AllElements {}
 
     interface ElementChildrenAttribute {
       children: NullstackNode
