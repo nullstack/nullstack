@@ -49,7 +49,7 @@ export interface Attributes<HTMLElementType> {
   source?: object
   bind?: any
   debounce?: number
-  ref?: HTMLElementType
+  ref?: HTMLElementType | ((context?: Partial<NullstackClientContext>) => void)
   'data-'?: any
   children?: NullstackNode
   route?: string
