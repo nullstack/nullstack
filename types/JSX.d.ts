@@ -1429,7 +1429,7 @@ declare global {
       element: ElementTagHTMLAttributes
     }
 
-    interface IntrinsicElements extends AllElements {}
+    interface IntrinsicElements extends ExoticElements, AllElements {}
 
     interface ElementChildrenAttribute {
       children: NullstackNode
