@@ -138,7 +138,6 @@ server.start = function () {
     if (method !== undefined) {
       try {
         const currentContext = getCurrentContext(args)
-        console.log({currentContext})
         const result = await method.call(boundKlass, currentContext)
         response.json({ result })
       } catch (error) {
@@ -175,7 +174,6 @@ server.start = function () {
         const method = registry[key]
         if (method !== undefined) {
           try {
-            console.log("DEVY")
             const currentContext = getCurrentContext(args)
             const result = await method.call(boundKlass, currentContext)
             response.json({ result })
