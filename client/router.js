@@ -71,7 +71,7 @@ class Router {
     }
     const absoluteUrl = new URL(target, document.baseURI)
     await this._update(absoluteUrl.pathname + absoluteUrl.search + absoluteUrl.hash, true)
-    window.scroll(0, 0)
+    window.scroll({ top: 0, left: 0, behavior: 'instant' })
   }
 
   get url() {
