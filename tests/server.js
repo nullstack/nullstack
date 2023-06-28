@@ -73,6 +73,11 @@ context.startIncrementalValue = 0
 
 setExternalRoute(context.server)
 
+context.server.use((request, response, next) => {
+  context.url = request.originalUrl
+  next()
+})
+
 context.start = async function () {
   await ContextProject.start(context)
   await ContextSecrets.start(context)
