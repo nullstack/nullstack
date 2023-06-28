@@ -44,12 +44,12 @@ type Booleanish = boolean | 'true' | 'false'
 // Nullstack Elements
 // ----------------------------------------------------------------------
 
-export interface Attributes<HTMLElementType> {
+export interface Attributes<HTMLElementType = unknown> {
   html?: string
   source?: object
   bind?: any
   debounce?: number
-  ref?: HTMLElementType | ((context?: Partial<NullstackClientContext>) => void)
+  ref?: HTMLElementType | ((context?: Partial<NullstackClientContext>) => void) | NullstackClientContext['ref']
   'data-'?: any
   children?: NullstackNode
   route?: string
@@ -57,9 +57,9 @@ export interface Attributes<HTMLElementType> {
   [key: string]: any
 }
 
-export interface NullstackAttributes<T> extends Attributes<T> {}
+export interface NullstackAttributes extends Attributes {}
 
-export interface ClassAttributes<T> extends Attributes<T> {
+export interface ClassAttributes<T = unknown> extends Attributes<T> {
   key?: string
 }
 
@@ -1233,18 +1233,18 @@ export interface SVGAttributes<T> extends AriaAttributes, DOMAttributes<T> {
   y?: number | string
 }
 
-export type ElementTagHTMLAttributes = AllHTMLAttributes<'div'> & {
+export type ElementTagHTMLAttributes = AllHTMLAttributes<HTMLDivElement> & {
   tag?: string
 }
 
-type ExoticElements = Record<string, DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>>
+type ExoticElements = Record<string, DetailedHTMLProps<HTMLAttributes<HTMLElement> | SVGProps<any> | ElementTagHTMLAttributes, HTMLElement>>
 
 declare global {
   namespace JSX {
     type Element = NullstackNode
 
-    type IntrinsicAttributes = NullstackAttributes<unknown>
-    type IntrinsicClassAttributes = ClassAttributes<unknown>
+    type IntrinsicAttributes = NullstackAttributes
+    type IntrinsicClassAttributes = ClassAttributes
 
     interface AllElements {
       // HTML
