@@ -47,7 +47,7 @@ type Booleanish = boolean | 'true' | 'false'
 export interface Attributes<HTMLElementType = unknown> {
   html?: string
   source?: object
-  bind?: any
+  bind?: NullstackClientContext['bind'] | string | number | boolean
   debounce?: number
   ref?: HTMLElementType | ((context?: Partial<NullstackClientContext>) => void) | NullstackClientContext['ref']
   'data-'?: any
