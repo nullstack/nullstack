@@ -17,7 +17,9 @@ if (module.hot) {
   $runtime.dependencies = new Map()
 
   $runtime.accept = function accept(target, file, dependencies, declarations) {
-    target.hot.accept()
+    if (declarations.length > 0) {
+      target.hot.accept()
+    }
     let initiateQueue = []
     const old = $runtime.dependencies.get(file)
     if (old) {
