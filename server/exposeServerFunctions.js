@@ -3,10 +3,9 @@ import fs from 'fs'
 import bodyParser from 'body-parser'
 import path from 'path'
 import deserialize from '../shared/deserialize'
-import { generateContext } from './context'
+import { getCurrentContext } from './context'
 import printError from './printError'
 import registry from './registry'
-import reqres from './reqres'
 
 export default function exposeServerFunctions(server) {
   for (const method of ['get', 'post', 'put', 'patch', 'delete', 'all']) {
@@ -14,7 +13,6 @@ export default function exposeServerFunctions(server) {
     server[method] = function (...args) {
       if (typeof args[1] === 'function' && args[1].name === '_invoke') {
         return original(args[0], bodyParser.text({ limit: server.maximumPayloadSize }), async (request, response) => {
-          reqres.set(request, response)
           const params = {}
           for (const key of Object.keys(request.params)) {
             params[key] = extractParamValue(request.params[key])
@@ -27,14 +25,12 @@ export default function exposeServerFunctions(server) {
             Object.assign(params, deserialize(payload))
           }
           try {
-            const subcontext = generateContext({ request, response, ...params })
+            const currentContext = getCurrentContext(params)
             const exposedFunction = module.hot ? registry[args[1].hash] : args[1]
-            const result = await exposedFunction(subcontext)
-            reqres.clear()
+            const result = await exposedFunction(currentContext)
             response.json(result)
           } catch (error) {
             printError(error)
-            reqres.clear()
             response.status(500).json({})
           }
         })
