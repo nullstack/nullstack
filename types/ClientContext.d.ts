@@ -11,7 +11,7 @@ import { NullstackWorker } from './Worker'
 /**
  * @see https://nullstack.app/context
  */
-interface BaseNullstackClientContext {
+interface BaseNullstackClientContext<TProps = unknown> {
   /**
    * Callback function that bootstrap the context for the application.
    */
@@ -120,15 +120,17 @@ interface BaseNullstackClientContext {
    *
    * @see https://nullstack.app/refs#complex-refable-components
    */
-  ref?: { property?: string | number; object?: any } | ((context: NullstackClientContext) => void)
+  ref?: TProps extends { ref: any } ? TProps['ref'] : {
+    object: any
+    property: string | number
+  }
 
   /**
    * Ref element.
    *
    * @see https://nullstack.app/refs#complex-refable-components
    */
-
   element?: HTMLElement
 }
 
-export type NullstackClientContext<TProps = unknown> = BaseNullstackClientContext & TProps
+export type NullstackClientContext<TProps = unknown> = BaseNullstackClientContext<TProps> & TProps

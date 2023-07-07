@@ -44,12 +44,12 @@ type Booleanish = boolean | 'true' | 'false'
 // Nullstack Elements
 // ----------------------------------------------------------------------
 
-export interface Attributes {
+export interface Attributes<HTMLElementType = unknown> {
   html?: string
   source?: object
-  bind?: any
+  bind?: NullstackClientContext['bind'] | string | number | boolean
   debounce?: number
-  ref?: any
+  ref?: HTMLElementType | ((context?: Partial<NullstackClientContext>) => void) | NullstackClientContext['ref']
   'data-'?: any
   children?: NullstackNode
   route?: string
@@ -59,7 +59,7 @@ export interface Attributes {
 
 export interface NullstackAttributes extends Attributes {}
 
-export interface ClassAttributes extends Attributes {
+export interface ClassAttributes<T = unknown> extends Attributes<T> {
   key?: string
 }
 
@@ -218,9 +218,9 @@ type WheelEventHandler<T = Element> = EventHandler<WheelEvent<T>>
 
 type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = E
 
-export interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes {}
+export interface SVGProps<T> extends SVGAttributes<T>, ClassAttributes<T> {}
 
-export interface DOMAttributes<T> extends Attributes {
+export interface DOMAttributes<T> extends Attributes<T> {
   // Focus Events
   onfocus?: FocusEventHandler<T>
   onblur?: FocusEventHandler<T>
@@ -1233,11 +1233,11 @@ export interface SVGAttributes<T> extends AriaAttributes, DOMAttributes<T> {
   y?: number | string
 }
 
-export type ElementTagHTMLAttributes = AllHTMLAttributes<'div'> & {
+export type ElementTagHTMLAttributes = AllHTMLAttributes<HTMLDivElement> & {
   tag?: string
 }
 
-type ExoticElements = Record<string, DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>>
+type ExoticElements = Record<string, DetailedHTMLProps<HTMLAttributes<HTMLElement> | SVGProps<any> | ElementTagHTMLAttributes, HTMLElement>>
 
 declare global {
   namespace JSX {

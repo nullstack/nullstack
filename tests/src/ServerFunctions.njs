@@ -21,7 +21,10 @@ class ServerFunctions extends Nullstack {
     this.count = await this.getCountAsOne()
   }
 
-  static async getCount({ to }) {
+  static async getCount(context) {
+    const { to, url } = context
+    console.log({url})
+    setInterval(() => console.log("SERVERF:", context.url), 1000)
     return to
   }
 
