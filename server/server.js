@@ -17,6 +17,7 @@ import generateRobots from './robots'
 import template from './template'
 import { generateServiceWorker } from './worker'
 import { load } from './lazy'
+import addDevRoutes from './devRoutes'
 
 const server = express()
 
@@ -101,6 +102,8 @@ server.start = function () {
       response.contentType('application/json')
       response.send(generateFile(`${request.params.number}.client.css.map`, server))
     })
+
+    addDevRoutes(server)
   }
 
   server.get(`/manifest.webmanifest`, (request, response) => {
