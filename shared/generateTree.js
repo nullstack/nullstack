@@ -2,19 +2,13 @@ import generateKey from '../shared/generateKey'
 import { isClass, isFalse, isFunction, isUndefined } from '../shared/nodes'
 import fragment from './fragment'
 import { transformNodes } from './plugins'
+import runtimeErrors from '../shared/runtimeError'
 
-async function generateBranch(siblings, node, depth, scope) {
+async function generateBranch(siblings, node, depth, scope, parentAttributes) {
   transformNodes(scope, node, depth)
 
   if (isUndefined(node)) {
-    let message = 'Attempting to render an undefined node. \n'
-    if (node === undefined) {
-      message +=
-        'This error usually happens because of a missing return statement around JSX or returning undefined from a renderable function.'
-    } else {
-      message += 'This error usually happens because of a missing import statement or a typo on a component tag'
-    }
-    throw new Error(message)
+    return runtimeErrors.add(parentAttributes?.__source, { node })
   }
 
   if (isFalse(node)) {
@@ -144,7 +138,7 @@ async function generateBranch(siblings, node, depth, scope) {
     const children = node.type(context)
     node.children = [].concat(children)
     for (let i = 0; i < node.children.length; i++) {
-      await generateBranch(siblings, node.children[i], `${depth}-${i}`, scope)
+      await generateBranch(siblings, node.children[i], `${depth}-${i}`, scope, node.attributes)
     }
     return
   }
@@ -181,6 +175,7 @@ async function generateBranch(siblings, node, depth, scope) {
 }
 
 export default async function generateTree(node, scope) {
+  runtimeErrors.clear()
   const tree = { type: 'div', attributes: { id: 'application' }, children: [] }
   await generateBranch(tree.children, node, '0', scope)
   return tree
