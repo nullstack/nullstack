@@ -53,6 +53,8 @@ const msgTextStyle = {
   fontWeight: 'initial'
 }
 
+import { throwUndefinedNodeProd } from './generateTree'
+
 /**
  * @param {{ source: { fileName: string, lineNumber: string, columnNumber: string }, filenameWithLOC: string }} item
  * @returns {Promise<{ header: string, body: string}>}
@@ -179,29 +181,6 @@ function createOverlay() {
   return { show, clear }
 }
 
-const overlay = createOverlay()
-let storedErrors = []
-let initialRenders = 0
-
-/**
- * @param {{ fileName: string, lineNumber: string, columnNumber: string }} source 
- * @param {{ disableProductionThrow: boolean, node: object }} options
- */
-async function add(source, options) {
-  ++initialRenders
-  if (!isClient()) return throwUndefinedProd(options)
-  if (!source) return throwUndefinedMain(options)
-
-  const { fileName, lineNumber, columnNumber } = source
-  const filenameWithLOC = `${fileName}:${lineNumber}:${columnNumber}`
-  if (storedErrors.includes(filenameWithLOC)) return
-  storedErrors.push(filenameWithLOC)
-  await overlay.show({
-    source,
-    filenameWithLOC
-  })
-}
-
 /**
  * @param {{ fileName: string, lineNumber: string, columnNumber: string }} source 
  */
@@ -219,16 +198,6 @@ function initialized() {
 }
 
 /**
- * @param {{ disableProductionThrow: boolean }} options
- */
-function throwUndefinedProd(options) {
-  if (options.disableProductionThrow) return
-  throw new Error(`
- 🚨 An undefined node exist on your application!
- 🚨 Access this route on development mode to get the location!`)
-}
-
-/**
  * @param {{ node: object | undefined }} options
  */
 function throwUndefinedMain(options) {
@@ -236,7 +205,27 @@ function throwUndefinedMain(options) {
   throw new Error('Your main component is trying to render an undefined node!')
 }
 
-module.exports = {
-  add,
-  clear: overlay.clear,
+const overlay = createOverlay()
+let storedErrors = []
+let initialRenders = 0
+
+/**
+ * @param {{ fileName: string, lineNumber: string, columnNumber: string }} source 
+ * @param {{ node: object }} options
+ */
+export async function add(source, options) {
+  ++initialRenders
+  if (!isClient()) return throwUndefinedNodeProd(options)
+  if (!source) return throwUndefinedMain(options)
+
+  const { fileName, lineNumber, columnNumber } = source
+  const filenameWithLOC = `${fileName}:${lineNumber}:${columnNumber}`
+  if (storedErrors.includes(filenameWithLOC)) return
+  storedErrors.push(filenameWithLOC)
+  await overlay.show({
+    source,
+    filenameWithLOC
+  })
 }
+
+export const clear = overlay.clear

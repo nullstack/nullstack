@@ -1,5 +1,4 @@
 import fragment from './fragment'
-import runtimeError from './runtimeError'
 
 const seed = Object.freeze([])
 
@@ -8,8 +7,8 @@ function normalize(child) {
 }
 
 export default function element(type, props, ...children) {
-  if (type === undefined) {
-    runtimeError.add(props?.__source, { disableProductionThrow: true })
+  if (module.hot && type === undefined) {
+    require('./runtimeError').add(props?.__source)
   }
   children = seed.concat(...children).map(normalize)
   if (type === 'textarea') {

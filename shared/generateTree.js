@@ -2,13 +2,21 @@ import generateKey from '../shared/generateKey'
 import { isClass, isFalse, isFunction, isUndefined } from '../shared/nodes'
 import fragment from './fragment'
 import { transformNodes } from './plugins'
-import runtimeErrors from '../shared/runtimeError'
+
+export function throwUndefinedNodeProd() {
+  throw new Error(`
+ 🚨 An undefined node exist on your application!
+ 🚨 Access this route on development mode to get the location!`)
+}
 
 async function generateBranch(siblings, node, depth, scope, parentAttributes) {
   transformNodes(scope, node, depth)
 
   if (isUndefined(node)) {
-    return runtimeErrors.add(parentAttributes?.__source, { node })
+    if (module.hot) {
+      return require('./runtimeError').add(parentAttributes?.__source, { node })
+    }
+    return throwUndefinedNodeProd()
   }
 
   if (isFalse(node)) {
@@ -175,7 +183,9 @@ async function generateBranch(siblings, node, depth, scope, parentAttributes) {
 }
 
 export default async function generateTree(node, scope) {
-  runtimeErrors.clear()
+  if (module.hot) {
+    require('./runtimeError').clear()
+  }
   const tree = { type: 'div', attributes: { id: 'application' }, children: [] }
   await generateBranch(tree.children, node, '0', scope)
   return tree
