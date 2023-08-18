@@ -13,7 +13,7 @@ export default function invoke(name, hash) {
     } else {
       worker.queues[name] = [...worker.queues[name], params]
     }
-    let finalHash = hash === this.hash ? hash : `${hash}-${this.hash}`
+    let finalHash = hash === this.hash ? hash : `${hash}---${this.hash}`
     let url = `${worker.api}/${prefix}/${finalHash}/${name}.json`
     if (module.hot) {
       const version = client.klasses[hash].__hashes[name]
