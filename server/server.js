@@ -2,6 +2,7 @@ import bodyParser from 'body-parser'
 import express from 'express'
 import path from 'path'
 import deserialize from '../shared/deserialize'
+import symbolHashSplit from '../shared/symbolHashSplit'
 import prefix from '../shared/prefix'
 import context, { getCurrentContext, generateCurrentContext } from './context'
 import emulatePrerender from './emulatePrerender'
@@ -123,7 +124,7 @@ server.start = function () {
     const payload = request.method === 'GET' ? request.query.payload : request.body
     const args = deserialize(payload)
     const { hash, methodName } = request.params
-    const [invokerHash, boundHash] = hash.split('-')
+    const [invokerHash, boundHash] = symbolHashSplit(hash)
     const key = `${invokerHash}.${methodName}`
     await load(boundHash || invokerHash)
     const invokerKlass = registry[invokerHash]
@@ -154,7 +155,7 @@ server.start = function () {
       const payload = request.method === 'GET' ? request.query.payload : request.body
       const args = deserialize(payload)
       const { version, hash, methodName } = request.params
-      const [invokerHash, boundHash] = hash.split('-')
+      const [invokerHash, boundHash] = symbolHashSplit(hash)
       let [filePath, klassName] = (invokerHash || boundHash).split("___")
       const file = path.resolve('..', filePath.replaceAll('__', '/'))
       console.info('\x1b[1;37m%s\x1b[0m', ` [${request.method}] ${request.path}`)
