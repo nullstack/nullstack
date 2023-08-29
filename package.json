@@ -37,6 +37,6 @@
     "terser-webpack-plugin": "5.3.6",
     "webpack": "5.88.2",
     "webpack-hot-middleware": "2.25.4",
-    "webpack-dev-middleware": "github:Mortaro/webpack-dev-middleware#fix-write-to-disk-cleanup"
+    "webpack-dev-middleware": "6.1.1"
   }
 }
