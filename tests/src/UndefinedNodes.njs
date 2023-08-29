@@ -5,7 +5,7 @@ import Nullstack from 'nullstack'
 class UndefinedNodes extends Nullstack {
 
   renderWithoutReturn() {
-    return <div> forgot to return </div>
+    <div> forgot to return </div>
   }
 
   renderWithUndefinedReturn() {
