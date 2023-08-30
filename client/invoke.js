@@ -1,5 +1,6 @@
 import deserialize from '../shared/deserialize'
 import prefix from '../shared/prefix'
+import { symbolHashJoin } from '../shared/symbolHash'
 import page from './page'
 import worker from './worker'
 import client from './client'
@@ -13,7 +14,7 @@ export default function invoke(name, hash) {
     } else {
       worker.queues[name] = [...worker.queues[name], params]
     }
-    let finalHash = hash === this.hash ? hash : `${hash}-${this.hash}`
+    let finalHash = hash === this.hash ? hash : symbolHashJoin(hash, this.hash)
     let url = `${worker.api}/${prefix}/${finalHash}/${name}.json`
     if (module.hot) {
       const version = client.klasses[hash].__hashes[name]
