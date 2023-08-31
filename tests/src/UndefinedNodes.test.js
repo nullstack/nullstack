@@ -1,22 +1,15 @@
 describe('UndefinedNodes WithoutReturn', () => {
   test('renderable functions without return should raise an error', async () => {
-    const response = await page.goto('http://localhost:6969/undefined-nodes?withoutReturn=true')
-    expect(response.status()).toEqual(500)
-  })
-})
-
-describe('UndefinedNodes WithoutUndefinedReturn', () => {
-  test('renderable functions with undefined return should raise an error', async () => {
-    const response = await page.goto('http://localhost:6969/undefined-nodes?withoutUndefinedReturn=true', {
+    const response = await page.goto('http://localhost:6969/undefined-nodes?withoutReturn=true', {
       waitUntil: 'networkidle0',
     })
     expect(response.status()).toEqual(500)
   })
 })
 
-describe('UndefinedNodes WithoutRetunr', () => {
-  test('tagging a renderable function that does not exist should raise an error', async () => {
-    const response = await page.goto('http://localhost:6969/undefined-nodes?withoutRetunr=true', {
+describe('UndefinedNodes WithUndefinedReturn', () => {
+  test('renderable functions with undefined return should raise an error', async () => {
+    const response = await page.goto('http://localhost:6969/undefined-nodes?withUndefinedReturn=true', {
       waitUntil: 'networkidle0',
     })
     expect(response.status()).toEqual(500)

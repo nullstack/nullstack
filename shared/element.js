@@ -7,6 +7,9 @@ function normalize(child) {
 }
 
 export default function element(type, props, ...children) {
+  if (module.hot && type === undefined) {
+    require('./runtimeError').add(props?.__source)
+  }
   children = seed.concat(...children).map(normalize)
   if (type === 'textarea') {
     children = [children.join('')]

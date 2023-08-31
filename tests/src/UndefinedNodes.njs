@@ -16,8 +16,7 @@ class UndefinedNodes extends Nullstack {
     return (
       <div>
         {params.withoutReturn && <WithoutReturn />}
-        {params.withoutUndefinedReturn && <WithUndefinedReturn />}
-        {params.withoutRetunr && <WithoutRetunr />}
+        {params.withUndefinedReturn && <WithUndefinedReturn />}
         {params.forgotToImport && <ForgotToImport />}
         {params.undeclaredVariable && <div data-undeclared-variable>{this.undeclaredVariable}</div>}
       </div>

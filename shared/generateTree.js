@@ -3,18 +3,23 @@ import { isClass, isFalse, isFunction, isUndefined } from '../shared/nodes'
 import fragment from './fragment'
 import { transformNodes } from './plugins'
 
-async function generateBranch(siblings, node, depth, scope) {
+export function throwUndefinedNodeProd() {
+  throw new Error(`
+ 🚨 An undefined node exist on your application!
+ 🚨 Access this route on development mode to get the location!`)
+}
+
+async function generateBranch(siblings, node, depth, scope, parent) {
   transformNodes(scope, node, depth)
 
   if (isUndefined(node)) {
-    let message = 'Attempting to render an undefined node. \n'
-    if (node === undefined) {
-      message +=
-        'This error usually happens because of a missing return statement around JSX or returning undefined from a renderable function.'
-    } else {
-      message += 'This error usually happens because of a missing import statement or a typo on a component tag'
+    if (module.hot) {
+      scope.skipHotReplacement = true
+      return require('./runtimeError').add(parent.attributes?.__source, {
+        node
+      })
     }
-    throw new Error(message)
+    return throwUndefinedNodeProd()
   }
 
   if (isFalse(node)) {
@@ -100,7 +105,7 @@ async function generateBranch(siblings, node, depth, scope) {
     }
     node.children = [].concat(children)
     for (let i = 0; i < node.children.length; i++) {
-      await generateBranch(siblings, node.children[i], `${depth}-${i}`, scope)
+      await generateBranch(siblings, node.children[i], `${depth}-${i}`, scope, node)
     }
     return
   }
@@ -144,7 +149,7 @@ async function generateBranch(siblings, node, depth, scope) {
     const children = node.type(context)
     node.children = [].concat(children)
     for (let i = 0; i < node.children.length; i++) {
-      await generateBranch(siblings, node.children[i], `${depth}-${i}`, scope)
+      await generateBranch(siblings, node.children[i], `${depth}-${i}`, scope, node)
     }
     return
   }
@@ -157,7 +162,7 @@ async function generateBranch(siblings, node, depth, scope) {
       })
       for (let i = 0; i < node.children.length; i++) {
         const id = `${depth}-${i}`
-        await generateBranch(scope.nextHead, node.children[i], id, scope)
+        await generateBranch(scope.nextHead, node.children[i], id, scope, node)
         scope.nextHead[scope.nextHead.length - 1].attributes.id ??= id
       }
     } else if (node.children) {
@@ -167,7 +172,7 @@ async function generateBranch(siblings, node, depth, scope) {
         children: [],
       }
       for (let i = 0; i < node.children.length; i++) {
-        await generateBranch(branch.children, node.children[i], `${depth}-${i}`, scope)
+        await generateBranch(branch.children, node.children[i], `${depth}-${i}`, scope, node)
       }
       siblings.push(branch)
     }
