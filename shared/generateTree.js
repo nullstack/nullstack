@@ -9,12 +9,15 @@ export function throwUndefinedNodeProd() {
  🚨 Access this route on development mode to get the location!`)
 }
 
-async function generateBranch(siblings, node, depth, scope, parentAttributes) {
+async function generateBranch(siblings, node, depth, scope, parent) {
   transformNodes(scope, node, depth)
 
   if (isUndefined(node)) {
     if (module.hot) {
-      return require('./runtimeError').add(parentAttributes?.__source, { node })
+      scope.skipHotReplacement = true
+      return require('./runtimeError').add(parent.attributes?.__source, {
+        node
+      })
     }
     return throwUndefinedNodeProd()
   }
@@ -102,7 +105,7 @@ async function generateBranch(siblings, node, depth, scope, parentAttributes) {
     }
     node.children = [].concat(children)
     for (let i = 0; i < node.children.length; i++) {
-      await generateBranch(siblings, node.children[i], `${depth}-${i}`, scope)
+      await generateBranch(siblings, node.children[i], `${depth}-${i}`, scope, node)
     }
     return
   }
@@ -146,7 +149,7 @@ async function generateBranch(siblings, node, depth, scope, parentAttributes) {
     const children = node.type(context)
     node.children = [].concat(children)
     for (let i = 0; i < node.children.length; i++) {
-      await generateBranch(siblings, node.children[i], `${depth}-${i}`, scope, node.attributes)
+      await generateBranch(siblings, node.children[i], `${depth}-${i}`, scope, node)
     }
     return
   }
@@ -159,7 +162,7 @@ async function generateBranch(siblings, node, depth, scope, parentAttributes) {
       })
       for (let i = 0; i < node.children.length; i++) {
         const id = `${depth}-${i}`
-        await generateBranch(scope.nextHead, node.children[i], id, scope)
+        await generateBranch(scope.nextHead, node.children[i], id, scope, node)
         scope.nextHead[scope.nextHead.length - 1].attributes.id ??= id
       }
     } else if (node.children) {
@@ -169,7 +172,7 @@ async function generateBranch(siblings, node, depth, scope, parentAttributes) {
         children: [],
       }
       for (let i = 0; i < node.children.length; i++) {
-        await generateBranch(branch.children, node.children[i], `${depth}-${i}`, scope)
+        await generateBranch(branch.children, node.children[i], `${depth}-${i}`, scope, node)
       }
       siblings.push(branch)
     }
@@ -183,9 +186,6 @@ async function generateBranch(siblings, node, depth, scope, parentAttributes) {
 }
 
 export default async function generateTree(node, scope) {
-  if (module.hot) {
-    require('./runtimeError').clear()
-  }
   const tree = { type: 'div', attributes: { id: 'application' }, children: [] }
   await generateBranch(tree.children, node, '0', scope)
   return tree

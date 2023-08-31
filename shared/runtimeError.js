@@ -25,7 +25,7 @@ const containerStyle = {
 const headerStyle = {
   color: '#EF5350',
   fontSize: '2em',
-  margin: '0 2rem 2rem 0'
+  marginRight: '1rem'
 }
 const dismissButtonStyle = {
   color: '#ffffff',
@@ -39,6 +39,12 @@ const dismissButtonStyle = {
   backgroundColor: 'transparent',
   border: 'none',
   fontFamily: 'Menlo, Consolas, monospace'
+}
+const explanationStyle = {
+  fontSize: '12px',
+  fontWeight: 'lighter',
+  color: '#d19aac',
+  margin: '1rem 0'
 }
 const msgTypeStyle = {
   color: '#EF5350',
@@ -61,13 +67,17 @@ import { throwUndefinedNodeProd } from './generateTree'
  */
 async function formatProblem(item) {
   const { file, relativePath } = await getFile(item.source)
-  const message = `Undefined node at:\n${file}`
   const linkStyle = 'all:unset;margin-left:.3em;color:#F48FB1;font-size:14px;'
   const openEditor = `<a style="${linkStyle}">Open in Editor ></a>`
   const { lineNumber, columnNumber } = item.source
+  const relativeLOC = `${relativePath}:${lineNumber}:${columnNumber}`
+  console.error(
+    `Error: Attempting to render an undefined node at\n%O`,
+    relativeLOC
+  )
   return {
-    header: `${relativePath}:${lineNumber}:${columnNumber} ${openEditor}`,
-    body: message || ''
+    header: `${relativeLOC} ${openEditor}`,
+    body: file || ''
   }
 }
 
@@ -105,15 +115,23 @@ function createOverlay() {
       id: 'nullstack-dev-server-client-overlay-div'
     })
     const headerElement = createEl('div', headerStyle, {
-      innerText: 'Runtime errors:'
+      innerText: 'Undefined nodes found:'
     })
     const closeButtonElement = createEl('button', dismissButtonStyle, {
       innerText: 'x',
       ariaLabel: 'Dismiss'
     })
+    const explanationElement = createEl('p', explanationStyle, {
+      innerText: 'Tip: This error means a missing return statement around JSX, returning undefined from a renderable function, a missing component import or a typo on it\'s tag name.'
+    })
     closeButtonElement.addEventListener('click', () => clear(true))
     containerElement = createEl('div')
-    contentElement.append(headerElement, closeButtonElement, containerElement)
+    contentElement.append(
+      headerElement,
+      closeButtonElement,
+      explanationElement,
+      containerElement
+    )
 
     overlayElement.appendChild(contentElement)
     onLoad(containerElement)
@@ -197,11 +215,7 @@ function initialized() {
   return initialRenders > 2
 }
 
-/**
- * @param {{ node: object | undefined }} options
- */
-function throwUndefinedMain(options) {
-  if (options.node !== undefined) return
+function throwUndefinedMain() {
   throw new Error('Your main component is trying to render an undefined node!')
 }
 
@@ -211,12 +225,13 @@ let initialRenders = 0
 
 /**
  * @param {{ fileName: string, lineNumber: string, columnNumber: string }} source 
- * @param {{ node: object }} options
+ * @param {{ node?: object }} options
  */
 export async function add(source, options) {
   ++initialRenders
+  if (options?.node !== undefined) return
   if (!isClient()) return throwUndefinedNodeProd(options)
-  if (!source) return throwUndefinedMain(options)
+  if (!source) return throwUndefinedMain()
 
   const { fileName, lineNumber, columnNumber } = source
   const filenameWithLOC = `${fileName}:${lineNumber}:${columnNumber}`
