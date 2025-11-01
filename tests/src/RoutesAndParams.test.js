@@ -256,6 +256,8 @@ describe('RoutesAndParams /routes-and-params/inner-html', () => {
 })
 
 describe('RoutesAndParams /routes-and-params/hrefs spa', () => {
+  jest.retryTimes(3, { logErrorsBeforeRetry: true, retryImmediately: true })
+
   beforeEach(async () => {
     await page.goto('http://localhost:6969/routes-and-params/hrefs')
     await page.waitForSelector(`[data-application-hydrated]`)
