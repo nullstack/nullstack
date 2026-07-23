@@ -13,6 +13,8 @@ import ExposedServerFunctions from './src/ExposedServerFunctions'
 import setExternalRoute from './src/externalRoute'
 import vueable from './src/plugins/vueable'
 import ReqRes from './src/ReqRes'
+import AppBusinessException from './src/AppBusinessException'
+import ErrorHandleServerFunctions from './src/ErrorHandleServerFunctions'
 
 Nullstack.use(vueable)
 
@@ -69,6 +71,14 @@ context.server.get('/vaidamerdanaapi.json', (_request, response) => {
   response.vaidamerdanaapi()
 })
 
+context.server.get(
+  '/error-handle/exposed-business.json',
+  ErrorHandleServerFunctions.throwAppBusinessError,
+)
+context.server.get('/error-handle/exposed-normal.json', ErrorHandleServerFunctions.throwNormalError)
+context.server.get('/error-handle/exposed-json.json', ErrorHandleServerFunctions.throwJSONError)
+context.server.get('/error-handle/exposed-dummy.json', ErrorHandleServerFunctions.throwDummyJsonError)
+
 context.startIncrementalValue = 0
 
 setExternalRoute(context.server)
@@ -91,6 +101,28 @@ context.catch = async function (error) {
   CatchError.logError({ message: error.message })
   if (context.environment.development) {
     console.error(error)
+  }
+}
+
+
+context.onerror = function (error) {
+  //Dentro do result construimos da nossa forma
+  //result e status é obrigatorio para o padrao do nullstack
+  if(error instanceof AppBusinessException){
+    return {
+      status: 422,
+      result: {
+        message: `Business Exception: ${error.message}`,
+        code: error.code,
+      },
+    }
+  }
+  return {
+    status: error.status || 500,
+    result: {
+      message: error.message,
+      code: error.code || 'ERROR_UNKNOWN',
+    },
   }
 }
 

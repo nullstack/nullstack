@@ -17,6 +17,30 @@ interface BaseNullstackServerContext {
   start?: () => Promise<void>
 
   /**
+   * Customizes HTTP JSON responses when a server function throws.
+   *
+   * **Throw contract:** always throw an `Error` (or subclass). Do not throw plain objects.
+   *
+   * **Return contract:**
+   * - `{ status?: number, result?: unknown }` — preferred response shape
+   * - any other non-null value — used as body (`error.status || 500`)
+   * - `null` / `undefined` — fall through to `error.toJSON()` or empty `{}`
+   *
+   * @example
+   * ```js
+   * context.onerror = (error) => ({
+   *   status: error.status || 500,
+   *   result: { message: error.message, code: error.code }
+   * })
+   * ```
+   */
+  onerror?: (error: Error & { status?: number; code?: string | number; toJSON?: () => unknown }) =>
+    | { status?: number; result?: unknown }
+    | unknown
+    | null
+    | undefined
+
+  /**
    * Information about the app manifest and some metatags.
    *
    * @see https://nullstack.app/context-project

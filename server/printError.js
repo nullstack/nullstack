@@ -2,9 +2,19 @@ import context from './context'
 
 export default function (error) {
   if (context.catch) {
-    context.catch(error)
+    try {
+      context.catch(error)
+    } catch (_) {
+      // user-land catch must not break error reporting
+    }
   }
-  const lines = error.stack.split(`\n`)
+
+  const name = error?.name || 'Error'
+  const message =
+    error?.message ??
+    (error && typeof error === 'object' ? JSON.stringify(error) : String(error))
+  const lines = typeof error?.stack === 'string' ? error.stack.split(`\n`) : []
+
   let initiator = lines.find((line) => line.indexOf('Proxy') > -1)
   if (initiator) {
     initiator = initiator.split('(')[0]
@@ -34,7 +44,7 @@ export default function (error) {
     }
   }
   console.info()
-  console.info('\x1b[31m', error.name, '-', error.message, '\x1b[0m')
+  console.info('\x1b[31m', name, '-', message, '\x1b[0m')
   console.info()
   if (initiator) {
     console.info('\x1b[2m', 'initiator:', '\x1b[0m', '\x1b[37m', initiator, '\x1b[0m')

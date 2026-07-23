@@ -4,6 +4,7 @@ import bodyParser from 'body-parser'
 import path from 'path'
 import deserialize from '../shared/deserialize'
 import { getCurrentContext } from './context'
+import errorHandleServerFunction from './errorHandleServerFunctions'
 import printError from './printError'
 import registry from './registry'
 
@@ -31,7 +32,7 @@ export default function exposeServerFunctions(server) {
             response.json(result)
           } catch (error) {
             printError(error)
-            response.status(500).json({})
+            errorHandleServerFunction(response, error, { wrapResult: false })
           }
         })
       }

@@ -19,6 +19,7 @@ import ContextWorker from './ContextWorker'
 import DateParser from './DateParser'
 import DynamicHead from './DynamicHead'
 import Element from './Element'
+import ErrorHandleServerFunctions from './ErrorHandleServerFunctions'
 import ErrorOnChildNode from './ErrorOnChildNode'
 import ErrorPage from './ErrorPage'
 import ExposedServerFunctions from './ExposedServerFunctions'
@@ -151,6 +152,7 @@ class Application extends Nullstack {
         <IsomorphicImport route="/isomorphic-import" />
         <ExposedServerFunctions route="/exposed-server-functions" />
         <CatchError route="/catch-error" />
+        <ErrorHandleServerFunctions route="/error-handle-server-functions" />
         <ReqRes route="/reqres" />
         <Logo route="/logo" />
         <NestedFolder route="/nested/folder" />

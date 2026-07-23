@@ -18,6 +18,7 @@ import generateRobots from './robots'
 import template from './template'
 import { generateServiceWorker } from './worker'
 import { load } from './lazy'
+import errorHandleServerFunction from './errorHandleServerFunctions'
 
 const server = express()
 
@@ -143,7 +144,7 @@ server.start = function () {
         response.json({ result })
       } catch (error) {
         printError(error)
-        response.status(500).json({})
+        errorHandleServerFunction(response, error)
       }
     } else {
       response.status(404).json({})
@@ -180,7 +181,7 @@ server.start = function () {
             response.json({ result })
           } catch (error) {
             printError(error)
-            response.status(500).json({})
+            errorHandleServerFunction(response, error)
           }
         } else {
           response.status(404).json({})
@@ -214,7 +215,7 @@ server.start = function () {
 
   server.use((error, _request, response, _next) => {
     printError(error)
-    response.status(500).json({})
+    errorHandleServerFunction(response, error)
   })
 
   if (module.hot) {
