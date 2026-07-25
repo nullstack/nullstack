@@ -10,6 +10,7 @@ import environment from './environment'
 import exposeServerFunctions from './exposeServerFunctions'
 import { generateFile } from './files'
 import hmr from './hmr'
+import { enableHttpServerApi, getListenTarget } from './httpServerApi'
 import generateManifest from './manifest'
 import { prerender } from './prerender'
 import printError from './printError'
@@ -20,6 +21,7 @@ import { generateServiceWorker } from './worker'
 import { load } from './lazy'
 
 const server = express()
+enableHttpServerApi(server)
 
 server.port = process.env.NULLSTACK_SERVER_PORT || process.env.PORT || 3000
 
@@ -222,14 +224,15 @@ server.start = function () {
   }
 
   if (!server.less) {
-    server.listen(server.port, async () => {
+    const onListen = async () => {
       if (environment.production) {
         console.info(
           '\x1b[36m%s\x1b[0m',
           ` ✅️ Your application is ready at http://${process.env.NULLSTACK_PROJECT_DOMAIN}:${process.env.NULLSTACK_SERVER_PORT}\n`,
         )
       }
-    })
+    }
+    getListenTarget(server).listen(server.port, onListen)
   }
 }
 
